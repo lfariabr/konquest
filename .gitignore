@@ -1,0 +1,22 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Environment
+.env
+venv/
+env/
+
+# Django
+*.sqlite3
+/media/
+db.sqlite3
+
+# Celery & Redis
+*.pid
+
+# IDEs
+.vscode/
+.idea/
