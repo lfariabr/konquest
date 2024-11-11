@@ -1,16 +1,24 @@
 # apiCrm/tasks.py
 from celery import shared_task
-from .models import Lead
+from .models import Lead, Appointment, BillCharge
 from datetime import timedelta
 from django.utils import timezone
 
 # Worker
 @shared_task
 def clean_up_leads():
-    # threshold_time = timezone.now() - timedelta(minutes=15)
-    # deleted_count, _ = Lead.objects.filter(created_at__lt=threshold_time).delete()
     deleted_count, _ = Lead.objects.all().delete()
     print(f"Deleted {deleted_count} leads.")
+
+@shared_task
+def clean_up_appointments():
+    deleted_count, _ = Appointment.objects.all().delete()
+    print(f"Deleted {deleted_count} appointments.")
+
+@shared_task
+def clean_up_bill_charges():
+    deleted_count, _ = BillCharge.objects.all().delete()
+    print(f"Deleted {deleted_count} bill charges.")
 
 def fetch_all_leads(start_date, end_date, token):
     pass

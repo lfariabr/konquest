@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lead, Appointment
+from .models import Lead, Appointment, BillCharge
 # from .serializers import LeadSerializer
 
 class LeadAdmin(admin.ModelAdmin):
@@ -28,7 +28,30 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 admin.site.register(Appointment, AppointmentAdmin)
 
+class BillChargeAdmin(admin.ModelAdmin):
+    # Update list_display to reflect actual fields in the BillCharge model
+    list_display = [
+        'quote_id',         # Update with valid field names
+        'customer_name',
+        'store_name',
+        'total_amount',
+        'quote_items',
+        'status',
+        'is_paid',
+        'paid_at',          # Ensure these fields exist in the model
+        'due_at'
+    ]
+
+    # Set ordering by fields that exist in BillCharge model
+    ordering = ['paid_at']  # Replace 'bill_date' with an actual field, like 'paid_at'
+
+    # Define list filters with existing fields in BillCharge model
+    list_filter = ['is_paid', 'store_name', 'status']
+
+admin.site.register(BillCharge, BillChargeAdmin)
+
 # AppointmentsAdmin - ok
+# BillChargesAdmin - ok
 
 # LeadsHandlerAdmin
 # SentMessagesAdmin

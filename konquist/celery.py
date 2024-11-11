@@ -13,6 +13,14 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = { # Check what else I can put aside from task and schedule
     'cleaner_leads': {
         'task': 'apiCrm.tasks.clean_up_leads',
-        'schedule': crontab(minute='*/15'),
+        'schedule': crontab(minute='*/5'),
+    },
+    'cleaner_appointments': {
+        'task': 'apiCrm.tasks.clean_up_appointments',
+        'schedule': crontab(minute='*/5'),
+    },
+    'cleaner_billcharges': {
+        'task': 'apiCrm.tasks.clean_up_bill_charges',
+        'schedule': crontab(minute='*/5'),
     },
 }

@@ -20,3 +20,5 @@ db.sqlite3
 # IDEs
 .vscode/
 .idea/
+
+migrations/

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Lead, Appointment
+from .models import Lead, Appointment, BillCharge
 
 class LeadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,4 +9,9 @@ class LeadSerializer(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
+        fields = '__all__'
+
+class BillChargeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BillCharge
         fields = '__all__'
