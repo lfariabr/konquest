@@ -1,6 +1,5 @@
 from .serializers import LeadSerializer, AppointmentSerializer, BillChargeSerializer
 
-
 def format_lead_data(raw_lead):
     return {
         'id_crm': raw_lead['id'],
