@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Lead, Appointment, BillCharge
+from .models.lead import Lead
+from .models.appointment import Appointment
+from .models.billcharge import BillCharge
+
+
 # from .serializers import LeadSerializer
 
 class LeadAdmin(admin.ModelAdmin):

@@ -1,5 +1,7 @@
 import pytest
-from apiCrm.models import Lead, Appointment, BillCharge
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 from apiCrm.tasks import clean_up_leads, clean_up_appointments, clean_up_bill_charges
 from django.utils import timezone
 from celery.result import EagerResult

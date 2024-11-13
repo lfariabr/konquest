@@ -3,7 +3,9 @@ import asyncio
 import graphene
 import pandas as pd
 from graphene_django.types import DjangoObjectType
-from .models import Lead, Appointment
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 from .resolvers import (
     fetch_all_leads,
     fetch_all_appointments,

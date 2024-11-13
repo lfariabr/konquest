@@ -34,8 +34,10 @@ async def test_fetch_all_appointments(mocker):
 
     # Call the function and assert the results
     appointments = await fetch_all_appointments('session','2024-01-01', '2024-01-02', 'dummy_token')
-    assert len(appointments) > 0
+    assert len(appointments) > 0 
     assert appointments[0]['id'] == '2732057'
+    #TODO: match exact lenght of mock response
+    #TODO: [0] structure is ok
 
 
 @pytest.mark.asyncio

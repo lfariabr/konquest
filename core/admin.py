@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Contact, User, UserPhone, Message, MessageLogs, FileType
+from core.models.user import User
+from core.models.contact import Contact
+from core.models.userphone import UserPhone
+from core.models.message import Message
+from core.models.messagelog import MessageLogs
 
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'user', 'relationship_tag', 'source', 'store', 'region', 'reference_code', 'external_tag')

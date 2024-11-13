@@ -1,5 +1,7 @@
 import pytest
-from apiCrm.models import Lead, Appointment, BillCharge
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 from datetime import datetime
 import pytz
 

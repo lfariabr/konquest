@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Lead, Appointment, BillCharge
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 
 class LeadSerializer(serializers.ModelSerializer):
     class Meta:

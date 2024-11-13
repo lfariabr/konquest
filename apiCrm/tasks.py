@@ -1,6 +1,8 @@
 # apiCrm/tasks.py
 from celery import shared_task
-from .models import Lead, Appointment, BillCharge
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 from datetime import timedelta
 from django.utils import timezone
 

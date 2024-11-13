@@ -2,7 +2,9 @@
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Lead, Appointment, BillCharge
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 from .serializers import LeadSerializer, AppointmentSerializer, BillChargeSerializer
 
 @api_view(['GET'])

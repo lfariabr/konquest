@@ -190,7 +190,7 @@ async def fetch_all_appointments(session, start_date, end_date, token):
 
         data = await fetch_graphql(session, 'https://open-api.eprocorpo.com.br/graphql', query, variables, token)
 
-        if data is None:
+        if data is None: #TODO add test of this case on tests
             print(f"Failed to fetch appointments on page {current_page}. Retrying...")
             continue
         
@@ -203,8 +203,8 @@ async def fetch_all_appointments(session, start_date, end_date, token):
 
         print(f"Querying Appointments - Page: {current_page}/{last_page} - startDate: {start_date} - endDate: {end_date}")
 
-        if current_page >= last_page:
-            break
+        if current_page >= last_page: #TODO all pages are being loaded on tests
+            break #TODO if only one pag on tests
 
         current_page += 1
         await asyncio.sleep(5)
