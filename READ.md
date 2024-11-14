@@ -1,59 +1,73 @@
 # Konquista Django App
 
+## Commands
+
 ## Goal
-The Konquista Django App is designed to manage CRM-related data.
+Konquista Django App is designed to manage CRM-related data.
 It is a system that focus on sending customized WhatsApp Messages for contacts, whether they're contacts from WhatsApp, Leads and/or Appointments. It integrates with Celery and Redis to support asynchronous task processing and scheduled data cleanup. The application also includes a GraphQL API for easy querying and interaction with all the data available.
 On the frontend, using Django Admin, the App has a SaaS to manage contacts, messages, sent_messages, manage rules, shoot new messages.
 
 ## Run Server + Worker + Beat
 To start the Django server, Celery worker, and Celery Beat for scheduled tasks, use the following commands:
 
-python manage.py runserver
-celery -A konquist worker -l info
-celery -A konquist beat -l info
-
 ## Overview
 Konquista is a Django project configured with Celery and Redis to handle asynchronous and periodic tasks efficiently. It leverages GraphQL for dynamic querying and fetching data, and aiohttp for managing asynchronous HTTP requests within the application. This setup is designed to manage and periodically clean up leads data, ensuring high performance and scalability.
 
 ## Key Features
-1. **Lead and Appointment Management:**
-   - Fetches and temporarily stores leads, appointment and buyers data in the database.
-   - Uses models to encapsulate CRM data, customer information, and UTM tracking details, facilitating easy and organized data management.
+1. Organized Codebase Structure
 
-2. **WhatsApp Messaging System:**
-   - Enables automated and customized WhatsApp messaging to contacts based on specified rules.
-   - Utilizes rule-based management to target specific contacts, enhancing marketing efforts.
+- Modular Design: The application is organized into dedicated folders for models, schemas, resolvers, and tests.
+- Models: Encapsulate CRM data, customer information, and UTM tracking details for organized data management.
+- Schemas: Define GraphQL types and mutations using graphene-django.
+- Resolvers: Contain the logic for fetching and processing data, ensuring a clean separation of concerns.
+- Tests: Located in a specific folder, tests are split in a robust way to cover core functionalities.
 
-3. **GraphQL API Integration:**
-   - Utilizes the Graphene-Django library to create a robust GraphQL interface.
-   - Includes custom types (LeadType, AppointmentType) and resolvers within the Query class for efficient data retrieval and management.
-   - Integrates aiohttp within GraphQL operations to perform asynchronous data fetches, improving data retrieval efficiency from external APIs.
+2. Lead, Appointment, and Buyer Management
 
-4. **Django Rest Framework Integration:**
-   - Employs Django Rest Framework for a versatile API endpoint access, supporting both RESTful and GraphQL queries.
-   - Enhances data accessibility and interaction capabilities within the app, allowing for extensive data operations and management.
+- Data Fetching: Concurrently fetches and temporarily stores leads, appointments, and buyers data in the database.
+- Asynchronous Operations: Utilizes aiohttp and asyncio for efficient asynchronous HTTP requests and data fetching.
+- Data Processing: Formats and processes data using serializers and custom utility functions.
 
-5. **Asynchronous Task Processing with Celery:**
-   - Uses Celery for managing background tasks, such as data fetching and message dispatch, which are crucial for maintaining application responsiveness and efficiency.
-   - Redis is used as a message broker to queue tasks, enabling asynchronous task processing and scheduling.
+3. WhatsApp Messaging System
 
-6. **Scheduled Data Cleanup:**
-   - Implements periodic cleanup tasks to manage database integrity and performance, using Celery Beat for scheduling.
-   - Deletes outdated records and optimizes database usage, ensuring the system remains efficient and clutter-free.
+- Automated Messaging: Sends customized WhatsApp messages to contacts based on specified rules.
+- Rule-Based Management: Enhances marketing efforts by targeting specific contacts through rule management.
+- Message Tracking: Keeps track of sent messages, allowing for analytics and follow-up actions.
 
-* **Extra Cool Features**
-   - Pytest: We utilize Pytest for our backend testing, valuing its powerful yet straightforward syntax and ability to handle both simple unit tests and complex functional testing.
+4. GraphQL API Integration
+
+- Dynamic Querying: Uses graphene-django to create a robust GraphQL interface for efficient data retrieval.
+- Custom Types and Resolvers: Includes custom types (LeadType, AppointmentType, BillChargeType, AllDataType) and resolvers within the Query class.
+- Asynchronous Data Fetching: Integrates aiohttp within GraphQL operations to perform asynchronous data fetches, improving data retrieval efficiency from external APIs.
+
+5. Asynchronous Task Processing with Celery
+
+- Background Tasks: Manages background tasks such as data fetching and message dispatch using Celery.
+- Redis Integration: Uses Redis as a message broker to queue tasks, enabling asynchronous task processing and scheduling.
+- Scheduled Tasks: Implements periodic tasks for data cleanup and maintenance using Celery Beat.
+
+6. Scheduled Data Cleanup
+
+- Database Optimization: Periodically cleans up outdated records to maintain database integrity and performance.
+- Clutter-Free System: Ensures the system remains efficient by deleting unnecessary data.
+
+7. Comprehensive Testing Suite
+
+- Pytest for Testing: Utilizes Pytest for powerful and straightforward syntax to handle unit tests and complex functional testing.
+- Test Coverage on Core Features: Focuses on testing critical components like fetching all data and resolving all data.
+- Mocking and Isolation: Ensures tests do not send real HTTP requests by mocking network interactions, leading to reliable and fast test execution.
+- Asynchronous Testing: Handles asynchronous code testing effectively, avoiding common pitfalls like TypeError related to asynchronous context managers.
 
 ## Setup and Installation
 
 ### Requirements
-- Python 3.10+
-- Django 3.x or 4.x
-- Celery 5.x
-- Redis
-- aiohttp for asynchronous HTTP requests handling
-- Graphene-Django for GraphQL API functionality
-- Pytest for TDD
+- Python: 3.10+
+- Django: 4.x
+- Celery: 5.x
+- Redis: For message brokering and task queuing
+- aiohttp: For asynchronous HTTP requests handling
+- Graphene-Django: For GraphQL API functionality
+- Pytest: For test-driven development (TDD)
 
 ### Install Dependencies
 ```bash
