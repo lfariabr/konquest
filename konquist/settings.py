@@ -128,3 +128,19 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 # Adjust limitation
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240 # higher than the count of fields
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {  # root logger
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

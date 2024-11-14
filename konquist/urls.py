@@ -1,7 +1,7 @@
 # konquista/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from apiCrm.schema import schema
+from apiCrm.schemas.resolve_all_data import schema
 from graphene_django.views import GraphQLView
 
 urlpatterns = [

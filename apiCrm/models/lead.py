@@ -1,8 +1,6 @@
 from django.db import models
 
 class Lead(models.Model):
-    id = models.AutoField(primary_key=True)
-
     # CRM fields
     id_crm = models.CharField(max_length=100)
     name = models.CharField(max_length=150)
