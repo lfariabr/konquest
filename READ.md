@@ -15,7 +15,6 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 
 ## Key Features
 1. Organized Codebase Structure
-
 - Modular Design: The application is organized into dedicated folders for models, schemas, resolvers, and tests.
 - Models: Encapsulate CRM data, customer information, and UTM tracking details for organized data management.
 - Schemas: Define GraphQL types and mutations using graphene-django.
@@ -23,36 +22,30 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Tests: Located in a specific folder, tests are split in a robust way to cover core functionalities.
 
 2. Lead, Appointment, and Buyer Management
-
 - Data Fetching: Concurrently fetches and temporarily stores leads, appointments, and buyers data in the database.
 - Asynchronous Operations: Utilizes aiohttp and asyncio for efficient asynchronous HTTP requests and data fetching.
 - Data Processing: Formats and processes data using serializers and custom utility functions.
 
 3. WhatsApp Messaging System
-
 - Automated Messaging: Sends customized WhatsApp messages to contacts based on specified rules.
 - Rule-Based Management: Enhances marketing efforts by targeting specific contacts through rule management.
 - Message Tracking: Keeps track of sent messages, allowing for analytics and follow-up actions.
 
 4. GraphQL API Integration
-
 - Dynamic Querying: Uses graphene-django to create a robust GraphQL interface for efficient data retrieval.
 - Custom Types and Resolvers: Includes custom types (LeadType, AppointmentType, BillChargeType, AllDataType) and resolvers within the Query class.
 - Asynchronous Data Fetching: Integrates aiohttp within GraphQL operations to perform asynchronous data fetches, improving data retrieval efficiency from external APIs.
 
 5. Asynchronous Task Processing with Celery
-
 - Background Tasks: Manages background tasks such as data fetching and message dispatch using Celery.
 - Redis Integration: Uses Redis as a message broker to queue tasks, enabling asynchronous task processing and scheduling.
 - Scheduled Tasks: Implements periodic tasks for data cleanup and maintenance using Celery Beat.
 
 6. Scheduled Data Cleanup
-
 - Database Optimization: Periodically cleans up outdated records to maintain database integrity and performance.
 - Clutter-Free System: Ensures the system remains efficient by deleting unnecessary data.
 
 7. Comprehensive Testing Suite
-
 - Pytest for Testing: Utilizes Pytest for powerful and straightforward syntax to handle unit tests and complex functional testing.
 - Test Coverage on Core Features: Focuses on testing critical components like fetching all data and resolving all data.
 - Mocking and Isolation: Ensures tests do not send real HTTP requests by mocking network interactions, leading to reliable and fast test execution.
