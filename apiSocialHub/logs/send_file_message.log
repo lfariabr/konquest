@@ -1,0 +1,298 @@
+2024-11-15 05:24:09,165 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "11963546222",
+  "message": "Test file from Konquest Django App",
+  "preview_url": true
+}
+2024-11-15 05:24:09,165 - INFO - Preparing to send file...
+2024-11-15 05:24:09,165 - INFO - File size: 1018880 bytes
+2024-11-15 05:24:18,613 - INFO - File message sent to 11963546222. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 05:30:11,226 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "11963546222",
+  "message": "Test file from Konquest Django App",
+  "preview_url": true
+}
+2024-11-15 05:30:11,226 - INFO - Preparing to send file...
+2024-11-15 05:30:11,226 - INFO - File size: 1018880 bytes
+2024-11-15 05:30:17,555 - INFO - File message sent to 11963546222. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:44:39,384 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:44:39,384 - INFO - Preparing to send file...
+2024-11-15 08:44:39,384 - ERROR - File not accessible: file_path
+2024-11-15 08:45:19,716 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:45:19,716 - INFO - Preparing to send file...
+2024-11-15 08:45:19,716 - ERROR - File not accessible: file_path
+2024-11-15 08:45:23,304 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:45:23,304 - INFO - Preparing to send file...
+2024-11-15 08:45:23,304 - ERROR - File not accessible: file_path
+2024-11-15 08:47:25,164 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:47:25,165 - INFO - Preparing to send file...
+2024-11-15 08:47:25,165 - ERROR - File not accessible: file_path
+2024-11-15 08:47:46,558 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:47:46,558 - INFO - Preparing to send file...
+2024-11-15 08:47:46,558 - ERROR - File not accessible: file_path
+2024-11-15 08:48:01,552 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:48:01,552 - INFO - Preparing to send file...
+2024-11-15 08:48:01,552 - ERROR - File not accessible: file_path
+2024-11-15 08:48:18,792 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:48:18,792 - INFO - Preparing to send file...
+2024-11-15 08:48:18,792 - ERROR - File not accessible: file_path
+2024-11-15 08:50:04,326 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:50:04,327 - INFO - Preparing to send file...
+2024-11-15 08:50:04,327 - ERROR - File not accessible: file_path
+2024-11-15 08:50:16,202 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:50:16,202 - INFO - Preparing to send file...
+2024-11-15 08:50:16,202 - ERROR - File not accessible: file_path
+2024-11-15 08:50:21,938 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:50:21,938 - INFO - Preparing to send file...
+2024-11-15 08:50:21,938 - ERROR - File not accessible: file_path
+2024-11-15 08:51:05,863 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:51:05,864 - INFO - Preparing to send file...
+2024-11-15 08:51:05,864 - ERROR - File not accessible: file_path
+2024-11-15 08:51:50,096 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:51:50,096 - INFO - Preparing to send file...
+2024-11-15 08:51:50,096 - ERROR - File not accessible: file_path
+2024-11-15 08:52:25,387 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:52:25,387 - INFO - Preparing to send file...
+2024-11-15 08:52:25,387 - ERROR - File not accessible: file_path
+2024-11-15 08:54:32,091 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:54:32,091 - INFO - Preparing to send file...
+2024-11-15 08:54:32,091 - ERROR - File not accessible: file_path
+2024-11-15 08:54:35,594 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2024-11-15 08:54:35,594 - INFO - Preparing to send file...
+2024-11-15 08:54:35,594 - ERROR - File not accessible: file_path
+2024-11-15 08:55:20,461 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:55:20,461 - INFO - Preparing to send file...
+2024-11-15 08:55:20,461 - ERROR - File not accessible: dummy_path
+2024-11-15 08:55:24,167 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:55:24,167 - INFO - Preparing to send file...
+2024-11-15 08:55:24,167 - ERROR - File not accessible: dummy_path
+2024-11-15 08:56:15,091 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:56:15,092 - INFO - Preparing to send file...
+2024-11-15 08:56:15,092 - INFO - File size: 1024 bytes
+2024-11-15 08:56:15,092 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:56:25,032 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:56:25,032 - INFO - Preparing to send file...
+2024-11-15 08:56:25,032 - INFO - File size: 1024 bytes
+2024-11-15 08:56:25,032 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:57:30,904 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:30,904 - INFO - Preparing to send file...
+2024-11-15 08:57:30,904 - INFO - File size: 1024 bytes
+2024-11-15 08:57:30,904 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:57:30,906 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:30,906 - INFO - Preparing to send file...
+2024-11-15 08:57:30,906 - INFO - File size: 1024 bytes
+2024-11-15 08:57:30,906 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-15 08:57:44,751 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:44,751 - INFO - Preparing to send file...
+2024-11-15 08:57:44,751 - INFO - File size: 1024 bytes
+2024-11-15 08:57:44,752 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:57:44,753 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:44,753 - INFO - Preparing to send file...
+2024-11-15 08:57:44,753 - INFO - File size: 1024 bytes
+2024-11-15 08:57:44,753 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-15 08:57:57,400 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:57,400 - INFO - Preparing to send file...
+2024-11-15 08:57:57,400 - INFO - File size: 1024 bytes
+2024-11-15 08:57:57,400 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 08:57:57,402 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:57,402 - INFO - Preparing to send file...
+2024-11-15 08:57:57,402 - INFO - File size: 1024 bytes
+2024-11-15 08:57:57,402 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-15 08:57:57,403 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 08:57:57,404 - INFO - Preparing to send file...
+2024-11-15 08:57:57,404 - INFO - File size: 1024 bytes
+2024-11-15 08:57:57,404 - ERROR - RequestException: RequestException - Timeout occurred
+2024-11-15 09:07:13,186 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "11963546222",
+  "message": "Testing with file",
+  "preview_url": true
+}
+2024-11-15 09:07:13,188 - INFO - Preparing to send file...
+2024-11-15 09:07:13,189 - INFO - File size: 1018880 bytes
+2024-11-15 09:07:19,303 - INFO - File message sent to 11963546222. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 09:09:26,191 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:26,192 - INFO - Preparing to send file...
+2024-11-15 09:09:26,192 - INFO - File size: 1024 bytes
+2024-11-15 09:09:26,193 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 09:09:26,194 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:26,194 - INFO - Preparing to send file...
+2024-11-15 09:09:26,194 - INFO - File size: 1024 bytes
+2024-11-15 09:09:26,194 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-15 09:09:26,195 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:26,195 - INFO - Preparing to send file...
+2024-11-15 09:09:26,195 - INFO - File size: 1024 bytes
+2024-11-15 09:09:26,195 - ERROR - RequestException: RequestException - Timeout occurred
+2024-11-15 09:09:49,071 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:49,072 - INFO - Preparing to send file...
+2024-11-15 09:09:49,072 - INFO - File size: 1024 bytes
+2024-11-15 09:09:49,073 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-15 09:09:49,074 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:49,074 - INFO - Preparing to send file...
+2024-11-15 09:09:49,074 - INFO - File size: 1024 bytes
+2024-11-15 09:09:49,074 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-15 09:09:49,075 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-15 09:09:49,075 - INFO - Preparing to send file...
+2024-11-15 09:09:49,075 - INFO - File size: 1024 bytes
+2024-11-15 09:09:49,076 - ERROR - RequestException: RequestException - Timeout occurred

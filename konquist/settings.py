@@ -31,9 +31,10 @@ INSTALLED_APPS = [
     'graphene_django',
 
     # Apps
-    'apiCrm',
     'django_celery_beat',
+    'apiCrm',
     'core',
+    'apiSocialHub',
 ]
 
 MIDDLEWARE = [

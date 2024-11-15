@@ -1,6 +1,9 @@
 # Konquista Django App
 
 ## Commands
+python manage.py runserver
+celery -A konquista worker -l info
+celery -A konquista beat -l info
 
 ## Goal
 Konquista Django App is designed to manage CRM-related data.
