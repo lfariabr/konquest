@@ -2,11 +2,11 @@ import pytest
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from core.models.contact import Contact
-from core.models.user import User
+from core.models.user import kUser
 
 @pytest.mark.django_db
 def test_contact_model():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -21,7 +21,7 @@ def test_contact_model():
 
 @pytest.mark.django_db
 def test_contact_name_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -32,7 +32,7 @@ def test_contact_name_not_blank():
 
 @pytest.mark.django_db
 def test_contact_phone_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -50,7 +50,7 @@ def test_contact_user_required():
 
 @pytest.mark.django_db
 def test_contact_default_values():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -67,7 +67,7 @@ def test_contact_default_values():
 
 @pytest.mark.django_db
 def test_contact_reference_code_null():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",

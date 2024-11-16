@@ -2,11 +2,11 @@ import pytest
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from core.models.userphone import UserPhone
-from core.models.user import User
+from core.models.user import kUser
 
 @pytest.mark.django_db
 def test_user_phone_model():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -31,7 +31,7 @@ def test_user_phone_user_required():
 
 @pytest.mark.django_db
 def test_user_phone_phone_number_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -42,7 +42,7 @@ def test_user_phone_phone_number_not_blank():
 
 @pytest.mark.django_db
 def test_user_phone_phone_token_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -53,7 +53,7 @@ def test_user_phone_phone_token_not_blank():
 
 @pytest.mark.django_db
 def test_user_phone_phone_description_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -64,7 +64,7 @@ def test_user_phone_phone_description_not_blank():
 
 @pytest.mark.django_db
 def test_user_phone_created_at_auto_now_add():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",

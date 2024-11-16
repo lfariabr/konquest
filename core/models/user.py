@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.validators import EmailValidator
 
-class User(models.Model):
+class kUser(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, validators=[EmailValidator()])
     company = models.CharField(max_length=100, null=True, blank=True)
