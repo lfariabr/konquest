@@ -809,3 +809,57 @@
 2024-11-16 17:22:37,102 - INFO - Preparing to send file...
 2024-11-16 17:22:37,102 - INFO - File size: 1024 bytes
 2024-11-16 17:22:37,103 - ERROR - RequestException: RequestException - Timeout occurred
+2024-11-16 18:04:17,018 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:04:17,018 - INFO - Preparing to send file...
+2024-11-16 18:04:17,018 - INFO - File size: 1024 bytes
+2024-11-16 18:04:17,018 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-16 18:04:17,020 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:04:17,020 - INFO - Preparing to send file...
+2024-11-16 18:04:17,020 - INFO - File size: 1024 bytes
+2024-11-16 18:04:17,020 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-16 18:04:17,021 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:04:17,021 - INFO - Preparing to send file...
+2024-11-16 18:04:17,021 - INFO - File size: 1024 bytes
+2024-11-16 18:04:17,021 - ERROR - RequestException: RequestException - Timeout occurred
+2024-11-16 18:14:25,383 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:14:25,383 - INFO - Preparing to send file...
+2024-11-16 18:14:25,383 - INFO - File size: 1024 bytes
+2024-11-16 18:14:25,383 - INFO - File message sent to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2024-11-16 18:14:25,385 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:14:25,385 - INFO - Preparing to send file...
+2024-11-16 18:14:25,385 - INFO - File size: 1024 bytes
+2024-11-16 18:14:25,385 - ERROR - Failed to send file message to 1234567890. Status code: 400, Response: Bad Request
+2024-11-16 18:14:25,386 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2024-11-16 18:14:25,386 - INFO - Preparing to send file...
+2024-11-16 18:14:25,386 - INFO - File size: 1024 bytes
+2024-11-16 18:14:25,386 - ERROR - RequestException: RequestException - Timeout occurred
