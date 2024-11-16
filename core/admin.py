@@ -64,9 +64,25 @@ class MessageLogsAdmin(admin.ModelAdmin):
 admin.site.register(MessageLogs, MessageLogsAdmin)
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'user', 'created_at', 'source', 'store', 'region', 'external_tag', 'relationship_tag')
+    list_display = ('name', 'phone', 'user', 'created_at', 'source', 'store', 'region', 'external_tag', 'relationship_tag', 'status', 'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count')
     change_list_template = "admin/contacts_changelist.html"
     # paginator #TODO add paginator
+    actions = ['check_leads']
+
+    def check_leads(self, request, queryset):
+        total = queryset.count()
+        found = 0
+        for contact in queryset:
+            lead = contact.check_if_lead_exists()
+            if lead:
+                found += 1
+        
+        self.message_user(
+            request,
+            f"Checked {total} contacts. Found {found} leads.",
+            messages.SUCCESS
+        )
+    check_leads.short_description = "Check selected contacts for leads"
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")

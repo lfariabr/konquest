@@ -28,4 +28,8 @@ db.sqlite3
 .coverage
 htmlcov/
 
+# Logs
+apiSocialHub/logs/
+*.log
+
 migrations/
