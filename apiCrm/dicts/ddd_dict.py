@@ -1,0 +1,17 @@
+ddd_dict = {
+    '11': 'São Paulo',
+    '12': 'São Paulo',
+    '13': 'Santos',
+    '15': 'Sorocaba',
+    '16': 'Ribeirão Preto',
+    '17': 'Ribeirão Preto',
+    '18': 'Campinas',
+    '19': 'Campinas',
+    '21': 'Rio de Janeiro',
+    '22': 'Rio de Janeiro',
+    '24': 'Rio de Janeiro',
+    '41': 'Londrina',
+    '43': 'Londrina',
+    '44': 'Londrina',
+    '45': 'Londrina',
+}

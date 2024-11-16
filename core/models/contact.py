@@ -12,4 +12,9 @@ class Contact(models.Model):
     
     # External Info - CRM / Social Hub
     reference_code = models.CharField(max_length=100, null=True, blank=True)
-    external_tag = models.CharField(max_length=100, null=True, blank=True, default="SEM TAGS")
+    external_tag = models.CharField(max_length=255, null=True, blank=True, default="SEM TAGS")  # Map to 'Tags' column
+    tag = models.CharField(max_length=255, null=True, blank=True)  # Internal tag (e.g., 'botox')
+    status = models.CharField(max_length=255, null=True, blank=True, default="landing page")  # Default value
+
+    def __str__(self):
+        return f"{self.name} - {self.phone}"

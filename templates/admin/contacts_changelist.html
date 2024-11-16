@@ -1,0 +1,18 @@
+{% extends "admin/change_list.html" %}
+{% block content %}
+<h2>Upload Contacts CSV</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_date">Date:</label>
+    <input type="date" name="date" id="id_date">
+    <br><br>
+    <label for="id_botox_file">Botox File:</label>
+    <input type="file" name="botox_file" id="id_botox_file">
+    <br><br>
+    <label for="id_preenchimento_file">Preenchimento File:</label>
+    <input type="file" name="preenchimento_file" id="id_preenchimento_file">
+    <br><br>
+    <button type="submit" name="csv_upload">Upload</button>
+</form>
+{{ block.super }}
+{% endblock %}

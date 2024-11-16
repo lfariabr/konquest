@@ -31,7 +31,10 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 
 3. WhatsApp Messaging System
 - Automated Messaging: Sends customized WhatsApp messages to contacts based on specified rules.
+    - Support for sending both **text messages** and **file messages** through SocialHub.
 - Rule-Based Management: Enhances marketing efforts by targeting specific contacts through rule management.
+    - Comprehensive logging with dedicated log files (`send_text_message.log` and `send_file_message.log`) to track message dispatches and errors.
+    - Django Admin integration for managing and tracking sent messages directly from the interface.
 - Message Tracking: Keeps track of sent messages, allowing for analytics and follow-up actions.
 
 4. GraphQL API Integration
