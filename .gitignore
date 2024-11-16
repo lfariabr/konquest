@@ -21,4 +21,11 @@ db.sqlite3
 .vscode/
 .idea/
 
+# Tests
+**/test_*.py
+**/tests.py
+**/tests/
+.coverage
+htmlcov/
+
 migrations/
