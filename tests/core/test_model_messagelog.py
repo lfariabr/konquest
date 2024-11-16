@@ -2,14 +2,14 @@ import pytest
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from core.models.messagelog import MessageLogs
-from core.models.user import User
+from core.models.user import kUser
 from core.models.contact import Contact
 from core.models.message import Message
 from core.models.userphone import UserPhone
 
 @pytest.mark.django_db
 def test_message_logs_model():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -28,7 +28,7 @@ def test_message_logs_model():
 
 @pytest.mark.django_db
 def test_message_logs_message_required():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -40,7 +40,7 @@ def test_message_logs_message_required():
 
 @pytest.mark.django_db
 def test_message_logs_user_required():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -56,7 +56,7 @@ def test_message_logs_user_required():
 
 @pytest.mark.django_db
 def test_message_logs_status_not_blank():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -71,7 +71,7 @@ def test_message_logs_status_not_blank():
 
 @pytest.mark.django_db
 def test_message_logs_user_phone_null():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -88,7 +88,7 @@ def test_message_logs_user_phone_null():
 
 @pytest.mark.django_db
 def test_message_logs_contact_null():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
@@ -105,7 +105,7 @@ def test_message_logs_contact_null():
 
 @pytest.mark.django_db
 def test_message_logs_sent_at_auto_now_add():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",

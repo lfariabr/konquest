@@ -1,12 +1,12 @@
 import pytest
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-from core.models.user import User
+from core.models.user import kUser
 from django.contrib.auth.hashers import make_password, check_password
 
 @pytest.mark.django_db
 def test_user_model():
-    user = User.objects.create(
+    user = kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",)
@@ -18,13 +18,13 @@ def test_user_model():
 
 @pytest.mark.django_db
 def test_user_email_unique():
-    User.objects.create(
+    kUser.objects.create(
         name="Test User",
         email="test@example.com",
         company="Test Company",
         password="password")
     with pytest.raises(IntegrityError):
-        User.objects.create(
+        kUser.objects.create(
             name="Another Test User",
             email="test@example.com",
             company="Another Test Company",
@@ -32,26 +32,26 @@ def test_user_email_unique():
 
 @pytest.mark.django_db
 def test_user_name_not_blank():
-    user = User(name="", email="test@example.com", company="Test Company")
+    user = kUser(name="", email="test@example.com", company="Test Company")
     with pytest.raises(ValidationError):
         user.full_clean()
 
 @pytest.mark.django_db
 def test_user_company_not_blank():
-    user = User(name="Test User", email="test@example.com", company="")
+    user = kUser(name="Test User", email="test@example.com", company="")
     with pytest.raises(ValidationError):
         user.full_clean()
 
 @pytest.mark.django_db
 def test_user_email_valid_format():
-    user = User(name="Test User", email="invalid_email", company="Test Company")
+    user = kUser(name="Test User", email="invalid_email", company="Test Company")
     with pytest.raises(ValidationError):
         user.full_clean()
 
 # @pytest.mark.django_db
 # def test_user_phone():
 #     # First, create a User instance
-#     user = User.objects.create(
+#     user = kUser.objects.create(
 #         name="Test User",
 #         email="test@example.com",  # Use a valid email format
 #         company="Test Company",
@@ -73,7 +73,7 @@ def test_user_email_valid_format():
 # @pytest.mark.django_db
 # def test_message_model():
 #     # First, create a User instance
-#     user = User.objects.create(
+#     user = kUser.objects.create(
 #         name="Test User",
 #         email="test@example.com",  # Use a valid email format
 #         company="Test Company",
@@ -97,7 +97,7 @@ def test_user_email_valid_format():
 # @pytest.mark.django_db
 # def test_message_logs_model():
 #     # First, create a User instance
-#     user = User.objects.create(
+#     user = kUser.objects.create(
 #         name="Test User",
 #         email="test@example.com",  # Use a valid email format
 #         company="Test Company",
@@ -154,7 +154,7 @@ def test_user_email_valid_format():
 # @pytest.mark.django_db
 # def test_contact_mdodel():
 #     # Create user instance
-#     user = User.objects.create(
+#     user = kUser.objects.create(
 #         name="Test User",
 #         email="test@example.com",  # Use a valid email format
 #         company="Test Company",

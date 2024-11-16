@@ -1,14 +1,13 @@
 from django.db import models
-from core.models.user import User
+from core.models.user import kUser
 from core.models.contact import Contact
 from core.models.message import Message
 from core.models.userphone import UserPhone
 
 class MessageLogs(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(kUser, on_delete=models.CASCADE)
     user_phone = models.ForeignKey(UserPhone, on_delete=models.CASCADE, null=True, blank=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=100)
     sent_at = models.DateTimeField(auto_now_add=True)
-    

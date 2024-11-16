@@ -1,8 +1,8 @@
 from django.db import models
-from core.models.user import User
+from core.models.user import kUser
 
 class UserPhone(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(kUser, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
     phone_token = models.CharField(max_length=100)
     phone_description = models.CharField(max_length=100)
