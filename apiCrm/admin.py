@@ -20,8 +20,8 @@ class LeadAdmin(admin.ModelAdmin):
 admin.site.register(Lead, LeadAdmin)
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ['id_crm', 'appointment_date', 'store_name', 'customer_name', 'status_label', 'procedure_name', 'employee_name', 'createdby_name', 'createdby_created_at']
-    search_fields = ['appointment_date', 'store_name', 'customer_name', 'status_label', 'procedure_name']
+    list_display = ['id_crm', 'appointment_date', 'store_name', 'customer_phone', 'customer_name', 'status_label', 'procedure_name', 'employee_name', 'createdby_name', 'createdby_created_at']
+    search_fields = ['appointment_date', 'store_name', 'customer_name', 'customer_phone', 'status_label', 'procedure_name']
     list_filter = ['appointment_date', 'store_name']
     ordering = ['-appointment_date']
 
