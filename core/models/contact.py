@@ -56,6 +56,13 @@ class Contact(models.Model):
                     self._update_lead_status(lead)
                     return lead
             
+            # If no phone match and phone is empty or invalid, try by name
+            if not clean_phone or len(clean_phone) < 8:  # Phone is empty or too short
+                lead = Lead.objects.filter(name__iexact=self.name).first()
+                if lead:
+                    self._update_lead_status(lead)
+                    return lead
+            
             # If no lead is found, clear the status
             self._clear_lead_status()
             return None

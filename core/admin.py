@@ -66,7 +66,6 @@ admin.site.register(MessageLogs, MessageLogsAdmin)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'user', 'created_at', 'source', 'store', 'region', 'external_tag', 'relationship_tag', 'status', 'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count')
     change_list_template = "admin/contacts_changelist.html"
-    # paginator #TODO add paginator
     actions = ['check_leads']
 
     def check_leads(self, request, queryset):
