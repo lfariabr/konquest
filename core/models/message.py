@@ -9,3 +9,4 @@ class Message(models.Model):
     counter = models.IntegerField(default=0)
     file = models.FileField(null=True, blank=True)
     file_type = models.CharField(max_length=20, choices=FileType.choices, null=True, blank=True)
+    # relationship_tag (multiple) #TODO

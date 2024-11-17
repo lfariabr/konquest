@@ -9,11 +9,15 @@ class LeadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    customer_id = serializers.CharField(allow_blank=True)
+
     class Meta:
         model = Appointment
         fields = '__all__'
 
 class BillChargeSerializer(serializers.ModelSerializer):
+    customer_id = serializers.CharField(allow_blank=True)
+
     class Meta:
         model = BillCharge
         fields = '__all__'

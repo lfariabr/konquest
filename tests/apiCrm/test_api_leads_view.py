@@ -1,9 +1,9 @@
-import pytest
 from django.test import Client
+import pytest
 from django.urls import reverse
 
 @pytest.mark.django_db
 def test_leads_view():
     client = Client()
-    response = client.get(reverse('leads_view'))  # assuming 'leads_view' is the name in your urls.py for this route
+    response = client.get(reverse('leads'))  # Updated URL name
     assert response.status_code == 200
