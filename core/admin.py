@@ -64,9 +64,14 @@ class MessageLogsAdmin(admin.ModelAdmin):
 admin.site.register(MessageLogs, MessageLogsAdmin)
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'user', 'created_at', 'source', 'store', 'region', 'external_tag', 'relationship_tag', 'status', 'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count')
+    list_display = ('name', 'phone', 'user', 'created_at', 'source', 'store', 'region', 
+                    'external_tag', 'relationship_tag', 'status', 
+                    # Lead fields
+                    'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
+                    # Appointment fields
+                    'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 'appointment_last_checked', 'appointment_check_count', 'store_appointment')
     change_list_template = "admin/contacts_changelist.html"
-    actions = ['check_leads']
+    actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
 
     def check_leads(self, request, queryset):
         total = queryset.count()
@@ -82,6 +87,21 @@ class ContactAdmin(admin.ModelAdmin):
             messages.SUCCESS
         )
     check_leads.short_description = "Check selected contacts for leads"
+
+    def check_appointments(self, request, queryset):
+        total = queryset.count()
+        found = 0
+        for contact in queryset:
+            appointment = contact.check_if_appointment_exists()
+            if appointment:
+                found += 1
+        
+        self.message_user(
+            request,
+            f"Checked {total} contacts. Found {found} appointments.",
+            messages.SUCCESS
+        )
+    check_appointments.short_description = "Check selected contacts for appointments"
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")

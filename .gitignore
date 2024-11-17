@@ -22,9 +22,6 @@ db.sqlite3
 .idea/
 
 # Tests
-**/test_*.py
-**/tests.py
-**/tests/
 .coverage
 htmlcov/
 
