@@ -30,9 +30,9 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(kUser, UserAdmin)
 
 class UserPhoneAdmin(admin.ModelAdmin):
-    list_display = ('phone_number', 'user', 'phone_token', 'phone_description')
-    search_fields = ('phone_number', 'user__name')
-    list_filter = ('user', 'phone_description')
+    list_display = ('phone_number', 'user', 'phone_token', 'phone_description', 'relationship_tag', 'created_at')
+    search_fields = ('phone_number', 'user__name', 'relationship_tag')
+    list_filter = ('user', 'phone_description', 'relationship_tag')
     ordering = ['-created_at']
 
     def get_queryset(self, request):
@@ -42,9 +42,9 @@ class UserPhoneAdmin(admin.ModelAdmin):
 admin.site.register(UserPhone, UserPhoneAdmin)
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'text', 'file_type')
-    search_fields = ('user__name', 'title', 'text')
-    list_filter = ('user', 'title', 'text')
+    list_display = ('user', 'title', 'text', 'file_type', 'relationship_tag', 'created_at')
+    search_fields = ('user__name', 'title', 'text', 'relationship_tag')
+    list_filter = ('user', 'title', 'relationship_tag', 'created_at')
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -53,9 +53,9 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Message, MessageAdmin)
 
 class MessageLogsAdmin(admin.ModelAdmin):
-    list_display = ('message', 'user', 'user_phone', 'contact', 'sent_at')
-    search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name')
-    list_filter = ('sent_at', 'user', 'user_phone', 'contact')
+    list_display = ('message', 'user', 'user_phone', 'contact', 'relationship_tag', 'sent_at')
+    search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
+    list_filter = ('sent_at', 'user', 'user_phone', 'contact', 'relationship_tag')
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

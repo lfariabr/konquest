@@ -11,4 +11,4 @@ class MessageLogs(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=100)
     sent_at = models.DateTimeField(auto_now_add=True)
-    # relationship_tag (one per message) #TODO
+    relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')

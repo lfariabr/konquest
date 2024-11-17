@@ -7,4 +7,4 @@ class UserPhone(models.Model):
     phone_token = models.CharField(max_length=100)
     phone_description = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
-    # relationship_tag (to be the sender) #TODO
+    relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')
