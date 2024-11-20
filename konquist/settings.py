@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'apiCrm',
     'core',
     'apiSocialHub',
+    
+    # Controller:
+    'messageShooter'
 ]
 
 MIDDLEWARE = [
