@@ -14,3 +14,17 @@ class Appointment(models.Model):
     createdby_name = models.CharField(max_length=100)
     createdby_created_at = models.DateTimeField()
     appointment_date = models.DateTimeField()
+
+    def __str__(self):
+        appointment_info = f" (Status: {self.status_label})" if self.status_label else ""
+        return f"{self.customer_name} - {self.customer_phone}{appointment_info}"
+    
+    def check_if_appointment_is_evaluation(self):
+        """
+        Check if the appointment procedure_name contains
+        the word "AVALIAÇÃO". If yes, return True.
+        Otherwise, return False
+        """
+        if "AVALIAÇÃO" in self.procedure_name:
+            return True
+        return False
