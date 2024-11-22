@@ -28,3 +28,4 @@ class Appointment(models.Model):
         if "AVALIAÇÃO" in self.procedure_name:
             return True
         return False
+        #TODO is this correct?

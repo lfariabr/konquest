@@ -29,14 +29,12 @@ class Campaign(models.Model):
     start_time = models.DateTimeField() # Option to select "Now"
 
     campaign_status = models.CharField(max_length=100) # "Active", "Paused", "Completed"
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+
     # Core data
     userphone_number = models.ForeignKey(UserPhone, on_delete=models.CASCADE) 
     phone_token = models.ForeignKey(UserPhone, on_delete=models.CASCADE)
     user = models.ForeignKey(kUser, on_delete=models.CASCADE)
-
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

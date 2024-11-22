@@ -57,6 +57,11 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Mocking and Isolation: Ensures tests do not send real HTTP requests by mocking network interactions, leading to reliable and fast test execution.
 - Asynchronous Testing: Handles asynchronous code testing effectively, avoiding common pitfalls like TypeError related to asynchronous context managers.
 
+## To be done:
+- messageShooter: component that will have business logic to create campaigns, schedule messages and send them
+- dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
+- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
+
 ## Setup and Installation
 
 ### Requirements
