@@ -6,14 +6,68 @@
 
 from core.models.contact import Contact
 from core.models.appointment import Appointment
+from django.utils import timezone
+from datetime import timedelta
 
 def get_contact_whatsapp(contact_type, contact_tag=None):
-    if contact_type == "Whatsapp" and contact_tag == "Botox":
-        contacts = Contact.objects.filter(source="Whatsapp", tag="Botox").order_by('created_at')
-    if contact_type == "Whatsapp" and contact_tag == "Preenchimento":
-        contacts = Contact.objects.filter(source="Whatsapp", tag="Preenchimento").order_by('created_at')
+    """
+    Get WhatsApp contacts based on tag, ordered by creation date (FIFO)
+    """
+    if contact_type != "Whatsapp":
+        return []
 
+    contacts = Contact.objects.filter(
+        source="Whatsapp",
+        tag=contact_tag,
+        is_active=True
+    ).order_by('created_at')[:500]  # Limit to 500 as per comment in queue_resolver
+    
+    return contacts
+
+#TODO complement accordingly to specific case scenarios... 
+# NPS: appointments "Atendido" in is_assessment == yes
+# Reschedule: appointments "FALTA" in assessment == yes in other appointments == no
+# ... 
 def get_contact_appointment(contact_type, contact_tag=None):
-    if contact_type == "Appointment" and contact_tag == "Reschedule": 
-        contacts = Appointment.objects.filter(status="Reschedule").order_by('created_at')
-        # How to filter "check_if_appointment_is_evaluation" to optimize this part ?
+    """
+    Get appointments based on tag and status
+    For NPS: appointments from 7 days ago
+    For Reminder: appointments in next 24 hours
+    For Reschedule: appointments with reschedule status
+    For Google My Business: completed appointments from last 24 hours
+    """
+    if contact_type != "Appointment":
+        return []
+
+    now = timezone.now()
+    
+    if contact_tag == "NPS":
+        # Get appointments from 7 days ago
+        seven_days_ago = now - timedelta(days=7)
+        return Appointment.objects.filter(
+            appointment_date__date=seven_days_ago.date(),
+            status="Completed"
+        ).order_by('created_at')
+    
+    elif contact_tag == "Reminder":
+        # Get appointments in next 24 hours
+        tomorrow = now + timedelta(days=1)
+        return Appointment.objects.filter(
+            appointment_date__range=(now, tomorrow),
+            status="Scheduled"
+        ).order_by('appointment_date')
+    
+    elif contact_tag == "Reschedule":
+        return Appointment.objects.filter(
+            status="Reschedule"
+        ).order_by('created_at')
+    
+    elif contact_tag == "Google My Business":
+        # Get completed appointments from last 24 hours
+        yesterday = now - timedelta(days=1)
+        return Appointment.objects.filter(
+            appointment_date__range=(yesterday, now),
+            status="Completed"
+        ).order_by('-appointment_date')
+    
+    return []
