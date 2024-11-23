@@ -21,25 +21,21 @@ def get_message(contact_type, contact_tag=None, counter=0):
        - Reschedule: Messages based on number of reschedule attempts
        - Google My Business: Review request message
     """
-    try:
-        # Get message matching all criteria
-        message = Message.objects.get(
-            relationship_type=contact_type,
-            relationship_tag=contact_tag,
-            counter=counter
-        )
+    # Get message matching all criteria
+    message = Message.objects.filter(
+        relationship_tag=contact_tag,
+        counter=counter
+    ).first()
+    
+    if message:
         return message
     
-    except ObjectDoesNotExist:
-        # If no exact match, try to get default message for this tag
-        try:
-            message = Message.objects.get(
-                relationship_type=contact_type,
-                relationship_tag=contact_tag,
-                counter=0  # Default message
-            )
-            return message
-        except ObjectDoesNotExist:
-            return None
+    # If no exact match, try to get default message for this tag
+    message = Message.objects.filter(
+        relationship_tag=contact_tag,
+        counter=0  # Default message
+    ).first()
+    
+    return message
 
     #TODO double check...

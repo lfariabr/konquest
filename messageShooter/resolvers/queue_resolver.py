@@ -47,14 +47,14 @@ def process_queue(batch_size=50):
                 success = send_text_message(
                     phone_number=target.contact_phone,
                     message_text=message.content,
-                    token=queue_item.token
+                    token_socialhub=queue_item.phone_token
                 )
             elif message.message_type == 'file':
                 success = send_file_message(
                     phone_number=target.contact_phone,
                     file_url=message.file_url,
                     caption=message.caption,
-                    token=queue_item.token
+                    token_socialhub=queue_item.phone_token
                 )
             else:
                 raise ValueError(f"Unsupported message type: {message.message_type}")

@@ -2,10 +2,10 @@
 # if contact_type = whatsapp + contact_tag[Botox] > get Contact Botox order FIFO
 
 # if contact_type > get Appointment
-3 # if contact_type = Appointment + contact_tag[Reschedule] > get Appointment Reschedule
+# if contact_type = Appointment + contact_tag[Reschedule] > get Appointment Reschedule
 
 from core.models.contact import Contact
-from core.models.appointment import Appointment
+from apiCrm.models.appointment import Appointment
 from django.utils import timezone
 from datetime import timedelta
 
@@ -18,8 +18,8 @@ def get_contact_whatsapp(contact_type, contact_tag=None):
 
     contacts = Contact.objects.filter(
         source="Whatsapp",
-        tag=contact_tag,
-        is_active=True
+        relationship_tag=contact_tag,
+        status__in=['landing page', 'active']  # Filter by valid statuses
     ).order_by('created_at')[:500]  # Limit to 500 as per comment in queue_resolver
     
     return contacts

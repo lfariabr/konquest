@@ -15,25 +15,29 @@
 
 from django.db import models
 from core.models.userphone import UserPhone
-from core.models.user import kUser
-from core.models.contact import Contact
-from apiCrm.models.lead import Lead
-from apiCrm.models.appointment import Appointment
+from core.models.message import Message
+from django.utils import timezone
 
 class TargetList(models.Model):
-    # from resolvers.get_contacts
+    # Contact information
     contact_phone = models.CharField(max_length=20)
     contact_type = models.CharField(max_length=100)
     contact_tag = models.CharField(max_length=100)
     reference_id = models.CharField(max_length=100)
 
-    # from resolvers.get_counter
+    # Message tracking
     sent_messages_count = models.IntegerField(default=0)
-    # from resolvers.getuserphone
     userphone = models.ForeignKey(UserPhone, on_delete=models.CASCADE)
-    #from resolvers.get_message
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
 
-    # from models.job
-    # priority
-    # status
+    # Processing
+    priority = models.IntegerField(default=0)  # Default 0 for FIFO
+    status = models.CharField(max_length=50, default='pending')  # pending, processing, completed, failed
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['priority', 'created_at']  # FIFO ordering
+
+    def __str__(self):
+        return f"{self.contact_type}:{self.contact_tag} - {self.contact_phone}"

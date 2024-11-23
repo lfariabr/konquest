@@ -22,18 +22,17 @@ campaign_status = [
 class Campaign(models.Model):
 
     name = models.CharField(max_length=100)
-    contact_type = models.CharField(max_length=100) # choose between "Whatsapp", "Appointment", "Lead", "BillCharge"
-    contact_tag = models.CharField(max_length=100) # dictionary according to type    
+    contact_type = models.CharField(max_length=100)  # choose between "Whatsapp", "Appointment", "Lead", "BillCharge"
+    contact_tag = models.CharField(max_length=100)  # dictionary according to type    
     
-    frequency = models.CharField(max_length=100) # "Once", "Daily", "Weekly", "Monthly"
-    start_time = models.DateTimeField() # Option to select "Now"
+    frequency = models.CharField(max_length=100)  # "Once", "Daily", "Weekly", "Monthly"
+    start_time = models.DateTimeField(null=True, blank=True)  # Option to select "Now"
 
-    campaign_status = models.CharField(max_length=100) # "Active", "Paused", "Completed"
+    campaign_status = models.CharField(max_length=100, default="Active")  # "Active", "Paused", "Completed"
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Core data
-    userphone_number = models.ForeignKey(UserPhone, on_delete=models.CASCADE) 
-    phone_token = models.ForeignKey(UserPhone, on_delete=models.CASCADE)
+    userphone = models.ForeignKey(UserPhone, on_delete=models.CASCADE, related_name='campaigns')
     user = models.ForeignKey(kUser, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -22,7 +22,7 @@ def get_userphone(contact_tag):
             userphone = None
 
         if userphone:
-            return userphone, userphone.token
+            return userphone, userphone.phone_token
         return None, None
 
     except Exception as e:
