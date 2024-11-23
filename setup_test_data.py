@@ -1,4 +1,10 @@
 # setup_test_data.py
+import os
+import django
+
+# Setup Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
+django.setup()
 
 from django.core.management import call_command
 from core.models.user import kUser
@@ -34,16 +40,16 @@ def create_test_data():
     # Create UserPhones
     userphone_botox = UserPhone.objects.create(
         user=user,
-        phone_number="5511999999991",
-        phone_token="temp_token_botox",
+        phone_number="11988446710",
+        phone_token="rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
         phone_description="Botox Phone",
         relationship_tag="Botox"
     )
 
     userphone_preench = UserPhone.objects.create(
         user=user,
-        phone_number="5511999999992",
-        phone_token="temp_token_preench",
+        phone_number="11975193585",
+        phone_token="MOOygXTIL373eLY4YTgbJvyjvW6fswp6",
         phone_description="Preenchimento Phone",
         relationship_tag="Preenchimento"
     )
@@ -52,7 +58,7 @@ def create_test_data():
     contact_botox = Contact.objects.create(
         user=user,
         name="Luis",
-        phone="119635462222",
+        phone="11963546222",
         source="Whatsapp",
         relationship_tag="Botox",
         status="active"
@@ -61,7 +67,7 @@ def create_test_data():
     contact_preench = Contact.objects.create(
         user=user,
         name="Luis",
-        phone="119635462222",
+        phone="11963546222",
         source="Whatsapp",
         relationship_tag="Preenchimento",
         status="active"
@@ -172,8 +178,6 @@ def create_test_data():
     }
 
 if __name__ == '__main__':
-    import django
-    django.setup()
     create_test_data()
 
 # django shell

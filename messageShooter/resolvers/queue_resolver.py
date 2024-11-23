@@ -3,6 +3,7 @@ from messageShooter.models.queue import Queue
 from apiSocialHub.resolvers.send_text_message import send_text_message
 from apiSocialHub.resolvers.send_file_message import send_file_message
 from core.models.messagelog import MessageLogs
+from core.models.contact import Contact
 
 def process_queue(batch_size=50):
     """
@@ -16,7 +17,7 @@ def process_queue(batch_size=50):
     pending_messages = Queue.objects.filter(
         status='pending',
         scheduled_time__lte=now
-    ).select_related('target_list')[:batch_size]
+    ).select_related('target_list', 'message', 'contact', 'userphone')[:batch_size]
 
     processed_count = 0
     success_count = 0
@@ -30,34 +31,35 @@ def process_queue(batch_size=50):
 
             # Send the message using appropriate SocialHub sender
             target = queue_item.target_list
-            message = target.message
+            message = queue_item.message
 
             # Prepare message log entry
             message_log = MessageLogs(
                 message=message,
-                phone_number=target.contact_phone,
-                userphone=target.userphone,
-                contact_type=target.contact_type,
-                contact_tag=target.contact_tag,
-                reference_id=target.reference_id,
-                sent_at=now
+                user=message.user,
+                user_phone=queue_item.userphone,
+                contact=queue_item.contact,
+                status='processing',
+                relationship_tag=target.contact_tag
             )
+            message_log.save()
 
-            if message.message_type == 'text':
-                success = send_text_message(
-                    phone_number=target.contact_phone,
-                    message_text=message.content,
-                    token_socialhub=queue_item.phone_token
-                )
-            elif message.message_type == 'file':
+            # Default to text message if no type specified
+            message_type = getattr(message, 'message_type', 'text')
+
+            if message_type == 'file':
                 success = send_file_message(
-                    phone_number=target.contact_phone,
+                    phone=target.contact_phone,
                     file_url=message.file_url,
                     caption=message.caption,
                     token_socialhub=queue_item.phone_token
                 )
-            else:
-                raise ValueError(f"Unsupported message type: {message.message_type}")
+            else:  # Default to text message
+                success = send_text_message(
+                    phone=target.contact_phone,
+                    message=message.text,
+                    token_socialhub=queue_item.phone_token
+                )
 
             if success:
                 queue_item.status = 'completed'
@@ -74,8 +76,6 @@ def process_queue(batch_size=50):
                     message_log.status = 'failed'
                 error_count += 1
 
-            # Save message log with final status and any error
-            message_log.error = queue_item.last_error
             message_log.save()
 
         except Exception as e:
@@ -86,14 +86,11 @@ def process_queue(batch_size=50):
             # Log failed message attempt
             MessageLogs.objects.create(
                 message=message,
-                phone_number=target.contact_phone,
-                userphone=target.userphone,
-                contact_type=target.contact_type,
-                contact_tag=target.contact_tag,
-                reference_id=target.reference_id,
-                sent_at=now,
+                user=message.user,
+                user_phone=queue_item.userphone,
+                contact=queue_item.contact,
                 status='failed',
-                error=str(e)
+                relationship_tag=target.contact_tag
             )
 
         queue_item.save()

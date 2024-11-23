@@ -1,64 +1,92 @@
 from django.core.management.base import BaseCommand
-from messageShooter.resolvers.target_list_resolver import create_target_list, clean_target_list
-from messageShooter.models.queue import Queue
-from django.utils import timezone
 from messageShooter.models.campaign import Campaign
-from datetime import datetime
+from messageShooter.models.target_list import TargetList
+from messageShooter.models.queue import Queue
+from core.models.message import Message
+from django.utils import timezone
+from messageShooter.resolvers.get_counter import get_counter_whatsapp
 
 class Command(BaseCommand):
-    help = 'Process a campaign and create target lists'
+    help = 'Process campaign messages sequentially'
 
     def add_arguments(self, parser):
-        parser.add_argument('campaign_id', type=int, help='ID of the campaign to process')
         parser.add_argument(
-            '--clean',
-            action='store_true',
-            help='Clean up old target list entries before processing'
+            'campaign_tag',
+            type=str,
+            help='Campaign tag to process (e.g., "Botox")'
+        )
+        parser.add_argument(
+            '--counter',
+            type=int,
+            help='Specific counter to process. If not provided, uses next available counter.'
         )
 
     def handle(self, *args, **options):
-        try:
-            campaign_id = options['campaign_id']
-            
-            # Get campaign
-            campaign = Campaign.objects.get(id=campaign_id)
-            
-            if campaign.campaign_status != "Active":
-                self.stdout.write(self.style.WARNING(f'Campaign {campaign.name} is not active'))
-                return
+        campaign_tag = options['campaign_tag']
+        specific_counter = options.get('counter')
 
-            # Clean up old entries if requested
-            if options['clean']:
-                cleaned = clean_target_list()
-                if cleaned > 0:
-                    self.stdout.write(
-                        self.style.SUCCESS(f'Cleaned up {cleaned} old target list entries')
-                    )
+        # Get active campaign
+        campaign = Campaign.objects.filter(
+            contact_tag=campaign_tag,
+            campaign_status='Active'
+        ).first()
 
-            # Create target list entries
-            created, skipped, errors = create_target_list(campaign_id)
-            
-            if created > 0:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f'Successfully processed campaign {campaign.name}.\n'
-                        f'Created: {created} entries\n'
-                        f'Skipped: {skipped} entries\n'
-                        f'Errors: {errors} entries'
-                    )
-                )
-            else:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f'No new entries created for campaign {campaign.name}.\n'
-                        f'Skipped: {skipped} entries\n'
-                        f'Errors: {errors} entries'
-                    )
-                )
+        if not campaign:
+            self.stdout.write(self.style.ERROR(f'No active campaign found for tag: {campaign_tag}'))
+            return
 
-        except Campaign.DoesNotExist:
-            self.stdout.write(self.style.ERROR(f'Campaign with id {campaign_id} does not exist'))
-        except Exception as e:
+        # Get all target lists for this campaign (removed status filter)
+        target_lists = TargetList.objects.filter(
+            contact_tag=campaign_tag
+        )
+
+        if not target_lists:
+            self.stdout.write(self.style.WARNING(f'No target lists found for tag: {campaign_tag}'))
+            return
+
+        # Get the message for this counter
+        if specific_counter is not None:
+            counter = specific_counter
+        else:
+            # Get the next counter based on sent messages
+            counter = get_counter_whatsapp("Whatsapp", campaign_tag)
+
+        message = Message.objects.filter(
+            relationship_tag=campaign_tag,
+            counter=counter
+        ).first()
+
+        if not message:
             self.stdout.write(
-                self.style.ERROR(f'Error processing campaign: {str(e)}')
+                self.style.ERROR(f'No message found for {campaign_tag} with counter {counter}')
             )
+            return
+
+        # Create queue entries for each target
+        queued_count = 0
+        for target in target_lists:
+            # Check if queue entry already exists
+            existing_queue = Queue.objects.filter(
+                target_list=target,
+                message=message,
+                status__in=['pending', 'processing']
+            ).exists()
+
+            if not existing_queue:
+                Queue.objects.create(
+                    target_list=target,
+                    contact_id=target.reference_id,
+                    message=message,
+                    userphone=target.userphone,
+                    phone_token=target.userphone.phone_token,
+                    status='pending',
+                    scheduled_time=timezone.now()
+                )
+                queued_count += 1
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f'Created {queued_count} queue entries for {campaign_tag} '
+                f'(counter: {counter}, message: {message.title})'
+            )
+        )

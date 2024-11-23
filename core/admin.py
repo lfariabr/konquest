@@ -42,7 +42,7 @@ class UserPhoneAdmin(admin.ModelAdmin):
 admin.site.register(UserPhone, UserPhoneAdmin)
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'text', 'file_type', 'relationship_tag', 'created_at')
+    list_display = ('user', 'title', 'text', 'counter' ,'file_type', 'relationship_tag', 'created_at')
     search_fields = ('user__name', 'title', 'text', 'relationship_tag')
     list_filter = ('user', 'title', 'relationship_tag', 'created_at')
 
