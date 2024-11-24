@@ -83,12 +83,12 @@ Now we have both Target List and Queue entries created correctly.
 2 - Two Queue entries:
 
     Botox: ID 1
-        Contact: Luis (119635462222)
+        Contact: Luis (11963546222)
         Message: "Hello 0 message Botox"
         UserPhone: 5511999999991
         Status: pending
     Preenchimento: ID 2
-        Contact: Luis (119635462222)
+        Contact: Luis (11963546222)
         Message: "Hello 0 message Preenchimento"
         UserPhone: 5511999999992
         Status: pending
