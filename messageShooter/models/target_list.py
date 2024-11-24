@@ -16,10 +16,12 @@
 from django.db import models
 from core.models.userphone import UserPhone
 from core.models.message import Message
+from core.models.contact import Contact
 from django.utils import timezone
 
 class TargetList(models.Model):
     # Contact information
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True)
     contact_phone = models.CharField(max_length=20)
     contact_type = models.CharField(max_length=100)
     contact_tag = models.CharField(max_length=100)
