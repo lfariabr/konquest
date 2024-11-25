@@ -2,6 +2,7 @@ import os
 import django
 import logging
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 # Setup Django environment
@@ -24,8 +25,15 @@ def main():
         # Set up campaign to run now
         now = timezone.now()
         campaign_botox.campaign_status = "Active"
-        campaign_botox.next_run = now
-        campaign_botox.save()
+        campaign_botox.start_time = now  # For FREQUENCY_ONCE campaigns
+        campaign_botox.next_run = now    # For recurring campaigns
+        campaign_botox.active_days = [now.weekday()]  # Add today as an active day
+        try:
+            campaign_botox.full_clean()  # Validate before save
+            campaign_botox.save()
+            logger.info("Successfully updated Botox campaign")
+        except ValidationError as e:
+            logger.error(f"Validation error for Botox campaign: {e}")
         
         # Create target list
         logger.info("Creating target list for Botox...")
@@ -43,8 +51,15 @@ def main():
         # Set up campaign to run now
         now = timezone.now()
         campaign_preench.campaign_status = "Active"
-        campaign_preench.next_run = now
-        campaign_preench.save()
+        campaign_preench.start_time = now  # For FREQUENCY_ONCE campaigns
+        campaign_preench.next_run = now    # For recurring campaigns
+        campaign_preench.active_days = [now.weekday()]  # Add today as an active day
+        try:
+            campaign_preench.full_clean()  # Validate before save
+            campaign_preench.save()
+            logger.info("Successfully updated Preenchimento campaign")
+        except ValidationError as e:
+            logger.error(f"Validation error for Preenchimento campaign: {e}")
         
         # Create target list
         logger.info("Creating target list for Preenchimento...")

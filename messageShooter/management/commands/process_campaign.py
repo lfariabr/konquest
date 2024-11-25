@@ -3,6 +3,7 @@ from messageShooter.models.campaign import Campaign
 from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue
 from core.models.message import Message
+from core.models.contact import Contact
 from django.utils import timezone
 from messageShooter.resolvers.get_counter import get_counter_whatsapp
 
@@ -73,9 +74,26 @@ class Command(BaseCommand):
             ).exists()
 
             if not existing_queue:
+                # Get contact - first try the direct relationship, then fallback to reference_id
+                contact = target.contact
+                if not contact and target.reference_id:
+                    try:
+                        contact = Contact.objects.get(id=target.reference_id)
+                    except (Contact.DoesNotExist, ValueError):
+                        self.stdout.write(
+                            self.style.ERROR(f'Contact not found for target list {target.id} with reference_id {target.reference_id}')
+                        )
+                        continue
+
+                if not contact:
+                    self.stdout.write(
+                        self.style.ERROR(f'No valid contact found for target list {target.id}')
+                    )
+                    continue
+
                 Queue.objects.create(
                     target_list=target,
-                    contact_id=target.reference_id,
+                    contact=contact,
                     message=message,
                     userphone=target.userphone,
                     phone_token=target.userphone.phone_token,

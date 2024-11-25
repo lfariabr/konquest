@@ -27,13 +27,14 @@ class Queue(models.Model):
     phone_token = models.CharField(max_length=255)
     
     # Processing
-    status = models.CharField(max_length=20, choices=[(s, s) for s in QUEUE_STATUS], default='pending')
-    priority = models.IntegerField(default=1)  # Higher number = higher priority
+    status = models.CharField(max_length=100, choices=[(s, s) for s in QUEUE_STATUS], default='pending')
+    priority = models.IntegerField(default=0)  # Higher number = higher priority
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     retry_count = models.IntegerField(default=0)
     last_error = models.TextField(null=True, blank=True)
-    scheduled_time = models.DateTimeField()
+    scheduled_time = models.DateTimeField(default=timezone.now)
+    error_message = models.TextField(null=True, blank=True)  # For storing error details
     sent_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

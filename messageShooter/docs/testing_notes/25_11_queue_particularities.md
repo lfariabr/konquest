@@ -43,6 +43,40 @@ The queue entries are ordered by:
 python setup_queue.py
 We have successfully moved the target lists to the queue and optimized the admin views to check everything
 
+# Git commit -m
+    feat(messageShooter): Enhance Target List and Queue Processing
+
+    Key Changes:
+    1. Target List Generation
+    - Fixed contact_phone field population in target list creation
+    - Updated token field to use phone_token from UserPhone model
+    - Added proper sequence handling for WhatsApp and Appointment campaigns
+
+    2. Queue Processing
+    - Enhanced Queue admin view with additional columns:
+    * Contacts to process count
+    * Queue status
+    * Priority
+    * UserPhone
+    * Scheduled time
+    - Improved error handling in queue setup script
+
+    3. Testing
+    - Added comprehensive tests for target list generation
+    - Added test cases for campaign status and active days
+    - Fixed test assertions for contact phone validation
+    - Added test for queue conversion
+
+    Technical Details:
+    - Updated TargetList model to properly handle contact phone numbers
+    - Fixed field name mismatch between UserPhone.phone_token and TargetList.token
+    - Improved logging for better debugging and monitoring
+    - Added proper status transitions (pending -> processing -> sent/failed)
+
+    This commit ensures proper handling of contact information throughout the
+    message shooting pipeline and improves the admin interface for better
+    monitoring and management of the queue system.
+
 # Next steps:
 1 - Test the queue system to shoot messages validating if counter is going up for Whatsapp campaign. 
 Steps should be:
@@ -52,3 +86,4 @@ c. run queue processing
 d. check if messages are being sent, saved on logs and incrementing the counter
 e. check if message counter = 1 is being sent
 f. check if message counter = 2 is being sent
+
