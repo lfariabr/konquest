@@ -59,16 +59,16 @@ def setup_test_data(db):
     # Create Messages
     message_botox = Message.objects.create(
         user=user,
-        title="Botox Message",
-        text="Hello message Botox",
+        title="Botox Message 0",
+        text="Hello message Botox 0",
         relationship_tag="Botox",
         counter=0
     )
 
     message_preench = Message.objects.create(
         user=user,
-        title="Preenchimento Message",
-        text="Hello message Preenchimento",
+        title="Preenchimento Message 0",
+        text="Hello message Preenchimento 0",
         relationship_tag="Preenchimento",
         counter=0
     )
@@ -88,7 +88,8 @@ def setup_test_data(db):
         execution_time=execution_time,
         active_days=[0, 1, 2, 3, 4, 5],  # Monday to Saturday
         start_time=now,
-        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo)
+        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo),
+        sequential_order=[{'message_id': message_botox.id}]  # Add message sequence
     )
 
     campaign_preench = Campaign.objects.create(
@@ -101,19 +102,19 @@ def setup_test_data(db):
         execution_time=execution_time,
         active_days=[0, 1, 2, 3, 4, 5],  # Monday to Saturday
         start_time=now,
-        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo)
+        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo),
+        sequential_order=[{'message_id': message_preench.id}]  # Add message sequence
     )
 
     return {
-        'user': user,
-        'userphone_botox': userphone_botox,
-        'userphone_preench': userphone_preench,
+        'campaign_botox': campaign_botox,
+        'campaign_preench': campaign_preench,
         'contact_botox': contact_botox,
         'contact_preench': contact_preench,
         'message_botox': message_botox,
         'message_preench': message_preench,
-        'campaign_botox': campaign_botox,
-        'campaign_preench': campaign_preench
+        'userphone_botox': userphone_botox,
+        'userphone_preench': userphone_preench
     }
 
 @pytest.mark.django_db
@@ -220,3 +221,46 @@ def test_target_list_generation_respects_active_days(setup_test_data):
     with freeze_time(monday_early):
         target_lists = generate_target_lists()
         assert TargetList.objects.count() == 0
+
+@pytest.mark.django_db
+def test_target_list_to_queue_conversion(setup_test_data):
+    """Test that target lists can be moved to the queue correctly"""
+    # Set up time to be 8:00 AM
+    test_time = timezone.make_aware(timezone.datetime(2024, 1, 8, 8, 0))  # Monday at 8:00 AM
+    
+    with freeze_time(test_time):
+        # Update campaign next_run times
+        campaign_botox = setup_test_data['campaign_botox']
+        campaign_preench = setup_test_data['campaign_preench']
+        
+        campaign_botox.next_run = test_time
+        campaign_preench.next_run = test_time
+        campaign_botox.save()
+        campaign_preench.save()
+        
+        # Generate target lists
+        target_lists = generate_target_lists()
+        assert TargetList.objects.count() == 2
+        
+        # Import and run the queue setup function
+        from setup_queue import move_target_lists_to_queue
+        move_target_lists_to_queue()
+        
+        # Verify queue items were created
+        from messageShooter.models.queue import Queue
+        assert Queue.objects.count() == 2
+        
+        # Check that target lists were moved to processing status
+        for target_list in TargetList.objects.all():
+            assert target_list.status == 'processing'
+        
+        # Check queue items properties
+        for queue_item in Queue.objects.all():
+            assert queue_item.status == 'pending'
+            assert queue_item.target_list is not None
+            assert queue_item.contact is not None
+            assert queue_item.message is not None
+            assert queue_item.userphone is not None
+            assert queue_item.scheduled_time is not None
+            # Priority should match target list priority
+            assert queue_item.priority == queue_item.target_list.priority

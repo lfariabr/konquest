@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from core.models.userphone import UserPhone
 from core.models.user import kUser
+from core.models.message import Message  # Import Message model
 
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
@@ -63,9 +64,15 @@ class Campaign(models.Model):
     
     # Scheduling
     frequency = models.CharField(max_length=100, choices=CAMPAIGN_FREQUENCIES, default=FREQUENCY_ONCE)
-    start_time = models.DateTimeField(null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True) # I believe this one is not being used, as "Execution time" took its place
     execution_time = models.TimeField(default='08:00')  # Default to 8 AM, later we can add time | later we can also allow users to set this
     active_days = models.JSONField(default=list, help_text="List of active days (0-6, Monday to Sunday)")
+    
+    # Sequence Control
+    sequential_order = models.JSONField(
+        default=list,
+        help_text="List of sequential orders linking to message counters. Format: [{'message_id': id, 'days_interval': days}]"
+    )
     
     # Status
     campaign_status = models.CharField(
@@ -101,6 +108,33 @@ class Campaign(models.Model):
                     'contact_tag': f'Invalid tag for {self.contact_type}. Valid tags are: {", ".join(valid_tags)}'
                 })
 
+        # Validate sequential_order based on contact_type
+        if self.sequential_order:
+            if not isinstance(self.sequential_order, list):
+                raise ValidationError({
+                    'sequential_order': 'Sequential order must be a list'
+                })
+            
+            for order in self.sequential_order:
+                if not isinstance(order, dict) or 'message_id' not in order:
+                    raise ValidationError({
+                        'sequential_order': 'Each sequential order must be a dictionary with at least a message_id'
+                    })
+                
+                # For Whatsapp campaigns, counter is mandatory
+                if self.contact_type == CONTACT_TYPE_WHATSAPP:
+                    message = Message.objects.filter(id=order['message_id']).first()
+                    if not message or message.counter is None:
+                        raise ValidationError({
+                            'sequential_order': f'Message {order["message_id"]} must have a counter value for Whatsapp campaigns'
+                        })
+                
+                # For Appointment campaigns, days_interval is required
+                if self.contact_type == CONTACT_TYPE_APPOINTMENT and 'days_interval' not in order:
+                    raise ValidationError({
+                        'sequential_order': 'Days interval is required for Appointment campaigns'
+                    })
+
         # Validate scheduling data
         if self.frequency != FREQUENCY_ONCE:
             if not self.execution_time:
@@ -117,10 +151,11 @@ class Campaign(models.Model):
         """Override save to handle scheduling logic"""
         self.clean()
         
-        # Calculate next run time
-        if self.frequency != FREQUENCY_ONCE and self.campaign_status == STATUS_ACTIVE:
-            now = timezone.now()
-            self.next_run = self.calculate_next_run(now)
+        # Calculate next run time only if not using update_fields or if next_run is in update_fields
+        if not kwargs.get('update_fields') or 'next_run' in kwargs.get('update_fields', []):
+            if self.frequency != FREQUENCY_ONCE and self.campaign_status == STATUS_ACTIVE:
+                now = timezone.now()
+                self.next_run = self.calculate_next_run(now)
         
         super().save(*args, **kwargs)
 
@@ -161,11 +196,7 @@ class Campaign(models.Model):
         if self.frequency == FREQUENCY_ONCE:
             return self.start_time and timezone.now() >= self.start_time
             
-        return (
-            self.next_run and 
-            timezone.now() >= self.next_run and 
-            timezone.now().weekday() in self.active_days
-        )
+        return self.next_run and timezone.now() >= self.next_run
 
     def should_run_today(self):
         """Check if the campaign should run today based on active days"""

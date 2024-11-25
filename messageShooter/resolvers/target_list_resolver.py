@@ -5,7 +5,7 @@ from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_cont
 from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
 from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
-from core.models.messagelog import MessageLogs
+from core.models.message import Message
 import logging
 
 logger = logging.getLogger(__name__)
@@ -32,87 +32,87 @@ def create_target_list(campaign_id):
         # Get contacts using appropriate resolver
         if campaign.contact_type == "Whatsapp":
             contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
-            counter = get_counter_whatsapp(campaign.contact_type, campaign.contact_tag)
         elif campaign.contact_type == "Appointment":
             contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag)
-            counter = get_counter_appointment(campaign.contact_type, campaign.contact_tag)
         else:
             raise ValueError(f"Invalid contact type: {campaign.contact_type}")
 
         logger.info(f"Found {len(contacts)} contacts for campaign {campaign.name}")
 
-        # Get message and userphone
-        message = get_message(campaign.contact_type, campaign.contact_tag, counter)
-        if not message:
-            logger.error(f"No message found for {campaign.contact_type}/{campaign.contact_tag}")
-            raise ValueError(f"No message found for {campaign.contact_type}/{campaign.contact_tag}")
-
-        userphone, token = get_userphone(campaign.contact_tag)
-        if not userphone or not token:
-            logger.error(f"No userphone/token found for tag: {campaign.contact_tag}")
-            raise ValueError(f"No userphone/token found for tag: {campaign.contact_tag}")
-
         created_count = 0
         skipped_count = 0
         error_count = 0
 
+        # Process each contact
         for contact in contacts:
             try:
-                # Check if contact already in target list
-                existing = TargetList.objects.filter(
-                    contact=contact,
-                    contact_type=campaign.contact_type,
-                    contact_tag=campaign.contact_tag,
-                    status='pending'
-                ).exists()
-
-                if existing:
-                    logger.info(f"Contact {contact.phone} already in target list")
-                    skipped_count += 1
-                    continue
-
-                # Check message frequency rules
-                if campaign.frequency != "Once":
-                    sent_today = MessageLogs.objects.filter(
-                        contact=contact,
-                        relationship_tag=campaign.contact_tag,
-                        sent_at__date=timezone.now().date()
-                    ).exists()
-
-                    if sent_today:
-                        logger.info(f"Contact {contact.phone} already received message today")
+                # Get message based on campaign type
+                if campaign.contact_type == "Whatsapp":
+                    # For WhatsApp, use the next message in sequence based on counter
+                    counter = get_counter_whatsapp(contact.id)
+                    if counter >= len(campaign.sequential_order):
+                        logger.info(f"Skipping contact {contact.id} - no more messages in sequence")
+                        skipped_count += 1
+                        continue
+                        
+                    message_id = campaign.sequential_order[counter]['message_id']
+                    message = Message.objects.get(id=message_id)
+                    sequence_order = counter
+                    
+                elif campaign.contact_type == "Appointment":
+                    # For Appointment, check days_interval
+                    for sequence_idx, order in enumerate(campaign.sequential_order):
+                        days_interval = order['days_interval']
+                        reference_date = contact.appointment_date if hasattr(contact, 'appointment_date') else contact.created_at
+                        target_date = reference_date + timezone.timedelta(days=days_interval)
+                        
+                        if target_date.date() == timezone.now().date():
+                            message_id = order['message_id']
+                            message = Message.objects.get(id=message_id)
+                            sequence_order = sequence_idx
+                            break
+                    else:
+                        logger.info(f"Skipping contact {contact.id} - not the right day for any interval")
                         skipped_count += 1
                         continue
 
-                # Create target list entry
-                TargetList.objects.create(
+                # Skip if target list already exists for this contact and message
+                if TargetList.objects.filter(
                     contact=contact,
-                    contact_phone=contact.phone,
+                    message=message,
+                    status__in=['pending', 'processing']
+                ).exists():
+                    skipped_count += 1
+                    continue
+
+                # Create target list entry
+                target_list = TargetList.objects.create(
+                    contact=contact,
                     contact_type=campaign.contact_type,
                     contact_tag=campaign.contact_tag,
-                    reference_id=str(contact.id),
-                    sent_messages_count=0,
-                    userphone=userphone,
+                    contact_phone=contact.phone,
                     message=message,
-                    priority=0,  # Default priority for FIFO
-                    status='pending'
+                    userphone=campaign.userphone,
+                    token=campaign.userphone.phone_token,
+                    sequence_order=sequence_order,
+                    days_interval=days_interval if campaign.contact_type == "Appointment" else None
                 )
-                logger.info(f"Created target list entry for contact {contact.phone}")
                 created_count += 1
+                logger.info(f"Created target list for contact {contact.id}, message {message.id}, sequence {sequence_order}")
 
             except Exception as e:
-                logger.error(f"Error processing contact {contact.id}: {str(e)}")
+                logger.error(f"Error creating target list for contact {contact.id}: {str(e)}")
                 error_count += 1
 
-        logger.info(f"Campaign {campaign.name} processed: {created_count} created, {skipped_count} skipped, {error_count} errors")
+        # Update campaign's last run time
+        campaign.last_run = timezone.now()
+        campaign.save()
+
         return created_count, skipped_count, error_count
 
-    except Campaign.DoesNotExist:
-        logger.error(f"Campaign with id {campaign_id} does not exist")
-        raise ValueError(f"Campaign with id {campaign_id} does not exist")
     except Exception as e:
-        logger.error(f"Error creating target list: {str(e)}")
-        raise Exception(f"Error creating target list: {str(e)}")
+        logger.error(f"Error processing campaign {campaign_id}: {str(e)}")
+        return 0, 0, 1
 
 def clean_target_list():
     """

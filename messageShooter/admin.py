@@ -18,6 +18,17 @@ class CampaignAdmin(admin.ModelAdmin):
     ordering = ('contact_type', 'contact_tag', 'name')
 admin.site.register(Campaign, CampaignAdmin)
 
-admin.site.register(Queue)
+class QueueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'target_list_id', 'contacts_to_process', 'status', 'priority', 'userphone', 'scheduled_time')
+    list_filter = ('status', 'priority', 'userphone')
+    search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number')
+    ordering = ('-priority', 'scheduled_time', 'created_at')
+
+    def contacts_to_process(self, obj):
+        """Return count of contacts in the target list"""
+        return TargetList.objects.filter(id=obj.target_list.id).count()
+    contacts_to_process.short_description = 'Contacts to Process'
+
+admin.site.register(Queue, QueueAdmin)
 
 # admin.site.register(Job)

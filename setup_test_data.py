@@ -59,39 +59,45 @@ def create_test_data():
         user=user,
         name="Luis",
         phone="11963546222",
-        source="Whatsapp",
+        source="Whatsapp",  # Make sure source is correct
+        tag="Botox",
         relationship_tag="Botox",
-        status="active"
+        status="active"  # Make sure status is valid
     )
 
     contact_preench = Contact.objects.create(
         user=user,
         name="Luis",
         phone="11963546222",
-        source="Whatsapp",
+        source="Whatsapp",  # Make sure source is correct
+        tag="Preenchimento",
         relationship_tag="Preenchimento",
-        status="active"
+        status="active"  # Make sure status is valid
     )
 
     # Create Messages for Botox
+    botox_messages = []
     for i in range(3):
-        Message.objects.create(
+        msg = Message.objects.create(
             user=user,
             title=f"Botox Message {i}",
             text=f"Hello {i} message Botox",
             relationship_tag="Botox",
             counter=i
         )
+        botox_messages.append(msg)
 
     # Create Messages for Preenchimento
+    preench_messages = []
     for i in range(3):
-        Message.objects.create(
+        msg = Message.objects.create(
             user=user,
             title=f"Preenchimento Message {i}",
             text=f"Hello {i} message Preenchimento",
             relationship_tag="Preenchimento",
             counter=i
         )
+        preench_messages.append(msg)
 
     # Create Campaigns
     campaign_botox = Campaign.objects.create(
@@ -99,7 +105,12 @@ def create_test_data():
         name="Botox Campaign",
         contact_type="Whatsapp",
         contact_tag="Botox",
-        frequency="Once",
+        frequency="Daily",
+        execution_time="08:00",
+        active_days=[0,1,2,3,4,5,6],  # All days
+        sequential_order=[
+            {'message_id': msg.id} for msg in botox_messages
+        ],
         userphone=userphone_botox,
         campaign_status="Active"  # Make sure campaign is active
     )
@@ -109,28 +120,39 @@ def create_test_data():
         name="Preenchimento Campaign",
         contact_type="Whatsapp",
         contact_tag="Preenchimento",
-        frequency="Once",
+        frequency="Daily",
+        execution_time="08:00",
+        active_days=[0,1,2,3,4,5,6],  # All days
+        sequential_order=[
+            {'message_id': msg.id} for msg in preench_messages
+        ],
         userphone=userphone_preench,
         campaign_status="Active"  # Make sure campaign is active
     )
 
     # Create Target List entries
     target_list_botox = TargetList.objects.create(
+        contact=contact_botox,
         contact_phone=contact_botox.phone,
         contact_type="Whatsapp",
         contact_tag="Botox",
         reference_id=str(contact_botox.id),
         userphone=userphone_botox,
-        message=Message.objects.filter(relationship_tag="Botox", counter=0).first()
+        message=botox_messages[0],  # First message in sequence
+        sequence_order=0,  # First in sequence
+        token=userphone_botox.phone_token
     )
 
     target_list_preench = TargetList.objects.create(
+        contact=contact_preench,
         contact_phone=contact_preench.phone,
         contact_type="Whatsapp",
         contact_tag="Preenchimento",
         reference_id=str(contact_preench.id),
         userphone=userphone_preench,
-        message=Message.objects.filter(relationship_tag="Preenchimento", counter=0).first()
+        message=preench_messages[0],  # First message in sequence
+        sequence_order=0,  # First in sequence
+        token=userphone_preench.phone_token
     )
 
     # Create Queue entries

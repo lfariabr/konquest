@@ -132,6 +132,69 @@ Implementation Strategy
     #    - Used freezegun for time-dependent testing
     #    - Ensured proper timezone handling in tests
    - Set up basic queue processing
+      - First of all process the existing campaigns
+      - This would ideally be a cron job that runs everyday updating the Target Lists
+      - Then, expected behavior is to create queue entries for the target lists generated
+      - Then, expected behavior is to process the queue entries by priority defined (if i'm not mistaken, FIFO) and send messages
+
+   ## Testing Target List Generation
+   1. Manual Testing Steps:
+      - Create test data in Django shell:
+         - Create a test user
+         - Create a test userphone with token
+         - Create test contacts
+         - Create test messages
+         - Create a test campaign with specific schedule
+      - Run target list generation
+      - Verify results:
+         - Check created target lists
+         - Verify contact assignments
+         - Check message assignments
+         - Validate scheduling logic
+
+   2. Expected Outcomes:
+      - Target lists should be created for active campaigns
+      - Only contacts matching campaign criteria should be included
+      - Message frequency rules should be respected
+      - Campaign scheduling (active days, execution time) should be followed
+      - Proper logging of the generation process
+
+   3. Validation Points:
+      - Campaign status (Active/Paused)
+      - Campaign schedule (execution_time, active_days)
+      - Contact eligibility
+      - Message frequency rules
+      - Priority handling
+      - Error handling and logging
+
+   - Question:
+      - Please POINT OUT WHERE i can see the rules defined for the SEQUENCE of the campaigns.
+      - The expected behavior is to create a campaign that has following rules:
+         - if counter = 0, it should position Contacts in the queue
+         - if counter = 1, it should position Contacts in the queue, right after the counter 0
+         - if counter = 2, it should position Contacts in the queue, right after the counter 1
+      - Does it make sense?
+
+   Answer:
+   Currently, there is no explicit sequence/counter field in the Campaign model to handle this ordering requirement. To implement this behavior, we need to:
+
+   1. Add a new field to Campaign model:
+      ```python
+      sequence_order = models.IntegerField(default=0, help_text="Order in which campaigns should be processed (0, 1, 2, etc)")
+      ```
+
+   2. Update Target List generation to respect this order:
+      - Modify generate_target_lists() to process campaigns in sequence_order
+      - Ensure queue entries are created following this sequence
+      - Add validation to prevent duplicate sequence numbers for active campaigns
+
+   This makes perfect sense as it allows for creating a sequence of campaigns where:
+   - Campaign with sequence_order=0 processes first
+   - Campaign with sequence_order=1 processes second
+   - Campaign with sequence_order=2 processes third
+   And so on...
+   # 25/11/2024 , we're HERE!!
+   # python setup_target_list_generation.py
 
 2. Phase 2: Scheduling
    - Configure Celery for daily tasks
