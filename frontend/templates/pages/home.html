@@ -1,0 +1,127 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Konquest - Home{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .logo-container {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 2rem;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .start-button {
+        background: #25D366;
+        color: #1a1a1a;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .start-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+    }
+
+    .start-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+        );
+        transition: 0.5s;
+    }
+
+    .start-button:hover::before {
+        left: 100%;
+    }
+
+    .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s ease forwards 0.5s;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logo-container">
+    <img src="{% static 'img/logo.svg' %}" alt="Konquest Logo" width="100%" height="100%">
+</div>
+
+<h1 class="tagline">Komece a sua jornada de relacionamento aqui!</h1>
+
+<a href="/admin/" class="start-button">CONNECT</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.querySelector('.start-button');
+        
+        // Add hover sound effect
+        button.addEventListener('mouseenter', () => {
+            const hoverSound = new Audio("{% static 'sounds/hover.mp3' %}");
+            hoverSound.volume = 0.2;
+            hoverSound.play().catch(() => {});
+        });
+
+        // Add click effect
+        button.addEventListener('click', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+        });
+    });
+</script>
+{% endblock %}
