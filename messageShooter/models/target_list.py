@@ -13,24 +13,43 @@
 
 # userphone token
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from core.models.userphone import UserPhone
 from core.models.message import Message
 from core.models.contact import Contact
 from django.utils import timezone
+from django.core import validators
 
 class TargetList(models.Model):
+    CONTACT_TYPE_CHOICES = [
+        ('Whatsapp', 'Whatsapp'),
+        ('Appointment', 'Appointment')
+    ]
+
     # Contact information
-    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=True)
-    contact_phone = models.CharField(max_length=20)
-    contact_type = models.CharField(max_length=100)
-    contact_tag = models.CharField(max_length=100)
-    reference_id = models.CharField(max_length=100)
+    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=False)
+    contact_phone = models.CharField(max_length=20, null=False, blank=False)
+    contact_type = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False,
+        choices=CONTACT_TYPE_CHOICES,
+        validators=[
+            validators.RegexValidator(
+                regex='^(Whatsapp|Appointment)$',
+                message='Contact type must be either Whatsapp or Appointment',
+                code='invalid_contact_type'
+            )
+        ]
+    )
+    contact_tag = models.CharField(max_length=100, null=False, blank=False)
+    reference_id = models.CharField(max_length=100, null=True, blank=True)  # Making reference_id nullable
 
     # Message tracking
     sent_messages_count = models.IntegerField(default=0)
-    message = models.ForeignKey('core.Message', on_delete=models.CASCADE)
-    userphone = models.ForeignKey('core.UserPhone', on_delete=models.CASCADE)
+    message = models.ForeignKey('core.Message', on_delete=models.CASCADE, null=False)
+    userphone = models.ForeignKey('core.UserPhone', on_delete=models.CASCADE, null=False)
     token = models.CharField(max_length=100, null=True, blank=True)  # Making token nullable
 
     # Processing
@@ -40,6 +59,19 @@ class TargetList(models.Model):
     days_interval = models.IntegerField(null=True, blank=True, help_text="Days to wait before sending (for appointment campaigns)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """Validate model fields"""
+        super().clean()
+        if self.contact_type not in dict(self.CONTACT_TYPE_CHOICES):
+            raise ValidationError({
+                'contact_type': 'Contact type must be either Whatsapp or Appointment'
+            })
+
+    def save(self, *args, **kwargs):
+        """Override save to enforce validation"""
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering

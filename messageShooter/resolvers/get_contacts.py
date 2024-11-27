@@ -11,16 +11,30 @@ from datetime import timedelta
 
 def get_contact_whatsapp(contact_type, contact_tag=None):
     """
-    Get WhatsApp contacts based on tag, ordered by creation date (FIFO)
+    Get WhatsApp contacts based on tag, ordered by creation date (FIFO).
+    If a contact exists with a different tag, it will be included and its tag
+    will be updated when creating the target list.
     """
     if contact_type != "Whatsapp":
         return []
 
+    # First try to find contacts that already have the right tag
     contacts = Contact.objects.filter(
         source="Whatsapp",
         relationship_tag=contact_tag,
-        status__in=['landing page', 'active']  # Filter by valid statuses
+        status__in=['landing page', 'active']
     ).order_by('created_at')[:500]  # Limit to 500 as per comment in queue_resolver
+    
+    # If we found contacts, return them
+    if contacts.exists():
+        return contacts
+    
+    # If no contacts found, look for any contact with this source and status
+    # The tag will be updated when creating the target list
+    contacts = Contact.objects.filter(
+        source="Whatsapp",
+        status__in=['landing page', 'active']
+    ).order_by('created_at')[:500]
     
     return contacts
 

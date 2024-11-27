@@ -7,18 +7,27 @@ from apiCrm.models.appointment import Appointment
 from django.utils import timezone
 from datetime import timedelta
 
-def get_counter_whatsapp(contact_type, contact_tag=None):
+def get_counter_whatsapp(phone, contact_tag=None):
     """
     For WhatsApp contacts, counter is the number of messages sent for this tag
     This helps in sequence messaging (e.g., first message, follow-up, final reminder)
+    
+    Args:
+        phone: Contact's phone number
+        contact_tag: Tag to filter messages by
+    Returns:
+        Number of messages sent to this contact with this tag
     """
-    if contact_type != "Whatsapp":
-        return 0
-
-    return MessageLogs.objects.filter(
-        message__relationship_tag=contact_tag,
+    from core.models.messagelog import MessageLogs
+    
+    # Filter by phone and tag, only count sent messages
+    logs = MessageLogs.objects.filter(
+        contact__phone=phone,
+        relationship_tag=contact_tag,
         status="sent"
-    ).count()
+    )
+    
+    return logs.count()
 
 #TODO update/test later.
 def get_counter_appointment(contact_type, contact_tag=None):

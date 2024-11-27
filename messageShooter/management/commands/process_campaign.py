@@ -45,27 +45,44 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(f'No target lists found for tag: {campaign_tag}'))
             return
 
-        # Get the message for this counter
-        if specific_counter is not None:
-            counter = specific_counter
-        else:
-            # Get the next counter based on sent messages
-            counter = get_counter_whatsapp("Whatsapp", campaign_tag)
-
-        message = Message.objects.filter(
-            relationship_tag=campaign_tag,
-            counter=counter
-        ).first()
-
-        if not message:
-            self.stdout.write(
-                self.style.ERROR(f'No message found for {campaign_tag} with counter {counter}')
-            )
-            return
-
         # Create queue entries for each target
         queued_count = 0
         for target in target_lists:
+            # Get contact - first try the direct relationship, then fallback to reference_id
+            contact = target.contact
+            if not contact and target.reference_id:
+                try:
+                    contact = Contact.objects.get(id=target.reference_id)
+                except (Contact.DoesNotExist, ValueError):
+                    self.stdout.write(
+                        self.style.ERROR(f'Contact not found for target list {target.id} with reference_id {target.reference_id}')
+                    )
+                    continue
+
+            if not contact:
+                self.stdout.write(
+                    self.style.ERROR(f'No valid contact found for target list {target.id}')
+                )
+                continue
+
+            # Get the counter for this specific contact
+            if specific_counter is not None:
+                counter = specific_counter
+            else:
+                counter = get_counter_whatsapp(contact.phone, campaign_tag)
+
+            # Get the message for this counter
+            message = Message.objects.filter(
+                relationship_tag=campaign_tag,
+                counter=counter
+            ).first()
+
+            if not message:
+                self.stdout.write(
+                    self.style.ERROR(f'No message found for {campaign_tag} with counter {counter}')
+                )
+                continue
+
             # Check if queue entry already exists
             existing_queue = Queue.objects.filter(
                 target_list=target,
@@ -74,23 +91,6 @@ class Command(BaseCommand):
             ).exists()
 
             if not existing_queue:
-                # Get contact - first try the direct relationship, then fallback to reference_id
-                contact = target.contact
-                if not contact and target.reference_id:
-                    try:
-                        contact = Contact.objects.get(id=target.reference_id)
-                    except (Contact.DoesNotExist, ValueError):
-                        self.stdout.write(
-                            self.style.ERROR(f'Contact not found for target list {target.id} with reference_id {target.reference_id}')
-                        )
-                        continue
-
-                if not contact:
-                    self.stdout.write(
-                        self.style.ERROR(f'No valid contact found for target list {target.id}')
-                    )
-                    continue
-
                 Queue.objects.create(
                     target_list=target,
                     contact=contact,
@@ -104,7 +104,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f'Created {queued_count} queue entries for {campaign_tag} '
-                f'(counter: {counter}, message: {message.title})'
+                f'Created {queued_count} queue entries for {campaign_tag}'
             )
         )

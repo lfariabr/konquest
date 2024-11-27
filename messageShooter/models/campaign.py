@@ -4,6 +4,7 @@ from django.utils import timezone
 from core.models.userphone import UserPhone
 from core.models.user import kUser
 from core.models.message import Message  # Import Message model
+from core.models.contact import Contact  # Import Contact model
 
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
@@ -61,6 +62,9 @@ class Campaign(models.Model):
     name = models.CharField(max_length=100)
     contact_type = models.CharField(max_length=100, choices=[(t, t) for t in CONTACT_TYPES])
     contact_tag = models.CharField(max_length=100)
+    
+    # Contact Relationship
+    contacts = models.ManyToManyField(Contact, related_name='campaigns', blank=True)
     
     # Scheduling
     frequency = models.CharField(max_length=100, choices=CAMPAIGN_FREQUENCIES, default=FREQUENCY_ONCE)

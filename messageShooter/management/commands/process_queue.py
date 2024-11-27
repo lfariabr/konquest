@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from messageShooter.resolvers.queue_resolver import process_queue
+from messageShooter.resolvers.queue_resolver import process_queue, process_queue_by_id
 import time
 
 class Command(BaseCommand):
@@ -23,8 +23,34 @@ class Command(BaseCommand):
             default=60,
             help='Seconds to sleep between batches in continuous mode'
         )
+        parser.add_argument(
+            '--queue-id',
+            type=int,
+            help='Process a specific queue entry by ID'
+        )
 
     def handle(self, *args, **options):
+        queue_id = options.get('queue_id')
+        
+        # If queue_id is provided, process just that entry
+        if queue_id:
+            try:
+                success = process_queue_by_id(queue_id)
+                if success:
+                    self.stdout.write(
+                        self.style.SUCCESS(f'Successfully processed queue entry {queue_id}')
+                    )
+                else:
+                    self.stdout.write(
+                        self.style.ERROR(f'Failed to process queue entry {queue_id}')
+                    )
+            except Exception as e:
+                self.stdout.write(
+                    self.style.ERROR(f'Error processing queue entry {queue_id}: {str(e)}')
+                )
+            return
+
+        # Otherwise, process in batch mode
         continuous = options['continuous']
         batch_size = options['batch_size']
         sleep_time = options['sleep']

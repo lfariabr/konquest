@@ -6,6 +6,7 @@ from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_count
 from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
 from core.models.message import Message
+from core.models.contact import Contact
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,38 +21,35 @@ def create_target_list(campaign_id, force_run=False):
     """
     try:
         campaign = Campaign.objects.get(id=campaign_id)
-        logger.info(f"Processing campaign {campaign.name} (ID: {campaign.id})")
-        logger.info(f"Campaign state:")
-        logger.info(f"- Status: {campaign.campaign_status}")
-        logger.info(f"- Start Time: {campaign.start_time}")
-        logger.info(f"- Next Run: {campaign.next_run}")
-        logger.info(f"- Active Days: {campaign.active_days}")
-        logger.info(f"- Frequency: {campaign.frequency}")
-        logger.info(f"- Is Ready: {campaign.is_ready_to_run()}")
-        logger.info(f"- Should Run Today: {campaign.should_run_today()}")
-        logger.info(f"- Force Run: {force_run}")
+        logger.info(f"Processing campaign {campaign.id} - {campaign.name}")
         
         # Check if campaign is active and ready to run
         if not force_run and (campaign.campaign_status != "Active" or not campaign.is_ready_to_run()):
-            logger.info(f"Campaign {campaign.name} is not active or not ready to run")
-            logger.info(f"- Active Status Check: {campaign.campaign_status == 'Active'}")
-            logger.info(f"- Ready to Run Check: {campaign.is_ready_to_run()}")
+            logger.info("Campaign not active or not ready to run")
             return 0, 0, 0
 
         # Check if campaign should run today based on active days
         if not force_run and not campaign.should_run_today():
-            logger.info(f"Campaign {campaign.name} should not run today")
+            logger.info("Campaign should not run today")
             return 0, 0, 0
 
         # Get contacts using appropriate resolver
         if campaign.contact_type == "Whatsapp":
-            contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
+            if campaign.contacts.exists():
+                contacts = campaign.contacts.all()
+                logger.info(f"Using {len(contacts)} contacts from campaign")
+            else:
+                contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
+                logger.info(f"Using {len(contacts)} contacts from resolver")
         elif campaign.contact_type == "Appointment":
-            contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag)
+            if campaign.contacts.exists():
+                contacts = campaign.contacts.all()
+                logger.info(f"Using {len(contacts)} contacts from campaign")
+            else:
+                contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag)
+                logger.info(f"Using {len(contacts)} contacts from resolver")
         else:
             raise ValueError(f"Invalid contact type: {campaign.contact_type}")
-
-        logger.info(f"Found {len(contacts)} contacts for campaign {campaign.name}")
 
         created_count = 0
         skipped_count = 0
@@ -60,65 +58,75 @@ def create_target_list(campaign_id, force_run=False):
         # Process each contact
         for contact in contacts:
             try:
-                logger.info(f"Processing contact: {contact.phone}")
-                
                 # Get message based on campaign type
                 if campaign.contact_type == "Whatsapp":
                     # For WhatsApp, use the next message in sequence based on counter
                     counter = get_counter_whatsapp(contact.phone, campaign.contact_tag)
-                    logger.info(f"Got counter for WhatsApp: {counter}")
                     message = get_message(campaign.contact_type, campaign.contact_tag, counter)
-                    logger.info(f"Got message for counter {counter}: {message.id if message else 'None'}")
-                    
+                    logger.info(f"Got message {message.id if message else 'None'} for counter {counter}")
                 elif campaign.contact_type == "Appointment":
                     # For appointments, get message based on appointment status
                     counter = get_counter_appointment(contact.phone, campaign.contact_tag)
-                    logger.info(f"Got counter for Appointment: {counter}")
                     message = get_message(campaign.contact_type, campaign.contact_tag, counter)
-                    logger.info(f"Got message for counter {counter}: {message.id if message else 'None'}")
+                    logger.info(f"Got message {message.id if message else 'None'} for counter {counter}")
                 else:
                     raise ValueError(f"Invalid contact type: {campaign.contact_type}")
 
                 if not message:
-                    logger.warning(f"No message found for tag {campaign.contact_tag} and counter {counter}")
+                    logger.info(f"No message found for counter {counter}")
                     skipped_count += 1
                     continue
 
                 # Get user phone for sending
                 userphone, token = get_userphone(campaign.contact_tag)
                 if not userphone:
-                    logger.error(f"No user phone found for campaign {campaign.name}")
+                    logger.error("No userphone found")
                     error_count += 1
                     continue
-
-                logger.info(f"Creating target list entry for contact {contact.phone}")
+                
+                # First try to find a contact that already has the right tag
+                existing_contact = Contact.objects.filter(
+                    phone=contact.phone,
+                    relationship_tag=campaign.contact_tag
+                ).first()
+                
+                if existing_contact:
+                    contact_to_use = existing_contact
+                else:
+                    # If no contact found with right tag, update this one
+                    contact.relationship_tag = campaign.contact_tag
+                    contact.save()
+                    contact_to_use = contact
+                
                 # Create target list entry
                 target = TargetList.objects.create(
-                    contact=contact,
-                    contact_phone=contact.phone,
+                    contact=contact_to_use,
+                    contact_phone=contact_to_use.phone,
                     contact_type=campaign.contact_type,
                     contact_tag=campaign.contact_tag,
-                    reference_id=str(contact.id),  # Set reference_id to contact's ID
+                    reference_id=str(contact_to_use.id),
                     message=message,
                     userphone=userphone,
                     sequence_order=counter,
-                    token=token
+                    token=token,
+                    sent_messages_count=0  # Initialize to 0, will be updated by signal handler
                 )
-                logger.info(f"Created target list entry: {target.id}")
+                logger.info(f"Created target list {target.id} for contact {contact_to_use.name}")
                 created_count += 1
 
             except Exception as e:
-                logger.error(f"Error processing contact {contact.phone}: {str(e)}")
+                logger.error(f"Error processing contact: {str(e)}")
                 error_count += 1
 
         # Update campaign's last run time
         campaign.last_run = timezone.now()
         campaign.save()
 
+        logger.info(f"Campaign {campaign.name} finished: {created_count} created, {skipped_count} skipped, {error_count} errors")
         return created_count, skipped_count, error_count
 
     except Exception as e:
-        logger.error(f"Error processing campaign {campaign_id}: {str(e)}")
+        logger.error(f"Error processing campaign: {str(e)}")
         return 0, 0, 1
 
 def clean_target_list():
