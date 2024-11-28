@@ -45,16 +45,42 @@ CAMPAIGN_FREQUENCIES = [
     (FREQUENCY_MONTHLY, "Monthly"),
 ]
 
-# Days of Week for Daily Campaigns
+# Constants for days of the week
 DAYS_OF_WEEK = [
-    (0, "Monday"),
-    (1, "Tuesday"),
-    (2, "Wednesday"),
-    (3, "Thursday"),
-    (4, "Friday"),
-    (5, "Saturday"),
-    (6, "Sunday"),
+    ('monday', 'Monday'),
+    ('tuesday', 'Tuesday'),
+    ('wednesday', 'Wednesday'),
+    ('thursday', 'Thursday'),
+    ('friday', 'Friday'),
+    ('saturday', 'Saturday'),
+    ('sunday', 'Sunday'),
 ]
+
+DAY_NAME_TO_NUMBER = {
+    'monday': 0,
+    'tuesday': 1,
+    'wednesday': 2,
+    'thursday': 3,
+    'friday': 4,
+    'saturday': 5,
+    'sunday': 6,
+}
+
+DAY_NUMBER_TO_NAME = {v: k for k, v in DAY_NAME_TO_NUMBER.items()}
+
+def validate_active_days(value):
+    """Validate that active_days contains valid day names"""
+    if not isinstance(value, list):
+        raise ValidationError('Active days must be a list')
+    
+    valid_days = [day[0] for day in DAYS_OF_WEEK]
+    invalid_days = [day for day in value if day not in valid_days]
+    
+    if invalid_days:
+        raise ValidationError(
+            f'Invalid day names: {", ".join(invalid_days)}. '
+            f'Valid options are: {", ".join(valid_days)}'
+        )
 
 class Campaign(models.Model):
 
@@ -66,16 +92,15 @@ class Campaign(models.Model):
     # Contact Relationship
     contacts = models.ManyToManyField(Contact, related_name='campaigns', blank=True)
     
-    # Scheduling
+    # Scheduling fields
     frequency = models.CharField(max_length=100, choices=CAMPAIGN_FREQUENCIES, default=FREQUENCY_ONCE)
-    start_time = models.DateTimeField(null=True, blank=True) # I believe this one is not being used, as "Execution time" took its place
-    execution_time = models.TimeField(default='08:00')  # Default to 8 AM, later we can add time | later we can also allow users to set this
-    active_days = models.JSONField(default=list, help_text="List of active days (0-6, Monday to Sunday)")
-    
-    # Sequence Control
-    sequential_order = models.JSONField(
+    execution_time = models.TimeField(
+        default='08:00',
+        help_text="Time of day when the campaign should run (HH:MM format)"
+    )
+    active_days = models.JSONField(
         default=list,
-        help_text="List of sequential orders linking to message counters. Format: [{'message_id': id, 'days_interval': days}]"
+        help_text="List of active days (monday, tuesday, etc.)"
     )
     
     # Status
@@ -112,33 +137,6 @@ class Campaign(models.Model):
                     'contact_tag': f'Invalid tag for {self.contact_type}. Valid tags are: {", ".join(valid_tags)}'
                 })
 
-        # Validate sequential_order based on contact_type
-        if self.sequential_order:
-            if not isinstance(self.sequential_order, list):
-                raise ValidationError({
-                    'sequential_order': 'Sequential order must be a list'
-                })
-            
-            for order in self.sequential_order:
-                if not isinstance(order, dict) or 'message_id' not in order:
-                    raise ValidationError({
-                        'sequential_order': 'Each sequential order must be a dictionary with at least a message_id'
-                    })
-                
-                # For Whatsapp campaigns, counter is mandatory
-                if self.contact_type == CONTACT_TYPE_WHATSAPP:
-                    message = Message.objects.filter(id=order['message_id']).first()
-                    if not message or message.counter is None:
-                        raise ValidationError({
-                            'sequential_order': f'Message {order["message_id"]} must have a counter value for Whatsapp campaigns'
-                        })
-                
-                # For Appointment campaigns, days_interval is required
-                if self.contact_type == CONTACT_TYPE_APPOINTMENT and 'days_interval' not in order:
-                    raise ValidationError({
-                        'sequential_order': 'Days interval is required for Appointment campaigns'
-                    })
-
         # Validate scheduling data
         if self.frequency != FREQUENCY_ONCE:
             if not self.execution_time:
@@ -165,9 +163,6 @@ class Campaign(models.Model):
 
     def calculate_next_run(self, from_time):
         """Calculate the next run time based on frequency and active days"""
-        if self.frequency == FREQUENCY_ONCE:
-            return self.start_time
-        
         # Convert execution_time string to datetime.time if needed
         if isinstance(self.execution_time, str):
             hour, minute = map(int, self.execution_time.split(':'))
@@ -186,8 +181,11 @@ class Campaign(models.Model):
         if from_time > next_run:
             next_run += timezone.timedelta(days=1)
         
+        # Convert active_days from names to numbers for comparison
+        active_day_numbers = [DAY_NAME_TO_NUMBER[day] for day in self.active_days]
+        
         # Find the next active day
-        while next_run.weekday() not in self.active_days:
+        while next_run.weekday() not in active_day_numbers:
             next_run += timezone.timedelta(days=1)
         
         return next_run
@@ -198,14 +196,14 @@ class Campaign(models.Model):
             return False
             
         if self.frequency == FREQUENCY_ONCE:
-            return self.start_time and timezone.now() >= self.start_time
+            return timezone.now() >= self.execution_time
             
         return self.next_run and timezone.now() >= self.next_run
 
     def should_run_today(self):
         """Check if the campaign should run today based on active days"""
-        # Get current weekday (0 = Monday, 6 = Sunday)
-        current_weekday = timezone.now().weekday()
+        # Get current weekday name
+        current_day = DAY_NUMBER_TO_NAME[timezone.now().weekday()]
         
         # Check if today is in active days
-        return current_weekday in self.active_days
+        return current_day in self.active_days

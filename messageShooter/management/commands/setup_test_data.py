@@ -106,7 +106,8 @@ class Command(BaseCommand):
             contact_tag="Botox",
             frequency="Once",
             userphone=userphone_botox,
-            campaign_status="Active"  # Make sure campaign is active
+            campaign_status="Active",
+            active_days=['monday', 'wednesday', 'friday']  # Using day names instead of numbers
         )
 
         campaign_preench = Campaign.objects.create(
@@ -116,7 +117,8 @@ class Command(BaseCommand):
             contact_tag="Preenchimento",
             frequency="Once",
             userphone=userphone_preench,
-            campaign_status="Active"  # Make sure campaign is active
+            campaign_status="Active",
+            active_days=['tuesday', 'thursday']  # Using day names instead of numbers
         )
 
         # Create Target Lists
@@ -125,6 +127,7 @@ class Command(BaseCommand):
         message_preench = Message.objects.get(relationship_tag="Preenchimento", counter=0)
 
         target_list_botox = TargetList.objects.create(
+            contact=contact_botox,  # Adding contact reference
             contact_phone=contact_botox.phone,
             contact_type="Whatsapp",
             contact_tag="Botox",
@@ -135,6 +138,7 @@ class Command(BaseCommand):
         )
 
         target_list_preench = TargetList.objects.create(
+            contact=contact_preench,  # Adding contact reference
             contact_phone=contact_preench.phone,
             contact_type="Whatsapp",
             contact_tag="Preenchimento",

@@ -1,0 +1,43 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block field_sets %}
+{{ block.super }}
+{% if show_load_messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var contactTagField = document.querySelector('.field-contact_tag .readonly');
+        if (!contactTagField) {
+            contactTagField = document.querySelector('.field-contact_tag');
+        }
+        
+        if (contactTagField) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.innerHTML = 'Load Messages';
+            button.style.marginLeft = '10px';
+            button.onclick = loadMessages;
+            contactTagField.appendChild(button);
+        }
+    });
+
+    function loadMessages() {
+        var tag = document.getElementById('id_contact_tag').value;
+        if (!tag) {
+            alert('Please select a contact tag first');
+            return;
+        }
+        
+        fetch('../load-messages/?tag=' + encodeURIComponent(tag))
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('id_available_messages').value = data.messages;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error loading messages');
+            });
+    }
+</script>
+{% endif %}
+{% endblock %}

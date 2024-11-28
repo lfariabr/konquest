@@ -86,10 +86,9 @@ def setup_test_data(db):
         frequency=FREQUENCY_DAILY,
         userphone=userphone_botox,
         execution_time=execution_time,
-        active_days=[0, 1, 2, 3, 4, 5],  # Monday to Saturday
-        start_time=now,
-        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo),
-        sequential_order=[{'message_id': message_botox.id}]  # Add message sequence
+        active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],  # Using day names
+        campaign_status="Active",
+        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo)
     )
 
     campaign_preench = Campaign.objects.create(
@@ -100,10 +99,9 @@ def setup_test_data(db):
         frequency=FREQUENCY_DAILY,
         userphone=userphone_preench,
         execution_time=execution_time,
-        active_days=[0, 1, 2, 3, 4, 5],  # Monday to Saturday
-        start_time=now,
-        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo),
-        sequential_order=[{'message_id': message_preench.id}]  # Add message sequence
+        active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],  # Using day names
+        campaign_status="Active",
+        next_run=timezone.datetime.combine(now.date(), execution_time, tzinfo=now.tzinfo)
     )
 
     return {
@@ -197,8 +195,8 @@ def test_target_list_generation_respects_active_days(setup_test_data):
     
     with freeze_time(monday):
         # Update campaign next_run times to today
-        campaign_botox.active_days = [0]  # Monday only
-        campaign_preench.active_days = [0]  # Monday only
+        campaign_botox.active_days = ['monday']  # Monday only
+        campaign_preench.active_days = ['monday']  # Monday only
         campaign_botox.next_run = monday
         campaign_preench.next_run = monday
         campaign_botox.save()
