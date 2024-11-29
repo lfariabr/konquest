@@ -3,12 +3,12 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from core.models.userphone import UserPhone
 from core.models.user import kUser
-from core.models.message import Message  # Import Message model
-from core.models.contact import Contact  # Import Contact model
+from core.models.message import Message  
+from core.models.contact import Contact 
 
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
-CONTACT_TYPE_APPOINTMENT = "Appointment" #Lead, # BillCharge too
+CONTACT_TYPE_APPOINTMENT = "Appointment" #Lead, # BillCharge #TODO
 
 CONTACT_TYPES = [
     CONTACT_TYPE_WHATSAPP,
@@ -153,42 +153,76 @@ class Campaign(models.Model):
         """Override save to handle scheduling logic"""
         self.clean()
         
-        # Calculate next run time only if not using update_fields or if next_run is in update_fields
-        if not kwargs.get('update_fields') or 'next_run' in kwargs.get('update_fields', []):
-            if self.frequency != FREQUENCY_ONCE and self.campaign_status == STATUS_ACTIVE:
-                now = timezone.now()
-                self.next_run = self.calculate_next_run(now)
+        # Only calculate next_run if:
+        # 1. It's not being explicitly set (not in update_fields)
+        # 2. It's currently None
+        # 3. The campaign is recurring and active
+        if (not kwargs.get('update_fields') or ('next_run' not in kwargs.get('update_fields', []))) \
+           and self.next_run is None \
+           and self.frequency != FREQUENCY_ONCE \
+           and self.campaign_status == STATUS_ACTIVE:
+            now = timezone.now()
+            self.next_run = self.calculate_next_run(now)
         
         super().save(*args, **kwargs)
 
-    def calculate_next_run(self, from_time):
-        """Calculate the next run time based on frequency and active days"""
-        # Convert execution_time string to datetime.time if needed
-        if isinstance(self.execution_time, str):
-            hour, minute = map(int, self.execution_time.split(':'))
-            execution_time = timezone.datetime.strptime(f"{hour:02d}:{minute:02d}", "%H:%M").time()
-        else:
-            execution_time = self.execution_time
+    def calculate_next_run(self, current_time):
+        """Calculate the next run time for a campaign based on its frequency and execution time.
 
-        # Start with the base time today
-        next_run = timezone.datetime.combine(
-            from_time.date(),
-            execution_time,
-            tzinfo=from_time.tzinfo
+        Args:
+            current_time (datetime): The current time to use as a reference.
+
+        Returns:
+            datetime: The next run time for the campaign.
+        """
+        # Get execution time components
+        if isinstance(self.execution_time, str):
+            execution_hour, execution_minute = map(int, self.execution_time.split(':'))
+        else:
+            execution_hour = self.execution_time.hour
+            execution_minute = self.execution_time.minute
+        
+        # Get timezone-aware time for today at execution time
+        current_tz = current_time.tzinfo
+        today_execution = current_time.replace(
+            hour=execution_hour,
+            minute=execution_minute,
+            second=0,
+            microsecond=0
         )
-        
-        # If we're past today's execution time, start from tomorrow
-        if from_time > next_run:
-            next_run += timezone.timedelta(days=1)
-        
-        # Convert active_days from names to numbers for comparison
-        active_day_numbers = [DAY_NAME_TO_NUMBER[day] for day in self.active_days]
-        
-        # Find the next active day
-        while next_run.weekday() not in active_day_numbers:
-            next_run += timezone.timedelta(days=1)
-        
-        return next_run
+
+        # If current time is before today's execution time, use today
+        if current_time < today_execution:
+            return today_execution
+
+        # For monthly campaigns, move to 1st of next month
+        if self.frequency == FREQUENCY_MONTHLY:
+            if current_time.month == 12:
+                next_month = 1
+                next_year = current_time.year + 1
+            else:
+                next_month = current_time.month + 1
+                next_year = current_time.year
+            
+            return current_time.replace(
+                year=next_year,
+                month=next_month,
+                day=1,
+                hour=execution_hour,
+                minute=execution_minute,
+                second=0,
+                microsecond=0
+            )
+
+        # For weekly campaigns, find the next active day
+        if self.frequency == FREQUENCY_WEEKLY:
+            next_run = today_execution + timezone.timedelta(days=1)
+            while next_run.strftime('%A').lower() not in self.active_days:
+                next_run += timezone.timedelta(days=1)
+            return next_run
+
+        # For daily campaigns, move to next day
+        return today_execution + timezone.timedelta(days=1)
 
     def is_ready_to_run(self):
         """Check if the campaign is ready to run"""
@@ -196,9 +230,22 @@ class Campaign(models.Model):
             return False
             
         if self.frequency == FREQUENCY_ONCE:
-            return timezone.now() >= self.execution_time
+            # Convert execution_time to datetime for today
+            now = timezone.now()
+            execution_datetime = timezone.datetime.combine(
+                now.date(),
+                self.execution_time,
+                tzinfo=now.tzinfo
+            )
+            return now >= execution_datetime
             
-        return self.next_run and timezone.now() >= self.next_run
+        # For recurring campaigns, check next_run
+        if not self.next_run:
+            # If next_run is not set, calculate it
+            self.next_run = self.calculate_next_run(timezone.now())
+            self.save(update_fields=['next_run'])
+            
+        return timezone.now() >= self.next_run
 
     def should_run_today(self):
         """Check if the campaign should run today based on active days"""

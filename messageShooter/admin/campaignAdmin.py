@@ -67,10 +67,10 @@ class CampaignAdmin(admin.ModelAdmin):
         }),
     )
     
-    list_display = ['name', 'contact_type', 'contact_tag', 'frequency', 'campaign_status', 'last_run', 'next_run']
-    list_filter = ['contact_type', 'contact_tag', 'frequency', 'campaign_status']
+    list_display = ['name', 'campaign_status', 'contact_type', 'contact_tag', 'frequency', 'execution_time', 'next_run']
+    list_filter = ['campaign_status', 'contact_type', 'frequency']
     search_fields = ['name']
-    readonly_fields = ['last_run', 'next_run']
+    readonly_fields = ['created_at', 'last_run']
     exclude = ['contacts']
     
     actions = ['instant_generate_tlist']

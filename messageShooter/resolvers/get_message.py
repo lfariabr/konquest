@@ -14,6 +14,7 @@ def get_message(contact_type, contact_tag=None, counter=0):
     Message selection logic:
     1. WhatsApp messages: Selected by tag and sequence (counter)
        - Preenchimento/Botox: Sequential messages (1st contact, follow-up, etc.)
+       - If no message exists for the counter, returns None (no fallback)
     
     2. Appointment messages: Selected by tag and timing
        - Reminder: Different messages for different days before appointment
@@ -21,19 +22,10 @@ def get_message(contact_type, contact_tag=None, counter=0):
        - Reschedule: Messages based on number of reschedule attempts
        - Google My Business: Review request message
     """
-    # Get message matching all criteria
+    # Get message matching all criteria - no fallback to counter=0
     message = Message.objects.filter(
         relationship_tag=contact_tag,
         counter=counter
-    ).first()
-    
-    if message:
-        return message
-    
-    # If no exact match, try to get default message for this tag
-    message = Message.objects.filter(
-        relationship_tag=contact_tag,
-        counter=0  # Default message
     ).first()
     
     return message

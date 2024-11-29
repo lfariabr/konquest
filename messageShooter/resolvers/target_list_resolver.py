@@ -1,6 +1,6 @@
 from django.utils import timezone
+from messageShooter.models.campaign import Campaign, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
-from messageShooter.models.campaign import Campaign
 from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
 from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
 from messageShooter.resolvers.get_message import get_message
@@ -109,7 +109,7 @@ def create_target_list(campaign_id, force_run=False):
                     userphone=userphone,
                     sequence_order=counter,
                     token=token,
-                    sent_messages_count=0  # Initialize to 0, will be updated by signal handler
+                    sent_messages_count=counter  # Initialize with the current counter value
                 )
                 logger.info(f"Created target list {target.id} for contact {contact_to_use.name}")
                 created_count += 1
@@ -172,27 +172,51 @@ def generate_target_lists():
     
     for campaign in campaigns:
         logger.info(f"Processing campaign {campaign.name}")
+        logger.info(f"Status: {campaign.campaign_status}")
+        logger.info(f"Next run: {campaign.next_run}")
+        logger.info(f"Current time: {timezone.now()}")
+        logger.info(f"Active days: {campaign.active_days}")
+        logger.info(f"Current day: {timezone.now().strftime('%A').lower()}")
+        
         # Check if campaign should run
-        if campaign.campaign_status != "Active" or not campaign.is_ready_to_run():
-            logger.info(f"Campaign {campaign.name} is not active or not ready to run")
+        if campaign.campaign_status != "Active":
+            logger.info(f"Campaign {campaign.name} is not active")
+            continue
+            
+        if not campaign.is_ready_to_run():
+            logger.info(f"Campaign {campaign.name} is not ready to run (next_run: {campaign.next_run}, now: {timezone.now()})")
             continue
             
         if not campaign.should_run_today():
             logger.info(f"Campaign {campaign.name} should not run today")
             continue
             
-        # Generate target list for this campaign
-        created, skipped, errors = create_target_list(campaign.id)
-        logger.info(f"Campaign {campaign.name}: {created} created, {skipped} skipped, {errors} errors")
-        
-        if created > 0:
-            # Get the newly created target lists for this campaign
-            new_lists = TargetList.objects.filter(
-                contact_tag=campaign.contact_tag,
-                status='pending'
-            ).order_by('-created_at')[:created]
+        try:
+            # Process campaign...
+            created, skipped, errors = create_target_list(campaign.id)
             
-            created_lists.extend(new_lists)
+            # After successful processing, update next_run and last_run
+            campaign.last_run = timezone.now()
+            if campaign.frequency != FREQUENCY_ONCE:
+                campaign.next_run = campaign.calculate_next_run(timezone.now())
+            else:
+                campaign.campaign_status = "Completed"
+            campaign.save(update_fields=['last_run', 'next_run', 'campaign_status'])
+            
+            logger.info(f"Campaign {campaign.name}: {created} created, {skipped} skipped, {errors} errors")
+            
+            if created > 0:
+                # Get the newly created target lists for this campaign
+                new_lists = TargetList.objects.filter(
+                    contact_tag=campaign.contact_tag,
+                    status='pending'
+                ).order_by('-created_at')[:created]
+                
+                created_lists.extend(new_lists)
+            
+        except Exception as e:
+            logger.error(f"Error processing campaign {campaign.name}: {str(e)}")
+            errors += 1
     
     logger.info(f"Target list generation complete. Created {len(created_lists)} lists")
     return created_lists

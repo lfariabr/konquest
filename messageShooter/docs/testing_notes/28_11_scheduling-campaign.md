@@ -23,7 +23,7 @@ Testing the campaign scheduling functionality to ensure proper message delivery 
 - Django Version: Latest
 
 ## Test Cases
-
+## 28/11/2024
 ### 1. Campaign Creation
 - [X] Create new campaign with basic information
 - [X] Set campaign name and description
@@ -43,19 +43,28 @@ setup test data: python manage.py setup_test_data
 [ok] h. re-think about "Sequential Order" field - all right, we killed it!
 [ok] i. pytest updates (oh boy!): 165 passed, 4 errors 
 
+## 29/11/2024
 ### 2. Schedule Configuration
-- [ ] Set start date and time
-- [ ] Set end date and time (optional)
-- [ ] Configure time zone settings
-- [ ] Set message sending intervals
-- [ ] Test schedule validation rules
+- [X] Set start date and time
+- [X] Set end date and time (optional)
+- [X] Configure time zone settings
+- [X] Set message sending intervals
+- [X] Test schedule validation rules
+Tests:
+[] a. Create campaign with "Once" frequency
+[ok] b. Create campaign with "Daily" frequency
+[] c. Create campaign with "Weekly" frequency
+[] d. Create campaign with "Monthly" frequency
+[ok] e. Set Next run and execute run_scheduler
+[ok] f. Make sure Campaign creates Target List
+[ok] g. Make sure Target List creates Queue
+[ok] h. Make sure Queue sends appropriate counter message
 
 ### 3. Target List Management
-- [ ] Import target list from CSV
 - [ ] Validate phone number formats
 - [ ] Check duplicate entries handling
 - [ ] Test target list updates
-- [ ] Verify contact information parsing
+- [X] Verify contact information parsing
 
 ### 4. Message Template Testing
 - [ ] Create message template

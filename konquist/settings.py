@@ -130,6 +130,9 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # Adjust limitation
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240 # higher than the count of fields
 
+# Django Daisy Configuration
+APPS_REORDER = {}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -54,5 +54,8 @@ class CampaignAdminForm(forms.ModelForm):
 
     class Meta:
         model = Campaign
-        fields = '__all__'
-        exclude = ['last_run', 'next_run']  # Hide these fields in the form
+        fields = ['name', 'contact_type', 'contact_tag', 'frequency', 'execution_time', 
+                 'active_days', 'campaign_status', 'userphone', 'next_run']
+        widgets = {
+            'next_run': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
