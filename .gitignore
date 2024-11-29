@@ -31,3 +31,6 @@ apiSocialHub/logs/
 
 migrations/
 references/
+
+# Other
+messageShooter/references/
