@@ -46,7 +46,8 @@ class TestRunSchedulerCommand(TestCase):
             title="Test Message",
             text="Hello test message",
             counter=0,
-            relationship_tag="Botox"
+            relationship_tag="Botox",
+            contact_type="Whatsapp"
         )
         
         # Set execution_time to a time object
@@ -151,7 +152,8 @@ class TestRunSchedulerCommand(TestCase):
             title="Message 1",
             text="Test message 1",
             counter=1,
-            relationship_tag="Botox"
+            relationship_tag="Botox",
+            contact_type="Whatsapp"
         )
         
         # Create message logs to simulate previous messages

@@ -17,7 +17,7 @@ def process_queue(batch_size=50):
     pending_messages = Queue.objects.filter(
         status='pending',
         scheduled_time__lte=now
-    ).select_related('target_list', 'message', 'contact', 'userphone')[:batch_size]
+    ).select_related('target_list', 'message', 'userphone', 'target_list__contact')[:batch_size]
 
     processed_count = 0
     success_count = 0
@@ -38,7 +38,7 @@ def process_queue(batch_size=50):
                 message=message,
                 user=message.user,
                 user_phone=queue_item.userphone,
-                contact=queue_item.contact,
+                contact=queue_item.target_list.contact,
                 status='processing',
                 relationship_tag=target.contact_tag
             )
@@ -62,7 +62,7 @@ def process_queue(batch_size=50):
                 )
 
             if success:
-                queue_item.status = 'completed'
+                queue_item.status = 'sent'
                 message_log.status = 'sent'
                 success_count += 1
             else:
@@ -70,7 +70,7 @@ def process_queue(batch_size=50):
                     queue_item.status = 'retrying'
                     queue_item.retry_count += 1
                     queue_item.scheduled_time = now + timezone.timedelta(minutes=5 * queue_item.retry_count)
-                    message_log.status = 'retry'
+                    message_log.status = 'failed'
                 else:
                     queue_item.status = 'failed'
                     message_log.status = 'failed'
@@ -88,7 +88,7 @@ def process_queue(batch_size=50):
                 message=message,
                 user=message.user,
                 user_phone=queue_item.userphone,
-                contact=queue_item.contact,
+                contact=queue_item.target_list.contact,
                 status='failed',
                 relationship_tag=target.contact_tag
             )
@@ -110,7 +110,7 @@ def process_queue_by_id(queue_id):
     
     try:
         queue_item = Queue.objects.select_related(
-            'target_list', 'message', 'contact', 'userphone'
+            'target_list', 'message', 'userphone', 'target_list__contact'
         ).get(id=queue_id)
         
         # Allow processing of both pending and failed entries
@@ -129,8 +129,6 @@ def process_queue_by_id(queue_id):
             raise ValueError(f"Queue entry {queue_id} has no target list")
         if not queue_item.message:
             raise ValueError(f"Queue entry {queue_id} has no message")
-        if not queue_item.contact:
-            raise ValueError(f"Queue entry {queue_id} has no contact")
         if not queue_item.userphone:
             raise ValueError(f"Queue entry {queue_id} has no userphone")
         if not queue_item.phone_token:
@@ -145,7 +143,7 @@ def process_queue_by_id(queue_id):
             message=message,
             user=message.user,
             user_phone=queue_item.userphone,
-            contact=queue_item.contact,
+            contact=queue_item.target_list.contact,
             status='processing',
             relationship_tag=target.contact_tag
         )

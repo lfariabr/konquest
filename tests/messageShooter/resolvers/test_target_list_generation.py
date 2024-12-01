@@ -62,6 +62,7 @@ def setup_test_data(db):
         title="Botox Message 0",
         text="Hello message Botox 0",
         relationship_tag="Botox",
+        contact_type="Whatsapp",
         counter=0
     )
 
@@ -70,6 +71,7 @@ def setup_test_data(db):
         title="Preenchimento Message 0",
         text="Hello message Preenchimento 0",
         relationship_tag="Preenchimento",
+        contact_type="Whatsapp",
         counter=0
     )
 
@@ -256,7 +258,7 @@ def test_target_list_to_queue_conversion(setup_test_data):
         for queue_item in Queue.objects.all():
             assert queue_item.status == 'pending'
             assert queue_item.target_list is not None
-            assert queue_item.contact is not None
+            assert queue_item.target_list.contact is not None
             assert queue_item.message is not None
             assert queue_item.userphone is not None
             assert queue_item.scheduled_time is not None

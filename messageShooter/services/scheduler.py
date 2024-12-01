@@ -25,19 +25,24 @@ class CampaignScheduler:
             queued_count = 0
             with transaction.atomic():
                 for target_list in created_lists:
+                    contacts = target_list.get_contacts()
                     Queue.objects.create(
                         target_list=target_list,
-                        contact=target_list.contact,
+                        campaign=target_list.campaign,  # Make sure campaign is set
                         message=target_list.message,
                         userphone=target_list.userphone,
                         phone_token=target_list.token,
-                        priority=target_list.priority,
-                        scheduled_time=timezone.now()
+                        priority=target_list.priority if hasattr(target_list, 'priority') else 0,
+                        scheduled_time=timezone.now(),
+                        total_contacts=len(contacts),
+                        processed_contacts={},
+                        processed_count=0,
+                        status='pending'
                     )
                     target_list.status = 'processing'
                     target_list.save()
                     queued_count += 1
-                    logger.info(f"Queued target list {target_list.id}")
+                    logger.info(f"Queued target list {target_list.id} for campaign {target_list.campaign.id if target_list.campaign else 'None'}")
             
             logger.info(f"Successfully queued {queued_count} target lists")
             return queued_count

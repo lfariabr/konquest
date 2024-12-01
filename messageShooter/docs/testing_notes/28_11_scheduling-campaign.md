@@ -15,13 +15,6 @@ Date: November 28, 2023
 ## Overview
 Testing the campaign scheduling functionality to ensure proper message delivery timing and campaign management.
 
-## Test Environment
-- Local Development Environment
-- Django Admin Interface
-- Database: PostgreSQL
-- Python Version: 3.10
-- Django Version: Latest
-
 ## Test Cases
 ## 28/11/2024
 ### 1. Campaign Creation
@@ -30,18 +23,17 @@ Testing the campaign scheduling functionality to ensure proper message delivery 
 - [X] Upload target list
 - [X] Configure message template
 - [X] Validate all required fields
-Tests:
-[ok] a. Campaign is askign to select "Contacts:". Not needed to be here. The contacts will be auto generated as campaign runs and populates contact list
-[ok] b. "Start time" and "Execution time" are duplicated. Since HH:MM is being set on Start time, execution time is not needed
-[ok] c. Active Days should be a multi select field with the names of the days instead of numbers
-[ok] d. Sequential Order should be easily editable. Since "Contact tag" equals to = "Relationship tag", we just need to exhibit existing dictionary structure showing "counter" number and "message.text" to easily validate
-[ok] e. Last run and Next run don't need to appear on campaign creation
-[ok] f. UserPhone should display the phone number instead of "UserPhone object (1)"
+- [X] a. Campaign is askign to select "Contacts:". Not needed to be here. The contacts will be auto generated as campaign runs and populates contact list
+- [X] b. "Start time" and "Execution time" are duplicated. Since HH:MM is being set on Start time, execution time is not needed
+- [X] c. Active Days should be a multi select field with the names of the days instead of numbers
+- [X] d. Sequential Order should be easily editable. Since "Contact tag" equals to = "Relationship tag", we just need to exhibit existing dictionary structure showing "counter" number and "message.text" to easily validate
+- [X] e. Last run and Next run don't need to appear on campaign creation
+- [X] f. UserPhone should display the phone number instead of "UserPhone object (1)"
 EXTRA ITEMS: 
-[ok] g. create "Forms" and "Admin" directories for better organization
+- [X] g. create "Forms" and "Admin" directories for better organization
 setup test data: python manage.py setup_test_data
-[ok] h. re-think about "Sequential Order" field - all right, we killed it!
-[ok] i. pytest updates (oh boy!): 165 passed, 4 errors 
+- [X] h. re-think about "Sequential Order" field - all right, we killed it!
+- [X] i. pytest updates (oh boy!): 165 passed, 4 errors 
 
 ## 29/11/2024
 ### 2. Schedule Configuration
@@ -51,33 +43,38 @@ setup test data: python manage.py setup_test_data
 - [X] Set message sending intervals
 - [X] Test schedule validation rules
 Tests:
-[] a. Create campaign with "Once" frequency
-[ok] b. Create campaign with "Daily" frequency
-[] c. Create campaign with "Weekly" frequency
-[] d. Create campaign with "Monthly" frequency
-[ok] e. Set Next run and execute run_scheduler
-[ok] f. Make sure Campaign creates Target List
-[ok] g. Make sure Target List creates Queue
-[ok] h. Make sure Queue sends appropriate counter message
+[X] a. Create campaign with "Once" frequency
+[X] b. Create campaign with "Daily" frequency
+[X] c. Create campaign with "Weekly" frequency
+[X] d. Create campaign with "Monthly" frequency
+[X] e. Set Next run and execute run_scheduler
+[X] f. Make sure Campaign creates Target List
+[X] g. Make sure Target List creates Queue
+[X] h. Make sure Queue sends appropriate counter message?
 
+# 30/11/2024
 ### 3. Target List Management
-- [ ] Validate phone number formats
-- [ ] Check duplicate entries handling
-- [ ] Test target list updates
+- [X] Validate phone number formats
 - [X] Verify contact information parsing
+- [X] a. Message logss to Message Log
+- [X] b. Message Logs display Text Message instead of "Message object (1)"
+- [X] c. Message Logs display "UserPhone" instead of "UserPhone object (1)"
+- [X] d. Message Logs display "Phone Number" of contact instead of "Contact object (1)"
+- [X] Test target list updates
+- [ ] Check duplicate entries handling - FAILED. Should eliminate duplicates when creating the target list
+- [ ] Check counter updates at different relationship tags on the messages
 
 ### 4. Message Template Testing
-- [ ] Create message template
-- [ ] Test variable substitution
-- [ ] Verify character count limits
-- [ ] Test emoji support
-- [ ] Check URL shortening (if applicable)
+- [X] Create message template
+- [X] Verify character count limits
+- [X] Test emoji support
+- [ ] Test variable substitution - only in appointment
 
 ### 5. Campaign Execution
-- [ ] Test immediate start
+- [X] Test immediate start
 - [ ] Test scheduled start
 - [ ] Verify message queuing
-- [ ] Monitor sending progress
+- [ ] Monitor sending progress (put 2 contacts and see if both target lists are working)
 - [ ] Check rate limiting compliance
 
 ### 6. Error Handling
@@ -87,6 +84,9 @@ Tests:
 - [ ] Rate limit exceeded scenarios
 - [ ] Database connection issues
 
+### 8. Queue Processing
+- [ ] Fix that one queue item should be the queue itself, not the target list individuals
+
 ### 7. Monitoring and Reporting
 - [ ] Campaign status updates
 - [ ] Delivery statistics
@@ -94,18 +94,14 @@ Tests:
 - [ ] Performance metrics
 - [ ] Export functionality
 
-## Known Issues
-1. TBD - Document any issues discovered during testing
 
-## Next Steps
+## Next Steps 
 1. Complete initial testing phase
 2. Document any bugs or issues
-3. Create JIRA tickets for identified problems
-4. Schedule follow-up testing session
+3. Schedule follow-up testing session
 
 ## Notes
 - Remember to test with different time zones
-- Verify compliance with messaging regulations
 - Test both small and large target lists
 - Document any unexpected behavior
 

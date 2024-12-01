@@ -12,3 +12,7 @@ class MessageLogs(models.Model):
     status = models.CharField(max_length=100)
     sent_at = models.DateTimeField(auto_now_add=True)
     relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')
+
+    class Meta:
+        verbose_name = 'Message Log'
+        verbose_name_plural = 'Message Logs'

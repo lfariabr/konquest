@@ -18,6 +18,7 @@ from django.db import models
 from core.models.userphone import UserPhone
 from core.models.message import Message
 from core.models.contact import Contact
+from messageShooter.models.campaign import Campaign
 from django.utils import timezone
 from django.core import validators
 
@@ -49,6 +50,7 @@ class TargetList(models.Model):
     # Message tracking
     sent_messages_count = models.IntegerField(default=0)
     message = models.ForeignKey('core.Message', on_delete=models.CASCADE, null=False)
+    campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True, related_name='target_lists')
     userphone = models.ForeignKey('core.UserPhone', on_delete=models.CASCADE, null=False)
     token = models.CharField(max_length=100, null=True, blank=True)  # Making token nullable
 
@@ -73,6 +75,19 @@ class TargetList(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def get_contacts(self):
+        """
+        Get contacts associated with this target list using the appropriate resolver
+        based on contact_type.
+        """
+        from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+
+        if self.contact_type == 'Whatsapp':
+            return get_contact_whatsapp(self.contact_type, self.contact_tag)
+        elif self.contact_type == 'Appointment':
+            return get_contact_appointment(self.contact_type, self.contact_tag)
+        return []
+
     class Meta:
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering
         indexes = [
@@ -81,4 +96,4 @@ class TargetList(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.contact_type}:{self.contact_tag} - {self.contact_phone}"
+        return f"Target List {self.id} - {self.contact_tag}"

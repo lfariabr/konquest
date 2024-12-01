@@ -11,4 +11,5 @@ class Message(models.Model):
     file = models.FileField(null=True, blank=True)
     file_type = models.CharField(max_length=20, choices=FileType.choices, null=True, blank=True)
     relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')
+    contact_type = models.CharField(max_length=100, null=True, blank=True, default='')
     created_at = models.DateTimeField(default=timezone.now)

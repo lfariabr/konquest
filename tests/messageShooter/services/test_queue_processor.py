@@ -71,7 +71,6 @@ class TestQueueProcessor(TestCase):
         # Create queue entry
         queue_entry = Queue.objects.create(
             target_list=self.target_list,
-            contact=self.contact,
             message=self.message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,
@@ -112,7 +111,6 @@ class TestQueueProcessor(TestCase):
         # Create queue entry
         queue_entry = Queue.objects.create(
             target_list=self.target_list,
-            contact=self.contact,
             message=self.message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,
@@ -136,7 +134,7 @@ class TestQueueProcessor(TestCase):
         # Check message log
         self.assertEqual(MessageLogs.objects.count(), 1)
         log = MessageLogs.objects.first()
-        self.assertEqual(log.status, 'retry')
+        self.assertEqual(log.status, 'failed')
 
     def test_process_queue_respects_scheduled_time(self):
         """Test that process_queue only processes messages scheduled for now or earlier"""
@@ -144,7 +142,6 @@ class TestQueueProcessor(TestCase):
         future_time = timezone.now() + timezone.timedelta(hours=1)
         Queue.objects.create(
             target_list=self.target_list,
-            contact=self.contact,
             message=self.message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,
@@ -169,7 +166,6 @@ class TestQueueProcessor(TestCase):
         # Create queue entry
         queue_entry = Queue.objects.create(
             target_list=self.target_list,
-            contact=self.contact,
             message=self.message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,
@@ -187,12 +183,12 @@ class TestQueueProcessor(TestCase):
                 self.queue_processor.process_queue()
                 queue_entry.refresh_from_db()
                 
-                if i < 2:  # First two retries
+                if i < self.queue_processor.max_retries:  # First three retries
                     self.assertEqual(queue_entry.status, 'retrying')
                     self.assertEqual(queue_entry.retry_count, i + 1)
                 else:  # After max retries
                     self.assertEqual(queue_entry.status, 'failed')
-                    self.assertEqual(queue_entry.retry_count, 2)  # Max retries
+                    self.assertEqual(queue_entry.retry_count, self.queue_processor.max_retries)
                 
                 # Advance time by 5 minutes for next iteration
                 current_time += timezone.timedelta(minutes=5)
@@ -221,7 +217,6 @@ class TestQueueProcessor(TestCase):
         # Create queue entry with file message
         queue_entry = Queue.objects.create(
             target_list=self.target_list,
-            contact=self.contact,
             message=file_message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,

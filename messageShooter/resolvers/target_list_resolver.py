@@ -19,9 +19,14 @@ def create_target_list(campaign_id, force_run=False):
         force_run: If True, bypasses the ready-to-run checks
     Returns (created_count, skipped_count, error_count)
     """
+    created_count = 0
+    skipped_count = 0
+    error_count = 0
+    
     try:
+        # Get campaign
         campaign = Campaign.objects.get(id=campaign_id)
-        logger.info(f"Processing campaign {campaign.id} - {campaign.name}")
+        logger.info(f"Processing campaign {campaign.name}")
         
         # Check if campaign is active and ready to run
         if not force_run and (campaign.campaign_status != "Active" or not campaign.is_ready_to_run()):
@@ -33,100 +38,93 @@ def create_target_list(campaign_id, force_run=False):
             logger.info("Campaign should not run today")
             return 0, 0, 0
 
-        # Get contacts using appropriate resolver
+        # Get contacts based on campaign type
         if campaign.contact_type == "Whatsapp":
-            if campaign.contacts.exists():
-                contacts = campaign.contacts.all()
-                logger.info(f"Using {len(contacts)} contacts from campaign")
-            else:
-                contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
-                logger.info(f"Using {len(contacts)} contacts from resolver")
-        elif campaign.contact_type == "Appointment":
-            if campaign.contacts.exists():
-                contacts = campaign.contacts.all()
-                logger.info(f"Using {len(contacts)} contacts from campaign")
-            else:
-                contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag)
-                logger.info(f"Using {len(contacts)} contacts from resolver")
+            contacts = get_contact_whatsapp(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
         else:
-            raise ValueError(f"Invalid contact type: {campaign.contact_type}")
-
-        created_count = 0
-        skipped_count = 0
-        error_count = 0
-
+            contacts = get_contact_appointment(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
+            
+        logger.info(f"Using {len(contacts)} contacts from resolver")
+        
+        if not contacts:
+            logger.warning(f"No contacts found for campaign {campaign.name} with tag {campaign.contact_tag}")
+            return created_count, skipped_count, error_count
+        
+        logger.info(f"Using {len(contacts)} contacts from resolver")
+        
         # Process each contact
         for contact in contacts:
             try:
-                # Get message based on campaign type
+                # Get current message counter for contact
                 if campaign.contact_type == "Whatsapp":
-                    # For WhatsApp, use the next message in sequence based on counter
                     counter = get_counter_whatsapp(contact.phone, campaign.contact_tag)
-                    message = get_message(campaign.contact_type, campaign.contact_tag, counter)
-                    logger.info(f"Got message {message.id if message else 'None'} for counter {counter}")
-                elif campaign.contact_type == "Appointment":
-                    # For appointments, get message based on appointment status
-                    counter = get_counter_appointment(contact.phone, campaign.contact_tag)
-                    message = get_message(campaign.contact_type, campaign.contact_tag, counter)
-                    logger.info(f"Got message {message.id if message else 'None'} for counter {counter}")
                 else:
-                    raise ValueError(f"Invalid contact type: {campaign.contact_type}")
-
-                if not message:
-                    logger.info(f"No message found for counter {counter}")
-                    skipped_count += 1
-                    continue
-
-                # Get user phone for sending
-                userphone, token = get_userphone(campaign.contact_tag)
-                if not userphone:
-                    logger.error("No userphone found")
-                    error_count += 1
-                    continue
-                
-                # First try to find a contact that already has the right tag
-                existing_contact = Contact.objects.filter(
-                    phone=contact.phone,
-                    relationship_tag=campaign.contact_tag
+                    counter = get_counter_appointment(contact.phone, campaign.contact_tag)
+                    
+                # Get message for current counter
+                message = Message.objects.filter(
+                    user=campaign.user,
+                    relationship_tag=campaign.contact_tag,
+                    counter=counter
                 ).first()
                 
-                if existing_contact:
-                    contact_to_use = existing_contact
-                else:
-                    # If no contact found with right tag, update this one
-                    contact.relationship_tag = campaign.contact_tag
-                    contact.save()
-                    contact_to_use = contact
+                if not message:
+                    logger.warning(f"No message found for counter {counter}")
+                    skipped_count += 1
+                    continue
+                    
+                # Update message contact type if not set
+                if not message.contact_type:
+                    message.contact_type = campaign.contact_type
+                    message.save()
+                    
+                logger.info(f"Got message {message.id} for counter {counter}")
+                
+                # Check if target list already exists
+                existing = TargetList.objects.filter(
+                    campaign=campaign,
+                    contact=contact,
+                    message__counter=counter,  # Check counter instead of exact message
+                    status__in=['pending', 'processing', 'retrying']
+                ).exists()
+                
+                if existing:
+                    logger.info(f"Target list already exists for contact {contact.id}")
+                    skipped_count += 1
+                    continue
                 
                 # Create target list entry
-                target = TargetList.objects.create(
-                    contact=contact_to_use,
-                    contact_phone=contact_to_use.phone,
-                    contact_type=campaign.contact_type,
-                    contact_tag=campaign.contact_tag,
-                    reference_id=str(contact_to_use.id),
+                target_list = TargetList.objects.create(
+                    campaign=campaign,
+                    contact=contact,
                     message=message,
-                    userphone=userphone,
-                    sequence_order=counter,
-                    token=token,
-                    sent_messages_count=counter  # Initialize with the current counter value
+                    contact_tag=campaign.contact_tag,
+                    contact_type=campaign.contact_type,
+                    contact_phone=contact.phone,
+                    reference_id=str(contact.id),
+                    userphone=campaign.userphone,
+                    token=campaign.userphone.phone_token,
+                    status='pending'
                 )
-                logger.info(f"Created target list {target.id} for contact {contact_to_use.name}")
+                
+                logger.info(f"Created target list {target_list.id} for contact {contact.id}")
                 created_count += 1
+                
+                # If this is a one-time campaign and we've processed all contacts,
+                # mark the campaign as completed
+                if campaign.frequency == FREQUENCY_ONCE and created_count == len(contacts):
+                    campaign.campaign_status = 'Completed'
+                    campaign.save()
+                    logger.info(f"Marked one-time campaign {campaign.id} as completed")
 
             except Exception as e:
-                logger.error(f"Error processing contact: {str(e)}")
+                logger.error(f"Error processing contact {contact.id}: {str(e)}")
                 error_count += 1
-
-        # Update campaign's last run time
-        campaign.last_run = timezone.now()
-        campaign.save()
-
-        logger.info(f"Campaign {campaign.name} finished: {created_count} created, {skipped_count} skipped, {error_count} errors")
+        
         return created_count, skipped_count, error_count
-
+        
     except Exception as e:
-        logger.error(f"Error processing campaign: {str(e)}")
+        logger.error(f"Error in create_target_list: {str(e)}")
         return 0, 0, 1
 
 def clean_target_list():
@@ -163,60 +161,39 @@ def generate_target_lists():
     Generate target lists for all active campaigns that are ready to run.
     Returns the list of created target lists.
     """
-    logger.info("Starting target list generation")
     created_lists = []
     
-    # Get all campaigns
-    campaigns = Campaign.objects.all()
-    logger.info(f"Found {len(campaigns)} campaigns")
-    
-    for campaign in campaigns:
-        logger.info(f"Processing campaign {campaign.name}")
-        logger.info(f"Status: {campaign.campaign_status}")
-        logger.info(f"Next run: {campaign.next_run}")
-        logger.info(f"Current time: {timezone.now()}")
-        logger.info(f"Active days: {campaign.active_days}")
-        logger.info(f"Current day: {timezone.now().strftime('%A').lower()}")
+    try:
+        # Get active campaigns
+        campaigns = Campaign.objects.filter(campaign_status="Active")
+        logger.info(f"Found {len(campaigns)} active campaigns")
         
-        # Check if campaign should run
-        if campaign.campaign_status != "Active":
-            logger.info(f"Campaign {campaign.name} is not active")
-            continue
-            
-        if not campaign.is_ready_to_run():
-            logger.info(f"Campaign {campaign.name} is not ready to run (next_run: {campaign.next_run}, now: {timezone.now()})")
-            continue
-            
-        if not campaign.should_run_today():
-            logger.info(f"Campaign {campaign.name} should not run today")
-            continue
-            
-        try:
-            # Process campaign...
-            created, skipped, errors = create_target_list(campaign.id)
-            
-            # After successful processing, update next_run and last_run
-            campaign.last_run = timezone.now()
-            if campaign.frequency != FREQUENCY_ONCE:
-                campaign.next_run = campaign.calculate_next_run(timezone.now())
-            else:
-                campaign.campaign_status = "Completed"
-            campaign.save(update_fields=['last_run', 'next_run', 'campaign_status'])
-            
-            logger.info(f"Campaign {campaign.name}: {created} created, {skipped} skipped, {errors} errors")
-            
-            if created > 0:
-                # Get the newly created target lists for this campaign
-                new_lists = TargetList.objects.filter(
-                    contact_tag=campaign.contact_tag,
-                    status='pending'
-                ).order_by('-created_at')[:created]
+        for campaign in campaigns:
+            try:
+                if campaign.is_ready_to_run() and campaign.should_run_today():
+                    created_count, skipped_count, error_count = create_target_list(campaign.id)
+                    
+                    if created_count > 0:
+                        # Get newly created target lists for this campaign
+                        new_lists = TargetList.objects.filter(
+                            campaign=campaign,
+                            status='pending'
+                        ).order_by('created_at')
+                        created_lists.extend(new_lists)
+                        
+                    logger.info(f"Campaign {campaign.name}: created={created_count}, skipped={skipped_count}, errors={error_count}")
+                    
+                    # Update campaign next run time
+                    if campaign.frequency != FREQUENCY_ONCE:
+                        campaign.update_next_run()
+                        campaign.save()
                 
-                created_lists.extend(new_lists)
-            
-        except Exception as e:
-            logger.error(f"Error processing campaign {campaign.name}: {str(e)}")
-            errors += 1
-    
-    logger.info(f"Target list generation complete. Created {len(created_lists)} lists")
-    return created_lists
+            except Exception as e:
+                logger.error(f"Error processing campaign {campaign.id}: {str(e)}")
+                continue
+        
+        return created_lists
+        
+    except Exception as e:
+        logger.error(f"Error in generate_target_lists: {str(e)}")
+        return []

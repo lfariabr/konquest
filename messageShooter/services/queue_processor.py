@@ -23,93 +23,18 @@ class QueueProcessor:
             pending_items = Queue.objects.filter(
                 Q(status='pending') | Q(status='retrying'),
                 scheduled_time__lte=now
-            ).select_related('target_list', 'message', 'contact', 'userphone')[:batch_size]
+            ).select_related('target_list', 'message', 'userphone')[:batch_size]
             
             processed_count = 0
             success_count = 0
             error_count = 0
             
             for queue_item in pending_items:
-                target = None  # Initialize outside try block
-                message = None
-                try:
-                    with transaction.atomic():
-                        # Mark as processing
-                        queue_item.status = 'processing'
-                        queue_item.save()
-                        
-                        target = queue_item.target_list
-                        message = queue_item.message
-                        
-                        # Prepare message log entry
-                        message_log = MessageLogs(
-                            message=message,
-                            user=message.user,
-                            user_phone=queue_item.userphone,
-                            contact=queue_item.contact,
-                            status='processing',
-                            relationship_tag=target.contact_tag
-                        )
-                        message_log.save()
-                        
-                        # Default to text message if no type specified
-                        message_type = getattr(message, 'file_type', None)
-                        
-                        if message_type:
-                            success = send_file_message(
-                                phone=target.contact_phone,
-                                message=message.text,
-                                token_socialhub=queue_item.phone_token,
-                                file_path=message.file.path if message.file else None
-                            )
-                        else:
-                            success = send_text_message(
-                                phone=target.contact_phone,
-                                message=message.text,
-                                token_socialhub=queue_item.phone_token
-                            )
-                            
-                        if success:
-                            queue_item.status = 'sent'
-                            queue_item.sent_at = now
-                            message_log.status = 'sent'
-                            success_count += 1
-                        else:
-                            # Increment retry count, but don't exceed max retries
-                            if queue_item.retry_count < self.max_retries - 1:
-                                queue_item.retry_count += 1
-                                queue_item.status = 'retrying'
-                                # Calculate next retry time with exponential backoff
-                                retry_delay = self.base_retry_delay * (2 ** queue_item.retry_count)
-                                queue_item.scheduled_time = now + timezone.timedelta(minutes=retry_delay)
-                                message_log.status = 'retry'
-                            else:
-                                # Set to max retries and mark as failed
-                                queue_item.retry_count = self.max_retries - 1
-                                queue_item.status = 'failed'
-                                message_log.status = 'failed'
-                            error_count += 1
-                            
-                        message_log.save()
-                        queue_item.save()
-                        processed_count += 1
-                        
-                except Exception as e:
-                    logger.error(f"Error processing queue item {queue_item.id}: {str(e)}")
-                    queue_item.status = 'failed'
-                    queue_item.error_message = str(e)
-                    queue_item.save()
-                    
-                    # Only create message log if we have the required objects
-                    if message and target:
-                        MessageLogs.objects.create(
-                            message=message,
-                            user=message.user,
-                            user_phone=queue_item.userphone,
-                            contact=queue_item.contact,
-                            status='failed',
-                            relationship_tag=target.contact_tag
-                        )
+                success, error = self.process_queue_item(queue_item)
+                processed_count += 1
+                if success:
+                    success_count += 1
+                if error:
                     error_count += 1
             
             logger.info(f"Queue processing complete: {processed_count} processed, {success_count} successful, {error_count} errors")
@@ -118,3 +43,107 @@ class QueueProcessor:
         except Exception as e:
             logger.error(f"Error in queue processing: {str(e)}")
             return 0, 0, 0
+
+    def process_queue_item(self, queue_item):
+        """Process a single queue item (target list)"""
+        if queue_item.status not in ['pending', 'retrying']:
+            return False, False
+        
+        success_count = 0
+        error_count = 0
+        
+        try:
+            # Mark as processing
+            queue_item.status = 'processing'
+            queue_item.save()
+            
+            # Get target list contacts
+            contact = queue_item.target_list.contact
+            
+            if contact:
+                try:
+                    # Send message to contact
+                    success = self.send_message(
+                        contact=contact,
+                        message=queue_item.message,
+                        userphone=queue_item.userphone
+                    )
+                    
+                    if success:
+                        success_count += 1
+                        queue_item.status = 'sent'
+                        queue_item.sent_at = timezone.now()
+                    else:
+                        error_count += 1
+                        # If we haven't exceeded max retries, mark for retry
+                        if queue_item.retry_count < self.max_retries:
+                            queue_item.status = 'retrying'
+                            queue_item.retry_count += 1
+                            # Calculate next retry time with exponential backoff
+                            retry_delay = self.base_retry_delay * (2 ** (queue_item.retry_count - 1))
+                            queue_item.scheduled_time = timezone.now() + timezone.timedelta(minutes=retry_delay)
+                        else:
+                            queue_item.status = 'failed'
+                            queue_item.last_error = "Max retries exceeded"
+                    
+                except Exception as e:
+                    error_count += 1
+                    queue_item.status = 'failed'
+                    queue_item.last_error = str(e)
+            
+            queue_item.save()
+            return success_count > 0, error_count > 0
+            
+        except Exception as e:
+            queue_item.status = 'failed'
+            queue_item.last_error = str(e)
+            queue_item.save()
+            return False, True
+
+    def send_message(self, contact, message, userphone):
+        """Send a message to a contact"""
+        try:
+            # Check if this is a file message
+            message_type = getattr(message, 'file_type', None)
+            success = False
+            
+            if message_type:  
+                success = send_file_message(
+                    phone=contact.phone,
+                    message=message.text,
+                    token_socialhub=userphone.phone_token,
+                    file_path=message.file.path if message.file else None  
+                )
+            else:
+                success = send_text_message(
+                    phone=contact.phone,
+                    message=message.text,
+                    token_socialhub=userphone.phone_token
+                )
+            
+            # Create message log regardless of success
+            status = 'sent' if success else 'failed'  
+            MessageLogs.objects.create(
+                user=contact.user,
+                contact=contact,
+                message=message,
+                status=status,
+                user_phone=userphone,
+                relationship_tag=message.relationship_tag  
+            )
+            
+            return success
+            
+        except Exception as e:
+            logger.error(f"Error sending message: {str(e)}")
+            # Create error log
+            MessageLogs.objects.create(
+                user=contact.user,
+                contact=contact,
+                message=message,
+                status='failed',  
+                error_message=str(e),
+                user_phone=userphone,
+                relationship_tag=message.relationship_tag  
+            )
+            return False

@@ -224,6 +224,12 @@ class Campaign(models.Model):
         # For daily campaigns, move to next day
         return today_execution + timezone.timedelta(days=1)
 
+    def update_next_run(self):
+        """Update the next run time based on current time and frequency"""
+        current_time = timezone.now()
+        self.next_run = self.calculate_next_run(current_time)
+        return self.next_run
+
     def is_ready_to_run(self):
         """Check if the campaign is ready to run"""
         if self.campaign_status != STATUS_ACTIVE:
@@ -254,3 +260,87 @@ class Campaign(models.Model):
         
         # Check if today is in active days
         return current_day in self.active_days
+
+    def generate_target_lists(self):
+        """
+        Generates target lists for this campaign based on current data.
+        This should be called each time the campaign runs.
+        """
+        from messageShooter.models.target_list import TargetList
+        from messageShooter.resolvers.get_counter import get_counter_whatsapp
+        from core.models.contact import Contact
+
+        # Get eligible contacts based on campaign type
+        if self.contact_type == CONTACT_TYPE_WHATSAPP:
+            contacts = Contact.objects.filter(
+                relationship_tag=self.contact_tag,
+                status='Active'
+            )
+        elif self.contact_type == CONTACT_TYPE_APPOINTMENT:
+            # Add appointment-specific logic here
+            contacts = []
+        
+        target_lists = []
+        for contact in contacts:
+            # Get the current counter for this contact
+            counter = get_counter_whatsapp(contact.phone, self.contact_tag)
+            
+            # Get the appropriate message for this counter
+            message = Message.objects.filter(
+                relationship_tag=self.contact_tag,
+                counter=counter
+            ).first()
+            
+            if message:
+                target_list = TargetList.objects.create(
+                    contact=contact,
+                    contact_phone=contact.phone,
+                    contact_type=self.contact_type,
+                    contact_tag=self.contact_tag,
+                    message=message,
+                    userphone=self.userphone,
+                    status='pending',
+                    campaign=self
+                )
+                target_lists.append(target_list)
+        
+        return target_lists
+
+    def process_campaign(self):
+        """
+        Main method to process a campaign run:
+        1. Generate new target lists
+        2. Create queue items
+        3. Update campaign status
+        """
+        from messageShooter.models.queue import Queue
+        
+        try:
+            # Generate fresh target lists
+            target_lists = self.generate_target_lists()
+            
+            # Create queue items for each target list
+            for target_list in target_lists:
+                contacts = target_list.get_contacts()
+                Queue.objects.create(
+                    target_list=target_list,
+                    campaign=self,
+                    message=target_list.message,
+                    userphone=self.userphone,
+                    phone_token=self.userphone.phone_token,
+                    status='pending',
+                    scheduled_time=timezone.now(),
+                    total_contacts=len(contacts),
+                    processed_contacts={},
+                    processed_count=0
+                )
+            
+            # Update campaign status
+            self.last_run = timezone.now()
+            self.next_run = self.calculate_next_run(self.last_run)
+            self.save()
+            
+            return True, f"Successfully created {len(target_lists)} target lists"
+            
+        except Exception as e:
+            return False, f"Error processing campaign: {str(e)}"

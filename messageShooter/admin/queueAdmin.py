@@ -3,9 +3,9 @@ from django.utils.html import format_html
 from messageShooter.models.target_list import TargetList
 
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ('id', 'contact_type', 'status', 'recipients_count', 'userphone_number', 'target_list_link')
-    list_filter = ('status', 'target_list__contact_type', 'userphone')
-    search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number')
+    list_display = ('id', 'contact_type', 'campaign_name', 'status', 'recipients_count', 'userphone_number', 'target_list_link')
+    list_filter = ('status', 'target_list__contact_type', 'target_list__campaign', 'userphone')
+    search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number', 'target_list__campaign__name')
     ordering = ('-priority', 'scheduled_time', 'created_at')
     actions = ['instant_process_queue']
 
@@ -30,6 +30,13 @@ class QueueAdmin(admin.ModelAdmin):
         url = f"/admin/messageShooter/targetlist/{obj.target_list.id}/change/"
         return format_html('<a href="{}">{}</a>', url, obj.target_list.id)
     target_list_link.short_description = '🎯 Target List'
+
+    def campaign_name(self, obj):
+        if obj.target_list and obj.target_list.campaign:
+            url = f"/admin/messageShooter/campaign/{obj.target_list.campaign.id}/change/"
+            return format_html('<a href="{}">{}</a>', url, obj.target_list.campaign.name)
+        return '-'
+    campaign_name.short_description = '📢 Campaign'
 
     def instant_process_queue(self, request, queryset):
         from django.core.management import call_command

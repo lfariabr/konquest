@@ -8,8 +8,11 @@ from core.models.contact import Contact
 from apiCrm.models.appointment import Appointment
 from django.utils import timezone
 from datetime import timedelta
+import logging
 
-def get_contact_whatsapp(contact_type, contact_tag=None):
+logger = logging.getLogger(__name__)
+
+def get_contact_whatsapp(contact_type, contact_tag):
     """
     Get WhatsApp contacts based on tag, ordered by creation date (FIFO).
     If a contact exists with a different tag, it will be included and its tag
@@ -20,22 +23,26 @@ def get_contact_whatsapp(contact_type, contact_tag=None):
 
     # First try to find contacts that already have the right tag
     contacts = Contact.objects.filter(
-        source="Whatsapp",
+        source__iexact="Whatsapp",  # Case-insensitive match
         relationship_tag=contact_tag,
         status__in=['landing page', 'active']
-    ).order_by('created_at')[:500]  # Limit to 500 as per comment in queue_resolver
+    ).order_by('created_at')[:700]  # Limit to 700 as per comment in queue_resolver
     
     # If we found contacts, return them
     if contacts.exists():
+        logger.info(f"Found {contacts.count()} contacts with tag {contact_tag}")
         return contacts
+    
+    logger.info(f"No contacts found with tag {contact_tag}, looking for any Whatsapp contacts")
     
     # If no contacts found, look for any contact with this source and status
     # The tag will be updated when creating the target list
     contacts = Contact.objects.filter(
-        source="Whatsapp",
+        source__iexact="Whatsapp",  # Case-insensitive match
         status__in=['landing page', 'active']
-    ).order_by('created_at')[:500]
+    ).order_by('created_at')[:700]
     
+    logger.info(f"Found {contacts.count()} total Whatsapp contacts")
     return contacts
 
 #TODO complement accordingly to specific case scenarios... 

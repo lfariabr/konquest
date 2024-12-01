@@ -1,11 +1,11 @@
-from django.core.management.base import BaseCommand
-from messageShooter.models.campaign import Campaign
-from messageShooter.models.target_list import TargetList
-from messageShooter.models.queue import Queue
+from django.utils import timezone
 from core.models.message import Message
 from core.models.contact import Contact
-from django.utils import timezone
+from messageShooter.models.queue import Queue
+from messageShooter.models.campaign import Campaign
+from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.get_counter import get_counter_whatsapp
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = 'Process campaign messages sequentially'
@@ -36,74 +36,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'No active campaign found for tag: {campaign_tag}'))
             return
 
-        # Get all target lists for this campaign (removed status filter)
-        target_lists = TargetList.objects.filter(
-            contact_tag=campaign_tag
-        )
-
-        if not target_lists:
-            self.stdout.write(self.style.WARNING(f'No target lists found for tag: {campaign_tag}'))
-            return
-
-        # Create queue entries for each target
-        queued_count = 0
-        for target in target_lists:
-            # Get contact - first try the direct relationship, then fallback to reference_id
-            contact = target.contact
-            if not contact and target.reference_id:
-                try:
-                    contact = Contact.objects.get(id=target.reference_id)
-                except (Contact.DoesNotExist, ValueError):
-                    self.stdout.write(
-                        self.style.ERROR(f'Contact not found for target list {target.id} with reference_id {target.reference_id}')
-                    )
-                    continue
-
-            if not contact:
-                self.stdout.write(
-                    self.style.ERROR(f'No valid contact found for target list {target.id}')
-                )
-                continue
-
-            # Get the counter for this specific contact
-            if specific_counter is not None:
-                counter = specific_counter
-            else:
-                counter = get_counter_whatsapp(contact.phone, campaign_tag)
-
-            # Get the message for this counter
-            message = Message.objects.filter(
-                relationship_tag=campaign_tag,
-                counter=counter
-            ).first()
-
-            if not message:
-                self.stdout.write(
-                    self.style.ERROR(f'No message found for {campaign_tag} with counter {counter}')
-                )
-                continue
-
-            # Check if queue entry already exists
-            existing_queue = Queue.objects.filter(
-                target_list=target,
-                message=message,
-                status__in=['pending', 'processing']
-            ).exists()
-
-            if not existing_queue:
-                Queue.objects.create(
-                    target_list=target,
-                    contact=contact,
-                    message=message,
-                    userphone=target.userphone,
-                    phone_token=target.userphone.phone_token,
-                    status='pending',
-                    scheduled_time=timezone.now()
-                )
-                queued_count += 1
-
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Created {queued_count} queue entries for {campaign_tag}'
-            )
-        )
+        # Process the campaign
+        success, message = campaign.process_campaign()
+        
+        if success:
+            self.stdout.write(self.style.SUCCESS(message))
+        else:
+            self.stdout.write(self.style.ERROR(message))

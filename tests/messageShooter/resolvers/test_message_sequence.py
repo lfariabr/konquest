@@ -72,6 +72,7 @@ class MessageSequenceTestCase(TestCase):
                 title=f"Message {i}",
                 text=f"Hello {i} message Botox",
                 relationship_tag="Botox",
+                contact_type="Whatsapp",  
                 counter=i,
                 user=self.user
             )
@@ -123,6 +124,10 @@ class MessageSequenceTestCase(TestCase):
             user=self.user,
             user_phone=self.userphone
         )
+        
+        # Update queue entry status
+        queue_entry.status = 'sent'
+        queue_entry.save()
         
         # 5. Test counter after first message (should be 1)
         counter = get_counter_whatsapp(self.contact.phone, "Botox")
@@ -198,9 +203,9 @@ class MessageSequenceTestCase(TestCase):
         self.assertEqual(len(queue_entries), 2)
         
         # First contact should get message 0
-        self.assertEqual(queue_entries[0].contact, self.contact)
+        self.assertEqual(queue_entries[0].target_list.contact, self.contact)
         self.assertEqual(queue_entries[0].message.counter, 0)
         
         # Second contact should get message 1
-        self.assertEqual(queue_entries[1].contact, contact2)
+        self.assertEqual(queue_entries[1].target_list.contact, contact2)
         self.assertEqual(queue_entries[1].message.counter, 1)
