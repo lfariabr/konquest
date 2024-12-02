@@ -70,6 +70,12 @@ def create_target_list(campaign_id, force_run=False):
         # Process each contact
         for contact in contacts:
             try:
+                # Validate phone number
+                if not contact.phone or not contact.phone.isdigit():
+                    logger.debug(f"Invalid phone number for contact {contact.id} - skipping")
+                    skipped_count += 1
+                    continue
+
                 # Get current message counter for contact
                 if campaign.contact_type == "Whatsapp":
                     counter = get_counter_whatsapp(contact.phone, campaign.contact_tag)

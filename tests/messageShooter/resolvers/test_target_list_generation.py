@@ -346,3 +346,84 @@ def test_duplicate_contact_handling(setup_test_data):
     # Verify it used the earliest contact
     target_list = target_lists.first()
     assert target_list.contact == contact1, "Should use the earliest created contact"
+
+@pytest.mark.django_db
+def test_invalid_phone_number_handling(setup_test_data):
+    """Test that contacts with invalid phone numbers are skipped during target list generation"""
+    user = kUser.objects.first()
+    
+    # Clean up any existing contacts with the Botox tag
+    Contact.objects.filter(relationship_tag="Botox").delete()
+    
+    # Create contacts with invalid phone numbers
+    invalid_contacts = [
+        Contact.objects.create(
+            user=user,
+            name="Invalid Phone ABC",
+            phone="abc123",  # Non-numeric phone
+            source="Whatsapp",
+            relationship_tag="Botox",
+            status="landing page"
+        ),
+        Contact.objects.create(
+            user=user,
+            name="Empty Phone",
+            phone="",  # Empty phone
+            source="Whatsapp",
+            relationship_tag="Botox",
+            status="landing page"
+        ),
+        Contact.objects.create(
+            user=user,
+            name="Valid Phone",
+            phone="11999999999",  # Valid phone
+            source="Whatsapp",
+            relationship_tag="Botox",
+            status="landing page"
+        )
+    ]
+    
+    # Create message for the campaign
+    message = Message.objects.create(
+        title="Test Message",
+        text="Hello test message",
+        relationship_tag="Botox",
+        counter=0,
+        user=user,
+        contact_type="Whatsapp"
+    )
+    
+    # Create campaign
+    current_time = timezone.now()
+    past_time = (current_time - timezone.timedelta(hours=1)).time()
+    weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    current_weekday = weekday_names[current_time.weekday()]
+    
+    campaign = Campaign.objects.create(
+        name="Test Campaign",
+        user=user,
+        userphone=UserPhone.objects.get(relationship_tag="Botox"),
+        contact_type="Whatsapp",
+        contact_tag="Botox",
+        campaign_status="Active",
+        frequency=FREQUENCY_ONCE,
+        execution_time=past_time,
+        active_days=[current_weekday]
+    )
+    
+    # Generate target lists
+    from messageShooter.resolvers.target_list_resolver import create_target_list
+    created, skipped, errors = create_target_list(campaign.id)
+    
+    # Verify only one target list was created (for the valid phone number)
+    target_lists = TargetList.objects.filter(campaign=campaign)
+    assert target_lists.count() == 1, "Should only create target list for valid phone number"
+    
+    # Verify the target list was created for the valid contact
+    target_list = target_lists.first()
+    valid_contact = invalid_contacts[2]  # The contact with valid phone
+    assert target_list.contact == valid_contact, "Target list should be created for contact with valid phone"
+    
+    # Verify the counts
+    assert created == 1, "Should create 1 target list"
+    assert skipped == 2, "Should skip 2 invalid contacts"

@@ -2,7 +2,6 @@
 # Trigger: python manage.py run_scheduler
 
 from django.core.management.base import BaseCommand
-from messageShooter.services.scheduler import CampaignScheduler
 from messageShooter.services.queue_processor import QueueProcessor
 import time
 import logging
@@ -14,84 +13,73 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
+            '--continuous',
+            action='store_true',
+            help='Run continuously',
+        )
+        parser.add_argument(
+            '--sleep',
+            type=int,
+            default=60,
+            help='Sleep time in seconds',
+        )
+        parser.add_argument(
+            '--max-iterations',
+            type=int,
+            default=None,
+            help='Maximum number of iterations (for testing)',
+        )
+        parser.add_argument(
             '--test-mode',
             action='store_true',
-            help='Run in test mode (no sleep)',
+            help='Run in test mode (for testing)',
         )
 
     def handle(self, *args, **options):
-        """Handle the command execution"""
-        self.stdout.write(self.style.SUCCESS("Starting campaign scheduler service..."))
-        scheduler = CampaignScheduler()
+        """Run the scheduler"""
+        continuous = options['continuous']
+        sleep_time = options['sleep']
+        max_iterations = options['max_iterations']
+        test_mode = options['test_mode']
         queue_processor = QueueProcessor()
-        running = True
-        test_mode = options.get('test_mode', False)
+        from messageShooter.services.scheduler import CampaignScheduler
+        campaign_scheduler = CampaignScheduler()
+        iterations = 0
 
-        try:
-            while running:
-                try:
-                    # Process campaigns
-                    self.stdout.write("Processing campaigns...")
-                    created_count = scheduler.process_campaigns()
-                    self.stdout.write(self.style.SUCCESS(f"Created {created_count} new queue items for campaigns"))
+        while True:
+            try:
+                # Process campaigns first
+                self.stdout.write("Starting campaign processing")
+                campaign_scheduler.process_campaigns()
 
-                    if not test_mode:
-                        # Process queue
-                        self.stdout.write("Processing queue...")
-                        processed, success, error = queue_processor.process_queue()
-                        self.stdout.write(self.style.SUCCESS(
-                            f"Queue processing complete: {processed} processed, {success} successful, {error} errors"
-                        ))
+                # Then process queue
+                self.stdout.write("Starting queue processing")
+                processed, success, error = queue_processor.process_queue()
+                if processed > 0:
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Processed {processed} messages ({success} successful, {error} errors)"
+                        )
+                    )
 
-                    if test_mode:
-                        running = False  # Exit after one iteration in test mode
-                    else:
-                        time.sleep(60)  # Only sleep in non-test mode
+                # Check if we should continue
+                iterations += 1
+                if not continuous or (max_iterations and iterations >= max_iterations):
+                    break
                     
-                except Exception as e:
-                    error_msg = str(e)
-                    if "Campaign processing error" in error_msg:
-                        self.stdout.write(self.style.ERROR(f"Error processing campaigns: {error_msg}"))
-                    elif "Queue processing error" in error_msg:
-                        self.stdout.write(self.style.ERROR(f"Error processing queue: {error_msg}"))
-                    else:
-                        self.stdout.write(self.style.ERROR(f"Error in scheduler: {error_msg}"))
-                    
-                    logger.error(error_msg)
-                    if test_mode:
-                        running = False  # Exit after error in test mode
-                    else:
-                        time.sleep(60)  # Only sleep in non-test mode
-                    
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self.stdout.write(self.style.WARNING("\nStopping campaign scheduler service..."))
+                time.sleep(sleep_time)
 
-# TODO: FUTURE IMPROVEMENT
-# @app.task
-# def check_campaigns():
-#     campaign_scheduler = CampaignScheduler()
-#     created = campaign_scheduler.process_campaigns()
-#     return created
+            except KeyboardInterrupt:
+                self.stdout.write(
+                    self.style.ERROR("Error in scheduler: KeyboardInterrupt")
+                )
+                break
+            except Exception as e:
+                self.stdout.write(
+                    self.style.ERROR(f"Error in scheduler: {str(e)}")
+                )
+                break
 
-
-# @app.task
-# def process_queue():
-#     queue_processor = QueueProcessor()
-#     processed, success, errors = queue_processor.process_queue()
-#     return processed, success, errors
-
-# # celery_config.py
-# from celery.schedules import crontab
-
-# beat_schedule = {
-#     'check-campaigns': {
-#         'task': 'tasks.check_campaigns',
-#         'schedule': 60.0,  # every minute
-#     },
-#     'process-queue': {
-#         'task': 'tasks.process_queue',
-#         'schedule': 30.0,  # every 30 seconds
-#     }
-# }
+        # Final status message
+        if continuous:
+            self.stdout.write(self.style.SUCCESS("Scheduler stopped"))

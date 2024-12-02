@@ -53,7 +53,7 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Message, MessageAdmin)
 
 class MessageLogsAdmin(admin.ModelAdmin):
-    list_display = ('get_message_text', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number', 'sent_at')
+    list_display = ('get_message_text', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number', 'status', 'sent_at')
     search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
     list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
 

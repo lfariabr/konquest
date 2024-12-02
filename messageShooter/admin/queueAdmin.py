@@ -39,18 +39,26 @@ class QueueAdmin(admin.ModelAdmin):
     campaign_name.short_description = '📢 Campaign'
 
     def instant_process_queue(self, request, queryset):
-        from django.core.management import call_command
+        """Process selected queue entries immediately"""
+        from messageShooter.services.queue_processor import QueueProcessor
+        processor = QueueProcessor()
         processed = 0
         errors = []
         
         for queue_entry in queryset:
             try:
-                call_command('process_queue', queue_id=queue_entry.id)
+                success, error = processor.process_queue_item(queue_entry)
                 processed += 1
+                # Refresh to get latest status
+                queue_entry.refresh_from_db()
+                status_message = (
+                    f"Queue entry {queue_entry.id} processed (Status: {queue_entry.status})"
+                    + (f", Error: {queue_entry.last_error}" if queue_entry.last_error else "")
+                )
                 self.message_user(
                     request,
-                    f"Successfully processed queue entry {queue_entry.id}",
-                    level='SUCCESS'
+                    status_message,
+                    level='SUCCESS' if queue_entry.status == 'sent' else 'WARNING'
                 )
             except Exception as e:
                 errors.append(f"Queue {queue_entry.id}: {str(e)}")

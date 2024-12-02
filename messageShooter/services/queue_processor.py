@@ -63,7 +63,7 @@ class QueueProcessor:
             if contact:
                 try:
                     # Send message to contact
-                    success = self.send_message(
+                    success, error_message = self.send_message(
                         contact=contact,
                         message=queue_item.message,
                         userphone=queue_item.userphone
@@ -84,7 +84,7 @@ class QueueProcessor:
                             queue_item.scheduled_time = timezone.now() + timezone.timedelta(minutes=retry_delay)
                         else:
                             queue_item.status = 'failed'
-                            queue_item.last_error = "Max retries exceeded"
+                            queue_item.last_error = error_message if error_message else "Max retries exceeded"
                     
                 except Exception as e:
                     error_count += 1
@@ -92,12 +92,16 @@ class QueueProcessor:
                     queue_item.last_error = str(e)
             
             queue_item.save()
-            return success_count > 0, error_count > 0
+            success = success_count > 0
+            error = error_count > 0
+            logger.info(f"{'Successfully' if success else 'Failed to'} process queue entry {queue_item.id} (Status: {queue_item.status})")
+            return success, error
             
         except Exception as e:
             queue_item.status = 'failed'
             queue_item.last_error = str(e)
             queue_item.save()
+            logger.error(f"Failed to process queue entry {queue_item.id} due to error: {str(e)}")
             return False, True
 
     def send_message(self, contact, message, userphone):
@@ -106,9 +110,10 @@ class QueueProcessor:
             # Check if this is a file message
             message_type = getattr(message, 'file_type', None)
             success = False
+            error_message = None
             
             if message_type:  
-                success = send_file_message(
+                success, error_message = send_file_message(
                     phone=contact.phone,
                     message=message.text,
                     token_socialhub=userphone.phone_token,
@@ -121,8 +126,8 @@ class QueueProcessor:
                     token_socialhub=userphone.phone_token
                 )
             
-            # Create message log regardless of success
-            status = 'sent' if success else 'failed'  
+            # Create message log with status
+            status = 'sent' if success else f'failed: {error_message}' if error_message else 'failed'
             MessageLogs.objects.create(
                 user=contact.user,
                 contact=contact,
@@ -132,18 +137,19 @@ class QueueProcessor:
                 relationship_tag=message.relationship_tag  
             )
             
-            return success
+            # Return both success and error message for queue entry
+            return success, error_message
             
         except Exception as e:
-            logger.error(f"Error sending message: {str(e)}")
+            error_str = str(e)
+            logger.error(f"Error sending message: {error_str}")
             # Create error log
             MessageLogs.objects.create(
                 user=contact.user,
                 contact=contact,
                 message=message,
-                status='failed',  
-                error_message=str(e),
+                status=f'failed: {error_str}',
                 user_phone=userphone,
                 relationship_tag=message.relationship_tag  
             )
-            return False
+            return False, error_str
