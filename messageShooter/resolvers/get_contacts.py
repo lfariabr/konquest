@@ -17,33 +17,44 @@ def get_contact_whatsapp(contact_type, contact_tag):
     Get WhatsApp contacts based on tag, ordered by creation date (FIFO).
     If a contact exists with a different tag, it will be included and its tag
     will be updated when creating the target list.
+    Returns only unique contacts by phone number, taking the earliest created contact.
     """
     if contact_type != "Whatsapp":
         return []
 
-    # First try to find contacts that already have the right tag
-    contacts = Contact.objects.filter(
+    from django.db.models import Min, Subquery, OuterRef
+
+    # Get the earliest created contact for each phone number
+    earliest_contacts = Contact.objects.filter(
         source__iexact="Whatsapp",  # Case-insensitive match
         relationship_tag=contact_tag,
         status__in=['landing page', 'active']
+    ).values('phone').annotate(
+        min_id=Min('id')
+    ).values('min_id')
+
+    contacts = Contact.objects.filter(
+        id__in=Subquery(earliest_contacts)
     ).order_by('created_at')[:700]  # Limit to 700 as per comment in queue_resolver
     
-    # If we found contacts, return them
-    if contacts.exists():
-        logger.info(f"Found {contacts.count()} contacts with tag {contact_tag}")
-        return contacts
-    
-    logger.info(f"No contacts found with tag {contact_tag}, looking for any Whatsapp contacts")
-    
-    # If no contacts found, look for any contact with this source and status
-    # The tag will be updated when creating the target list
-    contacts = Contact.objects.filter(
-        source__iexact="Whatsapp",  # Case-insensitive match
-        status__in=['landing page', 'active']
-    ).order_by('created_at')[:700]
-    
-    logger.info(f"Found {contacts.count()} total Whatsapp contacts")
+    count = contacts.count()
+    logger.info(f"Found {count} contacts with tag {contact_tag}")
     return contacts
+
+    # # First try to find contacts that already have the right tag
+    # contacts = Contact.objects.filter(
+    #     source__iexact="Whatsapp",  # Case-insensitive match
+    #     relationship_tag=contact_tag,
+    #     status__in=['landing page', 'active']
+    # ).order_by('created_at')[:700]  # Limit to 700 as per comment in queue_resolver
+    
+    # # If we found contacts, return them
+    # if contacts.exists():
+    #     logger.info(f"Found {contacts.count()} contacts with tag {contact_tag}")
+    #     return contacts
+    
+    # logger.info(f"No contacts found with tag {contact_tag}, looking for any Whatsapp contacts")
+    
 
 #TODO complement accordingly to specific case scenarios... 
 # NPS: appointments "Atendido" in is_assessment == yes

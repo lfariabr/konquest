@@ -4,7 +4,7 @@ from core.models.user import kUser
 from core.models.contact import Contact
 from core.models.userphone import UserPhone
 from core.models.message import Message
-from messageShooter.models.campaign import Campaign, FREQUENCY_DAILY
+from messageShooter.models.campaign import Campaign, FREQUENCY_DAILY, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.target_list_resolver import generate_target_lists
 from freezegun import freeze_time
@@ -44,7 +44,7 @@ def setup_test_data(db):
         phone="11963546222",
         source="Whatsapp",
         relationship_tag="Botox",
-        status="active"
+        status="landing page"
     )
 
     contact_preench = Contact.objects.create(
@@ -53,7 +53,7 @@ def setup_test_data(db):
         phone="11963546222",
         source="Whatsapp",
         relationship_tag="Preenchimento",
-        status="active"
+        status="landing page"
     )
 
     # Create Messages
@@ -264,3 +264,85 @@ def test_target_list_to_queue_conversion(setup_test_data):
             assert queue_item.scheduled_time is not None
             # Priority should match target list priority
             assert queue_item.priority == queue_item.target_list.priority
+
+@pytest.mark.django_db
+def test_duplicate_contact_handling(setup_test_data):
+    """Test that only one target list is created per phone number, using the earliest contact"""
+    user = kUser.objects.first()
+    
+    # Clean up any existing contacts with the Botox tag
+    Contact.objects.filter(relationship_tag="Botox").delete()
+    
+    # Create multiple contacts with the same phone number but different creation dates
+    phone = "11999999999"
+    contact1 = Contact.objects.create(
+        user=user,
+        name="Test Contact 1",
+        phone=phone,
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page",
+        created_at=timezone.now() - timezone.timedelta(days=2)
+    )
+    
+    contact2 = Contact.objects.create(
+        user=user,
+        name="Test Contact 2",
+        phone=phone,  # Same phone number
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page",
+        created_at=timezone.now() - timezone.timedelta(days=1)
+    )
+    
+    contact3 = Contact.objects.create(
+        user=user,
+        name="Test Contact 3",
+        phone=phone,  # Same phone number
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page",
+        created_at=timezone.now()
+    )
+    
+    # Create message for the campaign
+    message = Message.objects.create(
+        title="Test Message",
+        text="Hello test message",
+        relationship_tag="Botox",
+        counter=0,
+        user=user,
+        contact_type="Whatsapp"
+    )
+    
+    # Create campaign with execution_time in the past
+    current_time = timezone.now()
+    past_time = (current_time - timezone.timedelta(hours=1)).time()  # 1 hour ago
+    
+    # Get current weekday name (monday, tuesday, etc.)
+    weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    current_weekday = weekday_names[current_time.weekday()]
+    
+    campaign = Campaign.objects.create(
+        name="Test Campaign",
+        user=user,
+        userphone=UserPhone.objects.get(relationship_tag="Botox"),
+        contact_type="Whatsapp",
+        contact_tag="Botox",
+        campaign_status="Active",
+        frequency=FREQUENCY_ONCE,  # One-time campaign
+        execution_time=past_time,  # Set to past time so it's ready to run
+        active_days=[current_weekday]  # Set today as active day using name
+    )
+    
+    # Generate target lists
+    from messageShooter.resolvers.target_list_resolver import create_target_list
+    created, skipped, errors = create_target_list(campaign.id)
+    
+    # Verify only one target list was created
+    target_lists = TargetList.objects.filter(campaign=campaign)
+    assert target_lists.count() == 1, "Should only create one target list per phone number"
+    
+    # Verify it used the earliest contact
+    target_list = target_lists.first()
+    assert target_list.contact == contact1, "Should use the earliest created contact"
