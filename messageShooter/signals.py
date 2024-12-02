@@ -22,7 +22,7 @@ def initialize_target_list_counter(sender, instance, **kwargs):
             
             # Set initial count
             instance.sent_messages_count = sent_count
-            logger.info(f"Initialized sent_messages_count to {sent_count} for new target list")
+            logger.debug(f"Initialized counter for target list: contact={instance.contact.id}, count={sent_count}")
                 
         except Exception as e:
             logger.error(f"Error initializing target list counter: {str(e)}")
@@ -53,9 +53,9 @@ def update_target_list_counter(sender, instance, created, **kwargs):
                 updated = target_lists.update(sent_messages_count=sent_count)
                 
                 if updated:
-                    logger.info(f"Updated sent_messages_count for {updated} target list(s) to {sent_count}")
+                    logger.debug(f"Updated counter for {updated} target list(s): contact={instance.contact.id}, count={sent_count}")
                 else:
-                    logger.warning(f"No target lists found for contact {instance.contact.id} and tag {instance.relationship_tag}")
+                    logger.debug(f"No target lists found for contact={instance.contact.id}, tag={instance.relationship_tag}")
                 
         except Exception as e:
             logger.error(f"Error updating target list counter: {str(e)}")

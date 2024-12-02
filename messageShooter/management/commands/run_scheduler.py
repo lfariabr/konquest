@@ -1,4 +1,6 @@
 # messageShooter/management/commands/run_scheduler.py
+# Trigger: python manage.py run_scheduler
+
 from django.core.management.base import BaseCommand
 from messageShooter.services.scheduler import CampaignScheduler
 from messageShooter.services.queue_processor import QueueProcessor

@@ -26,16 +26,33 @@ def create_target_list(campaign_id, force_run=False):
     try:
         # Get campaign
         campaign = Campaign.objects.get(id=campaign_id)
-        logger.info(f"Processing campaign {campaign.name}")
+        logger.info(f"Processing campaign '{campaign.name}' (ID: {campaign_id})")
+
+        # Deletion of existing target list for this campaign
+        existing_target_lists = TargetList.objects.filter(campaign=campaign)
+        if existing_target_lists.exists():
+            count = existing_target_lists.count()
+            
+            # First delete associated queue entries
+            from messageShooter.models.queue import Queue
+            queue_entries = Queue.objects.filter(target_list__in=existing_target_lists)
+            queue_count = queue_entries.count()
+            if queue_count > 0:
+                logger.info(f"Cleaning up: Deleting {queue_count} queue entries and {count} target lists")
+                queue_entries.delete()
+                existing_target_lists.delete()
+            else:
+                logger.info(f"Cleaning up: Deleting {count} target lists")
+                existing_target_lists.delete()
         
         # Check if campaign is active and ready to run
         if not force_run and (campaign.campaign_status != "Active" or not campaign.is_ready_to_run()):
-            logger.info("Campaign not active or not ready to run")
+            logger.info(f"Campaign '{campaign.name}' is not active or not ready to run")
             return 0, 0, 0
 
         # Check if campaign should run today based on active days
         if not force_run and not campaign.should_run_today():
-            logger.info("Campaign should not run today")
+            logger.info(f"Campaign '{campaign.name}' is not scheduled to run today")
             return 0, 0, 0
 
         # Get contacts based on campaign type
@@ -44,13 +61,11 @@ def create_target_list(campaign_id, force_run=False):
         else:
             contacts = get_contact_appointment(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
             
-        logger.info(f"Using {len(contacts)} contacts from resolver")
-        
         if not contacts:
-            logger.warning(f"No contacts found for campaign {campaign.name} with tag {campaign.contact_tag}")
+            logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
             return created_count, skipped_count, error_count
         
-        logger.info(f"Using {len(contacts)} contacts from resolver")
+        logger.info(f"Found {len(contacts)} contacts with tag '{campaign.contact_tag}'")
         
         # Process each contact
         for contact in contacts:
@@ -69,7 +84,7 @@ def create_target_list(campaign_id, force_run=False):
                 ).first()
                 
                 if not message:
-                    logger.warning(f"No message found for counter {counter}")
+                    logger.debug(f"No message found for counter {counter} - skipping contact {contact.id}")
                     skipped_count += 1
                     continue
                     
@@ -78,18 +93,16 @@ def create_target_list(campaign_id, force_run=False):
                     message.contact_type = campaign.contact_type
                     message.save()
                     
-                logger.info(f"Got message {message.id} for counter {counter}")
-                
                 # Check if target list already exists
                 existing = TargetList.objects.filter(
                     campaign=campaign,
                     contact=contact,
-                    message__counter=counter,  # Check counter instead of exact message
+                    message__counter=counter,
                     status__in=['pending', 'processing', 'retrying']
                 ).exists()
                 
                 if existing:
-                    logger.info(f"Target list already exists for contact {contact.id}")
+                    logger.debug(f"Target list already exists for contact {contact.id} - skipping")
                     skipped_count += 1
                     continue
                 
@@ -107,7 +120,6 @@ def create_target_list(campaign_id, force_run=False):
                     status='pending'
                 )
                 
-                logger.info(f"Created target list {target_list.id} for contact {contact.id}")
                 created_count += 1
                 
                 # If this is a one-time campaign and we've processed all contacts,
@@ -115,12 +127,14 @@ def create_target_list(campaign_id, force_run=False):
                 if campaign.frequency == FREQUENCY_ONCE and created_count == len(contacts):
                     campaign.campaign_status = 'Completed'
                     campaign.save()
-                    logger.info(f"Marked one-time campaign {campaign.id} as completed")
-
+                    logger.info(f"One-time campaign '{campaign.name}' marked as completed")
+                
             except Exception as e:
                 logger.error(f"Error processing contact {contact.id}: {str(e)}")
                 error_count += 1
+                continue
         
+        logger.info(f"Campaign '{campaign.name}' processing complete: {created_count} created, {skipped_count} skipped, {error_count} errors")
         return created_count, skipped_count, error_count
         
     except Exception as e:

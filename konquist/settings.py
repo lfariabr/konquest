@@ -136,15 +136,38 @@ APPS_REORDER = {}
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        '': {  # root logger
+        'django': {  # Django framework logging
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'messageShooter': {  # Your app logging
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'core': {  # Core app logging
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
+    'root': {  # Root logger
+        'handlers': ['console'],
+        'level': 'WARNING',
+    }
 }
