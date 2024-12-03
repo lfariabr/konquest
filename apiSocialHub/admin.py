@@ -4,7 +4,7 @@ from .models.text_message import TextMessage
 from .resolvers.send_file_message import send_file_message
 from .resolvers.send_text_message import send_text_message
 
-@admin.register(TextMessage)
+# @admin.register(TextMessage)
 class TextMessageAdmin(admin.ModelAdmin):
     list_display = ('phone', 'message', 'status', 'response')
     actions = ['send_text_message_action']
@@ -23,7 +23,7 @@ class TextMessageAdmin(admin.ModelAdmin):
 
     send_text_message_action.short_description = "Send selected text messages"
 
-@admin.register(FileMessage)
+# @admin.register(FileMessage)
 class FileMessageAdmin(admin.ModelAdmin):
     list_display = ('phone', 'message', 'file', 'status')
     actions = ['send_file_message_action']
