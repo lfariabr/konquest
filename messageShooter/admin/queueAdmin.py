@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from messageShooter.models.target_list import TargetList
+from messageShooter.models.queue import Queue
+from messageShooter.services.queue_processor import QueueProcessor
 
 class QueueAdmin(admin.ModelAdmin):
     list_display = ('id', 'contact_type', 'campaign_name', 'status', 'recipients_count', 'userphone_number', 'target_list_link')
     list_filter = ('status', 'target_list__contact_type', 'target_list__campaign', 'userphone')
     search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number', 'target_list__campaign__name')
     ordering = ('-priority', 'scheduled_time', 'created_at')
-    actions = ['instant_process_queue']
+    actions = ['instant_process_queue', 'resume_interrupted_queues']
 
     def contact_type(self, obj):
         return obj.target_list.contact_type if obj.target_list else '-'
@@ -83,3 +85,20 @@ class QueueAdmin(admin.ModelAdmin):
             )
     
     instant_process_queue.short_description = "💥 Process Queue"
+
+    def resume_interrupted_queues(self, request, queryset):
+        processor = QueueProcessor()
+        resumed = 0
+        
+        for queue in queryset:
+            if queue.status == 'interrupted':
+                success, _ = processor.resume_interrupted_queue(queue)
+                if success:
+                    resumed += 1
+        
+        self.message_user(
+            request,
+            f"Successfully resumed {resumed} queue(s)."
+        )
+    
+    resume_interrupted_queues.short_description = "▶️ Resume interrupted Queue"

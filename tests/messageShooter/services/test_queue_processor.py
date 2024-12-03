@@ -290,3 +290,83 @@ class TestQueueProcessor(TestCase):
         self.assertEqual(message_log.user, self.user)
         self.assertEqual(message_log.contact, self.contact)
         self.assertEqual(message_log.message, self.message)
+
+    def test_resume_interrupted_queue(self):
+        """Test resuming an interrupted queue"""
+        # Create a queue in interrupted state
+        queue = Queue.objects.create(
+            target_list=self.target_list,
+            message=self.message,
+            userphone=self.userphone,
+            phone_token=self.userphone.phone_token,
+            status='interrupted',
+            scheduled_time=timezone.now()
+        )
+        
+        # Try to resume the queue
+        success, error = self.queue_processor.resume_interrupted_queue(queue)
+        
+        # Check that the queue was processed
+        self.assertTrue(success)
+        self.assertFalse(error)
+        
+        # Refresh queue from DB
+        queue.refresh_from_db()
+        self.assertEqual(queue.status, 'sent')
+    
+    def test_resume_non_interrupted_queue(self):
+        """Test attempting to resume a non-interrupted queue"""
+        # Create a queue in pending state
+        queue = Queue.objects.create(
+            target_list=self.target_list,
+            message=self.message,
+            userphone=self.userphone,
+            phone_token=self.userphone.phone_token,
+            status='pending',
+            scheduled_time=timezone.now()
+        )
+        
+        # Try to resume the queue
+        success, error = self.queue_processor.resume_interrupted_queue(queue)
+        
+        # Check that the queue was not processed
+        self.assertFalse(success)
+        self.assertFalse(error)
+        
+        # Refresh queue from DB
+        queue.refresh_from_db()
+        self.assertEqual(queue.status, 'pending')
+    
+    def test_resume_interrupted_queue_with_processed_contacts(self):
+        """Test resuming an interrupted queue with some already processed contacts"""
+        # Create a queue in interrupted state with some processed contacts
+        processed_contacts = {
+            "123": {"status": "sent", "processed_at": timezone.now().isoformat()},
+            "456": {"status": "failed", "processed_at": timezone.now().isoformat(), "error": "Test error"}
+        }
+        
+        queue = Queue.objects.create(
+            target_list=self.target_list,
+            message=self.message,
+            userphone=self.userphone,
+            phone_token=self.userphone.phone_token,
+            status='interrupted',
+            scheduled_time=timezone.now(),
+            processed_contacts=processed_contacts
+        )
+        
+        # Try to resume the queue
+        success, error = self.queue_processor.resume_interrupted_queue(queue)
+        
+        # Check that the queue was processed
+        self.assertTrue(success)
+        self.assertFalse(error)
+        
+        # Refresh queue from DB
+        queue.refresh_from_db()
+        
+        # Verify that processed contacts are preserved
+        self.assertIn("123", queue.processed_contacts)
+        self.assertEqual(queue.processed_contacts["123"]["status"], "sent")
+        self.assertIn("456", queue.processed_contacts)
+        self.assertEqual(queue.processed_contacts["456"]["status"], "failed")

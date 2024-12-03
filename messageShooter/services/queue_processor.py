@@ -118,6 +118,19 @@ class QueueProcessor:
             logger.error(f"Failed to process queue entry {queue_item.id} due to error: {str(e)}")
             return False, True
 
+    def resume_interrupted_queue(self, queue_item):
+        """Resume processing an interrupted queue"""
+        if queue_item.status != 'interrupted':
+            logger.warning(f"Cannot resume queue {queue_item.id} - not in interrupted state")
+            return False, False
+        
+        # Reset status to pending to allow processing
+        queue_item.status = 'pending'
+        queue_item.save()
+        
+        # Process the queue item
+        return self.process_queue_item(queue_item)
+
     def send_message(self, contact, message, userphone):
         """Send a message to a contact"""
         try:
