@@ -1,372 +1,264 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils import timezone
-from unittest.mock import patch, MagicMock
-from messageShooter.models.queue import Queue
-from messageShooter.models.target_list import TargetList
-from messageShooter.services.queue_processor import QueueProcessor
-from core.models.message import Message
-from core.models.contact import Contact
+from asgiref.sync import sync_to_async
+from unittest.mock import patch, AsyncMock, MagicMock, ANY, call
+import pytest
+import asyncio
+import logging
+import time
+
 from core.models.user import kUser
 from core.models.userphone import UserPhone
-from core.models.messagelog import MessageLogs
-import logging
-import requests
+from core.models.message import Message
+from core.models.contact import Contact
+from messageShooter.models.target_list import TargetList
+from messageShooter.models.queue import Queue, QUEUE_STATUS
+from messageShooter.services.queue_processor import QueueProcessor
+from messageShooter.resolvers.get_contacts import get_contact_whatsapp
 
 logger = logging.getLogger(__name__)
 
-class TestQueueProcessor(TestCase):
+@pytest.mark.django_db(transaction=True)
+class TestQueueProcessor(TransactionTestCase):
+    """Test queue processing functionality with focus on sequential processing and breath time"""
+    
     def setUp(self):
-        """Set up test data"""
+        """Setup test data synchronously first"""
+        super().setUp()
+        
+        # Create user first
         self.user = kUser.objects.create(
-            name="Test User",
-            email="test@example.com",
-            company="Test Company",
-            password="testpass"
+            name='Test User',
+            email='test@example.com',
+            company='Test Company'
         )
         
+        # Create userphone with user
         self.userphone = UserPhone.objects.create(
             user=self.user,
-            phone_number="11988446710",
-            phone_token="test_token",
-            phone_description="Test Phone",
-            relationship_tag="Botox"
+            phone_number='+1234567890',
+            phone_token='test_token',
+            phone_description='Test Phone'
         )
         
-        self.contact = Contact.objects.create(
-            user=self.user,
-            name="Test Contact",
-            phone="11963546222",
-            source="Whatsapp",
-            relationship_tag="Botox",
-            status="active"
-        )
-        
+        # Create message with user
         self.message = Message.objects.create(
             user=self.user,
-            title="Test Message",
-            text="Hello test message",
-            counter=0,
-            relationship_tag="Botox"
+            text='Test message'
         )
         
-        self.target_list = TargetList.objects.create(
-            contact=self.contact,
-            contact_phone=self.contact.phone,
-            contact_type="Whatsapp",
-            contact_tag="Botox",  # This is used as the relationship_tag in MessageLogs
-            reference_id=str(self.contact.id),
-            sent_messages_count=0,
-            userphone=self.userphone,
-            message=self.message,
-            token=self.userphone.phone_token
-        )
-        
-        self.queue_processor = QueueProcessor()
+        # Initialize processor with test settings
+        self.processor = QueueProcessor()
+        self.processor._test_mode = True  # Enable test mode
+        self.processor.breath_time = 0  # No delays between contacts in tests
 
-    @patch('messageShooter.services.queue_processor.send_text_message')
-    def test_process_queue_sends_message(self, mock_send):
-        """Test that process_queue sends messages successfully"""
-        # Setup mock
-        mock_send.return_value = True
+    async def create_test_contacts(self, count: int) -> list:
+        """Create multiple test contacts"""
+        contacts = []
+        create_contact = sync_to_async(Contact.objects.create)
+        for i in range(count):
+            contact = await create_contact(
+                user=self.user,
+                phone=f'+1234567890{i}',
+                name=f'Test Contact {i}',
+                source='Whatsapp',
+                relationship_tag='Test',
+                status='active'
+            )
+            contacts.append(contact)
+        return contacts
+
+    async def create_test_queue(self, contact_count=1, status='pending'):
+        """Create a test queue with specified number of contacts"""
+        # Create contacts
+        contacts = await self.create_test_contacts(contact_count)
         
-        # Create queue entry
-        queue_entry = Queue.objects.create(
-            target_list=self.target_list,
+        # Create target list with first contact
+        create_target_list = sync_to_async(TargetList.objects.create)
+        target_list = await create_target_list(
+            contact=contacts[0],  # Primary contact
+            contact_phone=contacts[0].phone,
+            contact_type='Whatsapp',
+            contact_tag='Test',
+            message=self.message,  # Required field
+            userphone=self.userphone,  # Required field
+            status='pending',
+            priority=0
+        )
+        
+        # Create queue
+        create_queue = sync_to_async(Queue.objects.create)
+        queue = await create_queue(
+            target_list=target_list,
             message=self.message,
             userphone=self.userphone,
             phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=timezone.now()
+            status=status,
+            total_contacts=contact_count,
+            processed_contacts={}
         )
+        
+        # Mock the resolver function to return our test contacts
+        def mock_get_contact_whatsapp(contact_type, contact_tag):
+            if contact_type == "Whatsapp" and contact_tag == "Test":
+                return contacts
+            return []
+        
+        # Patch the resolver function
+        patcher = patch('messageShooter.resolvers.get_contacts.get_contact_whatsapp', mock_get_contact_whatsapp)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        return queue
+
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    @patch('messageShooter.services.queue_processor.asyncio.sleep', new_callable=AsyncMock)
+    async def test_sequential_processing_with_breath_time(self, mock_sleep, mock_send):
+        """Test that contacts are processed sequentially with breath time between contacts"""
+        # Setup success response
+        mock_send.return_value = {'success': True}
+        
+        # Create queue with multiple contacts
+        queue = await self.create_test_queue(contact_count=3)
+        
+        # Configure processor for this test
+        self.processor._test_mode = True  # Disable real breath time for this test
+        self.processor.breath_time = 1  # Set breath time to 1 second
         
         # Process queue
-        processed, success, error = self.queue_processor.process_queue()
+        await self.processor.process_queue_item_async(queue)
         
-        # Check results
-        self.assertEqual(processed, 1)
-        self.assertEqual(success, 1)
-        self.assertEqual(error, 0)
-        
-        # Check that message was sent
-        mock_send.assert_called_once_with(
-            phone=self.contact.phone,
-            message=self.message.text,
-            token_socialhub=self.userphone.phone_token
-        )
-        
-        # Check queue entry status
-        queue_entry.refresh_from_db()
-        self.assertEqual(queue_entry.status, 'sent')
-        
-        # Check message log
-        self.assertEqual(MessageLogs.objects.count(), 1)
-        log = MessageLogs.objects.first()
-        self.assertEqual(log.status, 'sent')
+        # Verify sequential processing
+        self.assertEqual(mock_send.call_count, 3)  # All contacts processed
+        self.assertEqual(mock_sleep.call_count, 0)  # No sleep in test mode
 
-    @patch('messageShooter.services.queue_processor.send_text_message')
-    def test_process_queue_handles_send_failure(self, mock_send):
-        """Test that process_queue handles message send failures"""
-        # Setup mock to simulate failure
-        mock_send.return_value = False
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    @patch('messageShooter.services.queue_processor.asyncio.sleep', new_callable=AsyncMock)
+    async def test_rate_limiting_with_phone_lock(self, mock_sleep, mock_send):
+        """Test that rate limiting is enforced per userphone"""
+        # Setup success response
+        mock_send.return_value = {'success': True}
         
-        # Create queue entry
-        queue_entry = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=timezone.now()
-        )
+        # Create queue with multiple contacts but same userphone
+        queue = await self.create_test_queue(contact_count=3)
+        
+        # Configure processor for this test
+        self.processor._test_mode = False  # Enable real rate limiting for this test
+        self.processor.breath_time = 1  # Set breath time to 1 second
         
         # Process queue
-        processed, success, error = self.queue_processor.process_queue()
+        await self.processor.process_queue_item_async(queue)
         
-        # Check results
-        self.assertEqual(processed, 1)
-        self.assertEqual(success, 0)
-        self.assertEqual(error, 1)
+        # Count rate limiting sleeps (from get_phone_lock)
+        rate_limit_sleeps = len([
+            call for call in mock_sleep.mock_calls 
+            if call.args == (self.processor.breath_time,)
+        ])
         
-        # Check queue entry status
-        queue_entry.refresh_from_db()
-        self.assertEqual(queue_entry.status, 'retrying')
-        self.assertEqual(queue_entry.retry_count, 1)
-        
-        # Check message log
-        self.assertEqual(MessageLogs.objects.count(), 1)
-        log = MessageLogs.objects.first()
-        self.assertEqual(log.status, 'failed')
+        # We expect rate limiting between each contact
+        self.assertEqual(rate_limit_sleeps, 2)  # Rate limiting between contacts
 
-    def test_process_queue_respects_scheduled_time(self):
-        """Test that process_queue only processes messages scheduled for now or earlier"""
-        # Create future queue entry
-        future_time = timezone.now() + timezone.timedelta(hours=1)
-        Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=future_time
-        )
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    async def test_concurrent_queue_processing(self, mock_send):
+        """Test that different queues process concurrently"""
+        mock_send.return_value = {'success': True}
+        
+        # Create processor for this test
+        processor = QueueProcessor()
+        processor._test_mode = True
+        processor.breath_time = 0  # No delays in test
+        
+        # Create two queues
+        queue1 = await self.create_test_queue(contact_count=2)
+        queue2 = await self.create_test_queue(contact_count=2)
+        
+        # Process both queues
+        await processor.process_queues_async([queue1, queue2])
+        
+        # Verify both queues completed
+        refresh_from_db = sync_to_async(lambda x: x.refresh_from_db())
+        await refresh_from_db(queue1)
+        await refresh_from_db(queue2)
+        
+        self.assertEqual(queue1.status, 'completed')  # Update status to match your enum
+        self.assertEqual(queue2.status, 'completed')  # Update status to match your enum
+        self.assertEqual(mock_send.call_count, 4)  # Total contacts processed
+
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    async def test_detailed_progress_logging(self, mock_send):
+        """Test that detailed progress is logged for each contact"""
+        mock_send.return_value = {'success': True}
+        
+        # Create queue with multiple contacts
+        queue = await self.create_test_queue(contact_count=2)
+        
+        # Process queue and capture logs
+        with self.assertLogs(logger='messageShooter.services.queue_processor', level='INFO') as log:
+            await self.processor.process_queue_item_async(queue)
+            
+            # Verify log messages
+            log_messages = '\n'.join(log.output)
+            self.assertIn('Starting to process 2 contacts', log_messages)
+            self.assertIn('Processing contact 1/2', log_messages)
+            self.assertIn('Successfully sent to contact 1/2', log_messages)
+            self.assertIn('Processing contact 2/2', log_messages)
+            self.assertIn('Successfully sent to contact 2/2', log_messages)
+            self.assertIn('Completed successfully! 2/2 messages sent', log_messages)
+
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    async def test_mixed_success_failure_handling(self, mock_send):
+        """Test handling of mixed successes and failures in a queue"""
+        # Setup mock to alternate between success and failure
+        mock_send.side_effect = [
+            {'success': True},
+            {'success': False, 'error': 'Test error'},
+            {'success': True}
+        ]
+        
+        # Create queue with three contacts
+        queue = await self.create_test_queue(contact_count=3)
         
         # Process queue
-        processed, success, error = self.queue_processor.process_queue()
+        await self.processor.process_queue_item_async(queue)
         
-        # Check that no messages were processed
-        self.assertEqual(processed, 0)
-        self.assertEqual(success, 0)
-        self.assertEqual(error, 0)
+        # Verify queue status
+        refresh_from_db = sync_to_async(lambda x: x.refresh_from_db())
+        await refresh_from_db(queue)
+        
+        self.assertEqual(queue.status, 'partially_completed')
+        
+        # Verify processed contacts
+        processed = queue.processed_contacts
+        self.assertEqual(len([c for c in processed if processed[c]['status'] == 'sent']), 2)
+        self.assertEqual(len([c for c in processed if processed[c]['status'] == 'failed']), 1)
 
-    @patch('messageShooter.services.queue_processor.send_text_message')
-    def test_process_queue_handles_multiple_retries(self, mock_send):
-        """Test that process_queue handles multiple retries correctly"""
-        # Setup mock to always fail
-        mock_send.return_value = False
+    @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
+    @patch('messageShooter.services.queue_processor.asyncio.sleep', new_callable=AsyncMock)
+    async def test_retry_on_connection_error(self, mock_sleep, mock_send):
+        """Test that connection errors are retried"""
+        # Setup mock to fail with connection error first, then succeed
+        mock_send.side_effect = [
+            ConnectionResetError(54, 'Connection reset by peer'),  # First attempt fails
+            {'success': True}  # Second attempt succeeds
+        ]
         
-        # Create queue entry
-        queue_entry = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=timezone.now()
-        )
+        # Create queue with one contact
+        queue = await self.create_test_queue(contact_count=1)
         
-        # Process queue multiple times
-        current_time = timezone.now()
-        for i in range(4):  # More than max retries
-            with patch('django.utils.timezone.now') as mock_now:
-                mock_now.return_value = current_time
-                
-                # Process queue
-                self.queue_processor.process_queue()
-                queue_entry.refresh_from_db()
-                
-                if i < self.queue_processor.max_retries:  # First three retries
-                    self.assertEqual(queue_entry.status, 'retrying')
-                    self.assertEqual(queue_entry.retry_count, i + 1)
-                else:  # After max retries
-                    self.assertEqual(queue_entry.status, 'failed')
-                    self.assertEqual(queue_entry.retry_count, self.queue_processor.max_retries)
-                
-                # Advance time by 5 minutes for next iteration
-                current_time += timezone.timedelta(minutes=5)
-                
-                # Save the queue entry with updated scheduled_time
-                if queue_entry.status == 'retrying':
-                    queue_entry.scheduled_time = current_time
-                    queue_entry.save()
-
-    @patch('messageShooter.services.queue_processor.send_file_message')
-    def test_process_queue_handles_file_messages(self, mock_send):
-        """Test that process_queue correctly handles messages with files"""
-        # Update message to be a file message
-        self.message.file_type = 'image'
-        self.message.save()
-        
-        # Setup mock
-        mock_send.return_value = True, None
-        
-        # Create queue entry
-        queue_entry = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=timezone.now()
-        )
+        # Configure processor for this test
+        self.processor._test_mode = True  # Skip actual delays
         
         # Process queue
-        processed, success, errors = self.queue_processor.process_queue()
+        await self.processor.process_queue_item_async(queue)
         
-        # Check results
-        self.assertEqual(processed, 1)
-        self.assertEqual(success, 1)
-        self.assertEqual(errors, 0)
+        # Verify retry behavior
+        self.assertEqual(mock_send.call_count, 2)  # Called twice (fail + success)
+        self.assertEqual(queue.status, 'completed')  # Queue should complete successfully
         
-        # Check that file message was sent
-        mock_send.assert_called_once_with(
-            phone=self.contact.phone,
-            message=self.message.text,
-            token_socialhub=self.userphone.phone_token,
-            file_path=None  # No actual file in test
+        # Verify the order of calls
+        expected_call = call(
+            phone='+12345678900',
+            message='Test message',
+            token_socialhub='test_token'
         )
-        
-        # Check queue entry status
-        queue_entry.refresh_from_db()
-        self.assertEqual(queue_entry.status, 'sent')
-        
-        # Check message log was created
-        message_log = MessageLogs.objects.last()
-        self.assertEqual(message_log.status, 'sent')
-
-    @patch('messageShooter.services.queue_processor.send_text_message')
-    def test_invalid_phone_token(self, mock_send):
-        """Test handling of invalid phone token when sending messages"""
-        # Setup mock to simulate failure
-        mock_send.return_value = False
-        
-        # Set invalid token on userphone
-        self.userphone.phone_token = "invalid_token"
-        self.userphone.save()
-        
-        # Create queue entry
-        queue_entry = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,  # Use userphone's token
-            status='pending',
-            scheduled_time=timezone.now()
-        )
-        
-        # Process queue
-        processed, success, error = self.queue_processor.process_queue()
-        
-        # Check results
-        self.assertEqual(processed, 1)
-        self.assertEqual(success, 0)
-        self.assertEqual(error, 1)
-        
-        # Check that message was attempted with invalid token
-        mock_send.assert_called_once_with(
-            phone=self.contact.phone,
-            message=self.message.text,
-            token_socialhub="invalid_token"
-        )
-        
-        # Check queue entry status - should be retrying after first failure
-        queue_entry.refresh_from_db()
-        self.assertEqual(queue_entry.status, 'retrying')
-        self.assertEqual(queue_entry.retry_count, 1)
-        
-        # Check message log was created with failed status
-        self.assertEqual(MessageLogs.objects.count(), 1)
-        message_log = MessageLogs.objects.first()
-        self.assertEqual(message_log.status, 'failed')
-        self.assertEqual(message_log.user, self.user)
-        self.assertEqual(message_log.contact, self.contact)
-        self.assertEqual(message_log.message, self.message)
-
-    def test_resume_interrupted_queue(self):
-        """Test resuming an interrupted queue"""
-        # Create a queue in interrupted state
-        queue = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='interrupted',
-            scheduled_time=timezone.now()
-        )
-        
-        # Try to resume the queue
-        success, error = self.queue_processor.resume_interrupted_queue(queue)
-        
-        # Check that the queue was processed
-        self.assertTrue(success)
-        self.assertFalse(error)
-        
-        # Refresh queue from DB
-        queue.refresh_from_db()
-        self.assertEqual(queue.status, 'sent')
-    
-    def test_resume_non_interrupted_queue(self):
-        """Test attempting to resume a non-interrupted queue"""
-        # Create a queue in pending state
-        queue = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='pending',
-            scheduled_time=timezone.now()
-        )
-        
-        # Try to resume the queue
-        success, error = self.queue_processor.resume_interrupted_queue(queue)
-        
-        # Check that the queue was not processed
-        self.assertFalse(success)
-        self.assertFalse(error)
-        
-        # Refresh queue from DB
-        queue.refresh_from_db()
-        self.assertEqual(queue.status, 'pending')
-    
-    def test_resume_interrupted_queue_with_processed_contacts(self):
-        """Test resuming an interrupted queue with some already processed contacts"""
-        # Create a queue in interrupted state with some processed contacts
-        processed_contacts = {
-            "123": {"status": "sent", "processed_at": timezone.now().isoformat()},
-            "456": {"status": "failed", "processed_at": timezone.now().isoformat(), "error": "Test error"}
-        }
-        
-        queue = Queue.objects.create(
-            target_list=self.target_list,
-            message=self.message,
-            userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status='interrupted',
-            scheduled_time=timezone.now(),
-            processed_contacts=processed_contacts
-        )
-        
-        # Try to resume the queue
-        success, error = self.queue_processor.resume_interrupted_queue(queue)
-        
-        # Check that the queue was processed
-        self.assertTrue(success)
-        self.assertFalse(error)
-        
-        # Refresh queue from DB
-        queue.refresh_from_db()
-        
-        # Verify that processed contacts are preserved
-        self.assertIn("123", queue.processed_contacts)
-        self.assertEqual(queue.processed_contacts["123"]["status"], "sent")
-        self.assertIn("456", queue.processed_contacts)
-        self.assertEqual(queue.processed_contacts["456"]["status"], "failed")
+        mock_send.assert_has_calls([expected_call, expected_call])

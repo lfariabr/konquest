@@ -3,9 +3,13 @@ from django.utils.html import format_html
 from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue
 from messageShooter.services.queue_processor import QueueProcessor
+import logging
+from asgiref.sync import async_to_sync
+
+logger = logging.getLogger(__name__)
 
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ('id', 'contact_type', 'campaign_name', 'status', 'recipients_count', 'userphone_number', 'target_list_link')
+    list_display = ('id', 'contact_type', 'campaign_name', 'status', 'progress_display', 'recipients_count', 'userphone_number', 'target_list_link')
     list_filter = ('status', 'target_list__contact_type', 'target_list__campaign', 'userphone')
     search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number', 'target_list__campaign__name')
     ordering = ('-priority', 'scheduled_time', 'created_at')
@@ -15,11 +19,51 @@ class QueueAdmin(admin.ModelAdmin):
         return obj.target_list.contact_type if obj.target_list else '-'
     contact_type.short_description = 'Contact Type'
     
+    def progress_display(self, obj):
+        """Show processing progress for queue"""
+        if not obj.processed_contacts:
+            return '-'
+        
+        try:
+            total = len(obj.target_list.get_contacts()) if obj.target_list else 0
+            processed = len(obj.processed_contacts)
+            success = len([c for c in obj.processed_contacts.values() if c["status"] == "sent"])
+            
+            if obj.status == 'processing':
+                return format_html(
+                    '<span style="color: #1a73e8;">⏳ {}/{} ({:.0f}%)</span>',
+                    processed, total, (processed/total*100) if total > 0 else 0
+                )
+            elif obj.status == 'sent':
+                return format_html(
+                    '<span style="color: #0d904f;">✓ {}/{}</span>',
+                    success, total
+                )
+            elif obj.status == 'failed':
+                return format_html(
+                    '<span style="color: #d93025;">✗ {}/{}</span>',
+                    success, total
+                )
+            elif obj.status == 'retrying':
+                return format_html(
+                    '<span style="color: #f29900;">↻ {}/{} (Retry #{}/3)</span>',
+                    success, total, obj.retry_count
+                )
+            return f"{success}/{total}"
+        except Exception as e:
+            logger.error(f"Error displaying progress for queue {obj.id}: {str(e)}")
+            return '-'
+    progress_display.short_description = '📊 Progress'
+    
     def recipients_count(self, obj):
-        """Return count of recipients in the target list"""
+        """Get total number of recipients in target list"""
         if not obj.target_list:
             return 0
-        return TargetList.objects.filter(contact_tag=obj.target_list.contact_tag).count()
+        try:
+            return len(obj.target_list.get_contacts())
+        except Exception as e:
+            logger.error(f"Error getting recipients count for queue {obj.id}: {str(e)}")
+            return 0
     recipients_count.short_description = '👥 Recipients'
 
     def userphone_number(self, obj):
@@ -42,63 +86,79 @@ class QueueAdmin(admin.ModelAdmin):
 
     def instant_process_queue(self, request, queryset):
         """Process selected queue entries immediately"""
-        from messageShooter.services.queue_processor import QueueProcessor
         processor = QueueProcessor()
-        processed = 0
-        errors = []
         
-        for queue_entry in queryset:
-            try:
-                success, error = processor.process_queue_item(queue_entry)
-                processed += 1
-                # Refresh to get latest status
-                queue_entry.refresh_from_db()
-                status_message = (
-                    f"Queue entry {queue_entry.id} processed (Status: {queue_entry.status})"
-                    + (f", Error: {queue_entry.last_error}" if queue_entry.last_error else "")
-                )
-                self.message_user(
-                    request,
-                    status_message,
-                    level='SUCCESS' if queue_entry.status == 'sent' else 'WARNING'
-                )
-            except Exception as e:
-                errors.append(f"Queue {queue_entry.id}: {str(e)}")
-                self.message_user(
-                    request,
-                    f"Error processing queue entry {queue_entry.id}: {str(e)}",
-                    level='ERROR'
-                )
-        
-        if processed > 0:
-            self.message_user(
-                request,
-                f"Successfully processed {processed} queue entries",
-                level='SUCCESS'
+        try:
+            total_queues = len(queryset)
+            logger.info(f"🚀 Admin: Starting to process {total_queues} queues...")
+            
+            # Run async function in sync context
+            success_count, error_count, exception_count = async_to_sync(processor.process_queues_async)(
+                max_concurrent=3,
+                batch_size=total_queues
             )
-        
-        if errors:
+            
+            # Log detailed results
+            logger.info(
+                f"📊 Admin: Queue processing results:\n"
+                f"   - Total Queues: {total_queues}\n"
+                f"   - Successful: {success_count}\n"
+                f"   - Failed: {error_count}\n"
+                f"   - Exceptions: {exception_count}"
+            )
+            
             self.message_user(
                 request,
-                "Errors encountered:\n" + "\n".join(errors),
+                f"Processed {total_queues} queues: {success_count} successful, {error_count} failed, {exception_count} exceptions",
+                level='SUCCESS' if error_count == 0 and exception_count == 0 else 'WARNING'
+            )
+            
+        except Exception as e:
+            error_msg = str(e)
+            logger.error(f"❌ Admin: Error processing queues: {error_msg}", exc_info=True)
+            self.message_user(
+                request,
+                f"Error processing queues: {error_msg}",
+                level='ERROR'
+            )
+    
+    def resume_interrupted_queues(self, request, queryset):
+        """Resume interrupted queues"""
+        processor = QueueProcessor()
+        
+        try:
+            total_queues = len(queryset)
+            logger.info(f"🔄 Admin: Starting to resume {total_queues} interrupted queues...")
+            
+            # Run async function in sync context
+            success_count, error_count, exception_count = async_to_sync(processor.process_queues_async)(
+                max_concurrent=3,
+                batch_size=total_queues
+            )
+            
+            # Log detailed results
+            logger.info(
+                f"📊 Admin: Queue resume results:\n"
+                f"   - Total Queues: {total_queues}\n"
+                f"   - Successful: {success_count}\n"
+                f"   - Failed: {error_count}\n"
+                f"   - Exceptions: {exception_count}"
+            )
+            
+            self.message_user(
+                request,
+                f"Resumed {total_queues} queues: {success_count} successful, {error_count} failed, {exception_count} exceptions",
+                level='SUCCESS' if error_count == 0 and exception_count == 0 else 'WARNING'
+            )
+            
+        except Exception as e:
+            error_msg = str(e)
+            logger.error(f"❌ Admin: Error resuming queues: {error_msg}", exc_info=True)
+            self.message_user(
+                request,
+                f"Error resuming queues: {error_msg}",
                 level='ERROR'
             )
     
     instant_process_queue.short_description = "💥 Process Queue"
-
-    def resume_interrupted_queues(self, request, queryset):
-        processor = QueueProcessor()
-        resumed = 0
-        
-        for queue in queryset:
-            if queue.status == 'interrupted':
-                success, _ = processor.resume_interrupted_queue(queue)
-                if success:
-                    resumed += 1
-        
-        self.message_user(
-            request,
-            f"Successfully resumed {resumed} queue(s)."
-        )
-    
     resume_interrupted_queues.short_description = "▶️ Resume interrupted Queue"
