@@ -20,7 +20,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--sleep',
             type=int,
-            default=60,
+            default=60, # every minute
             help='Sleep time in seconds',
         )
         parser.add_argument(

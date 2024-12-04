@@ -111,7 +111,7 @@ async def test_fetch_all_leads(mock_fetch_graphql):
             },
             'pagination': {
                 'currentPage': 1,
-                'perPage': 100,
+                'perPage': 50,
             },
         },
         TOKEN

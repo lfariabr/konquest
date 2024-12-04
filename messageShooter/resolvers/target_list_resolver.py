@@ -55,6 +55,18 @@ def create_target_list(campaign_id, force_run=False):
             logger.info(f"Campaign '{campaign.name}' is not scheduled to run today")
             return 0, 0, 0
 
+        # For one-time campaigns, check if target list already exists
+        if campaign.frequency == FREQUENCY_ONCE:
+            existing_target_list = TargetList.objects.filter(
+                campaign=campaign,
+                contact_tag=campaign.contact_tag,
+                status__in=['pending', 'processing']
+            ).first()
+            
+            if existing_target_list:
+                logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
+                return 0, 0, 0
+
         # Get contacts based on campaign type
         if campaign.contact_type == "Whatsapp":
             contacts = get_contact_whatsapp(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
@@ -83,11 +95,11 @@ def create_target_list(campaign_id, force_run=False):
                     counter = get_counter_appointment(contact.phone, campaign.contact_tag)
                     
                 # Get message for current counter
-                message = Message.objects.filter(
-                    user=campaign.user,
-                    relationship_tag=campaign.contact_tag,
+                message = get_message(
+                    contact_type=campaign.contact_type,
+                    contact_tag=campaign.contact_tag,
                     counter=counter
-                ).first()
+                )
                 
                 if not message:
                     logger.debug(f"No message found for counter {counter} - skipping contact {contact.id}")
@@ -128,19 +140,17 @@ def create_target_list(campaign_id, force_run=False):
                 
                 created_count += 1
                 
-                # If this is a one-time campaign and we've processed all contacts,
-                # mark the campaign as completed
-                if campaign.frequency == FREQUENCY_ONCE and created_count == len(contacts):
-                    campaign.campaign_status = 'Completed'
-                    campaign.save()
-                    logger.info(f"One-time campaign '{campaign.name}' marked as completed")
-                
             except Exception as e:
                 logger.error(f"Error processing contact {contact.id}: {str(e)}")
                 error_count += 1
                 continue
-        
-        logger.info(f"Campaign '{campaign.name}' processing complete: {created_count} created, {skipped_count} skipped, {error_count} errors")
+
+        # Update campaign status if it's a one-time campaign and contacts were processed
+        if campaign.frequency == FREQUENCY_ONCE and created_count > 0:
+            campaign.campaign_status = "Completed"
+            campaign.save()
+            logger.info(f"One-time campaign '{campaign.name}' marked as completed")
+
         return created_count, skipped_count, error_count
         
     except Exception as e:
