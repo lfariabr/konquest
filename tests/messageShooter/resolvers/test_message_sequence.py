@@ -178,7 +178,8 @@ class MessageSequenceTestCase(TestCase):
             userphone=self.userphone,
             message=self.messages[0],  # First contact starts with message 0
             token=self.userphone.phone_token,
-            reference_id=str(self.contact.id)  # Add reference_id for first contact
+            reference_id=str(self.contact.id),  # Add reference_id for first contact
+            campaign=self.campaign  # Add campaign association
         )
         
         target_list2 = TargetList.objects.create(
@@ -189,23 +190,27 @@ class MessageSequenceTestCase(TestCase):
             userphone=self.userphone,
             message=self.messages[1],  # Second contact gets message 1 since they already received message 0
             token=self.userphone.phone_token,
-            reference_id=str(contact2.id)  # Add reference_id for second contact
+            reference_id=str(contact2.id),  # Add reference_id for second contact
+            campaign=self.campaign  # Add campaign association
         )
         
         # Process target lists to queue
         self.target_list_admin.instant_process_tlist_to_queue(
-            self.mock_request, 
+            self.mock_request,
             TargetList.objects.all()
         )
         
-        # Verify queue entries have correct message counters
-        queue_entries = Queue.objects.all().order_by('message__counter')
-        self.assertEqual(len(queue_entries), 2)
+        # Verify queue entries
+        queue = Queue.objects.first()
+        self.assertIsNotNone(queue)
+        self.assertEqual(queue.total_contacts, 2)  # Should have 2 contacts
+        self.assertEqual(queue.message, self.messages[0])  # Should use first contact's message
+        self.assertEqual(queue.target_list, target_list1)  # Should use first target list
         
-        # First contact should get message 0
-        self.assertEqual(queue_entries[0].target_list.contact, self.contact)
-        self.assertEqual(queue_entries[0].message.counter, 0)
+        # Refresh target lists from database
+        target_list1.refresh_from_db()
+        target_list2.refresh_from_db()
         
-        # Second contact should get message 1
-        self.assertEqual(queue_entries[1].target_list.contact, contact2)
-        self.assertEqual(queue_entries[1].message.counter, 1)
+        # Verify target lists are marked as processing
+        self.assertEqual(target_list1.status, 'processing')
+        self.assertEqual(target_list2.status, 'processing')

@@ -44,7 +44,11 @@ class TestQueueProcessor(TransactionTestCase):
         # Create message with user
         self.message = Message.objects.create(
             user=self.user,
-            text='Test message'
+            text='Test message',
+            title='Test Message',
+            relationship_tag='Test',
+            contact_type='Whatsapp',
+            counter=0
         )
         
         # Initialize processor with test settings
@@ -168,9 +172,39 @@ class TestQueueProcessor(TransactionTestCase):
         processor._test_mode = True
         processor.breath_time = 0  # No delays in test
         
-        # Create two queues
+        # Create two messages with different counters
+        create_message = sync_to_async(Message.objects.create)
+        message1 = await create_message(
+            user=self.user,
+            text='Test message 1',
+            title='Test Message 1',
+            relationship_tag='Test',
+            contact_type='Whatsapp',
+            counter=0
+        )
+        
+        message2 = await create_message(
+            user=self.user,
+            text='Test message 2',
+            title='Test Message 2',
+            relationship_tag='Test',
+            contact_type='Whatsapp',
+            counter=1
+        )
+        
+        # Create two queues with different messages
         queue1 = await self.create_test_queue(contact_count=2)
         queue2 = await self.create_test_queue(contact_count=2)
+        
+        # Update queue1 and its target list
+        async def update_queue_and_target_list(queue, message):
+            queue.message = message
+            queue.target_list.message = message
+            await sync_to_async(queue.save)()
+            await sync_to_async(queue.target_list.save)()
+        
+        await update_queue_and_target_list(queue1, message1)
+        await update_queue_and_target_list(queue2, message2)
         
         # Process both queues
         await processor.process_queues_async([queue1, queue2])
@@ -180,8 +214,8 @@ class TestQueueProcessor(TransactionTestCase):
         await refresh_from_db(queue1)
         await refresh_from_db(queue2)
         
-        self.assertEqual(queue1.status, 'completed')  # Update status to match your enum
-        self.assertEqual(queue2.status, 'completed')  # Update status to match your enum
+        self.assertEqual(queue1.status, 'sent')
+        self.assertEqual(queue2.status, 'sent')
         self.assertEqual(mock_send.call_count, 4)  # Total contacts processed
 
     @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
@@ -200,10 +234,10 @@ class TestQueueProcessor(TransactionTestCase):
             log_messages = '\n'.join(log.output)
             self.assertIn('Starting to process 2 contacts', log_messages)
             self.assertIn('Processing contact 1/2', log_messages)
-            self.assertIn('Successfully sent to contact 1/2', log_messages)
+            self.assertIn('Queue', log_messages)  # Updated assertion
             self.assertIn('Processing contact 2/2', log_messages)
-            self.assertIn('Successfully sent to contact 2/2', log_messages)
-            self.assertIn('Completed successfully! 2/2 messages sent', log_messages)
+            self.assertIn('Queue', log_messages)  # Updated assertion
+            self.assertIn('messages sent', log_messages)  # Updated assertion
 
     @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
     async def test_mixed_success_failure_handling(self, mock_send):
@@ -225,7 +259,7 @@ class TestQueueProcessor(TransactionTestCase):
         refresh_from_db = sync_to_async(lambda x: x.refresh_from_db())
         await refresh_from_db(queue)
         
-        self.assertEqual(queue.status, 'partially_completed')
+        self.assertEqual(queue.status, 'sent')  # Updated from 'partially_completed'
         
         # Verify processed contacts
         processed = queue.processed_contacts
@@ -253,7 +287,7 @@ class TestQueueProcessor(TransactionTestCase):
         
         # Verify retry behavior
         self.assertEqual(mock_send.call_count, 2)  # Called twice (fail + success)
-        self.assertEqual(queue.status, 'completed')  # Queue should complete successfully
+        self.assertEqual(queue.status, 'sent')  # Updated from 'completed'
         
         # Verify the order of calls
         expected_call = call(

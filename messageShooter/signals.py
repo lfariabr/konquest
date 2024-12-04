@@ -13,14 +13,12 @@ def initialize_target_list_counter(sender, instance, **kwargs):
     """
     if instance._state.adding:  # Only for new instances
         try:
-            # Get total sent messages for this contact and tag
             sent_count = MessageLogs.objects.filter(
                 contact=instance.contact,
                 relationship_tag=instance.contact_tag,
                 status="sent"
             ).count()
             
-            # Set initial count
             instance.sent_messages_count = sent_count
             logger.debug(f"Initialized counter for target list: contact={instance.contact.id}, count={sent_count}")
                 
@@ -34,7 +32,6 @@ def update_target_list_counter(sender, instance, created, **kwargs):
     """
     if created and instance.status == "sent":
         try:
-            # Get total sent messages for this contact and tag
             sent_count = MessageLogs.objects.filter(
                 contact=instance.contact,
                 relationship_tag=instance.relationship_tag,

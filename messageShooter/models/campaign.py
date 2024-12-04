@@ -280,31 +280,34 @@ class Campaign(models.Model):
             # Add appointment-specific logic here
             contacts = []
         
-        target_lists = []
-        for contact in contacts:
-            # Get the current counter for this contact
-            counter = get_counter_whatsapp(contact.phone, self.contact_tag)
-            
-            # Get the appropriate message for this counter
-            message = Message.objects.filter(
-                relationship_tag=self.contact_tag,
-                counter=counter
-            ).first()
-            
-            if message:
-                target_list = TargetList.objects.create(
-                    contact=contact,
-                    contact_phone=contact.phone,
-                    contact_type=self.contact_type,
-                    contact_tag=self.contact_tag,
-                    message=message,
-                    userphone=self.userphone,
-                    status='pending',
-                    campaign=self
-                )
-                target_lists.append(target_list)
+        if not contacts:
+            return []
+
+        # Create one target list for all contacts
+        # Use the first contact's counter to get initial message
+        first_contact = contacts[0]
+        counter = get_counter_whatsapp(first_contact.phone, self.contact_tag)
+        message = Message.objects.filter(
+            relationship_tag=self.contact_tag,
+            counter=counter
+        ).first()
         
-        return target_lists
+        if not message:
+            return []
+
+        # Create single target list for all contacts
+        target_list = TargetList.objects.create(
+            contact=first_contact,  # Use first contact as reference
+            contact_phone=first_contact.phone,
+            contact_type=self.contact_type,
+            contact_tag=self.contact_tag,
+            message=message,
+            userphone=self.userphone,
+            status='pending',
+            campaign=self
+        )
+        
+        return [target_list]
 
     def process_campaign(self):
         """
