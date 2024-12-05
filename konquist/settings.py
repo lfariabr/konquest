@@ -150,23 +150,23 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {  # Django framework logging
+        'django': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
-        'messageShooter': {  # Your app logging
+        'messageShooter': {  
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
-        'core': {  # Core app logging
+        'core': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
     },
-    'root': {  # Root logger
+    'root': {
         'handlers': ['console'],
         'level': 'WARNING',
     }

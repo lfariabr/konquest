@@ -1,14 +1,29 @@
+# messageShooter/services/scheduler.py
+import os
+import logging
 from django.utils import timezone
 from django.db import transaction
 from messageShooter.models.campaign import Campaign
 from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue
 from messageShooter.resolvers.target_list_resolver import generate_target_lists
-import logging
 from itertools import groupby
 from operator import attrgetter
 
 logger = logging.getLogger(__name__)
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Create a file handler
+file_handler = logging.FileHandler('logs/scheduler.log')
+file_handler.setLevel(logging.INFO)
+
+# Create a logging format
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+file_handler.setFormatter(formatter)
+
+# Add the file handler to the logger
+logger.addHandler(file_handler)
 
 class CampaignScheduler:
     def process_campaigns(self):
