@@ -22,4 +22,6 @@ dic_store_ident = {
         'ALPHAVILLE': 'fc61242a-d79e-4373-b10a-b596b5df6882',
         'PRAIA GRANDE': '6231663d-c0c6-441c-bdb7-4d3fc99bdfff',
         'CENTRAL': '70afc90f-a9ef-4dc9-9572-1d8b62ef0dfd',
+        'VILA MASCOTE': "dcfefa62-a763-4a22-aa86-1b416b1ef2e3",
+        'GUARULHOS': "24e2af43-c29e-4983-8fc9-d5a4d02db3f3",
 }

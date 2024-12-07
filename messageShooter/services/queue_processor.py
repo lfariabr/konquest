@@ -1,6 +1,8 @@
 # messageShooter/services/queue_processor.py
+import time
 import logging
 import asyncio
+import aiohttp
 from django.utils import timezone
 from django.db import transaction
 from asgiref.sync import sync_to_async
@@ -11,8 +13,9 @@ from core.models.messagelog import MessageLogs
 from core.models.message import Message
 from django.db.models import Q
 from typing import List, Tuple, Dict, Any
-import aiohttp
-import time
+from apiCrm.models.lead import Lead
+from apiCrm.utils.create_store import create_store
+from apiCrm.utils.create_region import create_region
 
 logger = logging.getLogger(__name__)
 
@@ -108,23 +111,80 @@ class QueueProcessor:
     async def process_contact_async(self, contact, message, userphone):
         """Process a single contact with rate limiting per userphone"""
         try:
-            # Apply rate limiting per userphone
-            await self.get_phone_lock(userphone.id)
+            # If message text indicates lead creation, create lead instead of sending message
+            if message.text in ["Lead da campanha Botox", "Lead da campanha Preenchimento"]:
+                try:
+                    campaign_name = "Botox" if "Botox" in message.text else "Preenchimento"
+                    
+                    @sync_to_async
+                    def create_campaign_lead():
+                        # Create new Lead instance and set its attributes
+                        lead = Lead()
+                        lead.name = contact.name
+                        lead.phone = contact.phone
+                        lead.email = "campanha@whatsapp.com"
+                        lead.message = message.text
+                        
+                        # Use utility functions to determine store and region
+                        store = create_store(contact.store)
+                        region = create_region(contact.region)
+                        
+                        # Call create_leads_at_crm with the determined store and region
+                        response = lead.create_leads_at_crm(
+                            name=contact.name,
+                            phone=contact.phone,
+                            email="campanha@whatsapp.com",
+                            message=message.text,
+                            store=store,
+                            region=region
+                        )
+                        
+                        if response and 'data' in response and 'createLead' in response['data']:
+                            # Update contact's lead status
+                            contact.is_lead = True
+                            contact.lead_created_at = timezone.now()
+                            contact.save()
+                            
+                            # Log the lead creation
+                            MessageLogs.objects.create(
+                                message=message,
+                                user=contact.user,
+                                user_phone=None,  # Since this is a lead creation, no user phone
+                                contact=contact,
+                                status="sent",
+                                relationship_tag=f"{campaign_name}"
+                            )
+                            self.logger.info(f"Lead created and logged for {contact.phone} in campaign {campaign_name}")
+                            return True, None
+                        return False, "Failed to create lead in CRM"
+
+                    lead_success, lead_error = await create_campaign_lead()
+                    if not lead_success:
+                        self.logger.error(f"Failed to create lead for {contact.phone}: {lead_error}")
+                        return False, lead_error
+                    
+                    # Return here after successful lead creation to prevent message sending
+                    return True, None
+                    
+                except Exception as e:
+                    error_message = f"Error creating lead for {contact.phone}: {str(e)}"
+                    self.logger.error(error_message)
+                    return False, error_message
             
-            # Wrap send_message_async in process_with_retry
-            success, error_message = await self.process_with_retry(
-                self.send_message_async,
-                contact=contact,
-                message=message,
-                userphone=userphone
-            )
-            
-            return success, error_message
+            # If not a lead creation message, send the normal message
+            else:
+                success, error_message = await self.process_with_retry(
+                    self.send_message_async,
+                    contact,
+                    message,
+                    userphone
+                )
+                return success, error_message
 
         except Exception as e:
-            error_msg = f"Exception sending message to {contact.phone}: {str(e)}"
-            self.logger.error(error_msg)
-            return False, error_msg
+            error_message = f"Error processing contact {contact.phone}: {str(e)}"
+            self.logger.error(error_message)
+            return False, error_message
 
     async def send_message_async(self, contact, message, userphone):
         """Send message asynchronously by wrapping sync functions in to_thread"""
@@ -293,8 +353,8 @@ class QueueProcessor:
                     try:
                         success, error_message = await self.process_contact_async(contact, message, userphone)
                         
-                        # Log successful message send
-                        if success:
+                        # Log successful message send only if it's not a lead creation message
+                        if success and message.text not in ["Lead da campanha Botox", "Lead da campanha Preenchimento"]:
                             await sync_to_async(self._log_message)(contact, message, userphone, target_list)
                         
                     finally:
