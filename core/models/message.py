@@ -13,3 +13,6 @@ class Message(models.Model):
     relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')
     contact_type = models.CharField(max_length=100, null=True, blank=True, default='')
     created_at = models.DateTimeField(default=timezone.now)
+
+    def should_create_lead(self):
+        pass

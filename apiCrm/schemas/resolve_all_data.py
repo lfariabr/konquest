@@ -13,8 +13,10 @@ from apiCrm.resolvers.fetch_all_data import run_fetch_all
 from apiCrm.resolvers.fetch_all_leads import fetch_all_leads
 from apiCrm.resolvers.fetch_bill_charges import fetch_bill_charges
 from apiCrm.resolvers.fetch_all_appointments import fetch_all_appointments
+from apiCrm.utils.format_lead_data import format_lead_data
+from apiCrm.utils.format_appointment_data import format_appointment_data
+from apiCrm.utils.format_bill_charge_data import format_bill_charge_data
 from apiCrm.serializers import LeadSerializer, AppointmentSerializer, BillChargeSerializer
-from apiCrm.utils import format_lead_data, format_appointment_data, format_bill_charge_data
 from datetime import datetime, timedelta, timezone
 from graphene_django.types import DjangoObjectType
 
