@@ -19,13 +19,28 @@ class Appointment(models.Model):
         appointment_info = f" (Status: {self.status_label})" if self.status_label else ""
         return f"{self.customer_name} - {self.customer_phone}{appointment_info}"
     
-    def check_if_appointment_is_evaluation(self):
+    def check_if_appointment_is_evaluation_aesthetic(self):
         """
         Check if the appointment procedure_name contains
         the word "AVALIAÇÃO". If yes, return True.
         Otherwise, return False
         """
-        if "AVALIAÇÃO" in self.procedure_name:
+        if "AVALIAÇÃO" in self.procedure_name and store_name != 'PLÁSTICA' or 'HOMA':
             return True
         return False
         #TODO is this correct?
+    
+    def check_if_appointment_is_evaluation_plastic(self):
+        """
+        Check if the appointment procedure_name contains
+        the word "AVALIAÇÃO". If yes, return True.
+        Otherwise, return False
+        """
+        if "AVALIAÇÃO" in self.procedure_name and 'PLÁSTICA' or 'HOMA' in self.store_name:
+            return True
+        return False
+    
+    def check_if_appointment_is_served(self):
+        if self.status_label == 'Atendido':
+            return True
+        return False

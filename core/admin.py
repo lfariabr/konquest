@@ -57,8 +57,8 @@ class MessageLogsAdmin(admin.ModelAdmin):
     search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
     list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
 
-    def get_contact_phone_number(self, obj): # instead of "message" from messagelogs model
-        return obj.contact.phone
+    def get_contact_phone_number(self, obj): 
+        return obj.contact.phone if obj.contact else '-'
     get_contact_phone_number.short_description = 'Contact Phone'
 
     def get_message_text(self, obj):
