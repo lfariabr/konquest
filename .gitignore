@@ -13,6 +13,7 @@ venv/
 *.sqlite3
 /media/
 db.sqlite3
+*.sql
 
 # Celery & Redis
 *.pid

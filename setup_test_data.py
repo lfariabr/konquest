@@ -12,8 +12,8 @@ from core.models.contact import Contact
 from core.models.message import Message
 from core.models.userphone import UserPhone
 from messageShooter.models.campaign import Campaign
-from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue
+from messageShooter.models.target_list import TargetList
 from django.utils import timezone
 
 def create_test_data():
@@ -108,9 +108,9 @@ def create_test_data():
         frequency="Daily",
         execution_time="08:00",
         active_days=[0,1,2,3,4,5,6],  # All days
-        sequential_order=[
-            {'message_id': msg.id} for msg in botox_messages
-        ],
+        # sequential_order=[
+        #     {'message_id': msg.id} for msg in botox_messages
+        # ],
         userphone=userphone_botox,
         campaign_status="Active"  # Make sure campaign is active
     )
@@ -123,56 +123,58 @@ def create_test_data():
         frequency="Daily",
         execution_time="08:00",
         active_days=[0,1,2,3,4,5,6],  # All days
-        sequential_order=[
-            {'message_id': msg.id} for msg in preench_messages
-        ],
+        # sequential_order=[
+        #     {'message_id': msg.id} for msg in preench_messages
+        # ],
         userphone=userphone_preench,
         campaign_status="Active"  # Make sure campaign is active
     )
 
-    # Create Target List entries
+    # Create target lists for campaigns
     target_list_botox = TargetList.objects.create(
         contact=contact_botox,
         contact_phone=contact_botox.phone,
-        contact_type="Whatsapp",
-        contact_tag="Botox",
+        contact_type='Whatsapp',
+        contact_tag='Botox',
         reference_id=str(contact_botox.id),
+        message=botox_messages[0],  # Use first message
         userphone=userphone_botox,
-        message=botox_messages[0],  # First message in sequence
-        sequence_order=0,  # First in sequence
-        token=userphone_botox.phone_token
+        campaign=campaign_botox,
+        status='pending',
+        priority=0
     )
 
     target_list_preench = TargetList.objects.create(
         contact=contact_preench,
         contact_phone=contact_preench.phone,
-        contact_type="Whatsapp",
-        contact_tag="Preenchimento",
+        contact_type='Whatsapp',
+        contact_tag='Preenchimento',
         reference_id=str(contact_preench.id),
+        message=preench_messages[0],  # Use first message
         userphone=userphone_preench,
-        message=preench_messages[0],  # First message in sequence
-        sequence_order=0,  # First in sequence
-        token=userphone_preench.phone_token
+        campaign=campaign_preench,
+        status='pending',
+        priority=0
     )
 
-    # Create Queue entries
+    # Create queues for campaigns
     queue_botox = Queue.objects.create(
         target_list=target_list_botox,
-        contact=contact_botox,
-        message=target_list_botox.message,
+        campaign=campaign_botox,
+        message=botox_messages[0],  # Use first message
         userphone=userphone_botox,
-        phone_token=userphone_botox.phone_token,
-        status='pending',
+        phone_token="test_token",  # Add a test token
+        status="pending",
         scheduled_time=timezone.now()
     )
 
     queue_preench = Queue.objects.create(
         target_list=target_list_preench,
-        contact=contact_preench,
-        message=target_list_preench.message,
+        campaign=campaign_preench,
+        message=preench_messages[0],  # Use first message
         userphone=userphone_preench,
-        phone_token=userphone_preench.phone_token,
-        status='pending',
+        phone_token="test_token",  # Add a test token
+        status="pending",
         scheduled_time=timezone.now()
     )
 
