@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     
     # Extra Libraries
     'rest_framework',
@@ -35,6 +36,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',  # Add this first
+    'debug_toolbar.middleware.DebugToolbarMiddleware', # New
+    'django.middleware.security.SecurityMiddleware', # New
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -42,6 +46,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Add this last
+
 ]
 
 ROOT_URLCONF = 'konquist.urls'
@@ -64,21 +70,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
-
 # Database
 DATABASE_ENGINE = config('DATABASE_ENGINE')
 
 if DATABASE_ENGINE == 'postgresql':
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+            'OPTIONS': {
+                        'sslmode': 'require',
+                        'application_name': 'konquest',
+                        'keepalives': 1,
+                        'keepalives_idle': 30,
+                        'keepalives_interval': 10,
+                        'keepalives_count': 5,
+                        'connect_timeout': 30,  # Increased timeout
+            },
+            'CONN_MAX_AGE': 60,  # Persistent connections, 60 seconds
+            'CONN_HEALTH_CHECKS': True,
+            'ATOMIC_REQUESTS': True,  # Enable transaction management
+        }
     }
-}
 
 else:
     DATABASES = {
@@ -87,6 +104,40 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# Database optimization settings
+DATABASE_OPTIONS = {
+    'timeout': 30,  # 30 seconds
+    'connect_timeout': 10
+}
+
+# Query optimization
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+# Cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'django_cache_table',
+        'TIMEOUT': 300,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+            'CULL_FREQUENCY': 3
+        }
+    }
+}
+
+# Cache middleware settings
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 300
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+
+# Django Daisy Configuration
+APPS_REORDER = {}
+
+# Session configuration
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_CACHE_ALIAS = 'default'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -139,12 +190,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
-# Adjust limitation
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240 # higher than the count of fields
-
-# Django Daisy Configuration
-APPS_REORDER = {}
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -183,3 +228,22 @@ LOGGING = {
         'level': 'WARNING',
     }
 }
+
+# Debug toolbar settings
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+if DEBUG:
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+        'RESULTS_CACHE_SIZE': 3,
+        'ENABLE_STACKTRACES': False,
+    }
+    
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+    ]

@@ -28,7 +28,9 @@ def get_contact_whatsapp(contact_type, contact_tag):
     earliest_contacts = Contact.objects.filter(
         source__iexact="Whatsapp",  # Case-insensitive match
         relationship_tag=contact_tag,
-        status__in=['landing page', 'active']
+        status__in=['landing page', 'active'],
+        is_lead=False,
+        is_appointment=False,
     ).values('phone').annotate(
         min_id=Min('id')
     ).values('min_id')

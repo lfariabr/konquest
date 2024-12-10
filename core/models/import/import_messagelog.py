@@ -189,7 +189,7 @@ def import_message_log(data):
         logger.error(f"Problematic data: {data}")
         return None
 
-def import_message_logs(data_list, limit=1500):
+def import_message_logs(data_list, limit=35000):
     """Import multiple message logs"""
     if limit:
         data_list = data_list[:limit]
@@ -214,7 +214,7 @@ def import_message_logs(data_list, limit=1500):
     logger.info(f"Successfully imported {success_count} out of {total_count} message logs")
     return success_count
 
-def run_import(limit=1500):
+def run_import(limit=35000):
     """Main function to run the import process"""
     import os
     
