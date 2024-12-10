@@ -76,10 +76,10 @@ current_contact_columns = [
 # Last updates:
 Terminal: 
 python manage.py shell
->>> from core.models.data_import import run_import
+>>> from core.models.import_contact import run_import
 >>> run_import()
 
 Terminal:
 python manage.py shell
->>> from core.models.message_log_import import run_import
+>>> from core.models.import_messagelog import run_import
 >>> run_import()

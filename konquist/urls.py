@@ -4,6 +4,7 @@ from django.urls import path, include
 from apiCrm.schemas.resolve_all_data import schema
 from graphene_django.views import GraphQLView
 from . import views
+from django.conf import settings
 from .admin import admin_site
 from django.views.generic.base import RedirectView
 from django.templatetags.static import static
@@ -15,3 +16,8 @@ urlpatterns = [
     path('apiCrm/', include('apiCrm.urls')),
     path('favicon.ico', RedirectView.as_view(url=static('img/favicon.svg'), permanent=True)),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ]

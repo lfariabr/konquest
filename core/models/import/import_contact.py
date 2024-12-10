@@ -1,8 +1,19 @@
 import os
+import sys
 import django
 import logging
 import re
 from datetime import datetime
+
+# Add the project root directory to the Python path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(project_root)
+
+# Setup Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
+django.setup()
+
+# Now we can import Django models
 from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
@@ -11,6 +22,8 @@ from core.models.messagelog import MessageLogs
 from core.models.user import kUser
 from core.models.message import Message
 from core.models.userphone import UserPhone
+from django.conf import settings
+from django.db import connection
 
 # Set up logging
 logging.basicConfig(
@@ -324,74 +337,164 @@ def import_message_log(data):
         return None
 
 @transaction.atomic
-def import_contacts(sql_file_path, limit=25000):
-    """Import contacts from SQL file"""
+def import_contacts(sql_file_path, limit=25000, batch_size=50, start_offset=0):
+    """Import contacts from SQL file with batch processing and resume capability"""
+    
     logger.info("Starting contact import...")
     values = parse_sql_file(sql_file_path)
     imported_count = 0
+    error_count = 0
     
-    # Take only the first 'limit' records for testing
-    test_values = values[:limit] if limit else values
-    logger.info(f"Processing {len(test_values)} out of {len(values)} total records")
+    # Calculate end index based on limit
+    end_index = min(len(values), limit) if limit else len(values)
+    # Adjust start_offset if it's beyond the available records
+    start_offset = min(start_offset, end_index)
     
-    for value in test_values:
+    logger.info(f"Processing records {start_offset} to {end_index} out of {len(values)} total records")
+    logger.info(f"Using batch size of {batch_size}")
+    
+    # Cache for user lookups
+    user_cache = {}
+    
+    # Process in batches
+    current_offset = start_offset
+    contacts_to_create = []
+    
+    # Pre-fetch all unique user IDs for this batch
+    unique_user_ids = set()
+    for value in values[start_offset:end_index]:
         try:
-            if len(value) < 10:
-                logger.warning(f"Skipping record with insufficient values: {value}")
-                continue
-
-            data = {
-                'phone': value[1],
-                'name': value[2],
-                'created_date': value[3],
-                'tag': value[4],
-                'source': value[5],
-                'store': value[6],
-                'region': value[7],
-                'user_id': value[9],
-                'tags': value[8]
-            }
-            
-            # Log the data we're about to import
-            logger.info(f"Importing contact: {data['phone']} - {data['name']}")
-            
-            # Check if contact already exists
-            existing_contact = Contact.objects.filter(phone=clean_phone(data['phone'])).first()
-            if existing_contact:
-                logger.info(f"Contact already exists: {existing_contact.phone}")
-                continue
-                
-            # Import the contact
-            contact = import_contact(data)
-            if contact:
-                imported_count += 1
-                
-            if imported_count % 10 == 0 and imported_count > 0:
-                logger.info(f"Imported {imported_count} contacts...")
-                
-        except Exception as e:
-            logger.error(f"Error processing record: {str(e)}")
-            logger.error(f"Problematic record: {value}")
+            if len(value) >= 10:
+                user_id = int(value[9])
+                unique_user_ids.add(user_id)
+        except (ValueError, TypeError, IndexError):
             continue
     
-    logger.info(f"Successfully imported {imported_count} contacts")
+    # Bulk fetch users
+    existing_users = {
+        user.id: user 
+        for user in kUser.objects.filter(id__in=list(unique_user_ids))
+    }
+    logger.info(f"Pre-fetched {len(existing_users)} users")
+    
+    while current_offset < end_index:
+        batch_end = min(current_offset + batch_size, end_index)
+        batch = values[current_offset:batch_end]
+        
+        logger.info(f"Processing batch from {current_offset} to {batch_end}")
+        
+        # Get all phone numbers in this batch
+        batch_phones = []
+        for value in batch:
+            try:
+                if len(value) >= 2:
+                    phone = clean_phone(value[1])
+                    if phone:
+                        batch_phones.append(phone)
+            except (IndexError, TypeError):
+                continue
+        
+        # Bulk check existing contacts
+        existing_phones = set()
+        if batch_phones:
+            with connection.cursor() as cursor:
+                placeholders = ','.join(['%s'] * len(batch_phones))
+                cursor.execute(
+                    f"SELECT phone FROM core_contact WHERE phone IN ({placeholders})",
+                    batch_phones
+                )
+                existing_phones = {row[0] for row in cursor.fetchall()}
+        
+        for value in batch:
+            try:
+                if len(value) < 10:
+                    logger.warning(f"Skipping record with insufficient values: {value}")
+                    error_count += 1
+                    continue
+
+                phone = clean_phone(value[1])
+                if not phone:
+                    logger.warning(f"Invalid phone number in record: {value}")
+                    error_count += 1
+                    continue
+                
+                if phone in existing_phones:
+                    logger.info(f"Contact already exists: {phone}")
+                    continue
+                
+                try:
+                    user_id = int(value[9])
+                    if user_id not in existing_users:
+                        # Create new user if not exists
+                        user = kUser.objects.create(
+                            id=user_id,
+                            name=f'Imported User {user_id}',
+                            email=f'imported_user_{user_id}@imported.com',
+                            password=make_password('imported123'),
+                            company='Imported Company'
+                        )
+                        existing_users[user_id] = user
+                    
+                    contact_data = {
+                        'phone': phone,
+                        'name': clean_name(value[2]),
+                        'created_at': parse_date(value[3]),
+                        'relationship_tag': clean_tag(value[4]),
+                        'source': value[5],
+                        'store': value[6],
+                        'region': value[7],
+                        'external_tag': clean_tag(value[8]),
+                        'is_lead': False,
+                        'user': existing_users[user_id]
+                    }
+                    
+                    contacts_to_create.append(Contact(**contact_data))
+                    imported_count += 1
+                    
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Invalid user_id value: {value[9]}, error: {str(e)}")
+                    continue
+                
+            except Exception as e:
+                error_count += 1
+                logger.error(f"Error processing record: {str(e)}")
+                logger.error(f"Problematic record: {value}")
+                continue
+        
+        # Bulk create contacts in smaller chunks
+        if contacts_to_create:
+            try:
+                Contact.objects.bulk_create(contacts_to_create, batch_size=100)
+                logger.info(f"Batch complete. Total imported: {imported_count}, Errors: {error_count}")
+                contacts_to_create = []  # Clear the list after successful creation
+            except Exception as e:
+                logger.error(f"Error bulk creating contacts: {str(e)}")
+                error_count += len(contacts_to_create)
+                contacts_to_create = []  # Clear the list on error
+        
+        current_offset = batch_end
+    
+    logger.info(f"Import complete. Successfully imported {imported_count} contacts, encountered {error_count} errors")
     return imported_count
 
 def run_import():
-    """Run the import process"""
-    logger.info("Starting import process...")
-    try:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        contacts_file = os.path.join(base_dir, 'models', 'leadwhatsapp_rows.sql')
-        
-        # Only import contacts for now
-        import_contacts(contacts_file, limit=25000)  # Test with first 50 contacts
-        logger.info("Import process completed successfully!")
-    except Exception as e:
-        logger.error(f"Import process failed: {str(e)}")
-        raise
+    """Run the import process with command line arguments"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Import contacts from SQL file')
+    parser.add_argument('--sql-file', required=True, help='Path to SQL file')
+    parser.add_argument('--limit', type=int, default=25000, help='Maximum number of records to process')
+    parser.add_argument('--batch-size', type=int, default=50, help='Number of records to process in each batch')
+    parser.add_argument('--start-offset', type=int, default=0, help='Starting offset for resuming interrupted imports')
+    
+    args = parser.parse_args()
+    
+    return import_contacts(
+        args.sql_file,
+        limit=args.limit,
+        batch_size=args.batch_size,
+        start_offset=args.start_offset
+    )
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquest.settings')
-    django.setup()
     run_import()

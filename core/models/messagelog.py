@@ -16,3 +16,11 @@ class MessageLogs(models.Model):
     class Meta:
         verbose_name = 'Message Log'
         verbose_name_plural = 'Message Logs'
+        indexes = [
+            models.Index(fields=['sent_at']),
+            models.Index(fields=['relationship_tag']),
+            models.Index(fields=['status']),
+            models.Index(fields=['user']),
+            models.Index(fields=['message']),
+            models.Index(fields=['contact']),
+        ]
