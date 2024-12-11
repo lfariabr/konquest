@@ -19,6 +19,8 @@ from apiCrm.utils.format_bill_charge_data import format_bill_charge_data
 from apiCrm.serializers import LeadSerializer, AppointmentSerializer, BillChargeSerializer
 from datetime import datetime, timedelta, timezone
 from graphene_django.types import DjangoObjectType
+from django.db import transaction
+
 
 logger = logging.getLogger(__name__)
 token = config('TOKEN')
@@ -192,51 +194,115 @@ def fetch_data(start_date, end_date, extended_end_date, token):
             logger.error(f"Error fetching data: {e}")
             return None, None, None
         
+# def process_leads(leads_data):
+#     try:
+#         leads_instances = []
+#         for raw_lead in leads_data:
+#             serializer = LeadSerializer(data=format_lead_data(raw_lead))
+#             if serializer.is_valid():
+#                 lead_instance = serializer.save()
+#                 leads_instances.append(lead_instance)
+#             else:
+#                 logger.error(f"Error saving lead: {serializer.errors}")
+#         return leads_instances
+#     except Exception as e:
+#         logger.error(f"Error processing leads: {e}")
+#         print(f"Error processing leads: {e}")
+#         return []
+
 def process_leads(leads_data):
     try:
         leads_instances = []
-        for raw_lead in leads_data:
-            serializer = LeadSerializer(data=format_lead_data(raw_lead))
-            if serializer.is_valid():
-                lead_instance = serializer.save()
-                leads_instances.append(lead_instance)
-            else:
-                logger.error(f"Error saving lead: {serializer.errors}")
+        with transaction.atomic():
+            for raw_lead in leads_data:
+                formatted_data = format_lead_data(raw_lead)
+                print(f"Processing lead {formatted_data.get('id_crm', 'unknown')}")
+                serializer = LeadSerializer(data=formatted_data)
+                if serializer.is_valid():
+                    lead_instance = serializer.save()
+                    leads_instances.append(lead_instance)
+                else:
+                    print(f"Error saving lead: {serializer.errors}")
+                    logger.error(f"Error saving lead: {serializer.errors}")
+            print(f"Successfully processed {len(leads_instances)} leads")
         return leads_instances
     except Exception as e:
+        print(f"Error processing leads: {str(e)}")
         logger.error(f"Error processing leads: {e}")
         return []
-    
+
+# def process_appointments(appointments_data):
+#     try:
+#         appointments_instances = []
+#         for raw_appointment in appointments_data:
+#             serializer = AppointmentSerializer(data=format_appointment_data(raw_appointment))
+#             if serializer.is_valid():
+#                 appointment_instance = serializer.save()
+#                 appointments_instances.append(appointment_instance)
+#             else:
+#                 logger.error(f"Error saving appointment: {serializer.errors}")
+#         return appointments_instances
+#     except Exception as e:
+#         logger.error(f"Error processing appointments: {e}")
+#         print(f"Error processing appointments: {e}")
+#         return []
 def process_appointments(appointments_data):
     try:
         appointments_instances = []
-        for raw_appointment in appointments_data:
-            serializer = AppointmentSerializer(data=format_appointment_data(raw_appointment))
-            if serializer.is_valid():
-                appointment_instance = serializer.save()
-                appointments_instances.append(appointment_instance)
-            else:
-                logger.error(f"Error saving appointment: {serializer.errors}")
+        with transaction.atomic():
+            for raw_appointment in appointments_data:
+                formatted_data = format_appointment_data(raw_appointment)
+                print(f"Processing appointment {formatted_data.get('id_crm', 'unknown')}")
+                serializer = AppointmentSerializer(data=formatted_data)
+                if serializer.is_valid():
+                    appointment_instance = serializer.save()
+                    appointments_instances.append(appointment_instance)
+                else:
+                    print(f"Error saving appointment: {serializer.errors}")
+                    logger.error(f"Error saving appointment: {serializer.errors}")
+            print(f"Successfully processed {len(appointments_instances)} appointments")
         return appointments_instances
     except Exception as e:
+        print(f"Error processing appointments: {str(e)}")
         logger.error(f"Error processing appointments: {e}")
         return []
-
+    
+# def process_bill_charges(bill_charges_data):
+#     try:
+#         bill_charges_instances = []
+#         for raw_bill_charge in bill_charges_data:
+#             serializer = BillChargeSerializer(data=format_bill_charge_data(raw_bill_charge))
+#             if serializer.is_valid():
+#                 bill_charge_instance = serializer.save()
+#                 bill_charges_instances.append(bill_charge_instance)
+#             else:
+#                 logger.error(f"Error saving bill charge: {serializer.errors}")
+#         return bill_charges_instances
+#     except Exception as e:
+#         logger.error(f"Error processing bill charges: {e}")
+#         print(f"Error processing bill charges: {e}")
+#         return []
 def process_bill_charges(bill_charges_data):
     try:
         bill_charges_instances = []
-        for raw_bill_charge in bill_charges_data:
-            serializer = BillChargeSerializer(data=format_bill_charge_data(raw_bill_charge))
-            if serializer.is_valid():
-                bill_charge_instance = serializer.save()
-                bill_charges_instances.append(bill_charge_instance)
-            else:
-                logger.error(f"Error saving bill charge: {serializer.errors}")
+        with transaction.atomic():
+            for raw_bill_charge in bill_charges_data:
+                formatted_data = format_bill_charge_data(raw_bill_charge)
+                print(f"Processing bill charge {formatted_data.get('quote_id', 'unknown')}")
+                serializer = BillChargeSerializer(data=formatted_data)
+                if serializer.is_valid():
+                    bill_charge_instance = serializer.save()
+                    bill_charges_instances.append(bill_charge_instance)
+                else:
+                    print(f"Error saving bill charge: {serializer.errors}")
+                    logger.error(f"Error saving bill charge: {serializer.errors}")
+            print(f"Successfully processed {len(bill_charges_instances)} bill charges")
         return bill_charges_instances
     except Exception as e:
+        print(f"Error processing bill charges: {str(e)}")
         logger.error(f"Error processing bill charges: {e}")
         return []
-    
+
 def assemble_all_data(leads_instances, appointments_instances, bill_charges_instances):
     try:
         return AllDataType(leads=leads_instances, appointments=appointments_instances, bill_charges=bill_charges_instances)

@@ -88,6 +88,8 @@ class ContactAdmin(admin.ModelAdmin):
                     'store', 'region', 'external_tag', 'status', 
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
                     'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 'appointment_last_checked', 'appointment_check_count', 'store_appointment')
+    list_filter = ('source', 'store', 'relationship_tag')
+    search_fields = ['phone']
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']

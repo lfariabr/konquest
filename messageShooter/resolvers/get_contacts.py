@@ -37,7 +37,7 @@ def get_contact_whatsapp(contact_type, contact_tag):
 
     contacts = Contact.objects.filter(
         id__in=Subquery(earliest_contacts)
-    ).order_by('created_at')[:700]  # Limit to 700 as per comment in queue_resolver
+    ).order_by('-created_at')[:1]  # Limit to 700 as per comment in queue_resolver
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")

@@ -24,6 +24,7 @@ class TargetListAdmin(admin.ModelAdmin):
     readonly_fields = ('get_sent_messages_count',)
     actions = ['instant_process_tlist_to_queue']
     list_per_page = 20
+    ordering = ['-created_at']
 
     def changelist_view(self, request, extra_context=None):
         self.request = request  # Store request if needed for other purposes

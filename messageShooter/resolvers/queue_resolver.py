@@ -6,6 +6,7 @@ from apiSocialHub.resolvers.send_file_message import send_file_message
 from core.models.messagelog import MessageLogs
 from core.models.contact import Contact
 import logging
+from django.db import transaction
 
 logger = logging.getLogger(__name__)
 
@@ -36,99 +37,94 @@ def process_queue(batch_size=50):
     processed_count = 0
     success_count = 0
     error_count = 0
-
+    
     for queue_item in pending_messages:
         cache_key = get_queue_cache_key(queue_item.id)
-        try:
-            # Check if already being processed
-            if cache.get(cache_key) == 'processing':
-                logger.warning(f"Queue {queue_item.id} is already being processed, skipping")
-                continue
+        
+        # Use transaction.atomic() as a context manager for the entire queue item processing
+        with transaction.atomic():
+            try:
+                # Check if already being processed
+                if cache.get(cache_key) == 'processing':
+                    logger.warning(f"Queue {queue_item.id} is already being processed, skipping")
+                    continue
 
-            # Mark as processing in cache and DB
-            cache.set(cache_key, 'processing', timeout=300)  # 5 minute timeout
-            queue_item.status = 'processing'
-            queue_item.save()
+                # Mark as processing in cache and DB
+                cache.set(cache_key, 'processing', timeout=300)  # 5 minute timeout
+                queue_item.status = 'processing'
+                queue_item.save()
 
-            logger.info(f"Processing queue item {queue_item.id} for target {queue_item.target_list.id}")
+                logger.info(f"Processing queue item {queue_item.id} for target {queue_item.target_list.id}")
 
-            # Send the message using appropriate SocialHub sender
-            target = queue_item.target_list
-            message = queue_item.message
+                # Create message log entry in its own transaction
+                try:
+                    with transaction.atomic():
+                        MessageLogs.objects.create(
+                            message=queue_item.message,
+                            user=queue_item.message.user,
+                            user_phone=queue_item.userphone,
+                            contact=queue_item.target_list.contact,
+                            status='processing',
+                            relationship_tag=queue_item.target_list.contact_tag
+                        )
+                except Exception as e:
+                    logger.error(f"Failed to create message log: {str(e)}")
 
-            # Prepare message log entry
-            message_log = MessageLogs(
-                message=message,
-                user=message.user,
-                user_phone=queue_item.userphone,
-                contact=queue_item.target_list.contact,
-                status='processing',
-                relationship_tag=target.contact_tag
-            )
-            message_log.save()
+                # Send the message using appropriate SocialHub sender
+                target = queue_item.target_list
+                message = queue_item.message
 
-            # Default to text message if no type specified
-            message_type = getattr(message, 'file_type', None)
+                # Default to text message if no type specified
+                message_type = getattr(message, 'file_type', None)
 
-            if message_type:
-                logger.debug(f"Sending file message for queue {queue_item.id}")
-                success = send_file_message(
-                    phone=target.contact_phone,
-                    message=message.text,
-                    token_socialhub=queue_item.phone_token,
-                    file_path=message.file.path if message.file else None
-                )
-            else:
-                logger.debug(f"Sending text message for queue {queue_item.id}")
-                success = send_text_message(
-                    phone=target.contact_phone,
-                    message=message.text,
-                    token_socialhub=queue_item.phone_token
-                )
-
-            if success:
-                queue_item.status = 'sent'
-                message_log.status = 'sent'
-                cache.set(cache_key, 'sent', timeout=3600)  # Cache for 1 hour
-                success_count += 1
-                logger.info(f"Successfully sent message for queue {queue_item.id}")
-            else:
-                if queue_item.retry_count < 3:  # Max 3 retries
-                    queue_item.status = 'retrying'
-                    queue_item.retry_count += 1
-                    queue_item.scheduled_time = now + timezone.timedelta(minutes=5 * queue_item.retry_count)
-                    message_log.status = 'failed'
-                    cache.set(cache_key, 'retrying', timeout=3600)
-                    logger.warning(f"Message failed, scheduling retry #{queue_item.retry_count} for queue {queue_item.id}")
+                if message_type:
+                    logger.debug(f"Sending file message for queue {queue_item.id}")
+                    success = send_file_message(
+                        phone=target.contact_phone,
+                        message=message.text,
+                        token_socialhub=queue_item.phone_token,
+                        file_path=message.file.path if message.file else None
+                    )
                 else:
-                    queue_item.status = 'failed'
-                    message_log.status = 'failed'
-                    cache.set(cache_key, 'failed', timeout=3600)
-                    logger.error(f"Message failed after all retries for queue {queue_item.id}")
+                    logger.debug(f"Sending text message for queue {queue_item.id}")
+                    success = send_text_message(
+                        phone=target.contact_phone,
+                        message=message.text,
+                        token_socialhub=queue_item.phone_token
+                    )
+
+                if success:
+                    queue_item.status = 'sent'
+                    cache.set(cache_key, 'sent', timeout=3600)  # Cache for 1 hour
+                    success_count += 1
+                    logger.info(f"Successfully sent message for queue {queue_item.id}")
+                else:
+                    if queue_item.retry_count < 3:  # Max 3 retries
+                        queue_item.status = 'retrying'
+                        queue_item.retry_count += 1
+                        queue_item.scheduled_time = now + timezone.timedelta(minutes=5 * queue_item.retry_count)
+                        cache.set(cache_key, 'retrying', timeout=3600)
+                        logger.warning(f"Message failed, scheduling retry #{queue_item.retry_count} for queue {queue_item.id}")
+                    else:
+                        queue_item.status = 'failed'
+                        cache.set(cache_key, 'failed', timeout=3600)
+                        logger.error(f"Message failed after all retries for queue {queue_item.id}")
+                    error_count += 1
+
+                queue_item.save()
+                processed_count += 1
+
+            except Exception as e:
+                queue_item.status = 'failed'
+                queue_item.last_error = str(e)
+                queue_item.save()
+                cache.set(cache_key, 'failed', timeout=3600)
                 error_count += 1
-
-            message_log.save()
-
-        except Exception as e:
-            queue_item.status = 'failed'
-            queue_item.last_error = str(e)
-            cache.set(cache_key, 'failed', timeout=3600)
-            error_count += 1
-            logger.exception(f"Error processing queue {queue_item.id}: {str(e)}")
-
-            # Log failed message attempt
-            MessageLogs.objects.create(
-                message=message,
-                user=message.user,
-                user_phone=queue_item.userphone,
-                contact=queue_item.target_list.contact,
-                status='failed',
-                relationship_tag=target.contact_tag
-            )
-
-        finally:
-            queue_item.save()
-            processed_count += 1
+                logger.exception(f"Error processing queue {queue_item.id}: {str(e)}")
+                processed_count += 1
+                
+                # Re-raise the exception to trigger the transaction rollback
+                raise
 
     logger.info(f"Queue processing complete. Processed: {processed_count}, Success: {success_count}, Errors: {error_count}")
     return processed_count, success_count, error_count
@@ -174,15 +170,16 @@ def process_queue_by_id(queue_id):
         message = queue_item.message
 
         # Prepare message log entry
-        message_log = MessageLogs(
-            message=message,
-            user=message.user,
-            user_phone=queue_item.userphone,
-            contact=queue_item.target_list.contact,
-            status='processing',
-            relationship_tag=target.contact_tag
-        )
-        message_log.save()
+        with transaction.atomic():
+            message_log = MessageLogs(
+                message=message,
+                user=message.user,
+                user_phone=queue_item.userphone,
+                contact=queue_item.target_list.contact,
+                status='processing',
+                relationship_tag=target.contact_tag
+            )
+            message_log.save()
 
         # Default to text message if no type specified
         message_type = getattr(message, 'file_type', None)
@@ -203,14 +200,18 @@ def process_queue_by_id(queue_id):
 
         if success:
             queue_item.status = 'sent'
-            message_log.status = 'sent'
+            with transaction.atomic():
+                message_log.status = 'sent'
+                message_log.save()
             
             # Only increment sent_messages_count if it's a successful send
             target.sent_messages_count += 1
             target.save()
         else:
             queue_item.status = 'failed'
-            message_log.status = 'failed'
+            with transaction.atomic():
+                message_log.status = 'failed'
+                message_log.save()
             raise ValueError(f"Failed to send message for queue entry {queue_id}")
 
         queue_item.save()
@@ -224,6 +225,7 @@ def process_queue_by_id(queue_id):
             queue_item.status = 'failed'
             queue_item.save()
         if message_log:
-            message_log.status = 'failed'
-            message_log.save()
+            with transaction.atomic():
+                message_log.status = 'failed'
+                message_log.save()
         raise Exception(f"Error processing queue entry {queue_id}: {error_msg}")

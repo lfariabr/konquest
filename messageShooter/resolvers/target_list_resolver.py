@@ -213,7 +213,7 @@ def generate_target_lists():
                         new_lists = TargetList.objects.filter(
                             campaign=campaign,
                             status='pending'
-                        ).order_by('created_at')
+                        ).order_by('sent_messages_count')
                         created_lists.extend(new_lists)
                         
                     logger.info(f"Campaign {campaign.name}: created={created_count}, skipped={skipped_count}, errors={error_count}")
