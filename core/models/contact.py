@@ -191,3 +191,6 @@ class Contact(models.Model):
         self.appointment_created_at = None
         self.store_appointment = None
         self.save()
+
+    class Meta:
+        indexes = [models.Index(fields=['id'])]

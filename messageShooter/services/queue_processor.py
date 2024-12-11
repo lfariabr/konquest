@@ -324,9 +324,10 @@ class QueueProcessor:
                     @sync_to_async
                     def get_message_for_contact():
                         counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
+                        # Map contact_tag to relationship_tag for get_message
                         message = get_message(
                             contact_type=target_list.contact_type,
-                            contact_tag=target_list.contact_tag,
+                            relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
                             counter=counter
                         )
                         return counter, message
@@ -479,7 +480,7 @@ class QueueProcessor:
             contact=contact,
             message=message,
             status="sent",
-            relationship_tag=target_list.contact_tag if target_list else contact.relationship_tag
+            relationship_tag=target_list.contact_tag if target_list else contact.relationship_tag  # Use contact_tag here
         )
     
     # Keep existing sync methods for backward compatibility

@@ -94,6 +94,7 @@ class TargetList(models.Model):
             models.Index(fields=['contact_type', 'contact_tag']),
             models.Index(fields=['status', 'priority', 'sequence_order']),
         ]
+        
 
     def __str__(self):
         return f"Target List {self.id} - {self.contact_tag}"

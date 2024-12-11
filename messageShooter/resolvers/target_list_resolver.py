@@ -2,7 +2,7 @@ from django.utils import timezone
 from messageShooter.models.campaign import Campaign, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
-from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
+from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment, bulk_get_counter_whatsapp, bulk_get_counter_appointment
 from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
 from core.models.message import Message
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def create_target_list(campaign_id, force_run=False):
     """
-    Create target list entries for a campaign
+    Create target list entries for a campaign with optimized bulk operations
     Args:
         campaign_id: ID of the campaign
         force_run: If True, bypasses the ready-to-run checks
@@ -28,78 +28,86 @@ def create_target_list(campaign_id, force_run=False):
         campaign = Campaign.objects.get(id=campaign_id)
         logger.info(f"Processing campaign '{campaign.name}' (ID: {campaign_id})")
 
-        # Deletion of existing target list for this campaign
+        # Bulk deletion of existing target lists and queue entries
         existing_target_lists = TargetList.objects.filter(campaign=campaign)
         if existing_target_lists.exists():
             count = existing_target_lists.count()
-            
-            # First delete associated queue entries
             from messageShooter.models.queue import Queue
-            queue_entries = Queue.objects.filter(target_list__in=existing_target_lists)
-            queue_count = queue_entries.count()
-            if queue_count > 0:
-                logger.info(f"Cleaning up: Deleting {queue_count} queue entries and {count} target lists")
-                queue_entries.delete()
-                existing_target_lists.delete()
-            else:
-                logger.info(f"Cleaning up: Deleting {count} target lists")
-                existing_target_lists.delete()
-        
-        # Check if campaign is active and ready to run
-        if not force_run and (campaign.campaign_status != "Active" or not campaign.is_ready_to_run()):
-            logger.info(f"Campaign '{campaign.name}' is not active or not ready to run")
-            return 0, 0, 0
+            queue_count = Queue.objects.filter(target_list__in=existing_target_lists).delete()[0]
+            target_count = existing_target_lists.delete()[0]
+            logger.info(f"Cleaned up: Deleted {queue_count} queue entries and {target_count} target lists")
 
-        # Check if campaign should run today based on active days
-        if not force_run and not campaign.should_run_today():
-            logger.info(f"Campaign '{campaign.name}' is not scheduled to run today")
-            return 0, 0, 0
+        # Early return checks
+        if not force_run:
+            if campaign.campaign_status != "Active" or not campaign.is_ready_to_run():
+                logger.info(f"Campaign '{campaign.name}' is not active or not ready to run")
+                return 0, 0, 0
+            if not campaign.should_run_today():
+                logger.info(f"Campaign '{campaign.name}' is not scheduled to run today")
+                return 0, 0, 0
 
-        # For one-time campaigns, check if target list already exists
+        # One-time campaign check
         if campaign.frequency == FREQUENCY_ONCE:
-            existing_target_list = TargetList.objects.filter(
+            if TargetList.objects.filter(
                 campaign=campaign,
                 contact_tag=campaign.contact_tag,
                 status__in=['pending', 'processing']
-            ).first()
-            
-            if existing_target_list:
+            ).exists():
                 logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
                 return 0, 0, 0
 
-        # Get contacts based on campaign type
-        if campaign.contact_type == "Whatsapp":
-            contacts = get_contact_whatsapp(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
-        else:
-            contacts = get_contact_appointment(contact_type=campaign.contact_type, contact_tag=campaign.contact_tag)
-            
+        # Get all contacts
+        contacts = (get_contact_whatsapp if campaign.contact_type == "Whatsapp" else get_contact_appointment)(
+            contact_type=campaign.contact_type,
+            contact_tag=campaign.contact_tag
+        )
+        
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
             return created_count, skipped_count, error_count
         
         logger.info(f"Found {len(contacts)} contacts with tag '{campaign.contact_tag}'")
         
-        # Process each contact
+        # Pre-load counters for all contacts
+        phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
+        if campaign.contact_type == "Whatsapp":
+            counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
+        else:
+            counters = bulk_get_counter_appointment(phones, campaign.contact_tag)
+            
+        # Pre-load all possible messages
+        unique_counters = set(counters.values())
+        messages = {
+            counter: get_message(
+                contact_type=campaign.contact_type,
+                relationship_tag=campaign.contact_tag,
+                counter=counter
+            )
+            for counter in unique_counters
+        }
+        
+        # Pre-fetch existing target lists to avoid duplicate checks in loop
+        existing_target_lists = set(
+            TargetList.objects.filter(
+                campaign=campaign,
+                status__in=['pending', 'processing', 'retrying']
+            ).values_list('contact_id', 'message__counter')
+        )
+        
+        # Prepare bulk create list
+        target_lists_to_create = []
+        messages_to_update = set()
+        
+        # Process contacts
         for contact in contacts:
             try:
-                # Validate phone number
                 if not contact.phone or not contact.phone.isdigit():
                     logger.debug(f"Invalid phone number for contact {contact.id} - skipping")
                     skipped_count += 1
                     continue
 
-                # Get current message counter for contact
-                if campaign.contact_type == "Whatsapp":
-                    counter = get_counter_whatsapp(contact.phone, campaign.contact_tag)
-                else:
-                    counter = get_counter_appointment(contact.phone, campaign.contact_tag)
-                    
-                # Get message for current counter
-                message = get_message(
-                    contact_type=campaign.contact_type,
-                    contact_tag=campaign.contact_tag,
-                    counter=counter
-                )
+                counter = counters.get(contact.phone)
+                message = messages.get(counter)
                 
                 if not message:
                     logger.debug(f"No message found for counter {counter} - skipping contact {contact.id}")
@@ -109,53 +117,50 @@ def create_target_list(campaign_id, force_run=False):
                 # Update message contact type if not set
                 if not message.contact_type:
                     message.contact_type = campaign.contact_type
-                    message.save()
+                    messages_to_update.add(message)
                     
-                # Check if target list already exists
-                existing = TargetList.objects.filter(
-                    campaign=campaign,
-                    contact=contact,
-                    message__counter=counter,
-                    status__in=['pending', 'processing', 'retrying']
-                ).exists()
-                
-                if existing:
+                # Check for existing target list
+                if (contact.id, counter) in existing_target_lists:
                     logger.debug(f"Target list already exists for contact {contact.id} - skipping")
                     skipped_count += 1
                     continue
                 
-                # Create target list entry
-                target_list = TargetList.objects.create(
-                    campaign=campaign,
-                    contact=contact,
-                    message=message,
-                    contact_tag=campaign.contact_tag,
-                    contact_type=campaign.contact_type,
-                    contact_phone=contact.phone,
-                    reference_id=str(contact.id),
-                    userphone=campaign.userphone,
-                    token=campaign.userphone.phone_token,
-                    status='pending'
+                target_lists_to_create.append(
+                    TargetList(
+                        campaign=campaign,
+                        contact=contact,
+                        message=message,
+                        contact_tag=campaign.contact_tag,
+                        contact_type=campaign.contact_type,
+                        contact_phone=contact.phone,
+                        reference_id=str(contact.id),
+                        userphone=campaign.userphone,
+                        token=campaign.userphone.phone_token,
+                        sent_messages_count=counter or 0,
+                        status='pending'
+                    )
                 )
-                
                 created_count += 1
                 
             except Exception as e:
                 logger.error(f"Error processing contact {contact.id}: {str(e)}")
                 error_count += 1
                 continue
-
-        # Update campaign status if it's a one-time campaign and contacts were processed
-        if campaign.frequency == FREQUENCY_ONCE and created_count > 0:
-            campaign.campaign_status = "Completed"
-            campaign.save()
-            logger.info(f"One-time campaign '{campaign.name}' marked as completed")
-
+        
+        # Bulk update messages
+        if messages_to_update:
+            Message.objects.bulk_update(list(messages_to_update), ['contact_type'])
+            
+        # Bulk create target lists
+        if target_lists_to_create:
+            TargetList.objects.bulk_create(target_lists_to_create, batch_size=1000)
+            
+        logger.info(f"Campaign processing complete. Created: {created_count}, Skipped: {skipped_count}, Errors: {error_count}")
         return created_count, skipped_count, error_count
         
     except Exception as e:
-        logger.error(f"Error in create_target_list: {str(e)}")
-        return 0, 0, 1
+        logger.error(f"Error processing campaign {campaign_id}: {str(e)}")
+        return created_count, skipped_count, error_count + 1
 
 def clean_target_list():
     """

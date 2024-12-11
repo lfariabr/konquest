@@ -4,11 +4,11 @@
 from core.models.message import Message
 from django.core.exceptions import ObjectDoesNotExist
 
-def get_message(contact_type, contact_tag=None, counter=0):
+def get_message(contact_type, relationship_tag=None, counter=0):
     """
     Get appropriate message based on:
     - Contact type (WhatsApp/Appointment)
-    - Contact tag (Preenchimento/Botox/NPS/etc.)
+    - Relationship tag (Preenchimento/Botox/NPS/etc.)
     - Counter (sequence number or days)
     
     Message selection logic:
@@ -24,7 +24,7 @@ def get_message(contact_type, contact_tag=None, counter=0):
     """
     # Get message matching all criteria - no fallback to counter=0
     message = Message.objects.filter(
-        relationship_tag=contact_tag,
+        relationship_tag=relationship_tag,  # This matches the database field name
         counter=counter
     ).first()
     

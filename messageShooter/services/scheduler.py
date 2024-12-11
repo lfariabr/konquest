@@ -83,6 +83,12 @@ class CampaignScheduler:
                         target.status = 'processing'
                         target.save()
                     
+                    # Update campaign status if it's a one-time campaign
+                    campaign = first_target.campaign
+                    if campaign.frequency == 'Once':
+                        campaign.campaign_status = 'Completed'
+                        campaign.save()
+                    
                     logger.info(f"Queued target list {first_target.id} for campaign {campaign_id}")
             
             logger.info(f"Successfully queued {queued_count} target lists")

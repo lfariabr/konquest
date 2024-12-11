@@ -20,7 +20,8 @@ class ContactModelTest(TestCase):
             user=self.user,
             source="WhatsApp",
             store="Test Store",
-            region="Test Region"
+            region="Test Region",
+            relationship_tag="Preenchimento",  # Use relationship_tag here
         )
         
         # Create test leads

@@ -53,9 +53,11 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Message, MessageAdmin)
 
 class MessageLogsAdmin(admin.ModelAdmin):
-    list_display = ('get_message_text', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number', 'status', 'sent_at')
+    list_display = ('get_message_text', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number')
     search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
     list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
+    ordering = ['-sent_at']
+    list_per_page = 20
 
     def get_contact_phone_number(self, obj): 
         return obj.contact.phone if obj.contact else '-'
@@ -70,23 +72,26 @@ class MessageLogsAdmin(admin.ModelAdmin):
         return obj.user_phone.phone_number if obj.user_phone else '-'
 
     get_phone_number.short_description = 'Phone Number'
-    
 
+    # def get_queryset(self, request):
+    #     queryset = super().get_queryset(request)
+    #     return queryset
+    
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        return queryset
+        return queryset.select_related('message', 'user', 'user_phone', 'contact')
 
 admin.site.register(MessageLogs, MessageLogsAdmin)
 
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'relationship_tag', 'created_at', 'source',
                     'store', 'region', 'external_tag', 'status', 
-                    # Lead fields
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
-                    # Appointment fields
                     'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 'appointment_last_checked', 'appointment_check_count', 'store_appointment')
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
+    ordering = ['-created_at']
+    list_per_page = 20
 
     def check_leads(self, request, queryset):
         total = queryset.count()
@@ -199,7 +204,7 @@ class ContactAdmin(admin.ModelAdmin):
                     except Exception as e:
                         logging.error(f"Error processing row: {row}, Error: {e}")
                         continue
-
+                print(f"Successfully processed {row_count} rows from file {csv_file.name}.")
                 logging.info(f"Successfully processed {row_count} rows from file {csv_file.name}.")
 
             finally:

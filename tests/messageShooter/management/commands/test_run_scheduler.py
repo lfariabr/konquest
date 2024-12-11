@@ -3,13 +3,14 @@ from django.core.management import call_command
 from django.utils import timezone
 from unittest.mock import patch, MagicMock
 from io import StringIO
-from messageShooter.models.campaign import Campaign, STATUS_ACTIVE, FREQUENCY_ONCE
-from messageShooter.models.target_list import TargetList
-from messageShooter.models.queue import Queue
-from core.models.message import Message
-from core.models.contact import Contact
 from core.models.user import kUser
 from core.models.userphone import UserPhone
+from core.models.contact import Contact
+from core.models.messagelog import MessageLogs
+from core.models.message import Message
+from messageShooter.models.queue import Queue
+from messageShooter.models.campaign import Campaign, STATUS_ACTIVE, FREQUENCY_ONCE
+from messageShooter.models.target_list import TargetList
 from datetime import datetime, time
 import logging
 import urllib3
@@ -177,9 +178,19 @@ class TestRunSchedulerCommand(TestCase):
     @patch('messageShooter.services.scheduler.timezone.now')
     def test_command_full_integration(self, mock_now):
         """Test full integration of campaign processing and queue processing"""
+        # Clean up any existing data
+        Campaign.objects.all().delete()
+        Message.objects.all().delete()
+        Queue.objects.all().delete()
+        TargetList.objects.all().delete()
+        Contact.objects.all().delete()
+        UserPhone.objects.all().delete()
+        kUser.objects.all().delete()
+        MessageLogs.objects.all().delete()
+
         # Mock current time to be after execution time
         mock_now.return_value = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
-
+    
         # Create test user and related objects
         test_user = kUser.objects.create(
             name="Test User 2",
@@ -202,13 +213,13 @@ class TestRunSchedulerCommand(TestCase):
             relationship_tag="Botox",
             status="active"
         )
-
+    
         # Create test messages
         message1 = Message.objects.create(
             user=test_user,
             title="Message 1",
             text="Test message 1",
-            counter=1,
+            counter=0,  # First message should have counter 0
             relationship_tag="Botox",
             contact_type="Whatsapp"
         )
@@ -216,13 +227,12 @@ class TestRunSchedulerCommand(TestCase):
             user=test_user,
             title="Message 2",
             text="Test message 2",
-            counter=2,
+            counter=1,  # Second message should have counter 1
             relationship_tag="Botox",
             contact_type="Whatsapp"
         )
-
+    
         # Create campaign
-        from messageShooter.models.campaign import Campaign
         campaign = Campaign.objects.create(
             user=test_user,
             name="Test Campaign",
@@ -233,8 +243,8 @@ class TestRunSchedulerCommand(TestCase):
             userphone=test_userphone,
             active_days=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         )
-
-        # Create target list
+    
+        # Create target list with message1 (counter 0)
         target_list = TargetList.objects.create(
             contact=test_contact,
             contact_phone=test_contact.phone,
@@ -244,33 +254,22 @@ class TestRunSchedulerCommand(TestCase):
             userphone=test_userphone,
             campaign=campaign
         )
-
-        # Create message logs to simulate previous messages
-        from core.models.messagelog import MessageLogs
-        MessageLogs.objects.create(
-            message=message2,
-            user=test_user,
-            user_phone=test_userphone,
-            contact=test_contact,
-            status="sent",
-            relationship_tag="Botox"
-        )
-
-        # Mock get_counter_whatsapp to return counter 1
+    
+        # Mock get_counter_whatsapp to return counter 0
         with patch('messageShooter.resolvers.target_list_resolver.get_counter_whatsapp') as mock_counter1, \
              patch('messageShooter.resolvers.get_counter.get_counter_whatsapp') as mock_counter2:
-            mock_counter1.return_value = 1  # This will match message1's counter
-            mock_counter2.return_value = 1  # This will match message1's counter
-            
+            mock_counter1.return_value = 0  # No messages sent yet
+            mock_counter2.return_value = 0  # No messages sent yet
+    
             # Run command with max 1 iteration
             out = StringIO()
             call_command('run_scheduler', max_iterations=1, stdout=out)
-            
+    
             # Check output
             output = out.getvalue()
             self.assertIn("Starting queue processing", output)
-            
-            # Check that a queue entry was created
+    
+            # Check that a queue entry was created with message1
             queue_entry = Queue.objects.first()
             self.assertIsNotNone(queue_entry)
-            self.assertEqual(queue_entry.message, message1)
+            self.assertEqual(queue_entry.message, message1)  # Should use message1 since counter is 0

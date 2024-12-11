@@ -9,80 +9,126 @@ from asgiref.sync import async_to_sync
 logger = logging.getLogger(__name__)
 
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ('id', 'contact_type', 'campaign_name', 'status', 'progress_display', 'recipients_count', 'userphone_number', 'target_list_link')
+    list_display = ('id', 'get_contact_type', 'get_campaign_name', 'status', 'get_progress_display', 'get_recipients_count', 'get_userphone_number', 'get_target_list_link')
     list_filter = ('status', 'target_list__contact_type', 'target_list__campaign', 'userphone')
     search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number', 'target_list__campaign__name')
     ordering = ('-priority', 'scheduled_time', 'created_at')
     actions = ['instant_process_queue', 'resume_interrupted_queues']
 
-    def contact_type(self, obj):
+    def get_queryset(self, request):
+        """Override get_queryset to store request and setup cache"""
+        self.request = request
+        qs = super().get_queryset(request)
+        
+        # Setup cache for counters
+        if not hasattr(request, 'queue_counters'):
+            request.queue_counters = {}
+            
+        return qs
+
+    def get_contact_type(self, obj):
         return obj.target_list.contact_type if obj.target_list else '-'
-    contact_type.short_description = 'Contact Type'
+    get_contact_type.short_description = 'Contact Type'
     
-    def progress_display(self, obj):
-        """Show processing progress for queue"""
+    def get_progress_display(self, obj):
+        """Show processing progress for queue with caching"""
+        cache_key = f'queue_progress_{obj.id}'
+        
+        if not hasattr(self, 'request'):
+            logger.error("No request object found for progress display")
+            return '-'
+            
+        # Try to get from cache
+        if cache_key in self.request.queue_counters:
+            logger.debug(f"Cache hit for progress {cache_key}")
+            return self.request.queue_counters[cache_key]
+            
         if not obj.processed_contacts:
+            self.request.queue_counters[cache_key] = '-'
             return '-'
         
         try:
-            total = len(obj.target_list.get_contacts()) if obj.target_list else 0
+            total = self.get_recipients_count(obj)
             processed = len(obj.processed_contacts)
             success = len([c for c in obj.processed_contacts.values() if c["status"] == "sent"])
             
+            result = None
             if obj.status == 'processing':
-                return format_html(
+                result = format_html(
                     '<span style="color: #1a73e8;">⏳ {}/{} ({:.0f}%)</span>',
                     processed, total, (processed/total*100) if total > 0 else 0
                 )
             elif obj.status == 'sent':
-                return format_html(
+                result = format_html(
                     '<span style="color: #0d904f;">✓ {}/{}</span>',
                     success, total
                 )
             elif obj.status == 'failed':
-                return format_html(
+                result = format_html(
                     '<span style="color: #d93025;">✗ {}/{}</span>',
                     success, total
                 )
             elif obj.status == 'retrying':
-                return format_html(
+                result = format_html(
                     '<span style="color: #f29900;">↻ {}/{} (Retry #{}/3)</span>',
                     success, total, obj.retry_count
                 )
-            return f"{success}/{total}"
+            else:
+                result = f"{success}/{total}"
+                
+            # Cache the result
+            self.request.queue_counters[cache_key] = result
+            return result
+            
         except Exception as e:
             logger.error(f"Error displaying progress for queue {obj.id}: {str(e)}")
+            self.request.queue_counters[cache_key] = '-'
             return '-'
-    progress_display.short_description = '📊 Progress'
+    get_progress_display.short_description = '📊 Progress'
     
-    def recipients_count(self, obj):
-        """Get total number of recipients in target list"""
+    def get_recipients_count(self, obj):
+        """Get total number of recipients in target list with caching"""
         if not obj.target_list:
             return 0
+            
+        cache_key = f'recipients_count_{obj.target_list.id}'
+        
+        if not hasattr(self, 'request'):
+            logger.error("No request object found for recipients count")
+            return 0
+            
+        # Try to get from cache
+        if cache_key in self.request.queue_counters:
+            logger.debug(f"Cache hit for recipients {cache_key}")
+            return self.request.queue_counters[cache_key]
+            
         try:
-            return len(obj.target_list.get_contacts())
+            count = len(obj.target_list.get_contacts())
+            self.request.queue_counters[cache_key] = count
+            return count
         except Exception as e:
             logger.error(f"Error getting recipients count for queue {obj.id}: {str(e)}")
+            self.request.queue_counters[cache_key] = 0
             return 0
-    recipients_count.short_description = '👥 Recipients'
+    get_recipients_count.short_description = '👥 Recipients'
 
-    def userphone_number(self, obj):
+    def get_userphone_number(self, obj):
         return obj.userphone.phone_number if obj.userphone else '-'
-    userphone_number.short_description = '📱 UserPhone'
+    get_userphone_number.short_description = '📱 UserPhone'
 
-    def target_list_link(self, obj):
+    def get_target_list_link(self, obj):
         if not obj.target_list:
             return '-'
         url = f"/admin/messageShooter/targetlist/{obj.target_list.id}/change/"
         return format_html('<a href="{}">{}</a>', url, obj.target_list.id)
-    target_list_link.short_description = '🎯 Target List'
+    get_target_list_link.short_description = '🎯 Target List'
 
-    def campaign_name(self, obj):
+    def get_campaign_name(self, obj):
         if obj.target_list and obj.target_list.campaign:
             url = f"/admin/messageShooter/campaign/{obj.target_list.campaign.id}/change/"
             return format_html('<a href="{}">{}</a>', url, obj.target_list.campaign.name)
         return '-'
-    campaign_name.short_description = '📢 Campaign'
+    get_campaign_name.short_description = '📢 Campaign'
 
     def instant_process_queue(self, request, queryset):
         """Process selected queues immediately"""
