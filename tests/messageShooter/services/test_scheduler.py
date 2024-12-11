@@ -52,8 +52,8 @@ class TestCampaignScheduler(TestCase):
                     user=self.user,
                     title=f"Message {i}",
                     text=f"Test message {i}",
-                    relationship_tag="Preenchimento",  # Match campaign's tag
-                    contact_type="Whatsapp",  # Match campaign's type
+                    relationship_tag="Preenchimento",  
+                    contact_type="Whatsapp",  
                     counter=i
                 )
             )
@@ -145,9 +145,9 @@ class TestCampaignScheduler(TestCase):
                 message=self.messages[0],
                 user=self.user,
                 user_phone=self.user_phone,
-                contact=self.contact,  # Add contact reference
+                contact=self.contact,  
                 status="sent",
-                relationship_tag="Preenchimento"  # Match campaign's tag
+                relationship_tag="Preenchimento"  
             )
             
             # Process campaigns
@@ -168,9 +168,9 @@ class TestCampaignScheduler(TestCase):
                 message=self.messages[0],
                 user=self.user,
                 user_phone=self.user_phone,
-                contact=self.contact,  # Add contact reference
+                contact=self.contact,  
                 status="sent",
-                relationship_tag="Preenchimento"  # Match campaign's tag
+                relationship_tag="Preenchimento"  
             )
         
         # Process campaigns
@@ -228,9 +228,9 @@ class TestCampaignScheduler(TestCase):
             user=self.user,
             title="Test Message",
             text="Test message content",
-            relationship_tag="Preenchimento",
-            contact_type="Whatsapp",
-            counter=0  # Start with counter 0
+            relationship_tag="Preenchimento",  
+            contact_type="Whatsapp",  
+            counter=0  
         )
         
         # Make campaign daily recurring
@@ -268,8 +268,8 @@ class TestCampaignScheduler(TestCase):
             user=self.user,
             title="Test Message",
             text="Test message content",
-            relationship_tag="Preenchimento",
-            contact_type="Whatsapp",
+            relationship_tag="Preenchimento",  
+            contact_type="Whatsapp",  
             counter=0
         )
         
@@ -277,6 +277,7 @@ class TestCampaignScheduler(TestCase):
         self.campaign.frequency = FREQUENCY_ONCE
         self.campaign.execution_time = "12:00"
         self.campaign.next_run = timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone())
+        self.campaign.contact_tag = "Preenchimento"  
         self.campaign.save()
 
         # Process campaigns
@@ -299,8 +300,8 @@ class TestCampaignScheduler(TestCase):
             user=self.user,
             title="Test Message",
             text="Test message content",
-            relationship_tag="Preenchimento",
-            contact_type="Whatsapp",
+            relationship_tag="Preenchimento",  
+            contact_type="Whatsapp",  
             counter=0
         )
         
@@ -341,8 +342,8 @@ class TestCampaignScheduler(TestCase):
             user=self.user,
             title="Test Message",
             text="Test message content",
-            relationship_tag="Preenchimento",
-            contact_type="Whatsapp",
+            relationship_tag="Preenchimento",  
+            contact_type="Whatsapp",  
             counter=0
         )
         

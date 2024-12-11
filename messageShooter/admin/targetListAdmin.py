@@ -2,6 +2,8 @@ from django.contrib import admin
 from core.models.messagelog import MessageLogs
 import logging
 from django.utils import timezone
+from django.core.cache import cache
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -9,51 +11,82 @@ class TargetListAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'contact_type',
-        'contact_tag',
+        'contact_tag', 
         'campaign',
         'contact_phone',
-        'sent_messages_count',
+        'get_sent_messages_count',
         'status',
         'created_at',
         'updated_at'
     )
     list_filter = ('contact_type', 'contact_tag', 'campaign', 'status', 'created_at')
     search_fields = ('contact_phone', 'contact_tag', 'campaign__name')
-    readonly_fields = ('sent_messages_count',)
+    readonly_fields = ('get_sent_messages_count',)
     actions = ['instant_process_tlist_to_queue']
+    list_per_page = 20
 
-    def sent_messages_count(self, obj):
-        """Return next message counter for this contact based on their message logs"""
-        # Debug info
-        logger.info(f"\n=== Getting next message counter for target list entry ===")
-        logger.info(f"Target List: {obj.id}")
-        logger.info(f"Phone: {obj.contact_phone}")
-        logger.info(f"Tag: {obj.contact_tag}")
+    def changelist_view(self, request, extra_context=None):
+        self.request = request  # Store request if needed for other purposes
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def get_queryset(self, request):
+        """Override to prefetch related counters in bulk"""
+        qs = super().get_queryset(request)
         
-        if not obj.contact:
-            logger.info("No contact associated with target list entry")
+        # Get all unique phone numbers and tags
+        phones_by_type = {}
+        for target in qs:
+            if target.contact_phone and target.contact_phone.isdigit():
+                phones_by_type.setdefault(target.contact_type, {}).setdefault(target.contact_tag, set()).add(target.contact_phone)
+        
+        # Bulk fetch counters for each contact type and tag
+        from messageShooter.resolvers.get_counter import bulk_get_counter_whatsapp, bulk_get_counter_appointment
+        
+        # Get or create cache key for this user
+        cache_key = f"target_list_counters_{request.user.id}"
+        counter_cache = cache.get(cache_key, {})
+        
+        for contact_type, tags in phones_by_type.items():
+            for tag, phones in tags.items():
+                logger.info(f"Processing {len(phones)} phones for {contact_type} - {tag}")
+                logger.info(f"Sample phones: {list(phones)[:3]}")
+
+                # Determine which counter fetching function to use
+                if contact_type.lower() == 'whatsapp':
+                    counters = bulk_get_counter_whatsapp(list(phones), tag)
+                else:
+                    counters = bulk_get_counter_appointment(list(phones), tag)
+
+                # Store results in cache
+                for phone, count in counters.items():
+                    key = f"{contact_type}:{tag}:{phone}"
+                    counter_cache[key] = count
+                    logger.info(f"Caching key: {key} = {count}")
+        
+        # Store in Django's cache for 1 hour
+        cache.set(cache_key, counter_cache, 3600)
+        logger.info(f"Stored {len(counter_cache)} counters in cache with key {cache_key}")
+
+        return qs
+
+    def get_sent_messages_count(self, obj):
+        """Get the number of messages sent to this contact"""
+        if not hasattr(self, 'request'):
+            logger.error("No request object found")
             return 0
             
-        logger.info(f"Contact: id={obj.contact.id}, phone={obj.contact.phone}, tag={obj.contact.relationship_tag}")
+        cache_key = f"target_list_counters_{self.request.user.id}"
+        counter_cache = cache.get(cache_key, {})
+        logger.info(f"Retrieved cache for key {cache_key}. Cache contents: {counter_cache}")
         
-        # Get the last sent message for this contact and tag
-        last_message = MessageLogs.objects.filter(
-            contact=obj.contact,
-            relationship_tag=obj.contact_tag,  # Filter by tag
-            status='sent'
-        ).order_by('-sent_at').first()
+        # Construct the same key format used when caching
+        key = f"{obj.contact_type}:{obj.contact_tag}:{obj.contact_phone}"
+        count = counter_cache.get(key, 0)
+        logger.info(f"Looking up key {key} in cache, found count: {count}")
         
-        # If no messages sent yet, start with counter 0
-        if not last_message:
-            logger.info(f"No messages sent yet for contact {obj.contact.id}")
-            return 0
-            
-        # Get the counter of the last message and add 1
-        next_counter = last_message.message.counter + 1 if last_message.message else 0
-        logger.info(f"Last message counter was {next_counter - 1}, next counter will be {next_counter}")
-        
-        return next_counter
-    sent_messages_count.short_description = '📨 Sent Messages'
+        return count
+    
+    get_sent_messages_count.short_description = '📨 Sent Messages'
 
     def instant_process_tlist_to_queue(self, request, queryset):
         """Directly add selected target lists to the queue"""
@@ -87,11 +120,11 @@ class TargetListAdmin(admin.ModelAdmin):
                     )
                     continue
                 
-                # Get first contact's counter and message
+                # Get first contact's counter and message  
                 counter = get_counter_whatsapp(first_target.contact_phone, first_target.contact_tag)
                 initial_message = get_message(
                     contact_type=first_target.contact_type,
-                    contact_tag=first_target.contact_tag,
+                    relationship_tag=first_target.contact_tag,  # This matches what get_message expects
                     counter=counter
                 )
                 if not initial_message:

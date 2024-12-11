@@ -13,14 +13,12 @@ class MessageLogs(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True) # Change this to import message logs maybe
     relationship_tag = models.CharField(max_length=100, null=True, blank=True, default='')
 
-    class Meta:
-        verbose_name = 'Message Log'
-        verbose_name_plural = 'Message Logs'
-        indexes = [
-            models.Index(fields=['sent_at']),
-            models.Index(fields=['relationship_tag']),
-            models.Index(fields=['status']),
-            models.Index(fields=['user']),
-            models.Index(fields=['message']),
-            models.Index(fields=['contact']),
-        ]
+class Meta:
+    indexes = [
+        models.Index(fields=['id']),
+        models.Index(fields=['sent_at']),
+        models.Index(fields=['message']),
+        models.Index(fields=['contact']),
+        models.Index(fields=['user_phone']),
+        models.Index(fields=['relationship_tag']),
+    ]

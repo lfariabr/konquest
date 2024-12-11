@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
+    # 'debug_toolbar',
     
     # Extra Libraries
     'rest_framework',
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',  # Add this first
-    'debug_toolbar.middleware.DebugToolbarMiddleware', # New
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware', # New
     'django.middleware.security.SecurityMiddleware', # New
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -71,7 +71,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # Database
-DATABASE_ENGINE = config('DATABASE_ENGINE')
+DATABASE_ENGINE = 'sqlite3' # sqlite3 # postgresql
+# DATABASE_ENGINE = config('DATABASE_ENGINE')
 
 if DATABASE_ENGINE == 'postgresql':
     DATABASES = {
@@ -117,10 +118,10 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 # Cache settings
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'django_cache_table',
-        'TIMEOUT': 300,
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
         'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'MAX_ENTRIES': 1000,
             'CULL_FREQUENCY': 3
         }
@@ -136,7 +137,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ''
 APPS_REORDER = {}
 
 # Session configuration
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
 # Password validation
