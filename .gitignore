@@ -12,6 +12,7 @@ venv/
 # Django
 *.sqlite3
 /media/
+/core/media/
 db.sqlite3
 *.sql
 

@@ -7,9 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 ALLOWED_HOSTS = []
+WSGI_APPLICATION = 'konquist.wsgi.application'
 
-
-# Application definition
+################
+# DATABASE / CONTACT LOAD
+################
+DATABASE_ENGINE = 'sqlite3' # sqlite3 # postgresql
+CONTACTS_TO_LOAD = 100
 
 INSTALLED_APPS = [
     'django_daisy',
@@ -19,18 +23,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'debug_toolbar',
-    
     # Extra Libraries
     'rest_framework',
     'graphene_django',
-
+    # 'debug_toolbar',
     # Apps
     'django_celery_beat',
     'apiCrm',
     'core',
     'apiSocialHub',
-    
     # Controller:
     'messageShooter'
 ]
@@ -67,12 +68,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'konquist.wsgi.application'
-
-# Database
-DATABASE_ENGINE = 'sqlite3' # sqlite3 # postgresql
-# DATABASE_ENGINE = config('DATABASE_ENGINE')
 
 if DATABASE_ENGINE == 'postgresql':
     DATABASES = {
@@ -185,6 +180,7 @@ STATICFILES_DIRS = [
 # Media Files (to send messages):
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'core', 'media')
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100 MB
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

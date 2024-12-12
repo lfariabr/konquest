@@ -140,12 +140,10 @@ class QueueProcessor:
                         )
                         
                         if response and 'data' in response and 'createLead' in response['data']:
-                            # Update contact's lead status
                             contact.is_lead = True
                             contact.lead_created_at = timezone.now()
                             contact.save()
                             
-                            # Log the lead creation
                             MessageLogs.objects.create(
                                 message=message,
                                 user=contact.user,
@@ -155,6 +153,8 @@ class QueueProcessor:
                                 relationship_tag=f"{campaign_name}"
                             )
                             self.logger.info(f"Lead created and logged for {contact.phone} in campaign {campaign_name}")
+                            time.sleep(60)
+                            print("Resting 60 seconds before creating next lead...")
                             return True, None
                         return False, "Failed to create lead in CRM"
 
@@ -171,7 +171,27 @@ class QueueProcessor:
                     self.logger.error(error_message)
                     return False, error_message
             
-            # If not a lead creation message, send the normal message
+            ##### NEW
+            elif message.file:  # Check if there is a file associated with the message
+                if message.file:  # Ensure the file field is not empty
+                    try:
+                        file_path = message.file.path
+                        success, error_message = await self.process_with_retry(
+                            self.send_file_message_async,
+                            contact,
+                            message,
+                            userphone,
+                            file_path
+                        )
+                        return success, error_message
+                    except Exception as e:
+                        self.logger.error(f"Error sending file message to {contact.phone}: {str(e)}")
+                else:
+                    error_message = f"No file associated with message for {contact.phone}"
+                    self.logger.error(error_message)
+                    return False, error_message
+
+            # else, if just a text message:
             else:
                 success, error_message = await self.process_with_retry(
                     self.send_message_async,
@@ -213,6 +233,30 @@ class QueueProcessor:
             self.logger.error(error_msg)
             if isinstance(e, (ConnectionError, ConnectionResetError)):
                 raise  # Let process_with_retry handle connection errors
+            return False, error_msg
+    
+    ######## NEW
+    async def send_file_message_async(self, contact, message, userphone, file_path):
+        """Send file message asynchronously by wrapping sync functions in to_thread"""
+        try:
+            result = await asyncio.to_thread(
+                send_file_message,
+                phone=contact.phone,
+                message=message.text,
+                token_socialhub=userphone.phone_token,
+                file_path=file_path,
+            )
+
+            if isinstance(result, dict) and result.get('success', False):
+                return True, None
+            else:
+                error_msg = result.get('error', 'Unknown error')
+                self.logger.error(f"Failed to send message to {contact.phone}: {error_msg}")
+                return False, error_msg
+
+        except Exception as e:
+            error_msg = f"Exception while sending file message to {contact.phone}: {str(e)}"
+            self.logger.error(error_msg)
             return False, error_msg
 
     async def process_queues_async(self, pending_queues=None, max_concurrent: int = 3, batch_size: int = 50):

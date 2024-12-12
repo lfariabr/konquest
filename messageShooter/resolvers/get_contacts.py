@@ -8,8 +8,10 @@ from core.models.contact import Contact
 from apiCrm.models.appointment import Appointment
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
 import logging
 
+number_of_contacts = settings.CONTACTS_TO_LOAD
 logger = logging.getLogger(__name__)
 
 def get_contact_whatsapp(contact_type, contact_tag):
@@ -37,7 +39,7 @@ def get_contact_whatsapp(contact_type, contact_tag):
 
     contacts = Contact.objects.filter(
         id__in=Subquery(earliest_contacts)
-    ).order_by('-created_at')[:1]  # Limit to 700 as per comment in queue_resolver
+    ).order_by('-created_at')[:number_of_contacts]
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")
