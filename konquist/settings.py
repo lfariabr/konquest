@@ -9,11 +9,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
-################
-# DATABASE / CONTACT LOAD
-################
-DATABASE_ENGINE = 'sqlite3' # sqlite3 # postgresql
-CONTACTS_TO_LOAD = 100
+# DATABASE: sqlite3 (dev) OR postgresql (prod)
+DATABASE_ENGINE = 'sqlite3' 
+CONTACTS_TO_LOAD = 100 # messageShooter/resolvers/get_contacts.py
 
 INSTALLED_APPS = [
     'django_daisy',
@@ -162,11 +160,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'America/Sao_Paulo'
+USE_TZ = True
 USE_I18N = True
 
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

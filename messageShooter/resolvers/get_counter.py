@@ -24,7 +24,7 @@ def get_counter_whatsapp(phone, contact_tag=None):
     logs = MessageLogs.objects.filter(
         contact__phone=phone,
         relationship_tag=contact_tag,  # Use relationship_tag here since that's the database field
-        status__in=['sent', 'lead_created']
+        status__in=['sent']
     )
     
     return logs.count()
@@ -49,8 +49,8 @@ def bulk_get_counter_whatsapp(phones, contact_tag=None):
     # Get counts for all phones in a single query
     counters = MessageLogs.objects.filter(
         contact__phone__in=phones,
-        relationship_tag=contact_tag,  # Use relationship_tag here since that's the database field
-        status__in=['sent', 'lead_created']
+        relationship_tag=contact_tag,  
+        status__in=['sent'] # change this
     ).values('contact__phone').annotate(
         counter=Count('id')
     )

@@ -93,7 +93,7 @@ class ContactAdmin(admin.ModelAdmin):
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
-    list_per_page = 20
+    list_per_page = 100 # change this
 
     def check_leads(self, request, queryset):
         total = queryset.count()

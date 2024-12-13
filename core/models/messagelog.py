@@ -18,7 +18,7 @@ class Meta:
         models.Index(fields=['id']),
         models.Index(fields=['sent_at']),
         models.Index(fields=['message']),
-        models.Index(fields=['contact']),
-        models.Index(fields=['user_phone']),
-        models.Index(fields=['relationship_tag']),
+        # models.Index(fields=['contact']), # change this
+        # models.Index(fields=['user_phone']), # change this
+        # models.Index(fields=['relationship_tag']), # change this
     ]
