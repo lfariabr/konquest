@@ -114,7 +114,8 @@ def setup_test_data(db):
         'message_botox': message_botox,
         'message_preench': message_preench,
         'userphone_botox': userphone_botox,
-        'userphone_preench': userphone_preench
+        'userphone_preench': userphone_preench,
+        'user': user
     }
 
 @pytest.mark.django_db
@@ -268,7 +269,7 @@ def test_target_list_to_queue_conversion(setup_test_data):
 @pytest.mark.django_db
 def test_duplicate_contact_handling(setup_test_data):
     """Test that only one target list is created per phone number, using the earliest contact"""
-    user = kUser.objects.first()
+    user = setup_test_data['user']
     
     # Clean up any existing contacts with the Botox tag
     Contact.objects.filter(relationship_tag="Botox").delete()
@@ -337,7 +338,7 @@ def test_duplicate_contact_handling(setup_test_data):
     
     # Generate target lists
     from messageShooter.resolvers.target_list_resolver import create_target_list
-    created, skipped, errors = create_target_list(campaign.id)
+    created, skipped, errors = create_target_list(campaign.id, force_run=True)
     
     # Verify only one target list was created
     target_lists = TargetList.objects.filter(campaign=campaign)
@@ -350,7 +351,7 @@ def test_duplicate_contact_handling(setup_test_data):
 @pytest.mark.django_db
 def test_invalid_phone_number_handling(setup_test_data):
     """Test that contacts with invalid phone numbers are skipped during target list generation"""
-    user = kUser.objects.first()
+    user = setup_test_data['user']
     
     # Clean up any existing contacts with the Botox tag
     Contact.objects.filter(relationship_tag="Botox").delete()
@@ -372,16 +373,18 @@ def test_invalid_phone_number_handling(setup_test_data):
             source="Whatsapp",
             relationship_tag="Botox",
             status="landing page"
-        ),
-        Contact.objects.create(
-            user=user,
-            name="Valid Phone",
-            phone="11999999999",  # Valid phone
-            source="Whatsapp",
-            relationship_tag="Botox",
-            status="landing page"
         )
     ]
+    
+    # Create valid contact
+    valid_contact = Contact.objects.create(
+        user=user,
+        name="Valid Phone",
+        phone="11999999999",  # Valid phone
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page"
+    )
     
     # Create message for the campaign
     message = Message.objects.create(
@@ -413,7 +416,7 @@ def test_invalid_phone_number_handling(setup_test_data):
     
     # Generate target lists
     from messageShooter.resolvers.target_list_resolver import create_target_list
-    created, skipped, errors = create_target_list(campaign.id)
+    created, skipped, errors = create_target_list(campaign.id, force_run=True)
     
     # Verify only one target list was created (for the valid phone number)
     target_lists = TargetList.objects.filter(campaign=campaign)
@@ -421,9 +424,196 @@ def test_invalid_phone_number_handling(setup_test_data):
     
     # Verify the target list was created for the valid contact
     target_list = target_lists.first()
-    valid_contact = invalid_contacts[2]  # The contact with valid phone
     assert target_list.contact == valid_contact, "Target list should be created for contact with valid phone"
     
     # Verify the counts
     assert created == 1, "Should create 1 target list"
     assert skipped == 2, "Should skip 2 invalid contacts"
+    assert errors == 0, "Should not encounter any errors"
+
+@pytest.mark.django_db
+def test_target_list_generation_with_missing_message(setup_test_data):
+    """Test that contacts are skipped when no message exists for their counter"""
+    user = setup_test_data['user']
+    
+    # Clean up any existing contacts with the Botox tag
+    Contact.objects.filter(relationship_tag="Botox").delete()
+    Message.objects.filter(relationship_tag="Botox").delete()  # Also clean up messages
+    
+    # Create a contact
+    contact = Contact.objects.create(
+        user=user,
+        name="Test Contact",
+        phone="11999999999",
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page"
+    )
+    
+    # Create campaign without creating a message
+    current_time = timezone.now()
+    past_time = (current_time - timezone.timedelta(hours=1)).time()
+    weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    current_weekday = weekday_names[current_time.weekday()]
+    
+    campaign = Campaign.objects.create(
+        name="Test Campaign",
+        user=user,
+        userphone=UserPhone.objects.get(relationship_tag="Botox"),
+        contact_type="Whatsapp",
+        contact_tag="Botox",
+        campaign_status="Active",
+        frequency=FREQUENCY_ONCE,
+        execution_time=past_time,
+        active_days=[current_weekday]
+    )
+    
+    # Generate target lists
+    from messageShooter.resolvers.target_list_resolver import create_target_list
+    created, skipped, errors = create_target_list(campaign.id, force_run=True)
+    
+    # Verify no target lists were created
+    target_lists = TargetList.objects.filter(campaign=campaign)
+    assert target_lists.count() == 0, "Should not create target list when message is missing"
+    
+    # Verify the counts
+    assert created == 0, "Should not create any target lists"
+    assert skipped == 1, "Should skip the contact due to missing message"
+    assert errors == 0, "Should not encounter any errors"
+
+@pytest.mark.django_db
+def test_target_list_generation_with_message_update(setup_test_data):
+    """Test that messages are updated with contact type if not set"""
+    user = setup_test_data['user']
+    
+    # Clean up any existing contacts with the Botox tag
+    Contact.objects.filter(relationship_tag="Botox").delete()
+    Message.objects.filter(relationship_tag="Botox").delete()  # Clean up messages
+    
+    # Create a contact
+    contact = Contact.objects.create(
+        user=user,
+        name="Test Contact",
+        phone="11999999999",
+        source="Whatsapp",
+        relationship_tag="Botox",
+        status="landing page"
+    )
+    
+    # Create message without contact type
+    message = Message.objects.create(
+        title="Test Message",
+        text="Hello test message",
+        relationship_tag="Botox",
+        counter=0,
+        user=user,
+        contact_type=None  # Explicitly set to None
+    )
+    
+    # Create campaign
+    current_time = timezone.now()
+    past_time = (current_time - timezone.timedelta(hours=1)).time()
+    weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    current_weekday = weekday_names[current_time.weekday()]
+    
+    campaign = Campaign.objects.create(
+        name="Test Campaign",
+        user=user,
+        userphone=UserPhone.objects.get(relationship_tag="Botox"),
+        contact_type="Whatsapp",
+        contact_tag="Botox",
+        campaign_status="Active",
+        frequency=FREQUENCY_ONCE,
+        execution_time=past_time,
+        active_days=[current_weekday]
+    )
+    
+    # Generate target lists
+    from messageShooter.resolvers.target_list_resolver import create_target_list
+    created, skipped, errors = create_target_list(campaign.id, force_run=True)
+    
+    # Verify target list was created
+    target_lists = TargetList.objects.filter(campaign=campaign)
+    assert target_lists.count() == 1, "Should create target list"
+    
+    # Verify message was updated
+    message.refresh_from_db()
+    assert message.contact_type == "Whatsapp", "Message contact_type should be updated"
+    
+    # Verify the counts
+    assert created == 1, "Should create one target list"
+    assert skipped == 0, "Should not skip any contacts"
+    assert errors == 0, "Should not encounter any errors"
+
+@pytest.mark.django_db
+def test_target_list_generation_with_bulk_operations(setup_test_data):
+    """Test that bulk operations work correctly with multiple contacts and messages"""
+    user = setup_test_data['user']
+    
+    # Clean up any existing contacts with the Botox tag
+    Contact.objects.filter(relationship_tag="Botox").delete()
+    Message.objects.filter(relationship_tag="Botox").delete()  # Clean up messages
+    
+    # Create multiple contacts
+    contacts = []
+    for i in range(5):
+        contacts.append(Contact.objects.create(
+            user=user,
+            name=f"Test Contact {i}",
+            phone=f"1199999999{i}",
+            source="Whatsapp",
+            relationship_tag="Botox",
+            status="landing page"
+        ))
+    
+    # Create messages for different counters
+    messages = []
+    for i in range(3):
+        messages.append(Message.objects.create(
+            title=f"Test Message {i}",
+            text=f"Hello test message {i}",
+            relationship_tag="Botox",
+            counter=0,  # All messages have counter 0 since they're new contacts
+            user=user,
+            contact_type="Whatsapp"
+        ))
+    
+    # Create campaign
+    current_time = timezone.now()
+    past_time = (current_time - timezone.timedelta(hours=1)).time()
+    weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    current_weekday = weekday_names[current_time.weekday()]
+    
+    campaign = Campaign.objects.create(
+        name="Test Campaign",
+        user=user,
+        userphone=UserPhone.objects.get(relationship_tag="Botox"),
+        contact_type="Whatsapp",
+        contact_tag="Botox",
+        campaign_status="Active",
+        frequency=FREQUENCY_ONCE,
+        execution_time=past_time,
+        active_days=[current_weekday]
+    )
+    
+    # Generate target lists
+    from messageShooter.resolvers.target_list_resolver import create_target_list
+    created, skipped, errors = create_target_list(campaign.id, force_run=True)
+    
+    # Verify target lists were created
+    target_lists = TargetList.objects.filter(campaign=campaign)
+    assert target_lists.count() == 5, "Should create target list for each contact"
+    
+    # Verify counters are correctly assigned
+    counter_distribution = {}
+    for target_list in target_lists:
+        counter = target_list.message.counter
+        counter_distribution[counter] = counter_distribution.get(counter, 0) + 1
+    
+    # All contacts should have counter 0 since they're new
+    assert counter_distribution.get(0) == 5, "All contacts should start with counter 0"
+    
+    # Verify the counts
+    assert created == 5, "Should create five target lists"
+    assert skipped == 0, "Should not skip any contacts"
+    assert errors == 0, "Should not encounter any errors"

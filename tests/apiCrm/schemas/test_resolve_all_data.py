@@ -20,7 +20,13 @@ def mock_data():
                 'source': 'Test Source',
                 'store': 'Test Store',
                 'status': 'Active',
-                'created_at': '2024-01-01T00:00:00Z'
+                'created_at': '2024-01-01T00:00:00Z',
+                'customer_id': None,
+                'utm_medium': None,
+                'utm_campaign': None,
+                'utm_content': None,
+                'utm_search': None,
+                'utm_term': None
             }
         ],
         'appointments': [
@@ -63,9 +69,9 @@ def mock_data():
 def test_resolve_all_data_success(mock_data):
     """Test successful resolution of all data types with mocked data"""
     with patch('apiCrm.schemas.resolve_all_data.fetch_data') as mock_fetch_data, \
-         patch('apiCrm.schemas.resolve_all_data.process_leads') as mock_process_leads, \
-         patch('apiCrm.schemas.resolve_all_data.process_appointments') as mock_process_appointments, \
-         patch('apiCrm.schemas.resolve_all_data.process_bill_charges') as mock_process_bill_charges:
+         patch('apiCrm.schemas.resolve_all_data.process_leads_batch') as mock_process_leads, \
+         patch('apiCrm.schemas.resolve_all_data.process_appointments_batch') as mock_process_appointments, \
+         patch('apiCrm.schemas.resolve_all_data.process_bill_charges_batch') as mock_process_bill_charges:
 
         # Mock fetch_data to return our test data
         mock_fetch_data.return_value = (
@@ -139,9 +145,9 @@ def test_resolve_all_data_success(mock_data):
 def test_resolve_all_data_empty_response():
     """Test handling of empty data with mocked responses"""
     with patch('apiCrm.schemas.resolve_all_data.fetch_data') as mock_fetch_data, \
-         patch('apiCrm.schemas.resolve_all_data.process_leads') as mock_process_leads, \
-         patch('apiCrm.schemas.resolve_all_data.process_appointments') as mock_process_appointments, \
-         patch('apiCrm.schemas.resolve_all_data.process_bill_charges') as mock_process_bill_charges:
+         patch('apiCrm.schemas.resolve_all_data.process_leads_batch') as mock_process_leads, \
+         patch('apiCrm.schemas.resolve_all_data.process_appointments_batch') as mock_process_appointments, \
+         patch('apiCrm.schemas.resolve_all_data.process_bill_charges_batch') as mock_process_bill_charges:
 
         # Mock all functions to return empty lists
         mock_fetch_data.return_value = ([], [], [])
@@ -209,7 +215,7 @@ def test_resolve_all_data_invalid_dates():
 def test_resolve_all_data_processing_error():
     """Test handling of data processing errors with mocked responses"""
     with patch('apiCrm.schemas.resolve_all_data.fetch_data') as mock_fetch_data, \
-         patch('apiCrm.schemas.resolve_all_data.process_leads') as mock_process_leads:
+         patch('apiCrm.schemas.resolve_all_data.process_leads_batch') as mock_process_leads:
 
         mock_fetch_data.return_value = ([{'invalid': 'data'}], [], [])
         mock_process_leads.side_effect = ValueError("Invalid data format")

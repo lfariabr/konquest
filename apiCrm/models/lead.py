@@ -15,7 +15,7 @@ class Lead(models.Model):
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
     source = models.CharField(max_length=100)
-    store = models.CharField(max_length=100)
+    store = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=100)
     customer_id = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField()

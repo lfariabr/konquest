@@ -11,6 +11,8 @@ from datetime import timedelta
 from django.conf import settings
 import logging
 
+from konquist.settings import CONTACTS_TO_LOAD
+
 number_of_contacts = settings.CONTACTS_TO_LOAD
 logger = logging.getLogger(__name__)
 
@@ -39,7 +41,7 @@ def get_contact_whatsapp(contact_type, contact_tag):
 
     contacts = Contact.objects.filter(
         id__in=Subquery(earliest_contacts)
-    ).order_by('-created_at')[:number_of_contacts]
+    ).order_by('-created_at')[:CONTACTS_TO_LOAD]
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")

@@ -31,13 +31,12 @@ async def test_fetch_all_leads(mock_fetch_graphql):
                         'utmContent': 'Facebook',
                         'utmCampaign': '2024-01-01',
                     }
-                    
                 ],
                 'meta': {'currentPage': 1, 'lastPage': 1}
             }
         }
     }
-    
+
     # Configure the mock to return the prepared data
     mock_fetch_graphql.return_value = mock_response_data
 
@@ -64,55 +63,64 @@ async def test_fetch_all_leads(mock_fetch_graphql):
     assert lead['utmContent'] == 'Facebook'
     assert lead['utmCampaign'] == '2024-01-01'
 
-    # Verify that fetch_graphql was called correctly
-    mock_fetch_graphql.assert_called_once_with(
-        mock_session,
-        URL,
-        '''query ($filters: LeadFiltersInput, $pagination: PaginationInput) {
-                    fetchLeads(filters: $filters, pagination: $pagination) {
-                        data {
-                            createdAt
-                            id
-                            source {
-                                title
-                            }
-                            store {
-                                name
-                            }
-                            status {
-                                label
-                            }
-                            customer {
-                                id
-                                name
-                            }
-                            name
-                            telephone
-                            email
-                            message
-                            utmMedium
-                            utmContent
-                            utmCampaign
-                            utmSearch
-                            utmTerm
-                        }
-                        meta {
-                            currentPage
-                            lastPage
-                        }
-                    }
-                }''',
-        {
-            'filters': {
-                'createdAtRange': {
-                    'start': START_DATE,
-                    'end': END_DATE,
-                },
-            },
-            'pagination': {
-                'currentPage': 1,
-                'perPage': 50,
+    # Get the actual query used in the call
+    actual_call = mock_fetch_graphql.call_args
+    assert actual_call is not None, "fetch_graphql was not called"
+
+    # Compare only the essential parts of the query
+    actual_args = actual_call[0]
+    assert actual_args[0] == mock_session  # Session object
+    assert actual_args[1] == URL  # URL
+    assert actual_args[3] == {  # Variables
+        'filters': {
+            'createdAtRange': {
+                'start': START_DATE,
+                'end': END_DATE,
             },
         },
-        TOKEN
-    )
+        'pagination': {
+            'currentPage': 1,
+            'perPage': 50,
+        },
+    }
+    assert actual_args[4] == TOKEN  # Token
+
+    # Compare query structure (ignoring whitespace)
+    actual_query = ''.join(actual_args[2].split())
+    expected_query = ''.join('''
+        query ($filters: LeadFiltersInput, $pagination: PaginationInput) {
+            fetchLeads(filters: $filters, pagination: $pagination) {
+                data {
+                    createdAt
+                    id
+                    source {
+                        title
+                    }
+                    store {
+                        name
+                    }
+                    status {
+                        label
+                    }
+                    customer {
+                        id
+                        name
+                    }
+                    name
+                    telephone
+                    email
+                    message
+                    utmMedium
+                    utmContent
+                    utmCampaign
+                    utmSearch
+                    utmTerm
+                }
+                meta {
+                    currentPage
+                    lastPage
+                }
+            }
+        }
+    '''.split())
+    assert actual_query == expected_query, "GraphQL query structure mismatch"

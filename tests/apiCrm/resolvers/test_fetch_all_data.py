@@ -8,10 +8,7 @@ from datetime import datetime
 def mock_env_config():
     """Mock environment config to prevent real token loading"""
     with patch('decouple.config', return_value='test-token'), \
-         patch('apiCrm.resolvers.fetch_graphql.config', return_value='test-token'), \
-         patch('apiCrm.resolvers.fetch_all_leads.config', return_value='test-token'), \
-         patch('apiCrm.resolvers.fetch_all_appointments.config', return_value='test-token'), \
-         patch('apiCrm.resolvers.fetch_bill_charges.config', return_value='test-token'):
+         patch('apiCrm.resolvers.fetch_graphql.config', return_value='test-token'):
         yield
 
 @pytest.fixture

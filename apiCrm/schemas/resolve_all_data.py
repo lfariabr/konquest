@@ -1,10 +1,25 @@
 # apiCrm/schemas/resolve_all_data
 import logging
+import time
 import aiohttp
 import graphene
 import pandas as pd
+from typing import List, Optional
+from datetime import datetime, timedelta, timezone
+from django.db import transaction, models, utils, connection
+from django.core.exceptions import ValidationError
+from django.db.utils import OperationalError, IntegrityError
+from django.db.models.manager import Manager
+from graphene_django.types import DjangoObjectType
 from decouple import config
 from asgiref.sync import async_to_sync
+
+# Import models
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge  # Note: lowercase billcharge
+
+# Local imports
 from apiCrm.schemas.lead_type import LeadType
 from apiCrm.schemas.all_data_type import AllDataType
 from apiCrm.schemas.appointment_type import AppointmentType
@@ -17,10 +32,6 @@ from apiCrm.utils.format_lead_data import format_lead_data
 from apiCrm.utils.format_appointment_data import format_appointment_data
 from apiCrm.utils.format_bill_charge_data import format_bill_charge_data
 from apiCrm.serializers import LeadSerializer, AppointmentSerializer, BillChargeSerializer
-from datetime import datetime, timedelta, timezone
-from graphene_django.types import DjangoObjectType
-from django.db import transaction
-
 
 logger = logging.getLogger(__name__)
 token = config('TOKEN')
@@ -38,15 +49,28 @@ class Query(graphene.ObjectType):
     )
 
     def resolve_all_data(self, info, start_date, end_date, extended_end_date):
-        print(f"Starting processing for start_date: {start_date}, end_date: {end_date}, extended_end_date: {extended_end_date}")
-        leads_data, appointments_data, bill_charges_data = fetch_data(start_date, end_date, extended_end_date, token)
-        leads_instances = process_leads(leads_data)
-        appointments_instances = process_appointments(appointments_data)
-        bill_charges_instances = process_bill_charges(bill_charges_data)
-        all_data = assemble_all_data(leads_instances, appointments_instances, bill_charges_instances)
-        print("___")
-        print("ALL DATA HAS BEEN RESOLVED!")
-        return all_data
+        logger.info(f"Starting data import for period: {start_date} to {end_date} (extended to {extended_end_date})")
+        start_time = time.time()
+        
+        try:
+            leads_data, appointments_data, bill_charges_data = fetch_data(start_date, end_date, extended_end_date, token)
+            
+            # Process all data
+            leads_instances = process_leads_batch(leads_data)
+            appointments_instances = process_appointments_batch(appointments_data)
+            bill_charges_instances = process_bill_charges_batch(bill_charges_data)
+            
+            all_data = assemble_all_data(leads_instances, appointments_instances, bill_charges_instances)
+            
+            # Log final statistics
+            execution_time = time.time() - start_time
+            logger.info(f"Import completed in {execution_time:.2f} seconds")
+            
+            return all_data
+            
+        except Exception as e:
+            logger.error(f"Error in resolve_all_data: {e}")
+            raise
 
     def resolve_leads(self, info, start_date, end_date):
         def sync_fetch_leads(start_date, end_date, token):
@@ -187,125 +211,303 @@ class Query(graphene.ObjectType):
 schema = graphene.Schema(query=Query)
 
 def fetch_data(start_date, end_date, extended_end_date, token):
-        try:
-            leads_data, appointments_data, bill_charges_data = run_fetch_all(start_date, end_date, extended_end_date, token)
-            return leads_data, appointments_data, bill_charges_data
-        except Exception as e:
-            logger.error(f"Error fetching data: {e}")
-            return None, None, None
-        
-# def process_leads(leads_data):
-#     try:
-#         leads_instances = []
-#         for raw_lead in leads_data:
-#             serializer = LeadSerializer(data=format_lead_data(raw_lead))
-#             if serializer.is_valid():
-#                 lead_instance = serializer.save()
-#                 leads_instances.append(lead_instance)
-#             else:
-#                 logger.error(f"Error saving lead: {serializer.errors}")
-#         return leads_instances
-#     except Exception as e:
-#         logger.error(f"Error processing leads: {e}")
-#         print(f"Error processing leads: {e}")
-#         return []
-
-def process_leads(leads_data):
     try:
+        leads_data, appointments_data, bill_charges_data = run_fetch_all(start_date, end_date, extended_end_date, token)
+        return leads_data, appointments_data, bill_charges_data
+    except Exception as e:
+        logger.error(f"Error fetching data: {e}")
+        return [], [], []
+
+def process_leads_batch(leads_data: Optional[List[dict]] = None, stats: dict = None, batch_size: int = 1000) -> List[Lead]:
+    try:
+        if not leads_data:
+            logger.warning("No leads data to process")
+            return []
+            
         leads_instances = []
-        with transaction.atomic():
-            for raw_lead in leads_data:
-                formatted_data = format_lead_data(raw_lead)
-                print(f"Processing lead {formatted_data.get('id_crm', 'unknown')}")
-                serializer = LeadSerializer(data=formatted_data)
-                if serializer.is_valid():
-                    lead_instance = serializer.save()
-                    leads_instances.append(lead_instance)
-                else:
-                    print(f"Error saving lead: {serializer.errors}")
-                    logger.error(f"Error saving lead: {serializer.errors}")
-            print(f"Successfully processed {len(leads_instances)} leads")
+        total_leads = len(leads_data)
+        print(f"\nStarting to process {total_leads} leads in batches of {batch_size}")
+        logger.info(f"Starting to process {total_leads} leads in batches of {batch_size}")
+        
+        for i in range(0, total_leads, batch_size):
+            batch = leads_data[i:i + batch_size]
+            batch_start = time.time()
+            batch_end = min(i+batch_size, total_leads)
+            print(f"\nProcessing leads batch {i+1}-{batch_end} of {total_leads}")
+            logger.info(f"Processing leads batch {i+1}-{batch_end} of {total_leads}")
+            
+            def process_batch() -> List[Lead]:
+                formatted_batch = [format_lead_data(raw_lead) for raw_lead in batch]
+                serializers = [LeadSerializer(data=data) for data in formatted_batch]
+                valid_serializers = [s for s in serializers if s.is_valid()]
+                
+                invalid_count = len(serializers) - len(valid_serializers)
+                if invalid_count > 0:
+                    print(f"Warning: {invalid_count} invalid leads in current batch")
+                    logger.warning(f"{invalid_count} invalid leads in current batch")
+                    if stats:
+                        stats['failed'] += invalid_count
+                
+                if not valid_serializers:
+                    print("Warning: No valid leads in current batch")
+                    logger.warning("No valid leads in current batch")
+                    return []
+                
+                # Create model instances without saving to database
+                instances = []
+                for serializer in valid_serializers:
+                    try:
+                        data_dict = dict(serializer.validated_data)
+                        instance = Lead(**data_dict)
+                        instances.append(instance)
+                    except Exception as e:
+                        print(f"Error creating lead instance: {str(e)}")
+                        logger.error(f"Error creating lead instance: {str(e)}")
+                        if stats:
+                            stats['failed'] += 1
+                
+                try:
+                    # Use bulk_create to insert all records in one go
+                    lead_manager: Manager = Lead.objects  # type: ignore
+                    saved_instances = lead_manager.bulk_create(instances, batch_size=100)
+                    if stats:
+                        stats['processed'] += len(saved_instances)
+                    return saved_instances
+                except Exception as e:
+                    print(f"Error bulk saving leads: {str(e)}")
+                    logger.error(f"Error bulk saving leads: {str(e)}")
+                    if stats:
+                        stats['failed'] += len(instances)
+                    return []
+
+            max_retries = 3
+            retry_count = 0
+            while retry_count < max_retries:
+                try:
+                    batch_instances = process_batch()
+                    leads_instances.extend(batch_instances)
+                    batch_time = time.time() - batch_start
+                    print(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} leads")
+                    logger.info(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} leads")
+                    break  # Success, exit retry loop
+                        
+                except (OperationalError, IntegrityError, ValidationError) as e:
+                    retry_count += 1
+                    if retry_count == max_retries:
+                        print(f"Error: Max retries reached for leads batch. Error: {str(e)}")
+                        logger.error(f"Max retries reached for leads batch. Error: {str(e)}")
+                        raise
+                    wait_time = (2 ** retry_count)  # Exponential backoff
+                    print(f"Warning: Database operation failed, retrying in {wait_time} seconds...")
+                    logger.warning(f"Database operation failed, retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                    
+        total_time = time.time() - batch_start
+        print(f"\nFinished processing leads - Total time: {total_time:.2f}s - Processed: {len(leads_instances)}/{total_leads}")
+        logger.info(f"Finished processing leads - Total time: {total_time:.2f}s - Processed: {len(leads_instances)}/{total_leads}")
         return leads_instances
+                    
     except Exception as e:
-        print(f"Error processing leads: {str(e)}")
-        logger.error(f"Error processing leads: {e}")
-        return []
+        print(f"Error in process_leads_batch: {str(e)}")
+        logger.error(f"Error in process_leads_batch: {str(e)}")
+        raise
 
-# def process_appointments(appointments_data):
-#     try:
-#         appointments_instances = []
-#         for raw_appointment in appointments_data:
-#             serializer = AppointmentSerializer(data=format_appointment_data(raw_appointment))
-#             if serializer.is_valid():
-#                 appointment_instance = serializer.save()
-#                 appointments_instances.append(appointment_instance)
-#             else:
-#                 logger.error(f"Error saving appointment: {serializer.errors}")
-#         return appointments_instances
-#     except Exception as e:
-#         logger.error(f"Error processing appointments: {e}")
-#         print(f"Error processing appointments: {e}")
-#         return []
-def process_appointments(appointments_data):
+def process_appointments_batch(appointments_data: Optional[List[dict]] = None, stats: dict = None, batch_size: int = 1000) -> List[Appointment]:
     try:
+        if not appointments_data:
+            logger.warning("No appointments data to process")
+            return []
+            
         appointments_instances = []
-        with transaction.atomic():
-            for raw_appointment in appointments_data:
-                formatted_data = format_appointment_data(raw_appointment)
-                print(f"Processing appointment {formatted_data.get('id_crm', 'unknown')}")
-                serializer = AppointmentSerializer(data=formatted_data)
-                if serializer.is_valid():
-                    appointment_instance = serializer.save()
-                    appointments_instances.append(appointment_instance)
-                else:
-                    print(f"Error saving appointment: {serializer.errors}")
-                    logger.error(f"Error saving appointment: {serializer.errors}")
-            print(f"Successfully processed {len(appointments_instances)} appointments")
-        return appointments_instances
-    except Exception as e:
-        print(f"Error processing appointments: {str(e)}")
-        logger.error(f"Error processing appointments: {e}")
-        return []
-    
-# def process_bill_charges(bill_charges_data):
-#     try:
-#         bill_charges_instances = []
-#         for raw_bill_charge in bill_charges_data:
-#             serializer = BillChargeSerializer(data=format_bill_charge_data(raw_bill_charge))
-#             if serializer.is_valid():
-#                 bill_charge_instance = serializer.save()
-#                 bill_charges_instances.append(bill_charge_instance)
-#             else:
-#                 logger.error(f"Error saving bill charge: {serializer.errors}")
-#         return bill_charges_instances
-#     except Exception as e:
-#         logger.error(f"Error processing bill charges: {e}")
-#         print(f"Error processing bill charges: {e}")
-#         return []
-def process_bill_charges(bill_charges_data):
-    try:
-        bill_charges_instances = []
-        with transaction.atomic():
-            for raw_bill_charge in bill_charges_data:
-                formatted_data = format_bill_charge_data(raw_bill_charge)
-                print(f"Processing bill charge {formatted_data.get('quote_id', 'unknown')}")
-                serializer = BillChargeSerializer(data=formatted_data)
-                if serializer.is_valid():
-                    bill_charge_instance = serializer.save()
-                    bill_charges_instances.append(bill_charge_instance)
-                else:
-                    print(f"Error saving bill charge: {serializer.errors}")
-                    logger.error(f"Error saving bill charge: {serializer.errors}")
-            print(f"Successfully processed {len(bill_charges_instances)} bill charges")
-        return bill_charges_instances
-    except Exception as e:
-        print(f"Error processing bill charges: {str(e)}")
-        logger.error(f"Error processing bill charges: {e}")
-        return []
+        total_appointments = len(appointments_data)
+        print(f"\nStarting to process {total_appointments} appointments in batches of {batch_size}")
+        logger.info(f"Starting to process {total_appointments} appointments in batches of {batch_size}")
+        
+        for i in range(0, total_appointments, batch_size):
+            batch = appointments_data[i:i + batch_size]
+            batch_start = time.time()
+            batch_end = min(i+batch_size, total_appointments)
+            print(f"\nProcessing appointments batch {i+1}-{batch_end} of {total_appointments}")
+            logger.info(f"Processing appointments batch {i+1}-{batch_end} of {total_appointments}")
+            
+            def process_batch() -> List[Appointment]:
+                formatted_batch = [format_appointment_data(raw_appointment) for raw_appointment in batch]
+                serializers = [AppointmentSerializer(data=data) for data in formatted_batch]
+                valid_serializers = [s for s in serializers if s.is_valid()]
+                
+                invalid_count = len(serializers) - len(valid_serializers)
+                if invalid_count > 0:
+                    print(f"Warning: {invalid_count} invalid appointments in current batch")
+                    logger.warning(f"{invalid_count} invalid appointments in current batch")
+                    if stats:
+                        stats['failed'] += invalid_count
+                
+                if not valid_serializers:
+                    print("Warning: No valid appointments in current batch")
+                    logger.warning("No valid appointments in current batch")
+                    return []
+                
+                # Create model instances without saving to database
+                instances = []
+                for serializer in valid_serializers:
+                    try:
+                        data_dict = dict(serializer.validated_data)
+                        instance = Appointment(**data_dict)
+                        instances.append(instance)
+                    except Exception as e:
+                        print(f"Error creating appointment instance: {str(e)}")
+                        logger.error(f"Error creating appointment instance: {str(e)}")
+                        if stats:
+                            stats['failed'] += 1
+                
+                try:
+                    # Use bulk_create to insert all records in one go
+                    appointment_manager: Manager = Appointment.objects  # type: ignore
+                    saved_instances = appointment_manager.bulk_create(instances, batch_size=100)
+                    if stats:
+                        stats['processed'] += len(saved_instances)
+                    return saved_instances
+                except Exception as e:
+                    print(f"Error bulk saving appointments: {str(e)}")
+                    logger.error(f"Error bulk saving appointments: {str(e)}")
+                    if stats:
+                        stats['failed'] += len(instances)
+                    return []
 
-def assemble_all_data(leads_instances, appointments_instances, bill_charges_instances):
-    try:
-        return AllDataType(leads=leads_instances, appointments=appointments_instances, bill_charges=bill_charges_instances)
+            max_retries = 3
+            retry_count = 0
+            while retry_count < max_retries:
+                try:
+                    batch_instances = process_batch()
+                    appointments_instances.extend(batch_instances)
+                    batch_time = time.time() - batch_start
+                    print(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} appointments")
+                    logger.info(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} appointments")
+                    break  # Success, exit retry loop
+                        
+                except (OperationalError, IntegrityError, ValidationError) as e:
+                    retry_count += 1
+                    if retry_count == max_retries:
+                        print(f"Error: Max retries reached for appointments batch. Error: {str(e)}")
+                        logger.error(f"Max retries reached for appointments batch. Error: {str(e)}")
+                        raise
+                    wait_time = (2 ** retry_count)  # Exponential backoff
+                    print(f"Warning: Database operation failed, retrying in {wait_time} seconds...")
+                    logger.warning(f"Database operation failed, retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                    
+        total_time = time.time() - batch_start
+        print(f"\nFinished processing appointments - Total time: {total_time:.2f}s - Processed: {len(appointments_instances)}/{total_appointments}")
+        logger.info(f"Finished processing appointments - Total time: {total_time:.2f}s - Processed: {len(appointments_instances)}/{total_appointments}")
+        return appointments_instances
+                    
     except Exception as e:
-        logger.error(f"Error assembling all data: {e}")
+        print(f"Error in process_appointments_batch: {str(e)}")
+        logger.error(f"Error in process_appointments_batch: {str(e)}")
+        raise
+
+def process_bill_charges_batch(bill_charges_data: Optional[List[dict]] = None, stats: dict = None, batch_size: int = 1000) -> List[BillCharge]:
+    try:
+        if not bill_charges_data:
+            logger.warning("No bill charges data to process")
+            return []
+            
+        bill_charges_instances = []
+        total_bill_charges = len(bill_charges_data)
+        print(f"\nStarting to process {total_bill_charges} bill charges in batches of {batch_size}")
+        logger.info(f"Starting to process {total_bill_charges} bill charges in batches of {batch_size}")
+        
+        for i in range(0, total_bill_charges, batch_size):
+            batch = bill_charges_data[i:i + batch_size]
+            batch_start = time.time()
+            batch_end = min(i+batch_size, total_bill_charges)
+            print(f"\nProcessing bill charges batch {i+1}-{batch_end} of {total_bill_charges}")
+            logger.info(f"Processing bill charges batch {i+1}-{batch_end} of {total_bill_charges}")
+            
+            def process_batch() -> List[BillCharge]:
+                formatted_batch = [format_bill_charge_data(raw_bill_charge) for raw_bill_charge in batch]
+                serializers = [BillChargeSerializer(data=data) for data in formatted_batch]
+                valid_serializers = [s for s in serializers if s.is_valid()]
+                
+                invalid_count = len(serializers) - len(valid_serializers)
+                if invalid_count > 0:
+                    print(f"Warning: {invalid_count} invalid bill charges in current batch")
+                    logger.warning(f"{invalid_count} invalid bill charges in current batch")
+                    if stats:
+                        stats['failed'] += invalid_count
+                
+                if not valid_serializers:
+                    print("Warning: No valid bill charges in current batch")
+                    logger.warning("No valid bill charges in current batch")
+                    return []
+                
+                # Create model instances without saving to database
+                instances = []
+                for serializer in valid_serializers:
+                    try:
+                        data_dict = dict(serializer.validated_data)
+                        instance = BillCharge(**data_dict)
+                        instances.append(instance)
+                    except Exception as e:
+                        print(f"Error creating bill charge instance: {str(e)}")
+                        logger.error(f"Error creating bill charge instance: {str(e)}")
+                        if stats:
+                            stats['failed'] += 1
+                
+                try:
+                    # Use bulk_create to insert all records in one go
+                    bill_charge_manager: Manager = BillCharge.objects  # type: ignore
+                    saved_instances = bill_charge_manager.bulk_create(instances, batch_size=100)
+                    if stats:
+                        stats['processed'] += len(saved_instances)
+                    return saved_instances
+                except Exception as e:
+                    print(f"Error bulk saving bill charges: {str(e)}")
+                    logger.error(f"Error bulk saving bill charges: {str(e)}")
+                    if stats:
+                        stats['failed'] += len(instances)
+                    return []
+
+            max_retries = 3
+            retry_count = 0
+            while retry_count < max_retries:
+                try:
+                    batch_instances = process_batch()
+                    bill_charges_instances.extend(batch_instances)
+                    batch_time = time.time() - batch_start
+                    print(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} bill charges")
+                    logger.info(f"Batch processed in {batch_time:.2f}s - Saved {len(batch_instances)} bill charges")
+                    break  # Success, exit retry loop
+                        
+                except (OperationalError, IntegrityError, ValidationError) as e:
+                    retry_count += 1
+                    if retry_count == max_retries:
+                        print(f"Error: Max retries reached for bill charges batch. Error: {str(e)}")
+                        logger.error(f"Max retries reached for bill charges batch. Error: {str(e)}")
+                        raise
+                    wait_time = (2 ** retry_count)  # Exponential backoff
+                    print(f"Warning: Database operation failed, retrying in {wait_time} seconds...")
+                    logger.warning(f"Database operation failed, retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                    
+        total_time = time.time() - batch_start
+        print(f"\nFinished processing bill charges - Total time: {total_time:.2f}s - Processed: {len(bill_charges_instances)}/{total_bill_charges}")
+        logger.info(f"Finished processing bill charges - Total time: {total_time:.2f}s - Processed: {len(bill_charges_instances)}/{total_bill_charges}")
+        return bill_charges_instances
+                    
+    except Exception as e:
+        print(f"Error in process_bill_charges_batch: {str(e)}")
+        logger.error(f"Error in process_bill_charges_batch: {str(e)}")
+        raise
+
+def assemble_all_data(leads_instances: List[Lead], appointments_instances: List[Appointment], bill_charges_instances: List[BillCharge]) -> Optional[AllDataType]:
+    try:
+        data = {
+            'leads': leads_instances or [],
+            'appointments': appointments_instances or [],
+            'bill_charges': bill_charges_instances or []
+        }
+        return AllDataType(**data)
+    except Exception as e:
+        logger.error(f"Error assembling all data: {str(e)}")
         return None

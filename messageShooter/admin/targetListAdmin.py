@@ -23,7 +23,7 @@ class TargetListAdmin(admin.ModelAdmin):
     search_fields = ('contact_phone', 'contact_tag', 'campaign__name')
     readonly_fields = ('get_sent_messages_count',)
     actions = ['instant_process_tlist_to_queue']
-    list_per_page = 20
+    list_per_page = 100
     ordering = ['-created_at']
 
     def changelist_view(self, request, extra_context=None):

@@ -1,51 +1,51 @@
-# apiCrm/resolvers.py
+# apiCrm/resolvers/fetch_all_leads.py
 import asyncio
-from decouple import config
+import logging
+from typing import List, Dict
 from apiCrm.resolvers.fetch_graphql import fetch_graphql
-token = config('TOKEN')
 
-# Session? for "fetch_all_data"
-async def fetch_all_leads(session, start_date, end_date, token): 
+logger = logging.getLogger(__name__)
+
+async def fetch_all_leads(session, start_date: str, end_date: str, token: str) -> List[Dict]:
     current_page = 1
     all_leads = []
     
-    # async with aiohttp.ClientSession() as session:
-    while True:
-        query = '''query ($filters: LeadFiltersInput, $pagination: PaginationInput) {
-                    fetchLeads(filters: $filters, pagination: $pagination) {
-                        data {
-                            createdAt
-                            id
-                            source {
-                                title
-                            }
-                            store {
-                                name
-                            }
-                            status {
-                                label
-                            }
-                            customer {
-                                id
-                                name
-                            }
+    query = '''query ($filters: LeadFiltersInput, $pagination: PaginationInput) {
+                fetchLeads(filters: $filters, pagination: $pagination) {
+                    data {
+                        createdAt
+                        id
+                        source {
+                            title
+                        }
+                        store {
                             name
-                            telephone
-                            email
-                            message
-                            utmMedium
-                            utmContent
-                            utmCampaign
-                            utmSearch
-                            utmTerm
                         }
-                        meta {
-                            currentPage
-                            lastPage
+                        status {
+                            label
                         }
+                        customer {
+                            id
+                            name
+                        }
+                        name
+                        telephone
+                        email
+                        message
+                        utmMedium
+                        utmContent
+                        utmCampaign
+                        utmSearch
+                        utmTerm
                     }
-                }'''
+                    meta {
+                        currentPage
+                        lastPage
+                    }
+                }
+            }'''
 
+    while True:
         variables = {
             'filters': {
                 'createdAtRange': {
@@ -77,6 +77,6 @@ async def fetch_all_leads(session, start_date, end_date, token):
             break
 
         current_page += 1
-        await asyncio.sleep(10)
+        await asyncio.sleep(4)
 
     return all_leads

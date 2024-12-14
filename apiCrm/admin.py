@@ -24,7 +24,8 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = ['appointment_date', 'store_name', 'customer_name', 'customer_phone', 'status_label', 'procedure_name']
     list_filter = ['appointment_date', 'store_name']
     ordering = ['-appointment_date']
-
+    # list_per_page = 1000
+    
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         # You can filter the queryset here if needed

@@ -10,7 +10,7 @@ ALLOWED_HOSTS = []
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'sqlite3' 
+DATABASE_ENGINE = 'sqlite' 
 CONTACTS_TO_LOAD = 100 # messageShooter/resolvers/get_contacts.py
 
 INSTALLED_APPS = [
@@ -75,19 +75,15 @@ if DATABASE_ENGINE == 'postgresql':
             'USER': config('DB_USER'),
             'PASSWORD': config('DB_PASSWORD'),
             'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT'),
+            'PORT': config('DB_PORT', default='5432'),
+            'CONN_MAX_AGE': 60,  # 60 seconds connection lifetime
             'OPTIONS': {
-                        'sslmode': 'require',
-                        'application_name': 'konquest',
-                        'keepalives': 1,
-                        'keepalives_idle': 30,
-                        'keepalives_interval': 10,
-                        'keepalives_count': 5,
-                        'connect_timeout': 30,  # Increased timeout
-            },
-            'CONN_MAX_AGE': 60,  # Persistent connections, 60 seconds
-            'CONN_HEALTH_CHECKS': True,
-            'ATOMIC_REQUESTS': True,  # Enable transaction management
+                'connect_timeout': 10,
+                'keepalives': 1,
+                'keepalives_idle': 30,
+                'keepalives_interval': 10,
+                'keepalives_count': 5,
+            }
         }
     }
 
@@ -170,6 +166,7 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend', 'static'),
 ]
