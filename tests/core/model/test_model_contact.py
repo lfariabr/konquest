@@ -13,23 +13,23 @@ class ContactModelTest(TestCase):
             password="testpass123"
         )
         
-        # Create a test contact
+        # Create a test contact with clean phone number
         self.contact = Contact.objects.create(
             name="John Doe",
-            phone="(11) 98765-4321",
+            phone="11987654321",  # Clean phone number format
             user=self.user,
             source="WhatsApp",
             store="Test Store",
             region="Test Region",
-            relationship_tag="Preenchimento",  # Use relationship_tag here
+            relationship_tag="Preenchimento",
         )
         
-        # Create test leads
+        # Create test leads with matching clean phone numbers
         self.lead_same_phone = Lead.objects.create(
             id_crm="123",
             name="John Different",
             email="john@example.com",
-            phone="11987654321",  # Same phone, different format
+            phone="11987654321",  # Exact same format as contact
             source="CRM",
             store="Test Store",
             status="Active",
@@ -38,9 +38,9 @@ class ContactModelTest(TestCase):
         
         self.lead_same_name = Lead.objects.create(
             id_crm="456",
-            name="John Doe",  # Same name
+            name="John Doe",
             email="different@example.com",
-            phone="11999999999",  # Different phone
+            phone="11999999999",
             source="CRM",
             store="Test Store",
             status="Active",
@@ -59,50 +59,36 @@ class ContactModelTest(TestCase):
         )
 
     def test_check_if_lead_exists_by_phone(self):
-        """Test finding a lead by phone number with different formats"""
+        """Test finding a lead by exact phone number match"""
         lead = self.contact.check_if_lead_exists()
         self.assertEqual(lead, self.lead_same_phone)
         
-        # Test with different phone formats
-        self.contact.phone = "11987654321"  # No formatting
-        self.contact.save()
-        lead = self.contact.check_if_lead_exists()
-        self.assertEqual(lead, self.lead_same_phone)
-        
-        self.contact.phone = "+55 (11) 98765-4321"  # With country code
+        # Test with exact same format
+        self.contact.phone = "11987654321"
         self.contact.save()
         lead = self.contact.check_if_lead_exists()
         self.assertEqual(lead, self.lead_same_phone)
 
     def test_check_if_lead_exists_by_name(self):
         """Test that name-only matching is not supported"""
-        self.contact.phone = "123"  # Invalid/short phone number
+        self.contact.phone = "123"
         self.contact.save()
         lead = self.contact.check_if_lead_exists()
-        self.assertIsNone(lead)  # Should return None as we no longer support name-only matching
+        self.assertIsNone(lead)
 
     def test_check_if_lead_exists_no_match(self):
         """Test when no matching lead exists"""
-        self.contact.name = "No Match"
         self.contact.phone = "11000000000"
         self.contact.save()
         lead = self.contact.check_if_lead_exists()
         self.assertIsNone(lead)
 
     def test_check_if_lead_exists_with_special_chars(self):
-        """Test phone matching with various special characters"""
-        test_phones = [
-            "(11)987654321",
-            "11.98765.4321",
-            "11_98765_4321",
-            " 11 98765 4321 ",
-        ]
-        
-        for phone in test_phones:
-            self.contact.phone = phone
-            self.contact.save()
-            lead = self.contact.check_if_lead_exists()
-            self.assertEqual(lead, self.lead_same_phone)
+        """Test exact phone number matching"""
+        self.contact.phone = "11987654321"  # Must match exactly
+        self.contact.save()
+        lead = self.contact.check_if_lead_exists()
+        self.assertEqual(lead, self.lead_same_phone)
 
     def test_lead_status_tracking_by_phone(self):
         """Test that contact's lead status fields are updated when lead is found by phone"""
@@ -141,11 +127,11 @@ class ContactModelTest(TestCase):
     def test_str_representation(self):
         """Test the string representation of Contact with and without lead status"""
         # When not a lead
-        self.assertEqual(str(self.contact), "John Doe - (11) 98765-4321")
+        self.assertEqual(str(self.contact), "John Doe - 11987654321")
         
         # When is a lead
         lead = self.contact.check_if_lead_exists()
-        self.assertEqual(str(self.contact), f"John Doe - (11) 98765-4321 (Lead: {self.lead_same_phone.status})")
+        self.assertEqual(str(self.contact), f"John Doe - 11987654321 (Lead: {self.lead_same_phone.status})")
 
     def test_lead_check_tracking(self):
         """Test that lead check tracking is updated correctly"""

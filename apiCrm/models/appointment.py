@@ -15,6 +15,13 @@ class Appointment(models.Model):
     createdby_created_at = models.DateTimeField()
     appointment_date = models.DateTimeField()
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['customer_phone']),
+            models.Index(fields=['id_crm']),
+            models.Index(fields=['store_name']),
+        ]
+
     def __str__(self):
         appointment_info = f" (Status: {self.status_label})" if self.status_label else ""
         return f"{self.customer_name} - {self.customer_phone}{appointment_info}"

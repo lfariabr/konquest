@@ -10,8 +10,8 @@ ALLOWED_HOSTS = []
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'sqlite' 
-CONTACTS_TO_LOAD = 100 # messageShooter/resolvers/get_contacts.py
+DATABASE_ENGINE = 'sqlite3' 
+CONTACTS_TO_LOAD = 500 # messageShooter/resolvers/get_contacts.py
 
 INSTALLED_APPS = [
     'django_daisy',

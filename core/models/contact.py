@@ -3,6 +3,9 @@ from core.models.user import kUser
 from django.utils import timezone
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Contact(models.Model):
     name = models.CharField(max_length=100)
@@ -42,37 +45,43 @@ class Contact(models.Model):
         lead_info = f" (Lead: {self.lead_status})" if self.is_lead else ""
         return f"{self.name} - {self.phone}{lead_info}"
 
+    def clean_phone_number(self, phone):
+        """Clean phone number to match CRM format (keep only digits)"""
+        clean_phone = ''.join(filter(str.isdigit, phone))
+        return clean_phone[-11:] if len(clean_phone) > 11 else clean_phone
+
     def check_if_lead_exists(self):
         """
         Check if this contact exists as a lead in the CRM.
         Returns the Lead object if found, None otherwise.
         Updates contact's lead status fields.
         """
+        logger.info(f"Checking lead status for contact {self.id} ({self.phone})")
+        
         # Update check tracking
         self.lead_last_checked = timezone.now()
         self.lead_check_count += 1
         self.save()
 
-        # Clean phone number to match CRM format (keep only digits)
-        clean_phone = ''.join(filter(str.isdigit, self.phone))
-        clean_phone = clean_phone[-11:] if len(clean_phone) > 11 else clean_phone  # Handle country code
-        
         try:
-            # Try to find a matching lead by phone number (clean both sides for comparison)
-            leads = Lead.objects.all()
-            for lead in leads:
-                lead_clean_phone = ''.join(filter(str.isdigit, lead.phone))
-                lead_clean_phone = lead_clean_phone[-11:] if len(lead_clean_phone) > 11 else lead_clean_phone
-                if clean_phone == lead_clean_phone:
-                    self._update_lead_status(lead)
-                    return lead
+            # Direct phone number match since phones are already cleaned during import
+            lead = Lead.objects.filter(phone=self.phone).first()
             
-            # If no lead is found, clear the status
+            if lead:
+                logger.info(f"Found matching lead: {lead.id} for contact {self.id}")
+                self._update_lead_status(lead)
+                return lead
+            
+            logger.info(f"No matching lead found for contact {self.id}")
             self._clear_lead_status()
             return None
             
         except Lead.DoesNotExist:
+            logger.info(f"No lead exists for contact {self.id}")
             self._clear_lead_status()
+            return None
+        except Exception as e:
+            logger.error(f"Error checking lead for contact {self.id}: {str(e)}")
             return None
 
     def needs_lead_check(self, hours=24):
@@ -121,38 +130,39 @@ class Contact(models.Model):
         """
         Check if this contact exists as an appointment in the CRM.
         Returns the Appointment object if found, None otherwise.
-        Updates contact's lead status fields.
+        Updates contact's appointment status fields.
         """
+        logger.info(f"Checking appointment status for contact {self.id} ({self.phone})")
+        
         # Update check tracking
         self.appointment_last_checked = timezone.now()
         self.appointment_check_count += 1
         self.save()
 
-        # Clean phone number to match CRM format (keep only digits)
-        clean_phone = ''.join(filter(str.isdigit, self.phone))
-        clean_phone = clean_phone[-11:] if len(clean_phone) > 11 else clean_phone  # Handle country code
-
         try:
-            # Try to find a matching lead by phone number (clean both sides for comparison)
-            appointments = Appointment.objects.all()
-            for appointment in appointments:
-                appointment_clean_phone = ''.join(filter(str.isdigit, appointment.customer_phone))
-                appointment_clean_phone = appointment_clean_phone[-11:] if len(appointment_clean_phone) > 11 else appointment_clean_phone
-                if clean_phone == appointment_clean_phone:
-                    self._update_appointment_status(appointment)
-                    return appointment
-
-            # If no lead is found, clear the status
+            # Direct phone number match since phones are already cleaned during import
+            appointment = Appointment.objects.filter(customer_phone=self.phone).first()
+            
+            if appointment:
+                logger.info(f"Found matching appointment: {appointment.id} for contact {self.id}")
+                self._update_appointment_status(appointment)
+                return appointment
+            
+            logger.info(f"No matching appointment found for contact {self.id}")
             self._clear_appointment_status()
             return None
-
+            
         except Appointment.DoesNotExist:
+            logger.info(f"No appointment exists for contact {self.id}")
             self._clear_appointment_status()
+            return None
+        except Exception as e:
+            logger.error(f"Error checking appointment for contact {self.id}: {str(e)}")
             return None
 
     def needs_appointment_check(self, hours=24):
         """
-        Check if this contact needs to be checked for lead status.
+        Check if this contact needs to be checked for appointment status.
         Returns True if the contact hasn't been checked in the specified hours
         or has never been checked.
         """
@@ -164,7 +174,7 @@ class Contact(models.Model):
 
     def get_appointment_check_stats(self):
         """
-        Get statistics about lead checks for this contact.
+        Get statistics about appointment checks for this contact.
         """
         return {
             'total_checks': self.appointment_check_count,

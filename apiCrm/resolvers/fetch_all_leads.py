@@ -55,7 +55,7 @@ async def fetch_all_leads(session, start_date: str, end_date: str, token: str) -
             },
             'pagination': {
                 'currentPage': current_page,
-                'perPage': 50,
+                'perPage': 1000,
             },
         }
 

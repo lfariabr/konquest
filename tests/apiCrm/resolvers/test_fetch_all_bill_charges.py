@@ -120,7 +120,7 @@ async def test_fetch_bill_charges(mock_fetch_graphql):
             },
             'pagination': {
                 'currentPage': 1,
-                'perPage': 200,
+                'perPage': 1000,
             },
         },
         TOKEN

@@ -105,7 +105,7 @@ async def test_fetch_all_appointments(mock_fetch_graphql):
             },
             'pagination': {
                 'currentPage': 1,
-                'perPage': 200,
+                'perPage': 1000,
             },
         },
         TOKEN

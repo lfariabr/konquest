@@ -1,21 +1,31 @@
-import csv
+from django.contrib import admin
+from django.contrib import messages
+from django.db import models, transaction
+from django.utils import timezone
 import logging
+import time
+import csv
 import tempfile
 import os
-from django.contrib import admin, messages
-from core.models.user import kUser
-from core.models.contact import Contact
-from core.models.userphone import UserPhone
-from core.models.message import Message
-from core.models.messagelog import MessageLogs
-from core.forms.contact_upload import ContactCsvUploadForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from datetime import datetime
-from django.utils import timezone
+
+# Import models with correct paths
+from core.models.contact import Contact
+from core.models.user import kUser
+from core.models.userphone import UserPhone
+from core.models.messagelog import MessageLogs
+from core.models.message import Message
+from apiCrm.models.lead import Lead
+from apiCrm.models.appointment import Appointment
+
+from core.forms.contact_upload import ContactCsvUploadForm
 from core.resolvers.clean_phone_number import clean_phone_number
 from core.resolvers.process_csv_files import process_csv_files
+
+logger = logging.getLogger(__name__)
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'company')
@@ -93,37 +103,117 @@ class ContactAdmin(admin.ModelAdmin):
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
-    list_per_page = 20 # change this
+    list_per_page = 1000 # change this
 
     def check_leads(self, request, queryset):
+        """Check selected contacts for leads using batch processing"""
+        import time
+        from django.db import transaction
+        
+        start_time = time.time()
         total = queryset.count()
         found = 0
-        for contact in queryset:
-            lead = contact.check_if_lead_exists()
-            if lead:
-                found += 1
+        batch_size = 50
         
+        self.message_user(request, f"Starting lead check for {total} contacts...", messages.INFO)
+        
+        # Process in batches
+        for i in range(0, total, batch_size):
+            batch = queryset[i:i + batch_size]
+            
+            # Update check tracking for batch
+            now = timezone.now()
+            with transaction.atomic():
+                Contact.objects.filter(id__in=batch.values_list('id', flat=True)).update(
+                    lead_last_checked=now,
+                    lead_check_count=models.F('lead_check_count') + 1
+                )
+            
+            # Get all phone numbers in this batch
+            phones = batch.values_list('phone', flat=True)
+            
+            # Find matching leads in one query
+            matching_leads = Lead.objects.filter(phone__in=phones)
+            
+            # Create a mapping of phone numbers to leads
+            lead_map = {lead.phone: lead for lead in matching_leads}
+            
+            # Update contacts that have matching leads
+            with transaction.atomic():
+                for contact in batch:
+                    lead = lead_map.get(contact.phone)
+                    if lead:
+                        found += 1
+                        contact._update_lead_status(lead)
+                    else:
+                        contact._clear_lead_status()
+            
+            # Log progress
+            progress = min(100, (i + batch_size) * 100 / total)
+            elapsed = time.time() - start_time
+            logger.info(f"Progress: {progress:.1f}% - Found {found} leads - Elapsed: {elapsed:.1f}s")
+        
+        elapsed = time.time() - start_time
         self.message_user(
             request,
-            f"Checked {total} contacts. Found {found} leads.",
+            f"Checked {total} contacts in {elapsed:.1f}s. Found {found} leads.",
             messages.SUCCESS
         )
-    check_leads.short_description = "Check selected contacts for leads"
 
     def check_appointments(self, request, queryset):
+        """Check selected contacts for appointments using batch processing"""
+        import time
+        from django.db import transaction
+        
+        start_time = time.time()
         total = queryset.count()
         found = 0
-        for contact in queryset:
-            appointment = contact.check_if_appointment_exists()
-            if appointment:
-                found += 1
+        batch_size = 50
         
+        self.message_user(request, f"Starting appointment check for {total} contacts...", messages.INFO)
+        
+        # Process in batches
+        for i in range(0, total, batch_size):
+            batch = queryset[i:i + batch_size]
+            
+            # Update check tracking for batch
+            now = timezone.now()
+            with transaction.atomic():
+                Contact.objects.filter(id__in=batch.values_list('id', flat=True)).update(
+                    appointment_last_checked=now,
+                    appointment_check_count=models.F('appointment_check_count') + 1
+                )
+            
+            # Get all phone numbers in this batch
+            phones = batch.values_list('phone', flat=True)
+            
+            # Find matching appointments in one query
+            matching_appointments = Appointment.objects.filter(customer_phone__in=phones)
+            
+            # Create a mapping of phone numbers to appointments
+            appointment_map = {appt.customer_phone: appt for appt in matching_appointments}
+            
+            # Update contacts that have matching appointments
+            with transaction.atomic():
+                for contact in batch:
+                    appointment = appointment_map.get(contact.phone)
+                    if appointment:
+                        found += 1
+                        contact._update_appointment_status(appointment)
+                    else:
+                        contact._clear_appointment_status()
+            
+            # Log progress
+            progress = min(100, (i + batch_size) * 100 / total)
+            elapsed = time.time() - start_time
+            logger.info(f"Progress: {progress:.1f}% - Found {found} appointments - Elapsed: {elapsed:.1f}s")
+        
+        elapsed = time.time() - start_time
         self.message_user(
             request,
-            f"Checked {total} contacts. Found {found} appointments.",
+            f"Checked {total} contacts in {elapsed:.1f}s. Found {found} appointments.",
             messages.SUCCESS
         )
-    check_appointments.short_description = "Check selected contacts for appointments"
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")

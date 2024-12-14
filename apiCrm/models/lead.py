@@ -13,7 +13,7 @@ class Lead(models.Model):
     id_crm = models.CharField(max_length=100)
     name = models.CharField(max_length=150)
     email = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100, db_index=True)
     source = models.CharField(max_length=100)
     store = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=100)
@@ -27,6 +27,13 @@ class Lead(models.Model):
     utm_search = models.CharField(max_length=100, null=True, blank=True)
     utm_term = models.CharField(max_length=100, null=True, blank=True)
     message = models.TextField(null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['phone']),
+            models.Index(fields=['id_crm']),
+            models.Index(fields=['store']),
+        ]
 
     def create_leads_at_crm(self, name, phone, email, message, store, region):
         source_identifier = "662bf789-d04c-4ccf-8424-26b92595060c"

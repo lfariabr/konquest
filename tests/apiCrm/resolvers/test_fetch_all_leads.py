@@ -80,7 +80,7 @@ async def test_fetch_all_leads(mock_fetch_graphql):
         },
         'pagination': {
             'currentPage': 1,
-            'perPage': 50,
+            'perPage': 1000,
         },
     }
     assert actual_args[4] == TOKEN  # Token

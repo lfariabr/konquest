@@ -59,12 +59,30 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 
 # Done
 - messageShooter: component that will have business logic to create campaigns, target lists, queue and possibility to schedule messages and send them asynchronously
+- feature/whatsapp-implementation
+- feature mockup setup_test_data to make process easier
+- feature enhancing message shooter speed processing at target list and queue process
+- fixed behavior between target campaign, targetlist and queue
+- implement campaign scheduler (run_scheduler)
+- implemented async calls to run multiple queues
+- data migration implementing flask postgresql database
+- settings smart config to switch between sqlite and postgresql
+- first shooting @ 11/december/2024 - 60 contacts
+- fixed sending images and photos on the messages
+- fixed counter (removed lead count from counter log) and timezone at database
+- apiCrm optimization to process data in batches:
+[2024-12-14 07:17:02] INFO core.admin Progress: 5.0% - Found 4 leads - Elapsed: 20.9s
+[2024-12-14 07:17:22] INFO core.admin Progress: 10.0% - Found 6 leads - Elapsed: 41.6s
+- apiCrm optimization to check if lead or appointment exists (only pytest left)
 
 # In progress
-- feature/whatsapp-implementation
+- update images and videos + last trial
+- feature/appointment-implementation
 
 ## Backlog:
-- feature/appointment-implementation
+- feature worker to clean data from apiCrm daily at midnight:00 BRT
+- feature worker to fetch data from apiCrm daily at midnight:15 BRT
+- feature worker to see if contacts are leads or appointments in apiCrm daily at 6AM BRT
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 
