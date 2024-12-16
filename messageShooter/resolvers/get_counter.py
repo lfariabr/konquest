@@ -79,49 +79,25 @@ def bulk_get_counter_whatsapp(phones, contact_tag=None):
     
     return result
 
-#TODO update/test later.
-def get_counter_appointment(contact_type, relationship_tag=None):
+def get_counter_appointment(phone, relationship_tag=None):
     """
-    For appointments, counter depends on the tag:
-    - Reminder: Days until appointment (0 = today, 1 = tomorrow)
-    - NPS: Days since appointment (7 = week ago)
-    - Reschedule: Number of reschedule attempts
-    - Google My Business: Always 0 (single message)
+    For Appointment contacts, counter = number of messages sent for this tag / contact.
+    This helps in sequence messaging (e.g., first message, follow-up, final reminder)
+    
+    - Args: phone: Contact's phone number + contact_tag: Tag to filter messages by
+    - Returns: Number of messages sent to this contact with this tag
     """
-    if contact_type != "Appointment":
-        return 0
+    from core.models.messagelog import MessageLogs
+    
+    # Filter by phone and tag, only count sent messages
+    logs = MessageLogs.objects.filter(
+        contact__phone=phone,
+        relationship_tag=contact_tag,  # Use relationship_tag here since that's the database field
+        status__in=['sent']
+    )
+    return logs.count()
 
-    now = timezone.now()
-
-    if relationship_tag == "Reminder":
-        # For reminders, return days until appointment
-        appointment = Appointment.objects.filter(
-            status="Scheduled",
-            appointment_date__gte=now
-        ).order_by('appointment_date').first()
-        
-        if appointment:
-            days_until = (appointment.appointment_date.date() - now.date()).days
-            return min(days_until, 7)  # Cap at 7 days
-        return 0
-
-    elif relationship_tag == "NPS":
-        # For NPS, return days since appointment (typically 7)
-        return 7
-
-    elif relationship_tag == "Reschedule":
-        # For reschedule, return number of reschedule attempts
-        return MessageLogs.objects.filter(
-            message__relationship_tag="Reschedule",
-            status__in=['sent']
-        ).count()
-
-    elif relationship_tag == "Google My Business":
-        # For Google My Business reviews, always send first message
-        return 0
-
-    return 0
-
+#TODO NOT IN USE...
 def bulk_get_counter_appointment(phones, relationship_tag=None):
     """
     Bulk fetch appointment counters for multiple phone numbers

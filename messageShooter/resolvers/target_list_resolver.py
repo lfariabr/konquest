@@ -56,7 +56,7 @@ def create_target_list(campaign_id, force_run=False):
                 logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
                 return 0, 0, 0
 
-        # Get all contacts
+        # Get all contacts # Isn't it better to get_contact_appointment without passing "contact_tag" ?!?!
         contacts = (get_contact_whatsapp if campaign.contact_type == "Whatsapp" else get_contact_appointment)(
             contact_type=campaign.contact_type,
             contact_tag=campaign.contact_tag

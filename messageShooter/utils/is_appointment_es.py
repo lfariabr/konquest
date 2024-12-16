@@ -1,3 +1,5 @@
+from apiCrm.dicts.stores import stores
+
 # Rules to define what is an appointment for aesthetic services = Pró-Corpo
 procedures_es = ['AVALIAÇÃO ESTÉTICA', 
                  'AVALIAÇÃO INJETÁVEIS E INVASIVOS']
@@ -8,7 +10,8 @@ reminder_desired_status_es = ['Confirmado',
 reminder_undesired_status_es = ['Atendido', 
                                 'Falta', 
                                 'Cancelado']
-stores_include_es = ['JARDINS'] # all, except stores_exclude
+stores_include_es = ["JARDINS"] # JARDINS
+# store for store in stores
 
 # Reschedule
 reschedule_desired_status_es = ['Falta',
