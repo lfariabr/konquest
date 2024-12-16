@@ -1,12 +1,36 @@
 # Rules to define what is an appointment for aesthetic services = Pró-Corpo
+procedures_es = ['AVALIAÇÃO ESTÉTICA', 
+                 'AVALIAÇÃO INJETÁVEIS E INVASIVOS']
 
-# Appointment info
-procedures_es = ['AVALIAÇÃO ESTÉTICA', 'AVALIAÇÃO INJETÁVEIS E INVASIVOS']
-desired_status_es = ['Confirmado', 'Agendado']
+# Reminders
+reminder_desired_status_es = ['Confirmado', 
+                              'Agendado']
+reminder_undesired_status_es = ['Atendido', 
+                                'Falta', 
+                                'Cancelado']
+stores_include_es = ['JARDINS'] # all, except stores_exclude
+
+# Reschedule
+reschedule_desired_status_es = ['Falta',
+                                'Cancelado']
+reschedule_undesired_status_es = ['Atendido', 
+                                    'Agendado', 
+                                    'Confirmado']
+reschedule_stores_include_es = ['all']
+
+# NPS
+nps_desired_status_es = ['Atendido']
+nps_undesired_status_es = ['Falta', 
+                            'Cancelado', 
+                            'Agendado', 
+                            'Confirmado']
+nps_stores_include_es = ['all']
 
 # Stores:
-stores_exclude_es = ['PRAIA GRANDE', 'HOMA', 'PLÁSTICA']
-stores_include_es = [] # all, except stores_exclude
+stores_exclude_es = ['PRAIA GRANDE', 
+                     'HOMA', 
+                     'PLÁSTICA']
+
 
 # Useful intervals:
 intervals_es = {
@@ -18,4 +42,4 @@ intervals_es = {
     '1': 'dMaisum'
 }
 
-interval_time = input - today()
+# interval_time = input - today()

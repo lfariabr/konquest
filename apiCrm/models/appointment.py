@@ -24,7 +24,7 @@ class Appointment(models.Model):
 
     def __str__(self):
         appointment_info = f" (Status: {self.status_label})" if self.status_label else ""
-        return f"{self.customer_name} - {self.customer_phone}{appointment_info}"
+        return f"{self.customer_name} | {self.customer_phone}{appointment_info} | {self.store_name} | {self.procedure_name} at {self.appointment_date}"
     
     def check_if_appointment_is_evaluation_aesthetic(self):
         """
