@@ -24,68 +24,56 @@ class TargetListAdmin(admin.ModelAdmin):
     readonly_fields = ('get_sent_messages_count',)
     actions = ['instant_process_tlist_to_queue']
     list_per_page = 100
-    ordering = ['-created_at']
+    ordering = ['created_at']
 
     def changelist_view(self, request, extra_context=None):
+        """Clear the queryset cache before processing the view"""
+        if hasattr(self, '_cached_queryset'):
+            del self._cached_queryset
         self.request = request  # Store request if needed for other purposes
         return super().changelist_view(request, extra_context=extra_context)
 
     def get_queryset(self, request):
-        """Override to prefetch related counters in bulk"""
+        """Override to optimize queryset loading with caching"""
+        logger.info("Starting get_queryset in TargetListAdmin")
+        
+        # Try to get cached queryset for this request
+        if hasattr(self, '_cached_queryset'):
+            logger.info("Using cached queryset")
+            return self._cached_queryset
+            
         qs = super().get_queryset(request)
         
-        # Get all unique phone numbers and tags
-        phones_by_type = {}
-        for target in qs:
-            if target.contact_phone and target.contact_phone.isdigit():
-                phones_by_type.setdefault(target.contact_type, {}).setdefault(target.contact_tag, set()).add(target.contact_phone)
+        # Add select_related for all foreign key relationships
+        qs = qs.select_related(
+            'contact',
+            'campaign'
+        )
         
-        # Bulk fetch counters for each contact type and tag
-        from messageShooter.resolvers.get_counter import bulk_get_counter_whatsapp, bulk_get_counter_appointment
+        # Cache the queryset
+        self._cached_queryset = qs
         
-        # Get or create cache key for this user
-        cache_key = f"target_list_counters_{request.user.id}"
-        counter_cache = cache.get(cache_key, {})
+        # Add debug logging
+        count = qs.count()
+        logger.info(f"TargetListAdmin queryset count: {count}")
         
-        for contact_type, tags in phones_by_type.items():
-            for tag, phones in tags.items():
-                logger.info(f"Processing {len(phones)} phones for {contact_type} - {tag}")
-                logger.info(f"Sample phones: {list(phones)[:3]}")
-
-                # Determine which counter fetching function to use
-                if contact_type.lower() == 'whatsapp':
-                    counters = bulk_get_counter_whatsapp(list(phones), tag)
-                else:
-                    counters = bulk_get_counter_appointment(list(phones), tag)
-
-                # Store results in cache
-                for phone, count in counters.items():
-                    key = f"{contact_type}:{tag}:{phone}"
-                    counter_cache[key] = count
-                    logger.info(f"Caching key: {key} = {count}")
-        
-        # Store in Django's cache for 1 hour
-        cache.set(cache_key, counter_cache, 3600)
-        logger.info(f"Stored {len(counter_cache)} counters in cache with key {cache_key}")
-
         return qs
 
     def get_sent_messages_count(self, obj):
-        """Get the number of messages sent to this contact"""
-        if not hasattr(self, 'request'):
-            logger.error("No request object found")
-            return 0
+        """Get the number of messages sent to this contact using the new counter fields"""
+        try:
+            if not obj.contact:
+                return 0
+                
+            if obj.contact_tag.lower() == 'botox':
+                return obj.contact.botox_messages_sent
+            elif obj.contact_tag.lower() == 'preenchimento':
+                return obj.contact.preenchimento_messages_sent
             
-        cache_key = f"target_list_counters_{self.request.user.id}"
-        counter_cache = cache.get(cache_key, {})
-        logger.info(f"Retrieved cache for key {cache_key}. Cache contents: {counter_cache}")
-        
-        # Construct the same key format used when caching
-        key = f"{obj.contact_type}:{obj.contact_tag}:{obj.contact_phone}"
-        count = counter_cache.get(key, 0)
-        logger.info(f"Looking up key {key} in cache, found count: {count}")
-        
-        return count
+            return 0
+        except Exception as e:
+            logger.error(f"Error in get_sent_messages_count: {str(e)}")
+            return 0
     
     get_sent_messages_count.short_description = '📨 Sent Messages'
 

@@ -17,6 +17,11 @@ class Contact(models.Model):
     region = models.CharField(max_length=100, null=True, blank=True, default="São Paulo")
     user = models.ForeignKey(kUser, on_delete=models.CASCADE)
     
+    # Message counters
+    botox_messages_sent = models.IntegerField(default=0, help_text="Number of Botox campaign messages sent")
+    preenchimento_messages_sent = models.IntegerField(default=0, help_text="Number of Preenchimento campaign messages sent")
+    last_message_sent_at = models.DateTimeField(null=True, blank=True)
+    
     # External Info - CRM / Social Hub
     reference_code = models.CharField(max_length=100, null=True, blank=True)
     external_tag = models.CharField(max_length=255, null=True, blank=True, default="SEM TAGS")  # Map to 'Tags' column

@@ -202,6 +202,20 @@ class QueueProcessor:
                     message,
                     userphone
                 )
+                
+                if success:
+                    # Update contact message counter
+                    @sync_to_async
+                    def update_contact_counter():
+                        if "botox" in message.relationship_tag.lower():
+                            contact.botox_messages_sent += 1
+                        elif "preenchimento" in message.relationship_tag.lower():
+                            contact.preenchimento_messages_sent += 1
+                        contact.last_message_sent_at = timezone.now()
+                        contact.save(update_fields=['botox_messages_sent', 'preenchimento_messages_sent', 'last_message_sent_at'])
+                    
+                    await update_contact_counter()
+                
                 return success, error_message
 
         except Exception as e:
