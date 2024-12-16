@@ -24,11 +24,14 @@ class QueueProcessor:
         """Initialize the queue processor"""
         self.max_retries = 3
         self.base_retry_delay = 5  # Base delay in minutes
-        self.breath_time = 8  # Reduce from 10s to 1s between processing each contact
+        self.breath_time = 15  # Increased from 8s to 15s between processing each contact
         self._userphone_locks = {}  # Track last send time per userphone
         self._locks = {}  # Track locks per phone
         self.logger = logging.getLogger(__name__)
         self._test_mode = False  # Flag for test mode
+        
+        # Command in progress handling
+        self.command_in_progress_delay = 5  # Seconds to wait when command in progress
         
         # File upload settings
         self.max_file_size = 10 * 1024 * 1024  # 10MB limit
