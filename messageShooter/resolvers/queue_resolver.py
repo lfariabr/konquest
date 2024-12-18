@@ -96,6 +96,18 @@ def process_queue(batch_size=50):
                 if success:
                     queue_item.status = 'sent'
                     cache.set(cache_key, 'sent', timeout=3600)  # Cache for 1 hour
+                    
+                    # Update contact message counters and last sent time
+                    # THIS IS VERY NEW!
+                    contact = queue_item.target_list.contact
+                    if contact:
+                        if queue_item.target_list.contact_tag == 'Botox':
+                            contact.botox_messages_sent += 1
+                        elif queue_item.target_list.contact_tag == 'Preenchimento':
+                            contact.preenchimento_messages_sent += 1
+                        contact.last_message_sent_at = timezone.now()
+                        contact.save()
+                    
                     success_count += 1
                     logger.info(f"Successfully sent message for queue {queue_item.id}")
                 else:

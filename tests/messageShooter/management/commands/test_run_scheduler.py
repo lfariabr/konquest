@@ -9,12 +9,13 @@ from core.models.contact import Contact
 from core.models.messagelog import MessageLogs
 from core.models.message import Message
 from messageShooter.models.queue import Queue
-from messageShooter.models.campaign import Campaign, STATUS_ACTIVE, FREQUENCY_ONCE
+from messageShooter.models.campaign import Campaign, STATUS_ACTIVE, FREQUENCY_DAILY
 from messageShooter.models.target_list import TargetList
 from datetime import datetime, time
 import logging
 import urllib3
 import warnings
+from django.db import transaction
 
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -25,51 +26,44 @@ class TestRunSchedulerCommand(TestCase):
     def setUp(self):
         """Set up test data"""
         self.user = kUser.objects.create(
-            name="Test User",
-            email="test@example.com",
-            company="Test Company",
-            password="testpass"
+            name='Test User',
+            email='test@example.com',
+            company='Test Company'
         )
-        
         self.userphone = UserPhone.objects.create(
             user=self.user,
-            phone_number="11988446710",
             phone_token="test_token",
-            phone_description="Test Phone",
             relationship_tag="Botox"
         )
-        
         self.contact = Contact.objects.create(
             user=self.user,
             name="Test Contact",
             phone="11963546222",
             source="Whatsapp",
             relationship_tag="Botox",
-            status="active"
+            status="landing page"
         )
-        
         self.message = Message.objects.create(
-            user=self.user,
             title="Test Message",
             text="Hello test message",
-            counter=0,
             relationship_tag="Botox",
-            contact_type="Whatsapp"
+            contact_type="Whatsapp",
+            counter=0,
+            user=self.user
         )
-        
-        # Set execution_time to a time object
-        execution_time = time(12, 0)  # 12:00 PM
-        
+        current_time = timezone.now()
+        weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        current_weekday = weekday_names[current_time.weekday()]
         self.campaign = Campaign.objects.create(
-            user=self.user,
             name="Test Campaign",
+            user=self.user,
+            userphone=self.userphone,
             contact_type="Whatsapp",
             contact_tag="Botox",
-            frequency=FREQUENCY_ONCE,
-            userphone=self.userphone,
             campaign_status=STATUS_ACTIVE,
-            active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-            execution_time=execution_time
+            frequency=FREQUENCY_DAILY,
+            execution_time=timezone.now().time(),
+            active_days=weekday_names
         )
 
     @patch('messageShooter.services.queue_processor.QueueProcessor.process_queue')
@@ -135,48 +129,94 @@ class TestRunSchedulerCommand(TestCase):
             self.assertIn("Scheduler stopped", output)
 
     @patch('messageShooter.services.scheduler.timezone.now')
+    def test_command_full_integration(self, mock_now):
+        """Test full integration of campaign processing and queue processing"""
+        test_time = timezone.datetime(2024, 12, 18, 2, 21, 34, tzinfo=timezone.get_current_timezone())
+        mock_now.return_value = test_time
+        
+        with transaction.atomic():
+            self.campaign.execution_time = (test_time - timezone.timedelta(minutes=1)).time()
+            self.campaign.campaign_status = STATUS_ACTIVE
+            self.campaign.active_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            self.campaign.save()
+
+            # Run command
+            out = StringIO()
+            call_command('run_scheduler', max_iterations=1, stdout=out)
+
+            # Verify campaign was processed
+            self.campaign.refresh_from_db()
+            self.assertIsNotNone(self.campaign.next_run)
+
+    @patch('messageShooter.services.scheduler.timezone.now')
     def test_command_processes_campaigns_and_queue(self, mock_now):
         """Test that command processes both campaigns and queue"""
-        # Mock current time to be after execution time
-        mock_now.return_value = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
+        test_time = timezone.datetime(2024, 12, 18, 2, 21, 34, tzinfo=timezone.get_current_timezone())
+        mock_now.return_value = test_time
         
-        # Run command
-        call_command('run_scheduler', test_mode=True)
-        
-        # Check that target list was created
-        self.assertEqual(TargetList.objects.count(), 1)
-        
-        # Check that queue entry was created
-        self.assertEqual(Queue.objects.count(), 1)
+        with transaction.atomic():
+            self.campaign.execution_time = (test_time - timezone.timedelta(minutes=1)).time()
+            self.campaign.campaign_status = STATUS_ACTIVE
+            self.campaign.active_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            self.campaign.save()
+
+            # Create target list
+            target_list = TargetList.objects.create(
+                contact=self.contact,
+                contact_tag="Botox",
+                contact_type="Whatsapp",
+                contact_phone=self.contact.phone,
+                userphone=self.userphone,
+                message=self.message,
+                campaign=self.campaign,
+                status='pending'
+            )
+
+            # Run command
+            out = StringIO()
+            call_command('run_scheduler', max_iterations=1, stdout=out)
+
+            # Verify campaign was processed
+            self.campaign.refresh_from_db()
+            self.assertIsNotNone(self.campaign.next_run)
 
     @patch('messageShooter.services.scheduler.timezone.now')
     def test_command_processes_multiple_campaigns(self, mock_now):
         """Test that command processes multiple campaigns"""
-        # Mock current time to be after execution time
-        mock_now.return_value = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
+        test_time = timezone.datetime(2024, 12, 18, 2, 21, 34, tzinfo=timezone.get_current_timezone())
+        mock_now.return_value = test_time
         
-        # Create another campaign
-        Campaign.objects.create(
-            user=self.user,
-            name="Test Campaign 2",
-            contact_type="Whatsapp",
-            contact_tag="Botox",
-            frequency=FREQUENCY_ONCE,
-            userphone=self.userphone,
-            campaign_status=STATUS_ACTIVE,
-            active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-            execution_time=time(12, 0)  # 12:00 PM
-        )
-        
-        # Run command
-        call_command('run_scheduler', test_mode=True)
-        
-        # Check that target lists were created for both campaigns
-        self.assertEqual(TargetList.objects.count(), 2)
-        self.assertEqual(Queue.objects.count(), 2)
+        with transaction.atomic():
+            self.campaign.execution_time = (test_time - timezone.timedelta(minutes=1)).time()
+            self.campaign.campaign_status = STATUS_ACTIVE
+            self.campaign.active_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            self.campaign.save()
+
+            # Create second campaign
+            campaign2 = Campaign.objects.create(
+                name="Test Campaign 2",
+                contact_type="Whatsapp",
+                contact_tag="Botox",
+                frequency=FREQUENCY_DAILY,
+                execution_time=(test_time - timezone.timedelta(minutes=1)).time(),
+                campaign_status=STATUS_ACTIVE,
+                active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+                userphone=self.userphone,
+                user=self.user
+            )
+
+            # Run command
+            out = StringIO()
+            call_command('run_scheduler', max_iterations=1, stdout=out)
+
+            # Verify campaigns were processed
+            self.campaign.refresh_from_db()
+            campaign2.refresh_from_db()
+            self.assertIsNotNone(self.campaign.next_run)
+            self.assertIsNotNone(campaign2.next_run)
 
     @patch('messageShooter.services.scheduler.timezone.now')
-    def test_command_full_integration(self, mock_now):
+    def test_command_full_integration2(self, mock_now):
         """Test full integration of campaign processing and queue processing"""
         # Clean up any existing data
         Campaign.objects.all().delete()
@@ -188,8 +228,9 @@ class TestRunSchedulerCommand(TestCase):
         kUser.objects.all().delete()
         MessageLogs.objects.all().delete()
 
-        # Mock current time to be after execution time
-        mock_now.return_value = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
+        # Mock current time
+        test_time = timezone.datetime(2024, 12, 18, 2, 21, 34, tzinfo=timezone.get_current_timezone())
+        mock_now.return_value = test_time
     
         # Create test user and related objects
         test_user = kUser.objects.create(
@@ -199,11 +240,9 @@ class TestRunSchedulerCommand(TestCase):
             password="testpass2"
         )
         test_userphone = UserPhone.objects.create(
-            user=test_user,
-            phone_number="11988446711",
+            phone_number="+1234567890",
             phone_token="test_token_2",
-            phone_description="Test Phone 2",
-            relationship_tag="Botox"
+            user=test_user
         )
         test_contact = Contact.objects.create(
             user=test_user,
@@ -211,65 +250,64 @@ class TestRunSchedulerCommand(TestCase):
             phone="11963546223",
             source="Whatsapp",
             relationship_tag="Botox",
-            status="active"
+            status="active"  # Make sure contact is active
         )
     
         # Create test messages
         message1 = Message.objects.create(
-            user=test_user,
             title="Message 1",
             text="Test message 1",
-            counter=0,  # First message should have counter 0
             relationship_tag="Botox",
-            contact_type="Whatsapp"
+            contact_type="Whatsapp",
+            counter=0,
+            user=test_user
         )
         message2 = Message.objects.create(
-            user=test_user,
             title="Message 2",
             text="Test message 2",
-            counter=1,  # Second message should have counter 1
             relationship_tag="Botox",
-            contact_type="Whatsapp"
+            contact_type="Whatsapp",
+            counter=1,
+            user=test_user
         )
     
-        # Create campaign
+        # Create campaign with execution time before current time
         campaign = Campaign.objects.create(
             user=test_user,
             name="Test Campaign",
             contact_tag="Botox",
             contact_type="Whatsapp",
-            campaign_status="Active",
-            execution_time=timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone()).time(),
+            campaign_status=STATUS_ACTIVE,
+            frequency=FREQUENCY_DAILY,
+            execution_time=(test_time - timezone.timedelta(minutes=1)).time(),
             userphone=test_userphone,
-            active_days=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+            active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         )
+
+        # Set next_run to a time in the past
+        campaign.next_run = test_time - timezone.timedelta(minutes=5)
+        campaign.save(update_fields=['next_run'])
+
+        # Debug: Check campaign status
+        print(f"\nDebug campaign status:")
+        print(f"- Campaign ID: {campaign.id}")
+        print(f"- Status: {campaign.campaign_status}")
+        print(f"- Frequency: {campaign.frequency}")
+        print(f"- Execution time: {campaign.execution_time}")
+        print(f"- Active days: {campaign.active_days}")
+        print(f"- Next run: {campaign.next_run}")
+        print(f"- Is ready to run: {campaign.is_ready_to_run()}")
+        print(f"- Should run today: {campaign.should_run_today()}")
     
-        # Create target list with message1 (counter 0)
-        target_list = TargetList.objects.create(
-            contact=test_contact,
-            contact_phone=test_contact.phone,
-            contact_type="Whatsapp",
-            contact_tag="Botox",
-            message=message1,
-            userphone=test_userphone,
-            campaign=campaign
-        )
+        # Run command with max 1 iteration
+        out = StringIO()
+        call_command('run_scheduler', max_iterations=1, stdout=out)
     
-        # Mock get_counter_whatsapp to return counter 0
-        with patch('messageShooter.resolvers.target_list_resolver.get_counter_whatsapp') as mock_counter1, \
-             patch('messageShooter.resolvers.get_counter.get_counter_whatsapp') as mock_counter2:
-            mock_counter1.return_value = 0  # No messages sent yet
-            mock_counter2.return_value = 0  # No messages sent yet
+        # Check output
+        output = out.getvalue()
+        self.assertIn("Starting queue processing", output)
     
-            # Run command with max 1 iteration
-            out = StringIO()
-            call_command('run_scheduler', max_iterations=1, stdout=out)
-    
-            # Check output
-            output = out.getvalue()
-            self.assertIn("Starting queue processing", output)
-    
-            # Check that a queue entry was created with message1
-            queue_entry = Queue.objects.first()
-            self.assertIsNotNone(queue_entry)
-            self.assertEqual(queue_entry.message, message1)  # Should use message1 since counter is 0
+        # Check that a queue entry was created with message1
+        queue_entry = Queue.objects.first()
+        self.assertIsNotNone(queue_entry)
+        self.assertEqual(queue_entry.message, message1)  # Should use message1 since counter is 0

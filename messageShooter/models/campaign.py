@@ -109,7 +109,7 @@ class Campaign(models.Model):
         choices=[(s, s) for s in CAMPAIGN_STATUSES],
         default=STATUS_ACTIVE
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
     last_run = models.DateTimeField(null=True, blank=True)
     next_run = models.DateTimeField(null=True, blank=True)
 
@@ -312,38 +312,26 @@ class Campaign(models.Model):
     def process_campaign(self):
         """
         Main method to process a campaign run:
-        1. Generate new target lists
+        1. Generate new target lists using create_target_list
         2. Create queue items
         3. Update campaign status
         """
         from messageShooter.models.queue import Queue
+        from messageShooter.resolvers.target_list_resolver import create_target_list
         
         try:
-            # Generate fresh target lists
-            target_lists = self.generate_target_lists()
+            # Generate fresh target lists using the new function
+            created_count, skipped_count, error_count = create_target_list(self.id)
             
-            # Create queue items for each target list
-            for target_list in target_lists:
-                contacts = target_list.get_contacts()
-                Queue.objects.create(
-                    target_list=target_list,
-                    campaign=self,
-                    message=target_list.message,
-                    userphone=self.userphone,
-                    phone_token=self.userphone.phone_token,
-                    status='pending',
-                    scheduled_time=timezone.now(),
-                    total_contacts=len(contacts),
-                    processed_contacts={},
-                    processed_count=0
-                )
+            if created_count == 0:
+                return False, f"No target lists created. Skipped: {skipped_count}, Errors: {error_count}"
             
             # Update campaign status
             self.last_run = timezone.now()
             self.next_run = self.calculate_next_run(self.last_run)
             self.save()
             
-            return True, f"Successfully created {len(target_lists)} target lists"
+            return True, f"Successfully created {created_count} target lists (Skipped: {skipped_count}, Errors: {error_count})"
             
         except Exception as e:
             return False, f"Error processing campaign: {str(e)}"

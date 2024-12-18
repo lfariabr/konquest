@@ -9,7 +9,8 @@ reminder_desired_status_es = ['Confirmado',
                               'Agendado']
 reminder_undesired_status_es = ['Atendido', 
                                 'Falta', 
-                                'Cancelado']
+                                'Cancelado',
+                                'Reagendado']
 stores_include_es = ["JARDINS"] # JARDINS
 # store for store in stores
 

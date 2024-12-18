@@ -15,6 +15,7 @@ from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue, QUEUE_STATUS
 from messageShooter.services.queue_processor import QueueProcessor
 from messageShooter.resolvers.get_contacts import get_contact_whatsapp
+from messageShooter.models.campaign import Campaign
 
 logger = logging.getLogger(__name__)
 
@@ -41,14 +42,27 @@ class TestQueueProcessor(TransactionTestCase):
             phone_description='Test Phone'
         )
         
-        # Create message with user
+        # Create default test message
         self.message = Message.objects.create(
             user=self.user,
-            text='Test message',
+            text='Default test message',
             title='Test Message',
-            relationship_tag='Test',
+            relationship_tag='Botox',
             contact_type='Whatsapp',
             counter=0
+        )
+        
+        # Create campaign with correct fields
+        self.campaign = Campaign.objects.create(
+            name="Test Campaign",
+            contact_type="Whatsapp",
+            contact_tag="Botox",  # Updated to use valid tag
+            frequency="Once",
+            execution_time=timezone.now().time(),
+            campaign_status="Active",
+            active_days=['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+            userphone=self.userphone,
+            user=self.user
         )
         
         # Initialize processor with test settings
@@ -72,47 +86,46 @@ class TestQueueProcessor(TransactionTestCase):
             contacts.append(contact)
         return contacts
 
-    async def create_test_queue(self, contact_count=1, status='pending'):
-        """Create a test queue with specified number of contacts"""
-        # Create contacts
-        contacts = await self.create_test_contacts(contact_count)
+    async def create_test_queue(self, contact_count=1, message=None):
+        """Helper to create a test queue with contacts"""
+        # Use provided message or default message
+        message = message or self.message
         
-        # Create target list with first contact
+        contacts = []
+        create_contact = sync_to_async(Contact.objects.create)
+        for i in range(contact_count):
+            contact = await create_contact(
+                user=self.user,
+                name=f"Test Contact {i}",
+                phone=f"+1234567890{i}",
+                source="Whatsapp",
+                relationship_tag="Botox",
+                status="active"
+            )
+            contacts.append(contact)
+
+        # Create target list
         create_target_list = sync_to_async(TargetList.objects.create)
         target_list = await create_target_list(
-            contact=contacts[0],  # Primary contact
+            contact=contacts[0],  # Use first contact
             contact_phone=contacts[0].phone,
-            contact_type='Whatsapp',
-            contact_tag='Test',
-            message=self.message,  # Required field
-            userphone=self.userphone,  # Required field
-            status='pending',
-            priority=0
+            contact_type="Whatsapp",
+            contact_tag="Botox",
+            campaign=self.campaign,
+            message=message,
+            userphone=self.userphone,
+            status="pending"
         )
-        
+
         # Create queue
         create_queue = sync_to_async(Queue.objects.create)
         queue = await create_queue(
             target_list=target_list,
-            message=self.message,
+            message=message,
             userphone=self.userphone,
-            phone_token=self.userphone.phone_token,
-            status=status,
-            total_contacts=contact_count,
-            processed_contacts={}
+            status="pending"
         )
-        
-        # Mock the resolver function to return our test contacts
-        def mock_get_contact_whatsapp(contact_type, contact_tag):
-            if contact_type == "Whatsapp" and contact_tag == "Test":
-                return contacts
-            return []
-        
-        # Patch the resolver function
-        patcher = patch('messageShooter.resolvers.get_contacts.get_contact_whatsapp', mock_get_contact_whatsapp)
-        patcher.start()
-        self.addCleanup(patcher.stop)
-        
+
         return queue
 
     @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
@@ -178,45 +191,115 @@ class TestQueueProcessor(TransactionTestCase):
             user=self.user,
             text='Test message 1',
             title='Test Message 1',
-            relationship_tag='Test',
+            relationship_tag='Botox',  # Match the contact tag
             contact_type='Whatsapp',
             counter=0
         )
-        
+
         message2 = await create_message(
             user=self.user,
             text='Test message 2',
             title='Test Message 2',
-            relationship_tag='Test',
+            relationship_tag='Botox',  # Match the contact tag
             contact_type='Whatsapp',
-            counter=1
+            counter=1  # Set to 1 to test different message counters
         )
-        
-        # Create two queues with different messages
-        queue1 = await self.create_test_queue(contact_count=2)
-        queue2 = await self.create_test_queue(contact_count=2)
-        
-        # Update queue1 and its target list
-        async def update_queue_and_target_list(queue, message):
-            queue.message = message
-            queue.target_list.message = message
-            await sync_to_async(queue.save)()
-            await sync_to_async(queue.target_list.save)()
-        
-        await update_queue_and_target_list(queue1, message1)
-        await update_queue_and_target_list(queue2, message2)
-        
-        # Process both queues
-        await processor.process_queues_async([queue1, queue2])
-        
+
+        # Create two contacts
+        create_contact = sync_to_async(Contact.objects.create)
+        contacts = []
+        for i in range(2):
+            contact = await create_contact(
+                user=self.user,
+                name=f"Test Contact {i+1}",
+                phone=f"+1234567890{i+1}",
+                source="Whatsapp",
+                relationship_tag="Botox",  # Both contacts have Botox tag
+                status="active"
+            )
+            contacts.append(contact)
+
+        # Create target lists and queues for each message
+        create_target_list = sync_to_async(TargetList.objects.create)
+        create_queue = sync_to_async(Queue.objects.create)
+        queues = []
+
+        # Create a queue for each message
+        for message in [message1, message2]:
+            # Create target list for this message
+            target_list = await create_target_list(
+                contact=contacts[0],  # Use first contact as reference
+                contact_phone=contacts[0].phone,
+                contact_type="Whatsapp",
+                contact_tag="Botox",  # Match the contacts' tag
+                campaign=self.campaign,
+                message=message,
+                userphone=self.userphone,
+                status="pending"
+            )
+
+            # Create queue for this message
+            queue = await create_queue(
+                target_list=target_list,
+                message=message,
+                userphone=self.userphone,
+                status="pending",
+                total_contacts=2  # Both contacts should receive this message
+            )
+            queues.append(queue)
+
+        # Process both queues concurrently
+        await processor.process_queues_async(queues)
+
         # Verify both queues completed
         refresh_from_db = sync_to_async(lambda x: x.refresh_from_db())
-        await refresh_from_db(queue1)
-        await refresh_from_db(queue2)
-        
-        self.assertEqual(queue1.status, 'sent')
-        self.assertEqual(queue2.status, 'sent')
-        self.assertEqual(mock_send.call_count, 4)  # Total contacts processed
+        for queue in queues:
+            await refresh_from_db(queue)
+            assert queue.status == 'sent', (
+                f"Queue {queue.id} has status '{queue.status}' instead of 'sent'. "
+                f"Processed contacts: {queue.processed_contacts}"
+            )
+
+        # Verify correct number of messages sent
+        expected_calls = len(queues) * len(contacts)  # Each queue sends to all contacts
+        assert mock_send.call_count == expected_calls, (
+            f"Expected {expected_calls} messages to be sent "
+            f"({len(contacts)} contacts per queue * {len(queues)} queues), "
+            f"but got {mock_send.call_count} calls"
+        )
+
+        # Verify messages were sent with correct text and to correct contacts
+        calls = mock_send.call_args_list
+        expected_messages = {
+            '+12345678901': ['Test message 1', 'Test message 2'],  # Each contact receives both messages
+            '+12345678902': ['Test message 1', 'Test message 2']   # Each contact receives both messages
+        }
+
+        # Group calls by phone number to verify each contact received the correct messages
+        actual_messages = {}
+        for call in calls:
+            phone = call[1]['phone']
+            message = call[1]['message']
+            if phone not in actual_messages:
+                actual_messages[phone] = []
+            actual_messages[phone].append(message)
+
+        # Log the actual calls for debugging
+        print("\nDebug: Mock send calls:")
+        for call in mock_send.call_args_list:
+            print(f"  - Phone: {call[1]['phone']}, Message: {call[1]['message']}")
+
+        # Sort messages for comparison
+        for phone in actual_messages:
+            actual_messages[phone].sort()
+            if phone in expected_messages:
+                expected_messages[phone].sort()
+
+        assert actual_messages == expected_messages, (
+            f"Messages were not sent correctly to contacts.\n"
+            f"Expected: {expected_messages}\n"
+            f"Got: {actual_messages}"
+        )
 
     @patch('messageShooter.services.queue_processor.send_text_message', new_callable=AsyncMock)
     async def test_detailed_progress_logging(self, mock_send):
@@ -276,8 +359,19 @@ class TestQueueProcessor(TransactionTestCase):
             {'success': True}  # Second attempt succeeds
         ]
         
+        # Create test message for this test
+        create_message = sync_to_async(Message.objects.create)
+        test_message = await create_message(
+            user=self.user,
+            text='Test message',
+            title='Test Message',
+            relationship_tag='Botox',
+            contact_type='Whatsapp',
+            counter=0
+        )
+
         # Create queue with one contact
-        queue = await self.create_test_queue(contact_count=1)
+        queue = await self.create_test_queue(contact_count=1, message=test_message)
         
         # Configure processor for this test
         self.processor._test_mode = True  # Skip actual delays

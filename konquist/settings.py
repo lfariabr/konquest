@@ -35,9 +35,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',  # Add this first
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware', # New
-    'django.middleware.security.SecurityMiddleware', # New
+    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.security.SecurityMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -45,7 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Add this last
+    'django.middleware.cache.FetchFromCacheMiddleware',
 
 ]
 

@@ -23,6 +23,7 @@ from messageShooter.utils.is_appointment_es import (
 )
 
 from konquist.settings import CONTACTS_TO_LOAD
+from django.db.models import Min, Subquery, OuterRef
 
 number_of_contacts = settings.CONTACTS_TO_LOAD
 logger = logging.getLogger(__name__)
@@ -58,14 +59,19 @@ def get_contact_whatsapp(contact_type, contact_tag):
     logger.info(f"Found {count} contacts with tag {contact_tag}")
     return contacts
     
-def get_contact_appointment(relationship_tag: str = None) -> dict:
+def get_contact_appointment(contact_type: str, contact_tag: str = None) -> list:
     """
     Get appointments based on specific relationship tag rules
-    - Args: relationship_tag (str, optional): Tag to filter appointments ('Reminder', 'NPS', 'Reschedule')
-    - Returns: dict: Filtered appointments matching the specified relationship tag
+    Args:
+        contact_type (str): Must be "Appointment"
+        contact_tag (str, optional): Tag to filter appointments ('Reminder', 'NPS', 'Reschedule')
+    Returns:
+        list: List of Appointment objects
     """
+    if contact_type != "Appointment":
+        return []
+        
     now = timezone.now()
-    filtered_appointments = {}
     
     # Base query with common filters
     base_query = Appointment.objects.filter(
@@ -73,13 +79,8 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
         procedure_name__in=procedures_es
     )
 
-    # Reminder, to test:
-    # python manage.py shell
-    # from messageShooter.resolvers.get_contacts import get_contact_appointment
-    # get_contact_appointment('Reminder')
-
     try:
-        if relationship_tag == 'Reminder':
+        if contact_tag == 'Reminder':
             # Get appointments in the next 5 days
             five_days_future = now + timedelta(days=5)
             thirty_days_past = now - timedelta(days=30)
@@ -109,7 +110,7 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
 
             logger.info(f"Reminder - Found {len(appointments)} appointments between {now} and {five_days_future}")
 
-        elif relationship_tag == 'NPS':
+        elif contact_tag == 'NPS':
             # NPS specific logic
             three_days_past = now - timedelta(days=3)
             five_days_past = now - timedelta(days=5)
@@ -132,7 +133,7 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
 
             logger.info(f"NPS - Found {len(appointments)} appointments between {three_days_past} and {now}")
 
-        elif relationship_tag == 'Reschedule':
+        elif contact_tag == 'Reschedule':
             # Reschedule specific logic
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
@@ -160,33 +161,16 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
             logger.info(f"Reschedule - Found {len(appointments)} appointments")
 
         else:
-            # Default case: return all relevant appointments
             appointments = base_query.order_by('appointment_date')[:CONTACTS_TO_LOAD]
             logger.info(f"Default - Found {len(appointments)} appointments")
-            
-        # Convert to dictionary format
-        for appointment in appointments:
-            filtered_appointments[appointment.id_crm] = {
-                'customer_name': appointment.customer_name,
-                'customer_phone': appointment.customer_phone,
-                'store_name': appointment.store_name,
-                'procedure_name': appointment.procedure_name,
-                'employee_name': appointment.employee_name,
-                'status_label': appointment.status_label,
-                'appointment_date': appointment.appointment_date,
-                'relationship_tag': relationship_tag or 'Default'
-            }
 
-        logger.info(
-            f"Retrieved {len(filtered_appointments)} appointments for tag '{relationship_tag}'"
-        )
+        logger.info(f"Found {len(appointments)} appointments with tag {contact_tag}")
+
+        return appointments
         
     except Exception as e:
-        logger.error(f"Error retrieving appointments for tag '{relationship_tag}': {str(e)}")
+        logger.error(f"Error retrieving appointments for tag '{contact_tag}': {str(e)}")
         raise
-
-    return filtered_appointments
-
 
 def get_contact_nps():
     """

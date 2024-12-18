@@ -17,6 +17,7 @@ from core.models.contact import Contact
 from core.models.user import kUser
 from core.models.userphone import UserPhone
 from core.models.messagelog import MessageLogs
+from core.models.messagelog_appointments import AppointmentMessageLogs
 from core.models.message import Message
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
@@ -93,8 +94,26 @@ class MessageLogsAdmin(admin.ModelAdmin):
 
 admin.site.register(MessageLogs, MessageLogsAdmin)
 
+class AppointmentMessageLogsAdmin(admin.ModelAdmin):
+    list_display = ('get_message_text', 'status', 'get_phone_number',  'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('appointment__customer_name', 'user__username', 'user_phone__phone')
+    readonly_fields = ('created_at',)
+    ordering = ('-created_at',)
+
+    def get_message_text(self, obj):
+        return obj.message.text
+    get_message_text.short_description = 'Message'
+
+    def get_phone_number(self, obj):
+        # return obj.phone_number
+        return obj.user_phone.phone_number if obj.user_phone else '-'
+
+    get_phone_number.short_description = 'Phone Number'
+
+admin.site.register(AppointmentMessageLogs, AppointmentMessageLogsAdmin)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'relationship_tag', 'created_at', 'source',
+    list_display = ('name', 'phone', 'botox_messages_sent', 'relationship_tag', 'created_at', 'source',
                     'store', 'region', 'external_tag', 'status', 
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
                     'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 'appointment_last_checked', 'appointment_check_count', 'store_appointment')

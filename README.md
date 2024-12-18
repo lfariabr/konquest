@@ -75,9 +75,15 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 [2024-12-14 07:17:22] INFO core.admin Progress: 10.0% - Found 6 leads - Elapsed: 41.6s
 - apiCrm optimization to check if lead or appointment exists (only pytest left)
 - update images and videos + last trial
+- feature/appointment-implementation
+- feature/appointment-reminder : create campaign for appointment reminder + 1 message
+- feature/appointment-reminder : create target list
+- create extra validation to generate target list as long as days interval is calculated
+- feature/appointment-reminder : create queue
 
 # In progress
-- feature/appointment-implementation
+- feature/appointment-reminder: double check target list
+- think on a way to count messages of target list appointment
 
 ## Backlog:
 - feature worker to clean data from apiCrm daily at midnight:00 BRT

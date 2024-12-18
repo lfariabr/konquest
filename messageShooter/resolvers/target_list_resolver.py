@@ -7,6 +7,7 @@ from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
 from core.models.message import Message
 from core.models.contact import Contact
+from apiCrm.models.appointment import Appointment
 import logging
 
 logger = logging.getLogger(__name__)
@@ -56,11 +57,221 @@ def create_target_list(campaign_id, force_run=False):
                 logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
                 return 0, 0, 0
 
-        # Get all contacts # Isn't it better to get_contact_appointment without passing "contact_tag" ?!?!
-        contacts = (get_contact_whatsapp if campaign.contact_type == "Whatsapp" else get_contact_appointment)(
-            contact_type=campaign.contact_type,
-            contact_tag=campaign.contact_tag
-        )
+        target_lists_to_create = []
+
+        if campaign.contact_type == "Whatsapp":
+            contacts = get_contact_whatsapp(
+                contact_type=campaign.contact_type,
+                contact_tag=campaign.contact_tag
+            )
+            if not contacts:
+                logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
+                return created_count, skipped_count, error_count
+
+            # Pre-load counters for contacts
+            phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
+            counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
+            
+            # Pre-load all possible messages
+            unique_counters = set(counters.values())
+            messages = {
+                counter: get_message(
+                    contact_type=campaign.contact_type,
+                    relationship_tag=campaign.contact_tag,
+                    counter=counter
+                )
+                for counter in unique_counters
+            }
+            
+            # Pre-fetch existing target lists
+            existing_target_lists = set(
+                TargetList.objects.filter(
+                    campaign=campaign,
+                    status__in=['pending', 'processing', 'retrying']
+                ).values_list('contact_id', 'message__counter')
+            )
+
+            # Create target lists for contacts
+            for contact in contacts:
+                try:
+                    if not contact.phone or not contact.phone.isdigit():
+                        logger.debug(f"Invalid phone number for contact {contact.id} - skipping")
+                        skipped_count += 1
+                        continue
+
+                    counter = counters.get(contact.phone)
+                    message = messages.get(counter)
+
+                    if not message:
+                        logger.debug(f"No message found for counter {counter} - skipping contact {contact.id}")
+                        skipped_count += 1
+                        continue
+
+                    target_lists_to_create.append(
+                        TargetList(
+                            campaign=campaign,
+                            contact=contact,
+                            message=message,
+                            contact_tag=campaign.contact_tag,
+                            contact_type=campaign.contact_type,
+                            contact_phone=contact.phone,
+                            reference_id=str(contact.id),
+                            userphone=campaign.userphone,
+                            token=campaign.userphone.phone_token,
+                            status='pending'
+                        )
+                    )
+                    created_count += 1
+                except Exception as e:
+                    logger.error(f"Error processing contact {contact.id}: {str(e)}")
+                    error_count += 1
+
+        else:  # Appointment type
+            appointments = get_contact_appointment(
+                contact_type=campaign.contact_type,
+                contact_tag=campaign.contact_tag
+            )
+            if not appointments:
+                logger.warning(f"No appointments found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
+                return created_count, skipped_count, error_count
+
+            # Pre-load counters for appointments
+            phones = [apt.customer_phone for apt in appointments if apt.customer_phone and apt.customer_phone.isdigit()]
+            counters = bulk_get_counter_appointment(phones, campaign.contact_tag)
+
+            # Pre-load all possible messages
+            unique_counters = set(counters.values())
+            messages = {
+                counter: get_message(
+                    contact_type=campaign.contact_type,
+                    relationship_tag=campaign.contact_tag,
+                    counter=counter
+                )
+                for counter in unique_counters
+            }
+            
+            # Pre-fetch existing target lists
+            existing_target_lists = set(
+                TargetList.objects.filter(
+                    campaign=campaign,
+                    status__in=['pending', 'processing', 'retrying']
+                ).values_list('contact_id', 'message__counter')
+            )
+
+            # Create target lists for appointments
+            for appointment in appointments:
+                try:
+                    if not appointment.customer_phone or not appointment.customer_phone.isdigit():
+                        logger.info(f"Skipping appointment {appointment.id_crm} - Invalid phone number: '{appointment.customer_phone}'")
+                        skipped_count += 1
+                        continue
+
+                    counter = counters.get(appointment.customer_phone)
+                    message = messages.get(counter)
+
+                    if not message:
+                        logger.info(f"Skipping appointment {appointment.id_crm} - No message found for counter {counter} (phone: {appointment.customer_phone})")
+                        skipped_count += 1
+                        continue
+
+                    # Create TargetList without any reference to Appointment model fields
+                    target_lists_to_create.append(
+                        TargetList(
+                            campaign=campaign,
+                            contact=None,  # Explicitly set contact to None for appointments
+                            message=message,
+                            contact_tag=campaign.contact_tag,
+                            contact_type=campaign.contact_type,
+                            contact_phone=appointment.customer_phone,
+                            reference_id=str(appointment.id_crm),
+                            userphone=campaign.userphone,
+                            token=campaign.userphone.phone_token,
+                            status='pending'  # This status is for TargetList, not Appointment
+                        )
+                    )
+                    created_count += 1
+                except Exception as e:
+                    logger.error(f"Error processing appointment {appointment.id_crm}: {str(e)}")
+                    error_count += 1
+
+        # Bulk create all target lists
+        if target_lists_to_create:
+            TargetList.objects.bulk_create(target_lists_to_create)
+            logger.info(f"Created {len(target_lists_to_create)} target lists")
+            
+        logger.info(f"Campaign processing complete. Created: {created_count}, Skipped: {skipped_count}, Errors: {error_count}")
+        return created_count, skipped_count, error_count
+        
+    except Exception as e:
+        logger.error(f"Error processing campaign {campaign_id}: {str(e)}")
+        return created_count, skipped_count, error_count + 1
+
+def create_target_list_original(campaign_id, force_run=False):
+    """
+    Create target list entries for a campaign with optimized bulk operations
+    Args:
+        campaign_id: ID of the campaign
+        force_run: If True, bypasses the ready-to-run checks
+    Returns (created_count, skipped_count, error_count)
+    """
+    created_count = 0
+    skipped_count = 0
+    error_count = 0
+    
+    try:
+        # Get campaign
+        campaign = Campaign.objects.get(id=campaign_id)
+        logger.info(f"Processing campaign '{campaign.name}' (ID: {campaign_id})")
+
+        # Bulk deletion of existing target lists and queue entries
+        existing_target_lists = TargetList.objects.filter(campaign=campaign)
+        if existing_target_lists.exists():
+            count = existing_target_lists.count()
+            from messageShooter.models.queue import Queue
+            queue_count = Queue.objects.filter(target_list__in=existing_target_lists).delete()[0]
+            target_count = existing_target_lists.delete()[0]
+            logger.info(f"Cleaned up: Deleted {queue_count} queue entries and {target_count} target lists")
+
+        # Early return checks
+        if not force_run:
+            if campaign.campaign_status != "Active" or not campaign.is_ready_to_run():
+                logger.info(f"Campaign '{campaign.name}' is not active or not ready to run")
+                return 0, 0, 0
+            if not campaign.should_run_today():
+                logger.info(f"Campaign '{campaign.name}' is not scheduled to run today")
+                return 0, 0, 0
+
+        # One-time campaign check
+        if campaign.frequency == FREQUENCY_ONCE:
+            if TargetList.objects.filter(
+                campaign=campaign,
+                contact_tag=campaign.contact_tag,
+                status__in=['pending', 'processing']
+            ).exists():
+                logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
+                return 0, 0, 0
+
+        # Get contacts
+        if campaign.contact_type == "Whatsapp":
+            contacts = get_contact_whatsapp(
+                contact_type=campaign.contact_type,
+                contact_tag=campaign.contact_tag
+            )
+        else:  # Appointment type
+            contacts = get_contact_appointment(
+                contact_type=campaign.contact_type,
+                contact_tag=campaign.contact_tag
+            )
+            contacts = []
+            for apt in appointments:
+                contact = Contact(
+                    phone=apt.customer_phone,
+                    name=apt.customer_name,
+                    store=apt.store_name,
+                    relationship_tag=campaign.contact_tag or 'Default',
+                    source='Appointment'
+                )
+                contacts.append(contact)
         
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
@@ -125,6 +336,7 @@ def create_target_list(campaign_id, force_run=False):
                     skipped_count += 1
                     continue
                 
+                # for target_list comming from contacts:
                 target_lists_to_create.append(
                     TargetList(
                         campaign=campaign,

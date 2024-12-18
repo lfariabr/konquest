@@ -29,7 +29,7 @@ class TargetList(models.Model):
     ]
 
     # Contact information
-    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=False)
+    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=True, blank=True)  # Make nullable and blank-able
     contact_phone = models.CharField(max_length=20, null=False, blank=False)
     contact_type = models.CharField(
         max_length=100,
@@ -92,7 +92,6 @@ class TargetList(models.Model):
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering
         indexes = [
             models.Index(fields=['contact_type', 'contact_tag']),
-            models.Index(fields=['status', 'priority', 'sequence_order']),
         ]
         
 

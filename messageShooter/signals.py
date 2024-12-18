@@ -13,6 +13,12 @@ def initialize_target_list_counter(sender, instance, **kwargs):
     """
     if instance._state.adding:  # Only for new instances
         try:
+            # Skip counter initialization for appointments since they don't have contacts
+            if instance.contact_type == 'Appointment':
+                instance.sent_messages_count = 0
+                logger.debug(f"Skipped counter initialization for appointment target list")
+                return
+
             sent_count = MessageLogs.objects.filter(
                 contact=instance.contact,
                 relationship_tag=instance.contact_tag,

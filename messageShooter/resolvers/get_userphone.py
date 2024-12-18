@@ -18,6 +18,12 @@ def get_userphone(contact_tag):
             userphone = UserPhone.objects.filter(relationship_tag="NPS").first()
         elif contact_tag == "Google My Business":
             userphone = UserPhone.objects.filter(relationship_tag="Google My Business").first()
+        elif contact_tag == "Reminder":
+            # For appointment reminders, use the default notification phone
+            userphone = UserPhone.objects.filter(relationship_tag="Reminder").first()
+            if not userphone:
+                # Fallback to any available phone if no specific reminder phone is set
+                userphone = UserPhone.objects.first()
         else:
             userphone = None
 

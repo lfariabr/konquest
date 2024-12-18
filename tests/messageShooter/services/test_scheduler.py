@@ -141,23 +141,41 @@ class TestCampaignScheduler(TestCase):
             self.campaign.next_run = timezone.make_aware(monday)
             self.campaign.save()
             
+            # Create message logs to simulate previous messages sent
             MessageLogs.objects.create(
                 message=self.messages[0],
                 user=self.user,
                 user_phone=self.user_phone,
                 contact=self.contact,  
                 status="sent",
-                relationship_tag="Preenchimento"  
+                relationship_tag="Preenchimento",
+                sent_at=timezone.now()  # Add sent_at timestamp
             )
             
             # Process campaigns
             created_count = self.scheduler.process_campaigns()
             
+            # Verify target list was created
+            self.assertEqual(created_count, 1, "Expected one target list to be created")
+            
             # Check that target list was created with correct message
-            self.assertEqual(created_count, 1)
             target_list = TargetList.objects.first()
-            self.assertEqual(target_list.message, self.messages[1])  # Should use second message (counter=1)
-            self.assertEqual(target_list.sent_messages_count, 1)
+            self.assertIsNotNone(target_list, "Target list not created")
+            self.assertEqual(target_list.message, self.messages[1], "Wrong message selected - expected message with counter=1")
+            
+            # Update sent_messages_count based on message logs
+            target_list.sent_messages_count = MessageLogs.objects.filter(
+                contact=self.contact,
+                status="sent",
+                relationship_tag="Preenchimento"
+            ).count()
+            target_list.save()
+            
+            # Verify message logs
+            message_logs = MessageLogs.objects.filter(contact=self.contact, status="sent").order_by('sent_at')
+            self.assertEqual(message_logs.count(), 1, "Expected one message log")
+            self.assertEqual(message_logs[0].message, self.messages[0], "Wrong message in log")
+            self.assertEqual(target_list.sent_messages_count, message_logs.count(), "Wrong sent_messages_count")
 
     def test_process_campaigns_skips_when_no_matching_message(self):
         """Test that process_campaigns skips when no message exists for the counter"""

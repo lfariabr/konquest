@@ -11,11 +11,13 @@ from apiSocialHub.resolvers.send_text_message import send_text_message
 from apiSocialHub.resolvers.send_file_message import send_file_message
 from core.models.messagelog import MessageLogs
 from core.models.message import Message
+from core.models.messagelog_appointments import AppointmentMessageLogs
 from django.db.models import Q
 from typing import List, Tuple, Dict, Any
 from apiCrm.models.lead import Lead
 from apiCrm.utils.create_store import create_store
 from apiCrm.utils.create_region import create_region
+
 
 logger = logging.getLogger(__name__)
 
@@ -124,7 +126,7 @@ class QueueProcessor:
                         # Create new Lead instance and set its attributes
                         lead = Lead()
                         lead.name = contact.name
-                        lead.phone = contact.phone
+                        lead.phone = getattr(contact, 'customer_phone', getattr(contact, 'phone', None))
                         lead.email = "campanha@whatsapp.com"
                         lead.message = message.text
                         
@@ -135,7 +137,7 @@ class QueueProcessor:
                         # Call create_leads_at_crm with the determined store and region
                         response = lead.create_leads_at_crm(
                             name=contact.name,
-                            phone=contact.phone,
+                            phone=getattr(contact, 'customer_phone', getattr(contact, 'phone', None)),
                             email="campanha@whatsapp.com",
                             message=message.text,
                             store=store,
@@ -155,7 +157,7 @@ class QueueProcessor:
                                 status="sent",
                                 relationship_tag=f"{campaign_name}"
                             )
-                            self.logger.info(f"Lead created and logged for {contact.phone} in campaign {campaign_name}")
+                            self.logger.info(f"Lead created and logged for {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))} in campaign {campaign_name}")
                             time.sleep(60)
                             print("Resting 60 seconds before creating next lead...")
                             return True, None
@@ -163,14 +165,14 @@ class QueueProcessor:
 
                     lead_success, lead_error = await create_campaign_lead()
                     if not lead_success:
-                        self.logger.error(f"Failed to create lead for {contact.phone}: {lead_error}")
+                        self.logger.error(f"Failed to create lead for {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {lead_error}")
                         return False, lead_error
                     
                     # Return here after successful lead creation to prevent message sending
                     return True, None
                     
                 except Exception as e:
-                    error_message = f"Error creating lead for {contact.phone}: {str(e)}"
+                    error_message = f"Error creating lead for {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {str(e)}"
                     self.logger.error(error_message)
                     return False, error_message
             
@@ -188,14 +190,19 @@ class QueueProcessor:
                         )
                         return success, error_message
                     except Exception as e:
-                        self.logger.error(f"Error sending file message to {contact.phone}: {str(e)}")
+                        self.logger.error(f"Error sending file message to {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {str(e)}")
                 else:
-                    error_message = f"No file associated with message for {contact.phone}"
+                    error_message = f"No file associated with message for {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}"
                     self.logger.error(error_message)
                     return False, error_message
 
             # else, if just a text message:
             else:
+                # Safely get phone number based on contact type
+                phone = getattr(contact, 'customer_phone', getattr(contact, 'phone', None))
+                if not phone:
+                    raise ValueError("Contact has no valid phone number")
+
                 success, error_message = await self.process_with_retry(
                     self.send_message_async,
                     contact,
@@ -204,9 +211,13 @@ class QueueProcessor:
                 )
                 
                 if success:
-                    # Update contact message counter
+                    # Update contact message counter only for non-appointment contacts
                     @sync_to_async
                     def update_contact_counter():
+                        # Skip counter update for appointments
+                        if not hasattr(contact, 'botox_messages_sent'):
+                            return
+                            
                         if "botox" in message.relationship_tag.lower():
                             contact.botox_messages_sent += 1
                         elif "preenchimento" in message.relationship_tag.lower():
@@ -219,17 +230,22 @@ class QueueProcessor:
                 return success, error_message
 
         except Exception as e:
-            error_message = f"Error processing contact {contact.phone}: {str(e)}"
+            error_message = f"Error processing contact {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {str(e)}"
             self.logger.error(error_message)
             return False, error_message
 
     async def send_message_async(self, contact, message, userphone):
         """Send message asynchronously by wrapping sync functions in to_thread"""
         try:
+            # Safely get phone number based on contact type
+            phone = getattr(contact, 'customer_phone', getattr(contact, 'phone', None))
+            if not phone:
+                raise ValueError("Contact has no valid phone number")
+
             # Wrap the synchronous send_text_message in to_thread
             result = await asyncio.to_thread(
                 send_text_message,
-                phone=contact.phone,
+                phone=phone,
                 message=message.text,
                 token_socialhub=userphone.phone_token
             )
@@ -241,24 +257,24 @@ class QueueProcessor:
             if isinstance(result, dict) and result.get('success', False):
                 return True, None
             else:
-                error_msg = f"Failed to send message to {contact.phone}: {result.get('message', 'Unknown error')}"
+                error_msg = f"Failed to send message to {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {result.get('message', 'Unknown error')}"
                 self.logger.error(error_msg)
                 return False, error_msg
 
         except Exception as e:
-            error_msg = f"Failed to send message to {contact.phone}: {str(e)}"
-            self.logger.error(error_msg)
+            error_message = f"Failed to send message to {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {str(e)}"
+            self.logger.error(error_message)
             if isinstance(e, (ConnectionError, ConnectionResetError)):
                 raise  # Let process_with_retry handle connection errors
-            return False, error_msg
-    
+            return False, error_message
+
     ######## NEW
     async def send_file_message_async(self, contact, message, userphone, file_path):
         """Send file message asynchronously by wrapping sync functions in to_thread"""
         try:
             result = await asyncio.to_thread(
                 send_file_message,
-                phone=contact.phone,
+                phone=getattr(contact, 'customer_phone', getattr(contact, 'phone', None)),
                 message=message.text,
                 token_socialhub=userphone.phone_token,
                 file_path=file_path,
@@ -268,11 +284,11 @@ class QueueProcessor:
                 return True, None
             else:
                 error_msg = result.get('error', 'Unknown error')
-                self.logger.error(f"Failed to send message to {contact.phone}: {error_msg}")
+                self.logger.error(f"Failed to send message to {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {error_msg}")
                 return False, error_msg
 
         except Exception as e:
-            error_msg = f"Exception while sending file message to {contact.phone}: {str(e)}"
+            error_msg = f"Exception while sending file message to {getattr(contact, 'customer_phone', getattr(contact, 'phone', 'unknown'))}: {str(e)}"
             self.logger.error(error_msg)
             return False, error_msg
 
@@ -357,7 +373,7 @@ class QueueProcessor:
         """Process a single queue item asynchronously with enhanced error handling"""
         try:
             from messageShooter.resolvers.get_counter import get_counter_whatsapp
-            from messageShooter.resolvers.get_message import get_message
+            from messageShooter.resolvers.get_message import get_message, get_message_for_interval
             
             # Get related objects using sync_to_async
             @sync_to_async
@@ -379,23 +395,19 @@ class QueueProcessor:
             # Process contacts sequentially with breath time
             for idx, contact in enumerate(contacts, 1):
                 try:
-                    self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
+                    # Safely get phone number based on contact type
+                    phone = getattr(contact, 'customer_phone', getattr(contact, 'phone', None))
+                    if not phone:
+                        raise ValueError("Contact has no valid phone number")
+
+                    self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({phone})")
                     
-                    # Get counter and message for this contact
-                    @sync_to_async
-                    def get_message_for_contact():
-                        counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
-                        # Map contact_tag to relationship_tag for get_message
-                        message = get_message(
-                            contact_type=target_list.contact_type,
-                            relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
-                            counter=counter
-                        )
-                        return counter, message
+                    # Use the queue's message directly
+                    message = queue_item.message
+                    counter = 0  # Not needed since we're using the queue's message
                     
-                    counter, message = await get_message_for_contact()
                     if not message:
-                        self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
+                        self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({phone}) - no message found")
                         processed_contacts[str(contact.id)] = {
                             "status": "skipped",
                             "processed_at": timezone.now().isoformat(),
@@ -404,9 +416,9 @@ class QueueProcessor:
                         continue
                     
                     # Apply rate limiting per phone
-                    phone_key = f"phone_lock_{contact.phone}"
+                    phone_key = f"phone_lock_{phone}"
                     if phone_key in self._locks:
-                        self.logger.info(f"⏳ Waiting for rate limit on phone {contact.phone}...")
+                        self.logger.info(f"⏳ Waiting for rate limit on phone {phone}...")
                         await self._locks[phone_key].acquire()
                     else:
                         self._locks[phone_key] = asyncio.Lock()
@@ -436,10 +448,10 @@ class QueueProcessor:
                     processed_contacts[str(contact.id)] = result
                     
                     if success:
-                        self.logger.info(f"✅ Queue {queue_item.id}: Successfully sent message {counter} to contact {idx}/{total_contacts} ({contact.phone})")
+                        self.logger.info(f"✅ Queue {queue_item.id}: Successfully sent message {counter} to contact {idx}/{total_contacts} ({phone})")
                         success_count += 1
                     else:
-                        self.logger.error(f"❌ Queue {queue_item.id}: Failed to send to contact {idx}/{total_contacts} ({contact.phone}): {error_message}")
+                        self.logger.error(f"❌ Queue {queue_item.id}: Failed to send to contact {idx}/{total_contacts} ({phone}): {error_message}")
                         error_count += 1
 
                 except Exception as e:
@@ -535,14 +547,24 @@ class QueueProcessor:
     @staticmethod
     def _log_message(contact, message, userphone, target_list=None) -> None:
         """Log a successful message send"""
-        MessageLogs.objects.create(
-            user=userphone.user,
-            user_phone=userphone,
-            contact=contact,
-            message=message,
-            status="sent",
-            relationship_tag=target_list.contact_tag if target_list else contact.relationship_tag  # Use contact_tag here
-        )
+        # Check if this is an appointment
+        if hasattr(contact, 'customer_phone'):
+            AppointmentMessageLogs.objects.create(
+                user=userphone.user,
+                user_phone=userphone,
+                appointment=contact,  # contact is actually an Appointment instance
+                message=message,
+                status="sent"
+            )
+        else:
+            MessageLogs.objects.create(
+                user=userphone.user,
+                user_phone=userphone,
+                contact=contact,
+                message=message,
+                status="sent",
+                relationship_tag=target_list.contact_tag if target_list else contact.relationship_tag
+            )
     
     # Keep existing sync methods for backward compatibility
     def process_queue(self, batch_size=50):
