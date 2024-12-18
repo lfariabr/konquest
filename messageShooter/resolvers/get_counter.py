@@ -105,62 +105,45 @@ def bulk_get_counter_appointment(phones, relationship_tag=None):
         phones: List of phone numbers
         relationship_tag: Tag determining counter logic
     Returns:
-        Dict mapping phone numbers to their counters based on appointment status
+        Dict mapping phone numbers to their counters based on message history
     """
-    from apiCrm.models.appointment import Appointment
-    from django.utils import timezone
-    from datetime import timedelta
+    from core.models.messagelog import MessageLogs
+    from django.db.models import Count
+    import logging
+    logger = logging.getLogger(__name__)
     
-    now = timezone.now()
-    counters = {}
+    logger.info(f"Fetching appointment counters for {len(phones)} phones with tag {relationship_tag}")
+    logger.info(f"Sample phones: {phones[:5]}")
     
-    if relationship_tag == "NPS":
-        # For NPS, counter is always 7 (days since appointment)
-        return {phone: 7 for phone in phones}
+    # Get counts for all phones in a single query
+    counters = MessageLogs.objects.filter(
+        contact__phone__in=phones,
+        relationship_tag=relationship_tag,
+        status__in=['sent']
+    ).values('contact__phone').annotate(
+        counter=Count('id')
+    )
     
-    elif relationship_tag == "Reminder":
-        # Get all scheduled appointments for these phones
-        appointments = Appointment.objects.filter(
-            customer_phone__in=phones,
-            status="Scheduled",
-            appointment_date__gte=now
-        ).values('customer_phone', 'appointment_date')
-        
-        # Calculate days until appointment for each phone
-        for phone in phones:
-            apt = next((
-                a for a in appointments 
-                if a['customer_phone'] == phone
-            ), None)
-            
-            if apt:
-                days_until = (apt['appointment_date'].date() - now.date()).days
-                counters[phone] = min(days_until, 7)  # Cap at 7 days
-            else:
-                counters[phone] = 0
-                
-    elif relationship_tag == "Reschedule":
-        # Get reschedule counts for all phones
-        from core.models.messagelog import MessageLogs
-        reschedule_counts = MessageLogs.objects.filter(
-            contact__phone__in=phones,
-            message__relationship_tag="Reschedule",
-            status__in=['sent']
-        ).values('contact__phone').annotate(
-            counter=Count('id')
+    # Log the raw SQL query
+    logger.info(f"SQL Query: {str(counters.query)}")
+    
+    # Log the results
+    counter_list = list(counters)
+    logger.info(f"Found {len(counter_list)} phones with messages")
+    if counter_list:
+        logger.info(f"Sample results: {counter_list[:5]}")
+    
+    # Convert to phone -> counter dict, defaulting to 0 for phones without messages
+    result = {
+        phone: next(
+            (c['counter'] for c in counter_list if c['contact__phone'] == phone),
+            0
         )
-        
-        # Map counts to phones
-        counters = {
-            phone: next(
-                (c['counter'] for c in reschedule_counts if c['contact__phone'] == phone),
-                0
-            )
-            for phone in phones
-        }
-        
-    elif relationship_tag == "Google My Business":
-        # For Google My Business reviews, counter is always 0
-        return {phone: 0 for phone in phones}
+        for phone in phones
+    }
     
-    return counters
+    # Log some sample results
+    sample_results = {k: v for k, v in list(result.items())[:5]}
+    logger.info(f"Sample final results: {sample_results}")
+    
+    return result

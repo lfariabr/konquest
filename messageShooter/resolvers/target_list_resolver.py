@@ -1,4 +1,5 @@
 from django.utils import timezone
+from apiCrm.models.appointment import Appointment
 from messageShooter.models.campaign import Campaign, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
@@ -56,11 +57,22 @@ def create_target_list(campaign_id, force_run=False):
                 logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
                 return 0, 0, 0
 
-        # Get all contacts # Isn't it better to get_contact_appointment without passing "contact_tag" ?!?!
+        # Get all contacts
         contacts = (get_contact_whatsapp if campaign.contact_type == "Whatsapp" else get_contact_appointment)(
             contact_type=campaign.contact_type,
             contact_tag=campaign.contact_tag
         )
+        
+        # Testing
+        logger.info(f"Raw contacts received: {contacts}")
+        logger.info(f"Type of contacts: {type(contacts)}")
+        if contacts and len(contacts) > 0:
+            logger.info(f"First contact type: {type(contacts[0])}")
+            # logger.info(f"First contact dir: {dir(contacts[0])}")
+        
+        if not contacts:
+            logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
+            return created_count, skipped_count, error_count
         
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
@@ -69,10 +81,12 @@ def create_target_list(campaign_id, force_run=False):
         logger.info(f"Found {len(contacts)} contacts with tag '{campaign.contact_tag}'")
         
         # Pre-load counters for all contacts
-        phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
         if campaign.contact_type == "Whatsapp":
+            phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
             counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
+            
         else:
+            phones = [apt.customer_phone for apt in contacts if apt.customer_phone and apt.customer_phone.isdigit()]
             counters = bulk_get_counter_appointment(phones, campaign.contact_tag)
             
         # Pre-load all possible messages
@@ -94,6 +108,8 @@ def create_target_list(campaign_id, force_run=False):
             ).values_list('contact_id', 'message__counter')
         )
         
+        logger.info(f"Existing target lists structure: {existing_target_lists}")
+        
         # Prepare bulk create list
         target_lists_to_create = []
         messages_to_update = set()
@@ -101,16 +117,35 @@ def create_target_list(campaign_id, force_run=False):
         # Process contacts
         for contact in contacts:
             try:
-                if not contact.phone or not contact.phone.isdigit():
-                    logger.debug(f"Invalid phone number for contact {contact.id} - skipping")
+                # # Getting the appropriate phone number based on contact type
+                # phone = contact.phone if campaign.contact_type == "Whatsapp" else contact.customer_phone
+
+                if isinstance(contact, Appointment):
+                    phone = contact.customer_phone
+                    logger.info(f"Appointment id_crm value: {contact.id_crm}")
+                    logger.info(f"Appointment id_crm type: {type(contact.id_crm)}")
+
+                    contact_id = contact.id_crm
+                else:
+                    phone = contact.phone
+                    contact_id = contact.id
+
+                # Skip if phone number is invalid
+                if not phone or not phone.isdigit():                # contact.id changed to contact_id
+                    logger.debug(f"Invalid phone number for contact {contact_id} - skipping")
                     skipped_count += 1
                     continue
 
-                counter = counters.get(contact.phone)
+                counter = counters.get(phone)
                 message = messages.get(counter)
+                logger.info(f"Processing contact {contact_id}:")
+                logger.info(f"- Contact object type: {type(contact)}")
+                logger.info(f"- Contact object attributes: {vars(contact)}")
+                logger.info(f"- Counter value: {counter}")
+                logger.info(f"- Checking tuple: ({contact_id}, {counter})")
                 
                 if not message:
-                    logger.debug(f"No message found for counter {counter} - skipping contact {contact.id}")
+                    logger.debug(f"No message found for counter {counter} - skipping contact {contact_id}")
                     skipped_count += 1
                     continue
                     
@@ -119,12 +154,24 @@ def create_target_list(campaign_id, force_run=False):
                     message.contact_type = campaign.contact_type
                     messages_to_update.add(message)
                     
+                # # Check for existing target list
+                # if (contact_id, counter) in existing_target_lists:
+                #     logger.debug(f"Target list already exists for contact {contact_id} - skipping")
+                #     skipped_count += 1
+                #     continue
                 # Check for existing target list
-                if (contact.id, counter) in existing_target_lists:
-                    logger.debug(f"Target list already exists for contact {contact.id} - skipping")
+                logger.info(f"Contact ID before str conversion: {contact_id}")
+                logger.info(f"Counter value: {counter}")
+                target_list_key = (str(contact_id), counter or 0)
+                logger.info(f"Target list key created: {target_list_key}")
+                logger.info(f"Target list key type: {type(target_list_key)}")
+                logger.info(f"Existing target lists: {existing_target_lists}")
+                
+                if target_list_key in existing_target_lists:
+                    logger.debug(f"Target list already exists for contact {contact_id} - skipping")
                     skipped_count += 1
                     continue
-                
+
                 target_lists_to_create.append(
                     TargetList(
                         campaign=campaign,
@@ -132,8 +179,8 @@ def create_target_list(campaign_id, force_run=False):
                         message=message,
                         contact_tag=campaign.contact_tag,
                         contact_type=campaign.contact_type,
-                        contact_phone=contact.phone,
-                        reference_id=str(contact.id),
+                        contact_phone=phone,
+                        reference_id=str(contact_id),
                         userphone=campaign.userphone,
                         token=campaign.userphone.phone_token,
                         sent_messages_count=counter or 0,
@@ -143,7 +190,7 @@ def create_target_list(campaign_id, force_run=False):
                 created_count += 1
                 
             except Exception as e:
-                logger.error(f"Error processing contact {contact.id}: {str(e)}")
+                logger.error(f"Error processing contact {contact_id} : {str(e)}")
                 error_count += 1
                 continue
         

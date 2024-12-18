@@ -58,12 +58,15 @@ def get_contact_whatsapp(contact_type, contact_tag):
     logger.info(f"Found {count} contacts with tag {contact_tag}")
     return contacts
     
-def get_contact_appointment(relationship_tag: str = None) -> dict:
+def get_contact_appointment(contact_type, contact_tag):
     """
     Get appointments based on specific relationship tag rules
-    - Args: relationship_tag (str, optional): Tag to filter appointments ('Reminder', 'NPS', 'Reschedule')
+    - Args: contact_tag (str, optional): Tag to filter appointments ('Reminder', 'NPS', 'Reschedule')
     - Returns: dict: Filtered appointments matching the specified relationship tag
     """
+    if contact_type != "Appointment":
+        return []
+
     now = timezone.now()
     filtered_appointments = {}
     
@@ -79,7 +82,7 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
     # get_contact_appointment('Reminder')
 
     try:
-        if relationship_tag == 'Reminder':
+        if contact_tag == 'Reminder':
             # Get appointments in the next 5 days
             five_days_future = now + timedelta(days=5)
             thirty_days_past = now - timedelta(days=30)
@@ -109,7 +112,7 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
 
             logger.info(f"Reminder - Found {len(appointments)} appointments between {now} and {five_days_future}")
 
-        elif relationship_tag == 'NPS':
+        elif contact_tag == 'NPS':
             # NPS specific logic
             three_days_past = now - timedelta(days=3)
             five_days_past = now - timedelta(days=5)
@@ -132,7 +135,7 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
 
             logger.info(f"NPS - Found {len(appointments)} appointments between {three_days_past} and {now}")
 
-        elif relationship_tag == 'Reschedule':
+        elif contact_tag == 'Reschedule':
             # Reschedule specific logic
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
@@ -174,18 +177,20 @@ def get_contact_appointment(relationship_tag: str = None) -> dict:
                 'employee_name': appointment.employee_name,
                 'status_label': appointment.status_label,
                 'appointment_date': appointment.appointment_date,
-                'relationship_tag': relationship_tag or 'Default'
+                'contact_tag': contact_tag or 'Default'
             }
 
         logger.info(
-            f"Retrieved {len(filtered_appointments)} appointments for tag '{relationship_tag}'"
+            f"Retrieved {len(filtered_appointments)} appointments for tag '{contact_tag}'"
         )
+        print(appointments)
+    
+        # print(filtered_appointments)
         
     except Exception as e:
-        logger.error(f"Error retrieving appointments for tag '{relationship_tag}': {str(e)}")
+        logger.error(f"Error retrieving appointments for tag '{contact_tag}': {str(e)}")
         raise
-
-    return filtered_appointments
+    return appointments # appointments # filtered_appointments
 
 
 def get_contact_nps():
