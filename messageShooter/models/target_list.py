@@ -29,7 +29,7 @@ class TargetList(models.Model):
     ]
 
     # Contact information
-    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=False)
+    contact = models.ForeignKey('core.Contact', on_delete=models.CASCADE, null=True, blank=True)  # Make nullable and blank-able
     contact_phone = models.CharField(max_length=20, null=False, blank=False)
     contact_type = models.CharField(
         max_length=100,
@@ -77,16 +77,21 @@ class TargetList(models.Model):
 
     def get_contacts(self):
         """
-        Get contacts associated with this target list.
-        Returns the contact that's already associated with this target list.
+        Get contacts associated with this target list using the appropriate resolver
+        based on contact_type.
         """
-        return [self.contact] if self.contact else []
+        from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+
+        if self.contact_type == 'Whatsapp':
+            return get_contact_whatsapp(self.contact_type, self.contact_tag)
+        elif self.contact_type == 'Appointment':
+            return get_contact_appointment(self.contact_type, self.contact_tag)
+        return []
 
     class Meta:
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering
         indexes = [
             models.Index(fields=['contact_type', 'contact_tag']),
-            models.Index(fields=['status', 'priority', 'sequence_order']),
         ]
         
 
