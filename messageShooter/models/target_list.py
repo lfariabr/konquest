@@ -77,16 +77,10 @@ class TargetList(models.Model):
 
     def get_contacts(self):
         """
-        Get contacts associated with this target list using the appropriate resolver
-        based on contact_type.
+        Get contacts associated with this target list.
+        Returns the contact that's already associated with this target list.
         """
-        from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
-
-        if self.contact_type == 'Whatsapp':
-            return get_contact_whatsapp(self.contact_type, self.contact_tag)
-        elif self.contact_type == 'Appointment':
-            return get_contact_appointment(self.contact_type, self.contact_tag)
-        return []
+        return [self.contact] if self.contact else []
 
     class Meta:
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering

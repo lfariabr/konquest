@@ -14,10 +14,8 @@ def get_userphone(contact_tag):
             userphone = UserPhone.objects.filter(relationship_tag="Preenchimento").first()
         elif contact_tag == "Botox":
             userphone = UserPhone.objects.filter(relationship_tag="Botox").first()
-        elif contact_tag == "NPS":
-            userphone = UserPhone.objects.filter(relationship_tag="NPS").first()
-        elif contact_tag == "Google My Business":
-            userphone = UserPhone.objects.filter(relationship_tag="Google My Business").first()
+        elif contact_tag == 'Reminder':
+            userphone = UserPhone.objects.filter(relationship_tag="Reminder").first()
         else:
             userphone = None
 

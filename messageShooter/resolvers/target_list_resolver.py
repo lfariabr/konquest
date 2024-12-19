@@ -58,12 +58,11 @@ def create_target_list(campaign_id, force_run=False):
                 return 0, 0, 0
 
         # Get all contacts
-        contacts = (get_contact_whatsapp if campaign.contact_type == "Whatsapp" else get_contact_appointment)(
-            contact_type=campaign.contact_type,
-            contact_tag=campaign.contact_tag
-        )
-        
-        # Testing
+        if campaign.contact_type == "Whatsapp":
+            contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
+        else:
+            contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag, user=campaign.user)
+            
         logger.info(f"Raw contacts received: {contacts}")
         logger.info(f"Type of contacts: {type(contacts)}")
         if contacts and len(contacts) > 0:
@@ -81,12 +80,10 @@ def create_target_list(campaign_id, force_run=False):
         logger.info(f"Found {len(contacts)} contacts with tag '{campaign.contact_tag}'")
         
         # Pre-load counters for all contacts
+        phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
         if campaign.contact_type == "Whatsapp":
-            phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
             counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
-            
         else:
-            phones = [apt.customer_phone for apt in contacts if apt.customer_phone and apt.customer_phone.isdigit()]
             counters = bulk_get_counter_appointment(phones, campaign.contact_tag)
             
         # Pre-load all possible messages
@@ -117,17 +114,11 @@ def create_target_list(campaign_id, force_run=False):
         # Process contacts
         for contact in contacts:
             try:
-                # # Getting the appropriate phone number based on contact type
-                # phone = contact.phone if campaign.contact_type == "Whatsapp" else contact.customer_phone
+                phone = contact.phone
 
                 if isinstance(contact, Appointment):
-                    phone = contact.customer_phone
-                    logger.info(f"Appointment id_crm value: {contact.id_crm}")
-                    logger.info(f"Appointment id_crm type: {type(contact.id_crm)}")
-
                     contact_id = contact.id_crm
                 else:
-                    phone = contact.phone
                     contact_id = contact.id
 
                 # Skip if phone number is invalid
@@ -154,11 +145,6 @@ def create_target_list(campaign_id, force_run=False):
                     message.contact_type = campaign.contact_type
                     messages_to_update.add(message)
                     
-                # # Check for existing target list
-                # if (contact_id, counter) in existing_target_lists:
-                #     logger.debug(f"Target list already exists for contact {contact_id} - skipping")
-                #     skipped_count += 1
-                #     continue
                 # Check for existing target list
                 logger.info(f"Contact ID before str conversion: {contact_id}")
                 logger.info(f"Counter value: {counter}")
