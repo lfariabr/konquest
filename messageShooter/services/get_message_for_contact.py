@@ -1,0 +1,70 @@
+import logging
+from typing import Tuple, Optional
+from core.models.message import Message
+from core.models.contact import Contact
+from messageShooter.models.target_list import TargetList
+from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
+from messageShooter.resolvers.get_message import get_message, get_message_for_interval, customize_message_text
+from messageShooter.resolvers.get_days_interval import calculate_interval
+
+logger = logging.getLogger(__name__)
+
+async def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[int, Optional[Message]]:
+    """
+    Get appropriate message for a contact based on contact type and target list
+    
+    Args:
+        contact: Contact object to get message for
+        target_list: TargetList object containing message parameters
+        
+    Returns:
+        Tuple of (counter, message)
+        counter: Current message counter for this contact
+        message: Message object or None if no appropriate message found
+    """
+    try:
+        logger.info(f"Getting message for contact {contact.id} (phone: {contact.phone})")
+        
+        if target_list.contact_type == "Appointment":
+            counter = get_counter_appointment(contact.phone, target_list.contact_tag) # PROBLEM HERE...
+            logger.info(f"📅 Processing appointment message for contact {contact.phone}")
+            
+            # Get appointment-specific data
+            days_interval = calculate_interval(contact.appointment_date) if contact.appointment_date else None
+            logger.info(f"Days until appointment: {days_interval}")
+            
+            # message = get_message(
+                    #         contact_type=target_list.contact_type,
+                    #         relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
+                    #         counter=counter
+                    #     )
+                # Failed: get_message_for_contact() missing 2 required positional arguments: 'contact' and 'target_list'
+            message = get_message_for_interval(
+                contact_type=target_list.contact_type,
+                relationship_tag=target_list.contact_tag, # USED HERE
+                counter=counter,
+                days_interval=days_interval,
+                appointment_status_label=contact.appointment_status
+            )
+        else:
+            counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
+            logger.info(f"💬 Processing WhatsApp message for contact {contact.phone}")
+            
+            message = get_message(
+                contact_type=target_list.contact_type,
+                relationship_tag=target_list.contact_tag,
+                counter=counter
+            )
+            
+        # Customize message with contact variables
+        if message:
+            message.text = customize_message_text(message.text, contact.message_variables)
+            logger.debug(f"✏️ Customized message for {contact.phone}: {message.text[:50]}...")
+        else:
+            logger.warning(f"❌ No message found for contact {contact.phone}")
+            
+        return counter, message
+        
+    except Exception as e:
+        logger.error(f"❌ Error getting message for contact {contact.phone}: {str(e)}", exc_info=True)
+        return 0, None

@@ -75,9 +75,10 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 [2024-12-14 07:17:22] INFO core.admin Progress: 10.0% - Found 6 leads - Elapsed: 41.6s
 - apiCrm optimization to check if lead or appointment exists (only pytest left)
 - update images and videos + last trial
+- feature/appointment-implementation
 
 # In progress
-- feature/appointment-implementation
+- cuistom messages @messageShooter/resolvers/get_message
 
 ## Backlog:
 - feature worker to clean data from apiCrm daily at midnight:00 BRT

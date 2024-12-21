@@ -81,11 +81,22 @@ class TargetList(models.Model):
         based on contact_type.
         """
         from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+        import logging
+        
+        logger = logging.getLogger(__name__)
 
         if self.contact_type == 'Whatsapp':
             return get_contact_whatsapp(self.contact_type, self.contact_tag)
         elif self.contact_type == 'Appointment':
-            return get_contact_appointment(self.contact_type, self.contact_tag)
+            # Get user from userphone
+            user = None
+            if self.userphone and self.userphone.user:
+                user = self.userphone.user
+                logger.info(f"Getting appointments for user {user.email}")
+                return get_contact_appointment(self.contact_type, self.contact_tag, user=user)
+            else:
+                logger.error(f"Missing user for appointment processing in target list {self.id}")
+                return []
         return []
 
     class Meta:

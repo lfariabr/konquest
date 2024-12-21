@@ -207,5 +207,54 @@ class Contact(models.Model):
         self.store_appointment = None
         self.save()
 
+    @property
+    def message_variables(self) -> dict:
+        """
+        Get message variables available for contact
+        Returns:
+            dict: Dictionary of message variables and their values
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        variables = {
+            "[nome]": self.name.split()[0].capitalize() if self.name else "",
+            "[unidade]": self.store.capitalize() if self.store else "",
+        }
+        
+        logger.info(f"Basic variables for contact {self.id}: {variables}")
+        
+        # Add appointment-specific variables if this is an appointment contact
+        if self.is_appointment and self.appointment_id:
+            logger.info(f"Contact {self.id} is an appointment with id {self.appointment_id}")
+            from messageShooter.models.appointment import Appointment
+            try:
+                # Get appointment data
+                appointment = Appointment.objects.filter(id_crm=self.appointment_id).first()
+                if appointment:
+                    logger.info(f"Found appointment: {appointment.id_crm} for contact {self.id}")
+                    # Format date/time
+                    if appointment.appointment_date:
+                        variables.update({
+                            "[data]": appointment.appointment_date.strftime('%d/%m/%Y'),
+                            "[hora]": appointment.appointment_date.strftime('%H:%M'),
+                        })
+                    # Add address if available
+                    if hasattr(appointment, 'address'):
+                        variables["[address]"] = appointment.address
+                        
+                    # Add provider if available
+                    if hasattr(appointment, 'employee_name'):
+                        variables["[prestador]"] = appointment.employee_name.split()[0].capitalize()
+                    
+                    logger.info(f"Final variables for contact {self.id}: {variables}")
+                else:
+                    logger.error(f"No appointment found with id {self.appointment_id}")
+                        
+            except Exception as e:
+                logger.error(f"Error getting appointment data for contact {self.id}: {str(e)}", exc_info=True)
+                
+        return variables
+
     class Meta:
         indexes = [models.Index(fields=['id'])]

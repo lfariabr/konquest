@@ -4,8 +4,37 @@
 from core.models.message import Message
 from django.core.exceptions import ObjectDoesNotExist
 from messageShooter.resolvers.get_days_interval import calculate_interval
+import logging
 
 def get_message(contact_type, relationship_tag=None, counter=0):
+    """
+    Get message based on contact type, relationship tag, and counter
+    """
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Getting message for type={contact_type}, tag={relationship_tag}, counter={counter}")
+    
+    # Get base message by tag and counter
+    message = Message.objects.filter(
+        relationship_tag=relationship_tag,  # This matches the database field name
+        counter=counter
+    ).first()
+    
+    if not message:
+        logger.info(f"No message found for counter={counter}, falling back to counter=0")
+        message = Message.objects.filter(
+            relationship_tag=relationship_tag,  # This matches the database field name
+            counter=0
+        ).first()
+    
+    if message:
+        logger.info(f"Found message id={message.id} for {relationship_tag}")
+    else:
+        logger.warning(f"No message found for {relationship_tag} (counter={counter})")  
+        
+    return message
+
+def get_message_original(contact_type, relationship_tag=None, counter=0):
     """
     Get appropriate message based on:
     - Contact type (WhatsApp/Appointment)
@@ -31,51 +60,23 @@ def get_message(contact_type, relationship_tag=None, counter=0):
     
     return message
 
-def customize_message_text(message_text, appointment_data):
+def customize_message_text(message_text, variables):
     """
-    Customize message text based on appointment data
-    Args: {
+    Customize message text by replacing variables
+    Args:
         message_text: original text with placeholders
-        Appointment_data: dictionary containing appointment details
-    }
-    Returns: Customized message text
+        variables: dictionary containing replacement values
+    Returns:
+        Customized message text
     """
-
-    if not message_text or not appointment_data:
+    if not message_text or not variables:
         return message_text
-
-    # Get values from appointment data:
-    store_name = appointment_data.get('store_name', "").capitalize()
-    customer_name = appointment_data.get('customer_name', "").split()[0].capitalize()
-    employee_name = appointment_data.get('employee_name', "").split()[0].capitalize()
-    address = appointment_data.get('address', "")
-    # Format appointment time
-    appointment_time = appointment_data.get("appointment_date")
-    if isinstance(appointment_time, timezone.datetime):
-        date_str = appointment_time.strftime('%d/%m/%Y')
-        time_str = appointment_time.strftime('%H:%M')
-    else:
-        try:
-            appointment_time = timezone.datetime.strptime(str(appointment_time), '%Y-%m-%d %H:%M:%S')
-            date_str = appointment_time.strftime('%d/%m/%Y')
-            time_str = appointment_time.strftime('%H:%M')
-        except:
-            date_str = ""
-            time_str = ""
     
-    # Replace placeholders
-    replacements = {
-        "[nome]": customer_name,
-        "[prestador]": employee_name,
-        "[data]": date_str,
-        "[hora]": time_str,
-        "[unidade]": store_name,
-        "[address]": address
-    }
-    
-    for placeholder, value in replacements.items():
-        message_text = message_text.replace(placeholder, value)
-    
+    # Replace variables that exist in the dict
+    for placeholder, value in variables.items():
+        if value:  # Only replace if we have a value
+            message_text = message_text.replace(placeholder, str(value))
+            
     return message_text
 
 def get_message_for_interval(contact_type, 
@@ -96,44 +97,40 @@ def get_message_for_interval(contact_type,
     Returns:
         Message object or None if no matching message found
     """
-    if contact_type != "Appointment" or days_interval is None:
-        return get_message(contact_type, relationship_tag, counter)
+    logger = logging.getLogger(__name__)
+    logger.info(f"Getting appointment message: status={appointment_status_label}, days_interval={days_interval}")
     
     # For appointments, use days_interval and status to select message
     message = None
     
-    if appointment_status_label == "Agendado" and days_interval == 0:
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,
-            counter=days_interval
-        ).first()
-    
-    elif appointment_status_label == "Agendado" and days_interval == 1:
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,
-            counter=days_interval
-        ).first()
-    
-    elif appointment_status_label == "Agendado" and days_interval == 2:
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,
-            counter=days_interval
-        ).first()
-    
+    if days_interval is None:
+        logger.warning("days_interval is None, cannot get appointment message")
+        return None
+        
+    if appointment_status_label == "Agendado":
+        if days_interval in [0, 1, 2]:  # Common cases
+            message = Message.objects.filter(
+                relationship_tag=relationship_tag,
+                counter=days_interval
+            ).first()
+            
     elif appointment_status_label == "Confirmado" and days_interval == 0:
         message = Message.objects.filter(
             relationship_tag=relationship_tag,
             counter=days_interval
         ).first()
-    
-    elif appointment_status_label == "Confirmado" and days_interval == 1:
+        
+    if not message:
+        logger.info(f"No specific message found for status={appointment_status_label}, days={days_interval}")
+        # Try to get a default message for this status
         message = Message.objects.filter(
             relationship_tag=relationship_tag,
-            counter=days_interval
+            counter=0
         ).first()
-    
-    # If message found and appointment data provided, customize message text
-    if message and appointment_data:
-        message.text = customize_message_text(message.text, appointment_data)
-    
+        
+    if message:
+        logger.info(f"Found appointment message id={message.id}")
+    else:
+        logger.warning(f"No message found for appointment: status={appointment_status_label}, days={days_interval}")
+        
     return message

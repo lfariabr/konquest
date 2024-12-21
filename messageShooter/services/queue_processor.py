@@ -16,6 +16,7 @@ from typing import List, Tuple, Dict, Any
 from apiCrm.models.lead import Lead
 from apiCrm.utils.create_store import create_store
 from apiCrm.utils.create_region import create_region
+from messageShooter.services.get_message_for_contact import get_message_for_contact
 
 logger = logging.getLogger(__name__)
 
@@ -381,19 +382,21 @@ class QueueProcessor:
                 try:
                     self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
                     
-                    # Get counter and message for this contact
-                    @sync_to_async
-                    def get_message_for_contact():
-                        counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
-                        # Map contact_tag to relationship_tag for get_message
-                        message = get_message(
-                            contact_type=target_list.contact_type,
-                            relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
-                            counter=counter
-                        )
-                        return counter, message
+                    #TODO FINISH THIS PART
                     
-                    counter, message = await get_message_for_contact()
+                    # Get counter and message for this contact
+                    # @sync_to_async
+                    # def get_message_for_contact():
+                    #     counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
+                    #     # Map contact_tag to relationship_tag for get_message
+                    #     message = get_message(
+                    #         contact_type=target_list.contact_type,
+                    #         relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
+                    #         counter=counter
+                    #     )
+                    #     return counter, message
+                    
+                    counter, message = await get_message_for_contact(contact, target_list)
                     if not message:
                         self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
                         processed_contacts[str(contact.id)] = {

@@ -66,7 +66,13 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         user: User instance to associate with created contacts
     - Returns: List of Contact instances derived from appointments
     """
+    logger = logging.getLogger(__name__)
+
     if contact_type != "Appointment":
+        return []
+
+    if not user:
+        logger.error("No user provided for appointment processing")
         return []
 
     now = timezone.now()

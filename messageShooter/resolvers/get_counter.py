@@ -92,7 +92,7 @@ def get_counter_appointment(phone, relationship_tag=None):
     # Filter by phone and tag, only count sent messages
     logs = MessageLogs.objects.filter(
         contact__phone=phone,
-        relationship_tag=contact_tag,  # Use relationship_tag here since that's the database field
+        relationship_tag=contact_tag,  # USED HERE... # Use relationship_tag here since that's the database field
         status__in=['sent']
     )
     return logs.count()
