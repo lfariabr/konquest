@@ -382,21 +382,11 @@ class QueueProcessor:
                 try:
                     self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
                     
-                    #TODO FINISH THIS PART
+                    @sync_to_async
+                    def get_message_for_contact_wrapper():
+                        return get_message_for_contact(contact, target_list)
+                    counter, message = await get_message_for_contact_wrapper()
                     
-                    # Get counter and message for this contact
-                    # @sync_to_async
-                    # def get_message_for_contact():
-                    #     counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
-                    #     # Map contact_tag to relationship_tag for get_message
-                    #     message = get_message(
-                    #         contact_type=target_list.contact_type,
-                    #         relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
-                    #         counter=counter
-                    #     )
-                    #     return counter, message
-                    
-                    counter, message = await get_message_for_contact(contact, target_list)
                     if not message:
                         self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
                         processed_contacts[str(contact.id)] = {

@@ -227,7 +227,7 @@ class Contact(models.Model):
         # Add appointment-specific variables if this is an appointment contact
         if self.is_appointment and self.appointment_id:
             logger.info(f"Contact {self.id} is an appointment with id {self.appointment_id}")
-            from messageShooter.models.appointment import Appointment
+            from apiCrm.models.appointment import Appointment
             try:
                 # Get appointment data
                 appointment = Appointment.objects.filter(id_crm=self.appointment_id).first()

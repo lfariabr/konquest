@@ -9,7 +9,7 @@ from messageShooter.resolvers.get_days_interval import calculate_interval
 
 logger = logging.getLogger(__name__)
 
-async def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[int, Optional[Message]]:
+def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[int, Optional[Message]]:
     """
     Get appropriate message for a contact based on contact type and target list
     
@@ -26,25 +26,20 @@ async def get_message_for_contact(contact: Contact, target_list: TargetList) -> 
         logger.info(f"Getting message for contact {contact.id} (phone: {contact.phone})")
         
         if target_list.contact_type == "Appointment":
-            counter = get_counter_appointment(contact.phone, target_list.contact_tag) # PROBLEM HERE...
+            counter = get_counter_appointment(contact.phone, target_list.contact_tag)
             logger.info(f"📅 Processing appointment message for contact {contact.phone}")
             
             # Get appointment-specific data
-            days_interval = calculate_interval(contact.appointment_date) if contact.appointment_date else None
+            days_interval = calculate_interval(contact.appointment_created_at) if contact.appointment_created_at else None
             logger.info(f"Days until appointment: {days_interval}")
-            
-            # message = get_message(
-                    #         contact_type=target_list.contact_type,
-                    #         relationship_tag=target_list.contact_tag,  # Use contact_tag but map it to relationship_tag parameter
-                    #         counter=counter
-                    #     )
-                # Failed: get_message_for_contact() missing 2 required positional arguments: 'contact' and 'target_list'
+            logger.info(f"Appointment Date: {contact.appointment_created_at}")
+     
             message = get_message_for_interval(
                 contact_type=target_list.contact_type,
-                relationship_tag=target_list.contact_tag, # USED HERE
+                relationship_tag=target_list.contact_tag,
                 counter=counter,
-                days_interval=days_interval,
-                appointment_status_label=contact.appointment_status
+                days_interval=days_interval, # New
+                appointment_status_label=contact.appointment_status # New
             )
         else:
             counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)

@@ -4,6 +4,7 @@ import logging
 from django.utils import timezone
 from django.core.cache import cache
 import json
+from messageShooter.resolvers.get_counter import get_counter_appointment
 
 logger = logging.getLogger(__name__)
 
@@ -64,11 +65,17 @@ class TargetListAdmin(admin.ModelAdmin):
         try:
             if not obj.contact:
                 return 0
-                
-            if obj.contact_tag.lower() == 'botox':
-                return obj.contact.botox_messages_sent
-            elif obj.contact_tag.lower() == 'preenchimento':
-                return obj.contact.preenchimento_messages_sent
+            
+            if obj.contact_type == 'Whatsapp':
+                # For WhatsApp, use special counters for botox/preenchimento
+                if obj.contact_tag.lower() == 'botox':
+                    return obj.contact.botox_messages_sent
+                elif obj.contact_tag.lower() == 'preenchimento':
+                    return obj.contact.preenchimento_messages_sent
+            if obj.contact_type == 'Appointment':
+                from messageShooter.resolvers.get_days_interval import calculate_interval
+                if obj.contact.appointment_created_at:
+                    return calculate_interval(obj.contact.appointment_created_at)
             
             return 0
         except Exception as e:

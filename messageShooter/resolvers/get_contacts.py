@@ -229,6 +229,7 @@ def _convert_appointment_to_contact(appointment, contact_tag, user=None):
             appointment_id=appointment.id_crm,  # Store the original appointment ID
             store=appointment.store_name,  # Store additional appointment data
             appointment_status=appointment.status_label,
+            appointment_created_at=appointment.appointment_date,
             user=user  # Set the user
         )
     

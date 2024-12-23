@@ -169,7 +169,7 @@ def create_target_list(campaign_id, force_run=False):
                         reference_id=str(contact_id),
                         userphone=campaign.userphone,
                         token=campaign.userphone.phone_token,
-                        sent_messages_count=counter or 0,
+                        sent_messages_count=counter,
                         status='pending'
                     )
                 )

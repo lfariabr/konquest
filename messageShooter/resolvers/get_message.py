@@ -9,6 +9,9 @@ import logging
 def get_message(contact_type, relationship_tag=None, counter=0):
     """
     Get message based on contact type, relationship tag, and counter
+    - Contact type (WhatsApp/Appointment)
+    - Relationship tag (Preenchimento/Botox/NPS/etc.)
+    - Counter (sequence number or days)
     """
     logger = logging.getLogger(__name__)
     
@@ -21,11 +24,7 @@ def get_message(contact_type, relationship_tag=None, counter=0):
     ).first()
     
     if not message:
-        logger.info(f"No message found for counter={counter}, falling back to counter=0")
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,  # This matches the database field name
-            counter=0
-        ).first()
+        logger.info(f"No message found for counter={counter}")
     
     if message:
         logger.info(f"Found message id={message.id} for {relationship_tag}")
@@ -87,42 +86,43 @@ def get_message_for_interval(contact_type,
                             appointment_data=None):
     """
     Get message based on days until appointment and appointment status
-    Args:
-        contact_type: Type of contact (WhatsApp/Appointment)
-        relationship_tag: Tag determining message type
-        counter: Message counter (used for non-appointment messages)
-        days_interval: Days until appointment (positive if appointment is in future)
-        appointment_status_label: Status of the appointment (e.g., "Agendado", "Confirmado")
-        appointment_data: Dict with appointment details for message customization
-    Returns:
-        Message object or None if no matching message found
+    Counter encoding:
+    - Agendado: days_interval (0, 1, 2)
+    - Confirmado: days_interval + 100 (e.g., 100 for day 0, 101 for day 1)
+    - Cancelado: days_interval + 200
+    - Default fallback: 0
     """
     logger = logging.getLogger(__name__)
     logger.info(f"Getting appointment message: status={appointment_status_label}, days_interval={days_interval}")
     
-    # For appointments, use days_interval and status to select message
     message = None
     
     if days_interval is None:
         logger.warning("days_interval is None, cannot get appointment message")
         return None
         
-    if appointment_status_label == "Agendado":
-        if days_interval in [0, 1, 2]:  # Common cases
-            message = Message.objects.filter(
-                relationship_tag=relationship_tag,
-                counter=days_interval
-            ).first()
-            
-    elif appointment_status_label == "Confirmado" and days_interval == 0:
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,
-            counter=days_interval
-        ).first()
+    # Encode status into counter
+    if appointment_status_label == "Agendado" and days_interval in [0, 1, 2]:
+        encoded_counter = days_interval  # 0, 1, 2 for Agendado
         
+    elif appointment_status_label == "Confirmado" and days_interval in [0, 1, 2]:
+        encoded_counter = days_interval + 100  # 100, 101, 102 for Confirmado
+        
+    elif appointment_status_label == "Cancelado" and days_interval in [0, 1, 2]:
+        encoded_counter = days_interval + 200  # 200, 201, 202 for Cancelado
+        
+    else:
+        encoded_counter = 0  # Default fallback
+    
+    # Try to get message with encoded counter
+    message = Message.objects.filter(
+        relationship_tag=relationship_tag,
+        counter=encoded_counter
+    ).first()
+    
     if not message:
         logger.info(f"No specific message found for status={appointment_status_label}, days={days_interval}")
-        # Try to get a default message for this status
+        # Try to get a default message (counter=0)
         message = Message.objects.filter(
             relationship_tag=relationship_tag,
             counter=0
