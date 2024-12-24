@@ -3,7 +3,7 @@ from typing import Tuple, Optional
 from core.models.message import Message
 from core.models.contact import Contact
 from messageShooter.models.target_list import TargetList
-from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
+from messageShooter.resolvers.get_counter import get_counter_whatsapp
 from messageShooter.resolvers.get_message import get_message, get_message_for_interval, customize_message_text
 from messageShooter.resolvers.get_days_interval import calculate_interval
 
@@ -26,7 +26,6 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
         logger.info(f"Getting message for contact {contact.id} (phone: {contact.phone})")
         
         if target_list.contact_type == "Appointment":
-            counter = get_counter_appointment(contact.phone, target_list.contact_tag)
             logger.info(f"📅 Processing appointment message for contact {contact.phone}")
             
             # Get appointment-specific data
@@ -37,10 +36,16 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
             message = get_message_for_interval(
                 contact_type=target_list.contact_type,
                 relationship_tag=target_list.contact_tag,
-                counter=counter,
-                days_interval=days_interval, # New
-                appointment_status_label=contact.appointment_status # New
+                counter=0,  # Not used for appointments
+                days_interval=days_interval,
+                appointment_status_label=contact.appointment_status
             )
+            
+            # Customize message with contact variables
+            if message:
+                message.text = customize_message_text(message.text, contact.message_variables)
+                
+            return days_interval, message
         else:
             counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
             logger.info(f"💬 Processing WhatsApp message for contact {contact.phone}")
@@ -51,15 +56,15 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
                 counter=counter
             )
             
-        # Customize message with contact variables
-        if message:
-            message.text = customize_message_text(message.text, contact.message_variables)
-            logger.debug(f"✏️ Customized message for {contact.phone}: {message.text[:50]}...")
-        else:
-            logger.warning(f"❌ No message found for contact {contact.phone}")
+            # Customize message with contact variables
+            if message:
+                message.text = customize_message_text(message.text, contact.message_variables)
+                logger.debug(f"✏️ Customized message for {contact.phone}: {message.text[:50]}...")
+            else:
+                logger.warning(f"❌ No message found for contact {contact.phone}")
+                
+            return counter, message
             
-        return counter, message
-        
     except Exception as e:
         logger.error(f"❌ Error getting message for contact {contact.phone}: {str(e)}", exc_info=True)
         return 0, None

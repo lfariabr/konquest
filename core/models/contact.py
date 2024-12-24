@@ -239,9 +239,11 @@ class Contact(models.Model):
                             "[data]": appointment.appointment_date.strftime('%d/%m/%Y'),
                             "[hora]": appointment.appointment_date.strftime('%H:%M'),
                         })
-                    # Add address if available
-                    if hasattr(appointment, 'address'):
-                        variables["[address]"] = appointment.address
+                    # Add address from store dictionary
+                    from apiCrm.dicts.dict_address import dic_store_address
+                    store_key = self.store.upper() if self.store else None
+                    if store_key and store_key in dic_store_address:
+                        variables["[address]"] = dic_store_address[store_key]
                         
                     # Add provider if available
                     if hasattr(appointment, 'employee_name'):
