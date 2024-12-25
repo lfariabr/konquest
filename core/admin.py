@@ -92,14 +92,41 @@ admin.site.register(MessageLogs, MessageLogsAdmin)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'relationship_tag', 'created_at', 'source',
                     'store', 'region', 'external_tag', 'status', 
+                    # Lead related data
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
-                    'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 'appointment_last_checked', 'appointment_check_count', 'store_appointment')
+
+                    # Appointment related data
+                    'is_appointment', 'appointment_id', 'appointment_status', 'appointment_created_at', 
+                    'appointment_last_checked', 'appointment_check_count', 'store_appointment',
+
+                    # Bill Charge related data
+                    'is_bill_charge', 'bill_charge_id', 'bill_charge_status', 'bill_charge_created_at', 
+                    'bill_charge_last_checked', 'bill_charge_check_count', 'store_bill_charge', 
+                    'formatted_bill_charge_amount', 'formatted_bill_charge_total_history',
+                    )
+
     list_filter = ('source', 'store', 'relationship_tag')
     search_fields = ['phone']
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments', 'check_bill_charges'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
-    list_per_page = 1000 # change this
+    list_per_page = 200
+
+    def formatted_bill_charge_amount(self, obj):
+        if obj.bill_charge_total_amount:
+            bill_charge_total_amount = obj.bill_charge_total_amount / 100
+            return f"R$ {bill_charge_total_amount:,.2f}"
+        return "-"
+    formatted_bill_charge_amount.short_description = "Current Bill Amount"
+    formatted_bill_charge_amount.admin_order_field = 'bill_charge_total_amount'
+
+    def formatted_bill_charge_total_history(self, obj):
+        if obj.bill_charge_total_history:
+            bill_charge_total_history = obj.bill_charge_total_history / 100
+            return f"R$ {bill_charge_total_history:,.2f}"
+        return "-"
+    formatted_bill_charge_total_history.short_description = "Total Bill History"
+    formatted_bill_charge_total_history.admin_order_field = 'bill_charge_total_history'
 
     def check_leads(self, request, queryset):
         """Check selected contacts for leads using batch processing"""
@@ -212,7 +239,22 @@ class ContactAdmin(admin.ModelAdmin):
         )
 
     def check_bill_charges(self, request, queryset):
-        pass
+        """Check bill charge status for selected contacts."""
+        updated = 0
+        found = 0
+
+        for contact in queryset:
+            bill_charge = contact.check_if_bill_charges_exists()
+            updated += 1
+            if bill_charge:
+                found += 1
+
+        self.message_user(
+            request,
+            f"Checked {updated} contacts. Found {found} bill charges.",
+            messages.SUCCESS
+        )
+    check_bill_charges.short_description = "Check bill charges status"
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")

@@ -19,6 +19,9 @@ async def fetch_bill_charges(session, start_date, end_date, token):
                                 name
                                 taxvat
                                 email
+                                telephones {
+                                    number
+                                }
                             }
                             status
                             bill {

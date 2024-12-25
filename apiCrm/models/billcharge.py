@@ -15,6 +15,7 @@ class BillCharge(models.Model):
     payment_method = models.CharField(max_length=50)
     status = models.CharField(max_length=50)
     quote_items = models.TextField()  # Stores items as a semicolon-separated string
+    customer_phone = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f"{self.quote_id} - {self.customer_name}"

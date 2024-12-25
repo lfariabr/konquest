@@ -82,6 +82,9 @@ async def test_fetch_bill_charges(mock_fetch_graphql):
                                 name
                                 taxvat
                                 email
+                                telephones {
+                                    number
+                                }
                             }
                             status
                             bill {

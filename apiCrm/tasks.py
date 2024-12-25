@@ -98,6 +98,7 @@ def check_contacts_in_crm():
         'total_contacts': 0,
         'leads_found': 0,
         'appointments_found': 0,
+        'billcharges_found': 0,
         'errors': 0,
         'start_time': timezone.now()
     }
@@ -124,6 +125,11 @@ def check_contacts_in_crm():
                     if appointment:
                         stats['appointments_found'] += 1
                     
+                    # Check if contact exists as billcharge and update tracking
+                    billcharge = contact.check_if_bill_charges_exists()
+                    if billcharge:
+                        stats['billcharges_found'] += 1
+
             except Exception as e:
                 stats['errors'] += 1
                 logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
@@ -136,7 +142,7 @@ def check_contacts_in_crm():
         logger.info(
             "Contact check completed:\n"
             f"- Processed: {stats['total_contacts']} contacts\n"
-            f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments\n"
+            f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments, {stats['billcharges_found']} billcharges\n"
             f"- Errors: {stats['errors']}\n"
             f"- Duration: {duration:.2f} seconds"
         )

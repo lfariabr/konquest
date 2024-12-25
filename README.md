@@ -58,7 +58,8 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Asynchronous Testing: Handles asynchronous code testing effectively, avoiding common pitfalls like TypeError related to asynchronous context managers.
 
 # Done
-- messageShooter: component that will have business logic to create campaigns, target lists, queue and possibility to schedule messages and send them asynchronously
+- messageShooter: create campaigns, target lists, queue 
+- possibility to schedule messages and send them asynchronously
 - feature/whatsapp-implementation
 - feature mockup setup_test_data to make process easier
 - feature enhancing message shooter speed processing at target list and queue process
@@ -70,19 +71,17 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - first shooting @ 11/december/2024 - 60 contacts
 - fixed sending images and photos on the messages
 - fixed counter (removed lead count from counter log) and timezone at database
-- apiCrm optimization to process data in batches:
-[2024-12-14 07:17:02] INFO core.admin Progress: 5.0% - Found 4 leads - Elapsed: 20.9s
-[2024-12-14 07:17:22] INFO core.admin Progress: 10.0% - Found 6 leads - Elapsed: 41.6s
+- apiCrm optimization to process data in batches
 - apiCrm optimization to check if lead or appointment exists (only pytest left)
-- update images and videos + last trial
+- update images and videos + last trial and commit
 - feature/appointment-implementation
 - custom messages @messageShooter/resolvers/get_message
 - delete data apiCrm
 - feature worker to see if contacts are leads or appointments in worker
 - feature worker to fetch data from apiCrm daily at midnight:15 BRT
+- Check Contact Bill Charges
 
 # In progress
-- Check Contact Bill Charges
 - Run "Reminder" Campaign
 
 ## Backlog:

@@ -1,5 +1,6 @@
 def format_bill_charge_data(raw_bill_charge):
     quote = raw_bill_charge['quote']
+    customer_phone = quote['customer'].get('telephones', [{}])[0].get('number', '') if quote['customer'].get('telephones') else ''
     return {
         'quote_id': quote['id'],
         'customer_id': quote['customer']['id'],
@@ -14,5 +15,6 @@ def format_bill_charge_data(raw_bill_charge):
         'is_paid': raw_bill_charge['isPaid'],
         'payment_method': raw_bill_charge['paymentMethod']['name'],
         'status': quote['status'],
-        'quote_items': "; ".join([f"{item['description']} (Qty: {item['quantity']}, Amount: {item['amount']})" for item in quote['bill']['items']])
+        'quote_items': "; ".join([f"{item['description']} (Qty: {item['quantity']}, Amount: {item['amount']})" for item in quote['bill']['items']]),
+        'customer_phone': customer_phone,  # Add the phone number
     }

@@ -43,7 +43,8 @@ class BillChargeSerializerTest(TestCase):
             'is_paid',
             'payment_method',
             'status',
-            'quote_items'
+            'quote_items',
+            'customer_phone'
         })
 
     def test_field_content(self):

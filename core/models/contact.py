@@ -3,6 +3,7 @@ from core.models.user import kUser
 from django.utils import timezone
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 import logging
 
 logger = logging.getLogger(__name__)
@@ -47,16 +48,16 @@ class Contact(models.Model):
     store_appointment = models.CharField(max_length=100, null=True, blank=True, default=None)
     
     # Bill Charge tracking fields
-    # is_bill_charge = models.BooleanField(default=False)
-    # bill_charge_id = models.CharField(max_length=100, null=True, blank=True)
-    # bill_charge_status = models.CharField(max_length=100, null=True, blank=True)
-    # bill_charge_created_at = models.DateTimeField(null=True, blank=True)
-    # bill_charge_last_checked = models.DateTimeField(null=True, blank=True)
-    # bill_charge_check_count = models.IntegerField(default=0)
-    # store_bill_charge = models.CharField(max_length=100, null=True, blank=True, default=None)
-    # bill_charge_installments = models.IntegerField(null=True, blank=True)
-    # bill_charge_total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    # bill_charge_total_contact_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    is_bill_charge = models.BooleanField(default=False)
+    bill_charge_id = models.CharField(max_length=100, null=True, blank=True)
+    bill_charge_status = models.CharField(max_length=100, null=True, blank=True)
+    bill_charge_created_at = models.DateTimeField(null=True, blank=True)
+    bill_charge_last_checked = models.DateTimeField(null=True, blank=True)
+    bill_charge_check_count = models.IntegerField(default=0)
+    store_bill_charge = models.CharField(max_length=100, null=True, blank=True, default=None)
+    bill_charge_installments = models.IntegerField(null=True, blank=True)
+    bill_charge_total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    bill_charge_total_history = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Total amount of all bill charges for this contact")
 
     def __str__(self):
         lead_info = f" (Lead: {self.lead_status})" if self.is_lead else ""
@@ -221,79 +222,88 @@ class Contact(models.Model):
     
     def check_if_bill_charges_exists(self):
         """
-        Check if this contact exists as a lead in the CRM.
-        Returns the Lead object if found, None otherwise.
-        Updates contact's lead status fields.
+        Check if this contact has any bill charges in the system.
+        Returns the BillCharge object if found, None otherwise.
+        Updates contact's bill charge status fields.
         """
-        logger.info(f"Checking lead status for contact {self.id} ({self.phone})")
+        logger.info(f"Checking bill charges for contact {self.id} ({self.phone})")
         
         # Update check tracking BEFORE checking status
-        self.lead_last_checked = timezone.now()
-        self.lead_check_count += 1
+        self.bill_charge_last_checked = timezone.now()
+        self.bill_charge_check_count += 1
         self.save()
 
         try:
-            # Direct phone number match since phones are already cleaned during import
-            bill_charge = BillCharge.objects.filter(phone=self.phone).first()
+            # Get all bill charges for this contact
+            all_charges = BillCharge.objects.filter(customer_phone=self.phone) # This is a problem, because customer_taxvat is not the phone number of customer...
+            
+            # Calculate total historical amount
+            total_history = sum(charge.total_amount for charge in all_charges)
+            self.bill_charge_total_history = total_history if total_history > 0 else None
+            
+            # Get the most recent bill charge
+            bill_charge = all_charges.order_by('-due_at').first()
             
             if bill_charge:
-                logger.info(f"Found matching lead: {bill_charge.id} for contact {self.id}")
-                self._update_lead_status(bill_charge)
+                logger.info(f"Found matching bill charge: {bill_charge.id} for contact {self.id}")
+                self.update_bill_charge_status(bill_charge)
                 return bill_charge
             
-            logger.info(f"No matching lead found for contact {self.id}")
-            self._clear_lead_status()
+            logger.info(f"No matching bill charge found for contact {self.id}")
+            self.clear_bill_charge_status()
             return None
             
-        except Lead.DoesNotExist:
-            logger.info(f"No lead exists for contact {self.id}")
-            self._clear_lead_status()
-            return None
         except Exception as e:
-            logger.error(f"Error checking lead for contact {self.id}: {str(e)}")
+            logger.error(f"Error checking bill charge for contact {self.id}: {str(e)}")
             return None
 
-    def needs_bill_charge_check(self, hours=24):
-        """
-        Check if this contact needs to be checked for lead status.
-        Returns True if the contact hasn't been checked in the specified hours
-        or has never been checked.
-        """
-        if not self.lead_last_checked:
-            return True
-        
-        time_since_check = timezone.now() - self.lead_last_checked
-        return time_since_check.total_seconds() > hours * 3600
-
-    def get_bill_charge_check_stats(self):
-        """
-        Get statistics about lead checks for this contact.
-        """
-        return {
-            'total_checks': self.lead_check_count,
-            'last_checked': self.lead_last_checked,
-            'is_lead': self.is_lead,
-            'lead_status': self.lead_status,
-            'lead_age': (timezone.now() - self.lead_created_at).days if self.lead_created_at else None
-        }
-
-    def update_bill_charge_status(self, lead):
-        """Update contact's lead status fields based on the found lead."""
-        self.is_lead = True
-        self.lead_id = lead.id_crm
-        self.lead_status = lead.status
-        self.lead_created_at = lead.created_at
-        self.store_lead = lead.store
+    def update_bill_charge_status(self, bill_charge):
+        """Update contact's bill charge status fields based on the found bill charge."""
+        self.is_bill_charge = True
+        self.bill_charge_id = bill_charge.quote_id
+        self.bill_charge_status = bill_charge.status
+        self.bill_charge_created_at = bill_charge.due_at
+        self.store_bill_charge = bill_charge.store_name
+        self.bill_charge_installments = bill_charge.installments
+        self.bill_charge_total_amount = bill_charge.total_amount
         self.save()
 
     def clear_bill_charge_status(self):
-        """Clear lead status fields when no lead is found."""
-        self.is_lead = False
-        self.lead_id = None
-        self.lead_status = None
-        self.lead_created_at = None
-        self.store_lead = None
+        """Clear bill charge status fields when no bill charge is found."""
+        self.is_bill_charge = False
+        self.bill_charge_id = None
+        self.bill_charge_status = None
+        self.bill_charge_created_at = None
+        self.store_bill_charge = None
+        self.bill_charge_installments = None
+        self.bill_charge_total_amount = None
+        self.bill_charge_total_history = None
         self.save()
+
+    def needs_bill_charge_check(self, hours=24):
+        """
+        Check if this contact needs to be checked for bill charge status.
+        Returns True if the contact hasn't been checked in the specified hours
+        or has never been checked.
+        """
+        if not self.bill_charge_last_checked:
+            return True
+            
+        time_since_check = timezone.now() - self.bill_charge_last_checked
+        return time_since_check.total_seconds() > (hours * 3600)
+
+    def get_bill_charge_check_stats(self):
+        """
+        Get statistics about bill charge checks for this contact.
+        """
+        return {
+            'last_checked': self.bill_charge_last_checked,
+            'check_count': self.bill_charge_check_count,
+            'is_bill_charge': self.is_bill_charge,
+            'bill_charge_status': self.bill_charge_status,
+            'bill_charge_created_at': self.bill_charge_created_at,
+            'store_bill_charge': self.store_bill_charge
+        }
 
     @property
     def message_variables(self) -> dict:
