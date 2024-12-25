@@ -83,10 +83,6 @@ class MessageLogsAdmin(admin.ModelAdmin):
 
     get_phone_number.short_description = 'Phone Number'
 
-    # def get_queryset(self, request):
-    #     queryset = super().get_queryset(request)
-    #     return queryset
-    
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.select_related('message', 'user', 'user_phone', 'contact')
@@ -101,7 +97,7 @@ class ContactAdmin(admin.ModelAdmin):
     list_filter = ('source', 'store', 'relationship_tag')
     search_fields = ['phone']
     change_list_template = "admin/contacts_changelist.html"
-    actions = ['check_leads', 'check_appointments'] # send_text_message_action, send_file_message_action
+    actions = ['check_leads', 'check_appointments', 'check_bill_charges'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
     list_per_page = 1000 # change this
 
@@ -214,6 +210,9 @@ class ContactAdmin(admin.ModelAdmin):
             f"Checked {total} contacts in {elapsed:.1f}s. Found {found} appointments.",
             messages.SUCCESS
         )
+
+    def check_bill_charges(self, request, queryset):
+        pass
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")

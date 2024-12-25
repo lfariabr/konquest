@@ -7,6 +7,13 @@ from apiCrm.models.appointment import Appointment
 from apiCrm.models.billcharge import BillCharge
 from core.models.contact import Contact
 from django.utils import timezone
+from datetime import timedelta, datetime
+from django.utils import timezone
+from django.conf import settings
+from decouple import config
+from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, process_appointments_batch, process_bill_charges_batch
+
+token = config('TOKEN')
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +21,8 @@ logger = logging.getLogger(__name__)
     name='apiCrm.cleanup_crm_tables',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
-    retry_backoff=True
+    retry_backoff=True,
+    soft_time_limit=27000 # 450 minutes
 )
 def cleanup_crm_tables():
     """
@@ -74,7 +82,8 @@ def cleanup_crm_tables():
     name='apiCrm.check_contacts_in_crm',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
-    retry_backoff=True
+    retry_backoff=True,
+    soft_time_limit=27000 # 45 minutes
 )
 def check_contacts_in_crm():
     """
@@ -95,7 +104,7 @@ def check_contacts_in_crm():
     
     try:
         # Get most recent contacts
-        contacts = Contact.objects.all().order_by('-id')[:1000]
+        contacts = Contact.objects.all().order_by('-id')[:2000]
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
         
@@ -139,20 +148,44 @@ def check_contacts_in_crm():
         raise
 
 # This task should be triggered right after cleanup_crm_tables
-# @shared_task(
-#     name='apiCrm.fetch_all_data',
-#     autoretry_for=(Exception,),
-#     retry_kwargs={'max_retries': 3},
-#     retry_backoff=True
-# )
-# def fetch_all_data():
-#     start_date = today - timedelta(days=30)
-#     end_date = today
-#     extended_end_date = today + timedelta(days=15)
+from apiCrm.schemas.resolve_all_data import Query
 
-#     try:
-#         all_data = fetch_all_data(start_date, end_date, extended_end_date, token)
-#         return all_data # Check if this is correct, because we're already saving the data directly into the database via this function
-#     except Exception as e:
-#         logger.error(f"Error in fetch_all_data: {e}")
-#         raise
+@shared_task(
+    name='apiCrm.fetch_all_data',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True,
+    soft_time_limit=27000,
+    rate_limit='1/h'
+)
+def fetch_all_data():
+    """
+    Fetch all CRM data for the last 30 days and upcoming 15 days.
+    This task should run after cleanup_crm_tables and before check_contacts_in_crm.
+    """
+    today = datetime.now().date()
+    start_date = (today - timedelta(days=15)).strftime('%Y-%m-%d')
+    end_date = today.strftime('%Y-%m-%d')
+    extended_end_date = (today + timedelta(days=15)).strftime('%Y-%m-%d')
+
+    try:
+        logger.info(f"Fetching data for dates: {start_date} to {extended_end_date}")
+        
+        # Use the same resolver as the GraphQL endpoint
+        query = Query()
+        result = query.resolve_all_data(None, start_date, end_date, extended_end_date)
+        
+        # Return counts instead of GraphQL types
+        stats = {
+            'leads_count': len(result.leads) if result.leads else 0,
+            'appointments_count': len(result.appointments) if result.appointments else 0,
+            'bill_charges_count': len(result.bill_charges) if result.bill_charges else 0,
+            'date_range': f"{start_date} to {extended_end_date}"
+        }
+        
+        logger.info(f"Successfully fetched and processed data")
+        return stats
+        
+    except Exception as e:
+        logger.error(f"Error in fetch_all_data: {str(e)}", exc_info=True)
+        raise

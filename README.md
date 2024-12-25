@@ -2,8 +2,8 @@
 
 ## Commands
 python manage.py runserver
-celery -A konquista worker -l info
-celery -A konquista beat -l info
+celery -A konquist worker -l INFO
+celery -A konquist beat -l INFO
 
 ## Goal
 Konquista Django App is designed to manage CRM-related data.
@@ -77,18 +77,19 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - update images and videos + last trial
 - feature/appointment-implementation
 - custom messages @messageShooter/resolvers/get_message
-- delete data apiCrm: Terminal 1: celery -A konquist worker -l INFO / Terminal 2: celery -A konquist beat -l INFO
+- delete data apiCrm
+- feature worker to see if contacts are leads or appointments in worker
+- feature worker to fetch data from apiCrm daily at midnight:15 BRT
 
 # In progress
-- feature worker to see if contacts are leads or appointments in apiCrm daily at 6AM BRT
+- Check Contact Bill Charges
+- Run "Reminder" Campaign
 
 ## Backlog:
-- feature worker to fetch data from apiCrm daily at midnight:15 BRT
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 
 ## Setup and Installation
-
 ### Requirements
 - Python: 3.10+
 - Django: 4.x

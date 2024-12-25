@@ -97,7 +97,6 @@ def get_counter_appointment(phone, contact_tag=None):
     )
     return logs.count()
 
-#TODO NOT IN USE...
 def bulk_get_counter_appointment(phones, relationship_tag=None):
     """
     Bulk fetch appointment counters for multiple phone numbers

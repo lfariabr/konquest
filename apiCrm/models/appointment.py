@@ -35,7 +35,6 @@ class Appointment(models.Model):
         if "AVALIAÇÃO" in self.procedure_name and store_name != 'PLÁSTICA' or 'HOMA':
             return True
         return False
-        #TODO is this correct?
     
     def check_if_appointment_is_evaluation_plastic(self):
         """

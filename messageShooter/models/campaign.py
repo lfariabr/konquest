@@ -8,7 +8,8 @@ from core.models.contact import Contact
 
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
-CONTACT_TYPE_APPOINTMENT = "Appointment" #Lead, # BillCharge #TODO
+CONTACT_TYPE_APPOINTMENT = "Appointment" #Lead, # BillCharge
+#TODO adding Leads so we're able to create Queues for interacting with them / Bill charge for follow up activity
 
 CONTACT_TYPES = [
     CONTACT_TYPE_WHATSAPP,

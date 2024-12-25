@@ -19,7 +19,9 @@ from messageShooter.utils.is_appointment_es import (
     reminder_desired_status_es,
     reminder_undesired_status_es,
     reschedule_desired_status_es,
-    reschedule_undesired_status_es
+    reschedule_undesired_status_es,
+    nps_desired_status_es,
+    nps_undesired_status_es
 )
 
 from konquist.settings import CONTACTS_TO_LOAD
@@ -123,7 +125,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             # Appointments from 3 days ago
             nps_appointments = base_query.filter(
                 Q(appointment_date__range=(three_days_past, now)) &
-                ~Q(status_label__in=['Atendido', 'Falta', 'Cancelado']) # Create desired_nps_status #TODO
+                ~Q(status_label__in=nps_desired_status_es)
             ).order_by('appointment_date')
 
             # Verify no recent undesired status
@@ -131,7 +133,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                 apt for apt in nps_appointments
                 if not Appointment.objects.filter(
                     customer_phone=apt.customer_phone,
-                    status_label__in=['Atendido', 'Falta', 'Cancelado'], # Create undesired_nps_status # TODO
+                    status_label__in=nps_undesired_status_es,
                     appointment_date__range=(five_days_past, now)
                 ).exists()
             ][:CONTACTS_TO_LOAD]
