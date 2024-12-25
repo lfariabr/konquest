@@ -1,36 +1,158 @@
-# apiCrm/tasks.py
+import logging
 from celery import shared_task
+from django.db import connection, transaction
+from django.db.models import ProtectedError
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
 from apiCrm.models.billcharge import BillCharge
-from datetime import timedelta
+from core.models.contact import Contact
 from django.utils import timezone
 
-# Worker
-@shared_task
-def clean_up_leads():
-    deleted_count, _ = Lead.objects.all().delete()
-    print(f"Deleted {deleted_count} leads.")
+logger = logging.getLogger(__name__)
 
-@shared_task
-def clean_up_appointments():
-    deleted_count, _ = Appointment.objects.all().delete()
-    print(f"Deleted {deleted_count} appointments.")
+@shared_task(
+    name='apiCrm.cleanup_crm_tables',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True
+)
+def cleanup_crm_tables():
+    """
+    Daily task to clean up CRM-related tables with proper dependency handling.
+    Uses PostgreSQL-specific syntax for cleanup while maintaining referential integrity.
+    """
+    logger.info("Starting CRM tables cleanup")
+    
+    try:
+        with connection.cursor() as cursor:
+            # Check if tables exist first
+            cursor.execute("""
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables 
+                    WHERE table_schema = 'public' 
+                    AND table_name IN ('apiCrm_billcharge', 'apiCrm_appointment', 'apiCrm_lead')
+                );
+            """)
+            tables_exist = cursor.fetchone()[0]
+            
+            if not tables_exist:
+                logger.warning("One or more CRM tables do not exist. Skipping cleanup.")
+                return False
+            
+            try:
+                with transaction.atomic():
+                    # Try to clean each table individually to handle partial existence
+                    for table in ['apiCrm_billcharge', 'apiCrm_appointment', 'apiCrm_lead']:
+                        try:
+                            cursor.execute('TRUNCATE TABLE "%s" CASCADE;' % table)
+                            logger.info(f"Successfully truncated {table}")
+                        except Exception as e:
+                            logger.warning(f"Could not truncate {table}: {str(e)}")
+                    
+                    # Log final table counts
+                    cursor.execute("""
+                        SELECT 
+                            (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'apiCrm_billcharge') as billcharges_exists,
+                            (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'apiCrm_appointment') as appointments_exists,
+                            (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'apiCrm_lead') as leads_exists;
+                    """)
+                    counts = cursor.fetchone()
+                    logger.info(f"Table existence check: {counts}")
+                    
+            except Exception as e:
+                logger.error(f"Error during cleanup: {str(e)}")
+                raise
+            
+            return True
+            
+    except Exception as e:
+        logger.error(f"Failed to clean CRM tables: {str(e)}", exc_info=True)
+        raise
 
-@shared_task
-def clean_up_bill_charges():
-    deleted_count, _ = BillCharge.objects.all().delete()
-    print(f"Deleted {deleted_count} bill charges.")
+# This task should be triggered right after apiCrm.fetch_all_data when it's implemented
+@shared_task(
+    name='apiCrm.check_contacts_in_crm',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True
+)
+def check_contacts_in_crm():
+    """
+    Task to check if contacts exist in CRM tables.
+    Processes contacts and tracks progress.
+    
+    Returns:
+        dict: Statistics about the check operation
+    """
+    logger.info("Starting contact check in CRM")
+    stats = {
+        'total_contacts': 0,
+        'leads_found': 0,
+        'appointments_found': 0,
+        'errors': 0,
+        'start_time': timezone.now()
+    }
+    
+    try:
+        # Get most recent contacts
+        contacts = Contact.objects.all().order_by('-id')[:1000]
+        total_contacts = len(contacts)
+        stats['total_contacts'] = total_contacts
+        
+        for idx, contact in enumerate(contacts, 1):
+            progress = (idx / total_contacts) * 100
+            logger.info(f"Processing contact {idx}/{total_contacts} ({progress:.1f}%) - {contact.phone}")
+            
+            try:
+                with transaction.atomic():
+                    # Check if contact exists as lead and update tracking
+                    lead = contact.check_if_lead_exists()
+                    if lead:
+                        stats['leads_found'] += 1
+                    
+                    # Check if contact exists as appointment and update tracking
+                    appointment = contact.check_if_appointment_exists()
+                    if appointment:
+                        stats['appointments_found'] += 1
+                    
+            except Exception as e:
+                stats['errors'] += 1
+                logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
+                continue
+        
+        # Calculate final statistics
+        stats['end_time'] = timezone.now()
+        duration = (stats['end_time'] - stats['start_time']).total_seconds()
+        
+        logger.info(
+            "Contact check completed:\n"
+            f"- Processed: {stats['total_contacts']} contacts\n"
+            f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments\n"
+            f"- Errors: {stats['errors']}\n"
+            f"- Duration: {duration:.2f} seconds"
+        )
+        
+        return stats
+        
+    except Exception as e:
+        logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
+        raise
 
-def fetch_all_leads(start_date, end_date, token):
-    pass
+# This task should be triggered right after cleanup_crm_tables
+# @shared_task(
+#     name='apiCrm.fetch_all_data',
+#     autoretry_for=(Exception,),
+#     retry_kwargs={'max_retries': 3},
+#     retry_backoff=True
+# )
+# def fetch_all_data():
+#     start_date = today - timedelta(days=30)
+#     end_date = today
+#     extended_end_date = today + timedelta(days=15)
 
-def fetch_graphql(session, url, query, variables, token):
-    pass
-
-def check_if_lead_is_served():
-    pass
-
-def check_if_lead_is_buyer():
-    pass
-
+#     try:
+#         all_data = fetch_all_data(start_date, end_date, extended_end_date, token)
+#         return all_data # Check if this is correct, because we're already saving the data directly into the database via this function
+#     except Exception as e:
+#         logger.error(f"Error in fetch_all_data: {e}")
+#         raise

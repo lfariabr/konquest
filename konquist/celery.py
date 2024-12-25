@@ -8,19 +8,24 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
 
 app = Celery('konquist')
 app.config_from_object('django.conf:settings', namespace='CELERY')
+
+app.conf.imports = ['apiCrm.tasks']
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = { # Check what else I can put aside from task and schedule
-    'cleaner_leads': {
-        'task': 'apiCrm.tasks.clean_up_leads',
-        'schedule': crontab(minute='*/5'),
+    # Clean up tables - run at midnight daily
+    'cleaner_crm_tables': {
+    'task': 'apiCrm.cleanup_crm_tables',
+    'schedule': crontab(hour=0, minute=0),
     },
-    'cleaner_appointments': {
-        'task': 'apiCrm.tasks.clean_up_appointments',
-        'schedule': crontab(minute='*/5'),
+    # Contact check task - runs daily right after yet to be implemented fetch_all_data
+    'check_contacts_in_crm': {
+    'task': 'apiCrm.check_contacts_in_crm',
+    'schedule': crontab(minute=30), # for instant testing.
     },
-    'cleaner_billcharges': {
-        'task': 'apiCrm.tasks.clean_up_bill_charges',
-        'schedule': crontab(minute='*/5'),
-    },
+    # Fetch all data task - runs daily right after yet to be implemented check_contacts_in_crm
+    # 'fetch_all_data': {
+    # 'task': 'apiCrm.fetch_all_data',
+    # 'schedule': crontab(minute='*'), 
+    # },
 }

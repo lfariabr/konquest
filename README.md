@@ -76,14 +76,14 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - apiCrm optimization to check if lead or appointment exists (only pytest left)
 - update images and videos + last trial
 - feature/appointment-implementation
+- custom messages @messageShooter/resolvers/get_message
+- delete data apiCrm: Terminal 1: celery -A konquist worker -l INFO / Terminal 2: celery -A konquist beat -l INFO
 
 # In progress
-- cuistom messages @messageShooter/resolvers/get_message
+- feature worker to see if contacts are leads or appointments in apiCrm daily at 6AM BRT
 
 ## Backlog:
-- feature worker to clean data from apiCrm daily at midnight:00 BRT
 - feature worker to fetch data from apiCrm daily at midnight:15 BRT
-- feature worker to see if contacts are leads or appointments in apiCrm daily at 6AM BRT
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 

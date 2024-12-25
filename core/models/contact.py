@@ -63,7 +63,7 @@ class Contact(models.Model):
         """
         logger.info(f"Checking lead status for contact {self.id} ({self.phone})")
         
-        # Update check tracking
+        # Update check tracking BEFORE checking status
         self.lead_last_checked = timezone.now()
         self.lead_check_count += 1
         self.save()
@@ -139,7 +139,7 @@ class Contact(models.Model):
         """
         logger.info(f"Checking appointment status for contact {self.id} ({self.phone})")
         
-        # Update check tracking
+        # Update check tracking BEFORE checking status
         self.appointment_last_checked = timezone.now()
         self.appointment_check_count += 1
         self.save()
