@@ -170,9 +170,9 @@ def fetch_all_data():
     This task should run after cleanup_crm_tables and before check_contacts_in_crm.
     """
     today = datetime.now().date()
-    start_date = (today - timedelta(days=15)).strftime('%Y-%m-%d')
+    start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
     end_date = today.strftime('%Y-%m-%d')
-    extended_end_date = (today + timedelta(days=15)).strftime('%Y-%m-%d')
+    extended_end_date = (today + timedelta(days=20)).strftime('%Y-%m-%d')
 
     try:
         logger.info(f"Fetching data for dates: {start_date} to {extended_end_date}")

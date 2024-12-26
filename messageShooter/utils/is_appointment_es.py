@@ -15,6 +15,10 @@ stores_include_es = ["JARDINS"] # JARDINS
 # store for store in stores
 
 # Reschedule
+stores_include_es_reschedule = ['JARDINS']
+# stores_include_es_reschedule = ['TIJUCA', 'TUCURUVI', 'MOOCA', 'COPACABANA', 'MOEMA', 'LAPA',
+                #   'IPIRANGA', 'SANTOS', 'OSASCO', 'SOROCABA','LONDRINA', 'JARDINS', 'CAMPINAS',
+                #   'TATUAPÉ', 'ALPHAVILLE', 'ITAIM', 'SANTO AMARO', 'GUARULHOS', 'OSASCO', 'VILA MASCOTE']
 reschedule_desired_status_es = ['Falta',
                                 'Cancelado']
 reschedule_undesired_status_es = ['Atendido', 

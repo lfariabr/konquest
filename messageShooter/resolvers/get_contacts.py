@@ -140,33 +140,6 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
 
             logger.info(f"NPS - Found {len(appointments)} appointments between {three_days_past} and {now}")
 
-        elif contact_tag == 'Reschedule':
-            # Reschedule specific logic #TODO
-            thirty_days_past = now - timedelta(days=30)
-            thirty_days_future = now + timedelta(days=30)
-            
-            # Potential reschedule appointments
-            reschedule_appointments = base_query.filter(
-                Q(status_label__in=reschedule_desired_status_es)
-            ).order_by('appointment_date')
-
-            # Exclude appointments with undesired statuses
-            excluded_appointments = Appointment.objects.filter(
-                Q(status_label__in=reschedule_undesired_status_es) &
-                Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-            )
-
-            # Create set of excluded phone numbers
-            excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
-
-            # Final filtering
-            appointments = [
-                apt for apt in reschedule_appointments 
-                if apt.customer_phone not in excluded_phones
-            ][:CONTACTS_TO_LOAD]
-
-            logger.info(f"Reschedule - Found {len(appointments)} appointments")
-
         else:
             # Default case: return all relevant appointments
             appointments = base_query.order_by('appointment_date')[:CONTACTS_TO_LOAD]

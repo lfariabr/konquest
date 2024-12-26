@@ -82,6 +82,9 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Check Contact Bill Charges
 
 # In progress
+- Build rationale to integrate Reschedule Campaign
+
+# Test in prod
 - Run "Reminder" Campaign
 
 ## Backlog:

@@ -20,6 +20,7 @@ from core.models.messagelog import MessageLogs
 from core.models.message import Message
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
+from apiCrm.models.billcharge import BillCharge
 
 from core.forms.contact_upload import ContactCsvUploadForm
 from core.resolvers.clean_phone_number import clean_phone_number
@@ -239,22 +240,82 @@ class ContactAdmin(admin.ModelAdmin):
         )
 
     def check_bill_charges(self, request, queryset):
-        """Check bill charge status for selected contacts."""
-        updated = 0
+        """Check selected contacts for bill charges using batch processing"""
+        import time
+        from django.db import transaction
+        
+        start_time = time.time()
+        total = queryset.count()
         found = 0
-
-        for contact in queryset:
-            bill_charge = contact.check_if_bill_charges_exists()
-            updated += 1
-            if bill_charge:
-                found += 1
-
+        batch_size = 50
+        
+        self.message_user(request, f"Starting bill charge check for {total} contacts...", messages.INFO)
+        
+        # Process in batches
+        for i in range(0, total, batch_size):
+            batch = queryset[i:i + batch_size]
+            
+            # Update check tracking for batch
+            now = timezone.now()
+            with transaction.atomic():
+                Contact.objects.filter(id__in=batch.values_list('id', flat=True)).update(
+                    bill_charge_last_checked=now,
+                    bill_charge_check_count=models.F('bill_charge_check_count') + 1
+                )
+            
+            # Get all phone numbers in this batch
+            phones = batch.values_list('phone', flat=True)
+            
+            # Find matching bill charges in one query
+            matching_charges = BillCharge.objects.filter(customer_phone__in=phones)
+            
+            # Calculate total amounts per phone
+            from django.db.models import Sum
+            total_amounts = matching_charges.values('customer_phone').annotate(
+                total_history=Sum('total_amount')
+            )
+            total_amount_map = {item['customer_phone']: item['total_history'] for item in total_amounts}
+            
+            # Create a mapping of phone numbers to most recent bill charges
+            from django.db.models import Max
+            latest_charges = matching_charges.values('customer_phone').annotate(
+                latest_date=Max('due_at')
+            )
+            latest_map = {}
+            for item in latest_charges:
+                phone = item['customer_phone']
+                latest_charge = matching_charges.filter(
+                    customer_phone=phone,
+                    due_at=item['latest_date']
+                ).first()
+                if latest_charge:
+                    latest_map[phone] = latest_charge
+            
+            # Update contacts that have matching bill charges
+            with transaction.atomic():
+                for contact in batch:
+                    bill_charge = latest_map.get(contact.phone)
+                    total_history = total_amount_map.get(contact.phone)
+                    
+                    if bill_charge:
+                        found += 1
+                        contact.update_bill_charge_status(bill_charge)
+                        contact.bill_charge_total_history = total_history
+                        contact.save()
+                    else:
+                        contact.clear_bill_charge_status()
+            
+            # Log progress
+            progress = min(100, (i + batch_size) * 100 / total)
+            elapsed = time.time() - start_time
+            logger.info(f"Progress: {progress:.1f}% - Found {found} bill charges - Elapsed: {elapsed:.1f}s")
+        
+        elapsed = time.time() - start_time
         self.message_user(
             request,
-            f"Checked {updated} contacts. Found {found} bill charges.",
+            f"Checked {total} contacts in {elapsed:.1f}s. Found {found} bill charges.",
             messages.SUCCESS
         )
-    check_bill_charges.short_description = "Check bill charges status"
 
     def changelist_view(self, request, extra_context=None):
         logging.info("Entered CSV Upload Admin")
