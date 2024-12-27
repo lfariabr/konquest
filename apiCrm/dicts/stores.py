@@ -1,5 +1,27 @@
 stores = {
-        'ALPHAVILLE', 'BELO HORIZONTE', 'CAMPINAS', 'COPACABANA', 'ITAIM', 'IPIRANGA',
-        'LAPA', 'LONDRINA', 'MOEMA', 'MOOCA', 'JARDINS', 'OSASCO', 'RIBEIRÃO PRETO',
-        'SANTO AMARO', 'SANTOS', 'SOROCABA', 'TATUAPÉ', 'TIJUCA', 'TUCURUVI'
+        # sp
+        'MOEMA',
+        'JARDINS',
+        'ALPHAVILLE',
+        'OSASCO',
+        'MOOCA',
+        'ITAIM',
+        'GUARULHOS',
+        'VILA MASCOTE'
+        'SÃO BERNARDO',
+        'SANTO AMARO',
+        'IPIRANGA',
+        'TATUAPÉ',
+        'LAPA',
+        'TUCURUVI',
+        
+        # rj
+        'COPACABANA',
+        'TIJUCA',
+
+        # paraná / litoral / interior
+        'LONDRINA',
+        'SANTOS',
+        'CAMPINAS',
+        'SOROCABA'
 }

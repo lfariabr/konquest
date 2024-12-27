@@ -16,6 +16,7 @@ from messageShooter.utils.is_appointment_es import (
     stores_exclude_es, 
     stores_include_es, 
     intervals_es,
+    stores_include_es_reschedule,
     reminder_desired_status_es,
     reminder_undesired_status_es,
     reschedule_desired_status_es,
@@ -75,12 +76,17 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     
     # Base query with common filters
     base_query = Appointment.objects.filter(
-        store_name__in=stores_include_es,
+        # store_name__in=stores_include_es, 
         procedure_name__in=procedures_es
     )
+    # Just removed "store_name" to get all stores and filter within the contact tag.
 
     try:
         if contact_tag == 'Reminder':
+            """
+            - Get appointments in the next 5 days
+            - Exclude appointments that are reminder_undesired_status_es in the last AND future 30 days
+            """
             # Get appointments in the next 5 days
             five_days_future = now + timedelta(days=5)
             thirty_days_past = now - timedelta(days=30)
@@ -89,7 +95,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             # Get all potential appointments
             potential_appointments = base_query.filter(
                 Q(status_label__in=reminder_desired_status_es) &
-                Q(appointment_date__range=(now, five_days_future))  # Specific 5-day window
+                Q(appointment_date__range=(now, five_days_future) &
+                Q(store_name__in=stores_include_es))
             ).order_by('appointment_date')
 
             # Get excluded appointments by existing customer_phone
@@ -116,7 +123,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             
             # Potential reschedule appointments
             reschedule_appointments = base_query.filter(
-                Q(status_label__in=reschedule_desired_status_es)
+                Q(status_label__in=reschedule_desired_status_es) &
+                Q(store_name__in=stores_include_es_reschedule)
             ).order_by('appointment_date')
 
             # Exclude appointments with undesired statuses
@@ -139,6 +147,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         elif contact_tag == 'NPS':
             pass
             # Work In Progress
+            # Get appointments that were served on the past 2 days
 
         else:
             # Default case: return all relevant appointments

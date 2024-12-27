@@ -84,13 +84,13 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - get contacts / get counter / get phone / get message / customize message / calculate days interval
 
 # In progress
+- Build "NPS" Campaign
 
 # Test in prod
 - Run "Reminder" Campaign
 - Run "Reschedule" Campaign
 
 ## Backlog:
-- Build "NPS" Campaign
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 

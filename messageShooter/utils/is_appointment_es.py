@@ -1,20 +1,32 @@
 from apiCrm.dicts.stores import stores
 
-# Rules to define what is an appointment for aesthetic services = Pró-Corpo
 procedures_es = ['AVALIAÇÃO ESTÉTICA', 
                  'AVALIAÇÃO INJETÁVEIS E INVASIVOS']
+                 
+procedures_pl = ['AVALIAÇÃO MAMOPLASTIA',
+                'AVALIAÇÃO PLÁSTICA DE ABDÔMEN',
+                'AVALIAÇÃO MAMOPLASTIA COM PRÓTESE',
+                'AVALIAÇÃO LIPOASPIRAÇÃO',
+                'AVALIAÇÃO PRÓTESE DE MAMA',
+                'AVALIAÇÃO RINOPLASTIA',
+                'AVALIAÇÃO BLEFAROPLASTIA',
+                'AVALIAÇÃO RITIDOPLASTIA',
+                'AVALIAÇÃO CIRURGIA ÍNTIMA',
+                'SEGUNDA OPINIÃO (AVALIAÇÃO CIRURGIA)']
 
-# Reminders
+# Reminder Rules
 reminder_desired_status_es = ['Confirmado', 
                               'Agendado']
+
 reminder_undesired_status_es = ['Atendido', 
                                 'Falta', 
                                 'Cancelado',
                                 'Reagendado']
-stores_include_es = ["JARDINS"] # JARDINS
-# store for store in stores
+
+stores_include_es = ["JARDINS"] # store for store in stores
 
 # Reschedule
+
 stores_include_es_reschedule = ['JARDINS']
 # stores_include_es_reschedule = ['TIJUCA', 'TUCURUVI', 'MOOCA', 'COPACABANA', 'MOEMA', 'LAPA',
                 #   'IPIRANGA', 'SANTOS', 'OSASCO', 'SOROCABA','LONDRINA', 'JARDINS', 'CAMPINAS',

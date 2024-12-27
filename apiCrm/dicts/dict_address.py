@@ -24,4 +24,5 @@ dic_store_address = {
         'CENTRAL': '70afc90f-a9ef-4dc9-9572-1d8b62ef0dfd',
         'VILA MASCOTE': "dcfefa62-a763-4a22-aa86-1b416b1ef2e3",
         'GUARULHOS': "24e2af43-c29e-4983-8fc9-d5a4d02db3f3",
+        'SÃO BERNARDO': "?" #TODO
 }

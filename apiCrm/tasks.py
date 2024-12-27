@@ -105,7 +105,7 @@ def check_contacts_in_crm():
     
     try:
         # Get most recent contacts
-        contacts = Contact.objects.all().order_by('-id')[:2000]
+        contacts = Contact.objects.all().order_by('-id')[:3000]
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
         
