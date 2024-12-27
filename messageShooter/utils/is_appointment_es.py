@@ -2,7 +2,7 @@ from apiCrm.dicts.stores import stores
 
 procedures_es = ['AVALIAÇÃO ESTÉTICA', 
                  'AVALIAÇÃO INJETÁVEIS E INVASIVOS']
-                 
+
 procedures_pl = ['AVALIAÇÃO MAMOPLASTIA',
                 'AVALIAÇÃO PLÁSTICA DE ABDÔMEN',
                 'AVALIAÇÃO MAMOPLASTIA COM PRÓTESE',
@@ -14,7 +14,7 @@ procedures_pl = ['AVALIAÇÃO MAMOPLASTIA',
                 'AVALIAÇÃO CIRURGIA ÍNTIMA',
                 'SEGUNDA OPINIÃO (AVALIAÇÃO CIRURGIA)']
 
-# Reminder Rules
+# REMINDER RULES
 reminder_desired_status_es = ['Confirmado', 
                               'Agendado']
 
@@ -25,12 +25,11 @@ reminder_undesired_status_es = ['Atendido',
 
 stores_include_es = ["JARDINS"] # store for store in stores
 
-# Reschedule
+store_include_pl = ['PLÁSTICA']
 
-stores_include_es_reschedule = ['JARDINS']
-# stores_include_es_reschedule = ['TIJUCA', 'TUCURUVI', 'MOOCA', 'COPACABANA', 'MOEMA', 'LAPA',
-                #   'IPIRANGA', 'SANTOS', 'OSASCO', 'SOROCABA','LONDRINA', 'JARDINS', 'CAMPINAS',
-                #   'TATUAPÉ', 'ALPHAVILLE', 'ITAIM', 'SANTO AMARO', 'GUARULHOS', 'OSASCO', 'VILA MASCOTE']
+# RESCHEDULE RULES
+stores_include_es_reschedule = [store for store in stores] # store for store in stores
+
 reschedule_desired_status_es = ['Falta',
                                 'Cancelado']
 reschedule_undesired_status_es = ['Atendido', 
@@ -38,7 +37,7 @@ reschedule_undesired_status_es = ['Atendido',
                                     'Confirmado']
 reschedule_stores_include_es = ['all']
 
-# NPS
+# NPS RULES
 nps_desired_status_es = ['Atendido']
 nps_undesired_status_es = ['Falta', 
                             'Cancelado', 
