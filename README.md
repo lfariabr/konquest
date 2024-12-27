@@ -81,19 +81,16 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - feature worker to fetch data from apiCrm daily at midnight:15 BRT
 - Check Contact Bill Charges
 - Build rationale to integrate Reschedule Campaign
+- get contacts / get counter / get phone / get message / customize message / calculate days interval
 
 # In progress
-- organize get contacts
-- organize get counter
-- organize get phone
-- organize get message
-- organize customize message
-- organize calculate days interval
 
 # Test in prod
 - Run "Reminder" Campaign
+- Run "Reschedule" Campaign
 
 ## Backlog:
+- Build "NPS" Campaign
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 
