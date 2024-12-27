@@ -23,20 +23,20 @@ app.conf.beat_schedule = {
     # 45-minute window: 00:00 - 00:45
     'cleaner_crm_tables': {
         'task': 'apiCrm.cleanup_crm_tables',
-        'schedule': crontab(hour=5, minute=12),
+        'schedule': crontab(hour=-0, minute=12),
     },
 
     # 2. Fetch all data - Starts at 00:45 BRT
     # 45-minute window: 00:45 - 01:30
     'fetch_all_data': {
         'task': 'apiCrm.fetch_all_data',
-        'schedule': crontab(hour=5, minute=14),
+        'schedule': crontab(hour=-0, minute=14),
     },
 
     # 3. Check contacts - Starts at 01:30 BRT
     # 45-minute window: 01:30 - 02:15
     'check_contacts_in_crm': {
         'task': 'apiCrm.check_contacts_in_crm',
-        'schedule': crontab(hour=5, minute=27),
+        'schedule': crontab(hour=-0, minute=27),
     },
 }

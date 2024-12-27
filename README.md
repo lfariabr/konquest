@@ -80,9 +80,15 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - feature worker to see if contacts are leads or appointments in worker
 - feature worker to fetch data from apiCrm daily at midnight:15 BRT
 - Check Contact Bill Charges
+- Build rationale to integrate Reschedule Campaign
 
 # In progress
-- Build rationale to integrate Reschedule Campaign
+- organize get contacts
+- organize get counter
+- organize get phone
+- organize get message
+- organize customize message
+- organize calculate days interval
 
 # Test in prod
 - Run "Reminder" Campaign

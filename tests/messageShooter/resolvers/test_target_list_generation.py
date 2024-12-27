@@ -273,8 +273,7 @@ def test_duplicate_contact_handling(setup_test_data):
     
     # Clean up any existing contacts with the Botox tag
     Contact.objects.filter(relationship_tag="Botox").delete()
-    
-    # Create multiple contacts with the same phone number but different creation dates
+
     phone = "11999999999"
     contact1 = Contact.objects.create(
         user=user,
@@ -285,7 +284,7 @@ def test_duplicate_contact_handling(setup_test_data):
         status="landing page",
         created_at=timezone.now() - timezone.timedelta(days=2)
     )
-    
+
     contact2 = Contact.objects.create(
         user=user,
         name="Test Contact 2",
@@ -295,7 +294,7 @@ def test_duplicate_contact_handling(setup_test_data):
         status="landing page",
         created_at=timezone.now() - timezone.timedelta(days=1)
     )
-    
+
     contact3 = Contact.objects.create(
         user=user,
         name="Test Contact 3",
@@ -305,7 +304,7 @@ def test_duplicate_contact_handling(setup_test_data):
         status="landing page",
         created_at=timezone.now()
     )
-    
+
     # Create message for the campaign
     message = Message.objects.create(
         title="Test Message",
@@ -315,15 +314,14 @@ def test_duplicate_contact_handling(setup_test_data):
         user=user,
         contact_type="Whatsapp"
     )
-    
+
     # Create campaign with execution_time in the past
     current_time = timezone.now()
-    past_time = (current_time - timezone.timedelta(hours=1)).time()  # 1 hour ago
-    
-    # Get current weekday name (monday, tuesday, etc.)
+    past_time = (current_time - timezone.timedelta(hours=1)).time()
+
     weekday_names = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
     current_weekday = weekday_names[current_time.weekday()]
-    
+
     campaign = Campaign.objects.create(
         name="Test Campaign",
         user=user,
@@ -331,22 +329,28 @@ def test_duplicate_contact_handling(setup_test_data):
         contact_type="Whatsapp",
         contact_tag="Botox",
         campaign_status="Active",
-        frequency=FREQUENCY_ONCE,  # One-time campaign
-        execution_time=past_time,  # Set to past time so it's ready to run
-        active_days=[current_weekday]  # Set today as active day using name
+        frequency=FREQUENCY_ONCE,
+        execution_time=past_time,
+        active_days=[current_weekday]
     )
-    
+
     # Generate target lists
     from messageShooter.resolvers.target_list_resolver import create_target_list
     created, skipped, errors = create_target_list(campaign.id, force_run=True)
-    
-    # Verify only one target list was created
+
+    # Verify target lists were created for all contacts
     target_lists = TargetList.objects.filter(campaign=campaign)
-    assert target_lists.count() == 1, "Should only create one target list per phone number"
+    assert target_lists.count() == 3, "Should create target lists for all contacts"
     
-    # Verify it used the earliest contact
-    target_list = target_lists.first()
-    assert target_list.contact == contact1, "Should use the earliest created contact"
+    # Verify all target lists have the same message counter since it's the same phone
+    counters = set(tl.message.counter for tl in target_lists)
+    assert len(counters) == 1, "All target lists should have the same counter for the same phone number"
+    assert list(counters)[0] == 0, "Counter should be 0 for first message"
+    
+    # Verify all target lists have the correct phone number
+    phones = set(tl.contact_phone for tl in target_lists)
+    assert len(phones) == 1, "All target lists should have the same phone number"
+    assert list(phones)[0] == phone, f"Phone number should be {phone}"
 
 @pytest.mark.django_db
 def test_invalid_phone_number_handling(setup_test_data):

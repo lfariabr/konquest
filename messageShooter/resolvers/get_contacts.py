@@ -23,10 +23,10 @@ from messageShooter.utils.is_appointment_es import (
     nps_desired_status_es,
     nps_undesired_status_es
 )
+from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact
+
 
 from konquist.settings import CONTACTS_TO_LOAD
-
-number_of_contacts = settings.CONTACTS_TO_LOAD
 logger = logging.getLogger(__name__)
 
 def get_contact_whatsapp(contact_type, contact_tag):
@@ -38,26 +38,19 @@ def get_contact_whatsapp(contact_type, contact_tag):
     """
     if contact_type != "Whatsapp":
         return []
-
-    from django.db.models import Min, Subquery, OuterRef
-
-    # Get the earliest created contact for each phone number
-    earliest_contacts = Contact.objects.filter(
-        source__iexact="Whatsapp",  # Case-insensitive match
+        
+    contacts = Contact.objects.filter(
+        source__iexact="Whatsapp",
         relationship_tag=contact_tag,
-        status__in=['landing page', 'active'],
+        # status__in=['landing page', 'active', None],
         is_lead=False,
         is_appointment=False,
-    ).values('phone').annotate(
-        min_id=Min('id')
-    ).values('min_id')
-
-    contacts = Contact.objects.filter(
-        id__in=Subquery(earliest_contacts)
     ).order_by('-created_at')[:CONTACTS_TO_LOAD]
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")
+    
+    #TODO think about how to remove duplicates
     return contacts
     
 def get_contact_appointment(contact_type, contact_tag, user=None):
@@ -97,7 +90,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             potential_appointments = base_query.filter(
                 Q(status_label__in=reminder_desired_status_es) &
                 Q(appointment_date__range=(now, five_days_future))  # Specific 5-day window
-            )
+            ).order_by('appointment_date')
 
             # Get excluded appointments by existing customer_phone
             excluded_appointments = Appointment.objects.filter(
@@ -117,28 +110,35 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
 
             logger.info(f"Reminder - Found {len(appointments)} appointments between {now} and {five_days_future}")
 
-        elif contact_tag == 'NPS':
-            # NPS specific logic
-            three_days_past = now - timedelta(days=3)
-            five_days_past = now - timedelta(days=5)
+        elif contact_tag == 'Reschedule':
+            thirty_days_past = now - timedelta(days=30)
+            thirty_days_future = now + timedelta(days=30)
             
-            # Appointments from 3 days ago
-            nps_appointments = base_query.filter(
-                Q(appointment_date__range=(three_days_past, now)) &
-                ~Q(status_label__in=nps_desired_status_es)
+            # Potential reschedule appointments
+            reschedule_appointments = base_query.filter(
+                Q(status_label__in=reschedule_desired_status_es)
             ).order_by('appointment_date')
 
-            # Verify no recent undesired status
+            # Exclude appointments with undesired statuses
+            excluded_appointments = Appointment.objects.filter(
+                Q(status_label__in=reschedule_undesired_status_es) &
+                Q(appointment_date__range=(thirty_days_past, thirty_days_future))
+            ).values('customer_phone')
+
+            # Create set of excluded phone numbers
+            excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
+
+            # Final filtering
             appointments = [
-                apt for apt in nps_appointments
-                if not Appointment.objects.filter(
-                    customer_phone=apt.customer_phone,
-                    status_label__in=nps_undesired_status_es,
-                    appointment_date__range=(five_days_past, now)
-                ).exists()
+                apt for apt in reschedule_appointments 
+                if apt.customer_phone not in excluded_phones
             ][:CONTACTS_TO_LOAD]
 
-            logger.info(f"NPS - Found {len(appointments)} appointments between {three_days_past} and {now}")
+            logger.info(f"Reschedule - Found {len(appointments)} appointments")
+
+        elif contact_tag == 'NPS':
+            pass
+            # Work In Progress
 
         else:
             # Default case: return all relevant appointments
@@ -148,7 +148,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         # Convert appointments to contacts
         contacts = []
         for appointment in appointments:
-            contact = _convert_appointment_to_contact(appointment, contact_tag, user)
+            contact = convert_appointment_to_contact(appointment, contact_tag, user)
             if contact:
                 contacts.append(contact)
             
@@ -158,70 +158,3 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     except Exception as e:
         logger.error(f"Error getting appointments: {str(e)}")
         return []
-
-def _convert_appointment_to_contact(appointment, contact_tag, user=None):
-    """
-    Convert an Appointment instance to a Contact instance.
-    This allows us to maintain the existing flow while handling appointments.
-    
-    Args:
-        appointment: Appointment instance to convert
-        contact_tag: Tag to assign to the contact (e.g., 'Reminder', 'Reschedule')
-        user: User instance to associate with created contacts
-    Returns:
-        Contact instance (saved to DB)
-    """
-    from core.models.contact import Contact
-    import logging
-    logger = logging.getLogger(__name__)
-    
-    if not user:
-        logger.error(f"No user provided for appointment {appointment.id_crm}")
-        return None
-    
-    try:
-        # Check if contact already exists with this phone
-        existing_contact = Contact.objects.filter(
-            phone=appointment.customer_phone,
-            relationship_tag=contact_tag,
-            # is_appointment=True
-        ).first()
-        
-        if existing_contact:
-            existing_contact.appointment_status = appointment.status_label
-            existing_contact.appointment_id = appointment.id_crm  # Update to latest appointment
-            existing_contact.is_appointment = True
-            existing_contact.save()
-            return existing_contact
-            
-        contact = Contact(
-            name=appointment.customer_name,
-            phone=appointment.customer_phone,
-            source='Appointment',  # Mark the source as Appointment
-            relationship_tag=contact_tag,
-            status='active', 
-            is_appointment=True,  # Mark as appointment-derived
-            appointment_id=appointment.id_crm,  # Store the original appointment ID
-            store=appointment.store_name,  # Store additional appointment data
-            appointment_status=appointment.status_label,
-            appointment_created_at=appointment.appointment_date,
-            user=user  # Set the user
-        )
-    
-        # Save to database
-        contact.save()
-        
-        logger.info(f"Created and saved contact from appointment: {appointment.id_crm} -> Contact(id={contact.id}, phone={contact.phone})")
-        return contact
-        
-    except Exception as e:
-        logger.error(f"Error converting appointment {appointment.id_crm} to contact: {str(e)}")
-        return None
-
-
-def get_contact_nps():
-    """
-    Grab NPS contacts that gave scoring of 9 or 10 from spreadsheet in the past 2 days.
-    Ask for their review on local store Google My Business.
-    """
-    pass

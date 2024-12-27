@@ -63,16 +63,9 @@ def create_target_list(campaign_id, force_run=False):
         else:
             contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag, user=campaign.user)
             
-        logger.info(f"Raw contacts received: {contacts}")
-        logger.info(f"Type of contacts: {type(contacts)}")
         if contacts and len(contacts) > 0:
             logger.info(f"First contact type: {type(contacts[0])}")
-            # logger.info(f"First contact dir: {dir(contacts[0])}")
-        
-        if not contacts:
-            logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
-            return created_count, skipped_count, error_count
-        
+
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
             return created_count, skipped_count, error_count
@@ -105,7 +98,7 @@ def create_target_list(campaign_id, force_run=False):
             ).values_list('contact_id', 'message__counter')
         )
         
-        logger.info(f"Existing target lists structure: {existing_target_lists}")
+        # logger.info(f"Existing target lists structure: {existing_target_lists}")
         
         # Prepare bulk create list
         target_lists_to_create = []
@@ -129,11 +122,6 @@ def create_target_list(campaign_id, force_run=False):
 
                 counter = counters.get(phone)
                 message = messages.get(counter)
-                logger.info(f"Processing contact {contact_id}:")
-                logger.info(f"- Contact object type: {type(contact)}")
-                logger.info(f"- Contact object attributes: {vars(contact)}")
-                logger.info(f"- Counter value: {counter}")
-                logger.info(f"- Checking tuple: ({contact_id}, {counter})")
                 
                 if not message:
                     logger.debug(f"No message found for counter {counter} - skipping contact {contact_id}")
@@ -145,14 +133,9 @@ def create_target_list(campaign_id, force_run=False):
                     message.contact_type = campaign.contact_type
                     messages_to_update.add(message)
                     
-                # Check for existing target list
-                logger.info(f"Contact ID before str conversion: {contact_id}")
-                logger.info(f"Counter value: {counter}")
+                # Skip if target list already exists
                 target_list_key = (str(contact_id), counter or 0)
-                logger.info(f"Target list key created: {target_list_key}")
-                logger.info(f"Target list key type: {type(target_list_key)}")
-                logger.info(f"Existing target lists: {existing_target_lists}")
-                
+            
                 if target_list_key in existing_target_lists:
                     logger.debug(f"Target list already exists for contact {contact_id} - skipping")
                     skipped_count += 1

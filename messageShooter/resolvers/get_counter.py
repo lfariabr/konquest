@@ -56,7 +56,7 @@ def bulk_get_counter_whatsapp(phones, contact_tag=None):
     )
     
     # Log the raw SQL query
-    logger.info(f"SQL Query: {str(counters.query)}")
+    # logger.info(f"SQL Query: {str(counters.query)}")
     
     # Log the results
     counter_list = list(counters)
@@ -111,8 +111,8 @@ def bulk_get_counter_appointment(phones, relationship_tag=None):
     import logging
     logger = logging.getLogger(__name__)
     
-    logger.info(f"Fetching appointment counters for {len(phones)} phones with tag {relationship_tag}")
-    logger.info(f"Sample phones: {phones[:5]}")
+    # logger.info(f"Fetching appointment counters for {len(phones)} phones with tag {relationship_tag}")
+    # logger.info(f"Sample phones: {phones[:5]}")
     
     # Get counts for all phones in a single query
     counters = MessageLogs.objects.filter(
@@ -124,7 +124,7 @@ def bulk_get_counter_appointment(phones, relationship_tag=None):
     )
     
     # Log the raw SQL query
-    logger.info(f"SQL Query: {str(counters.query)}")
+    # logger.info(f"SQL Query: {str(counters.query)}")
     
     # Log the results
     counter_list = list(counters)

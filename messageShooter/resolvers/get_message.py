@@ -85,52 +85,81 @@ def get_message_for_interval(contact_type,
                             appointment_status_label=None,
                             appointment_data=None):
     """
-    Get message based on days until appointment and appointment status
-    Counter encoding:
-    - Agendado: days_interval (0, 1, 2)
-    - Confirmado: days_interval + 100 (e.g., 100 for day 0, 101 for day 1)
-    - Cancelado: days_interval + 200
-    - Default fallback: 0
+    Get encoded counter based on relationship tag, status and days interval.
+    
+    Reminder Tag:
+        - Agendado: 0-2 days (counters 0,1,2)
+        - Confirmado: 0-2 days (counters 100,101,102)
+    
+    Reschedule Tag:
+        - Falta: Based on days since missed appointment
+            * 1-7 days: counter 300
+            * 7-14 days: counter 301
+            * 14+ days: counter 302
+        - Cancelado: Based on days since cancellation
+            * 1-7 days: counter 400
+            * 7-14 days: counter 401
+            * 14+ days: counter 402
     """
     logger = logging.getLogger(__name__)
     logger.info(f"Getting appointment message: status={appointment_status_label}, days_interval={days_interval}")
     
+    if not appointment_status_label:
+        return None
+
     message = None
     
     if days_interval is None:
         logger.warning("days_interval is None, cannot get appointment message")
         return None
         
-    # Encode status into counter
-    if appointment_status_label == "Agendado" and days_interval in [0, 1, 2]:
-        encoded_counter = days_interval  # 0, 1, 2 for Agendado
-        
-    elif appointment_status_label == "Confirmado" and days_interval in [0, 1, 2]:
-        encoded_counter = days_interval + 100  # 100, 101, 102 for Confirmado
-        
-    elif appointment_status_label == "Cancelado" and days_interval in [0, 1, 2]:
-        encoded_counter = days_interval + 200  # 200, 201, 202 for Cancelado
-        
+    # Calculate the counter based on tag and interval
+    if relationship_tag == "Reminder":
+        if appointment_status_label == "Agendado" and days_interval in [0, 1, 2]:
+            counter = days_interval  # 0, 1, 2 for upcoming appointments
+        elif appointment_status_label == "Confirmado" and days_interval in [0, 1, 2]:
+            counter = days_interval + 100  # 100, 101, 102 for confirmed appointments
+        else:
+            logger.warning(f"Invalid combination for Reminder: status={appointment_status_label}, days={days_interval}")
+            return None  # Invalid combination for Reminder
+
+    elif relationship_tag == "Reschedule":
+            if appointment_status_label == "Falta":
+                if -7 < days_interval <= -1:  # Changed to match get_message_for_interval
+                    counter = 0      # Recent miss (0-7 days_interval ago)
+                elif -14 < days_interval <= -7:
+                    counter = 1      # Week-old miss (7-14 days_interval ago)
+                elif days_interval <= -14:
+                    counter = 2      # Old miss (14+ days_interval ago)
+                else:
+                    counter = 0
+            elif appointment_status_label == "Cancelado":
+                if 1 <= days_interval < 7:    # Changed to match get_message_for_interval
+                    counter = 0      # Recent cancellation
+                elif 7 <= days_interval < 14:
+                    counter = 1      # Week-old cancellation
+                elif days_interval >= 14:
+                    counter = 2      # Old cancellation
+                else:
+                    counter = 0
+            else:
+                logger.warning(f"Invalid appointment_status_label for Reschedule: appointment_status_label={appointment_status_label}, days={days}")
+                return None  # Invalid status for Reschedule
+            
     else:
-        encoded_counter = 0  # Default fallback
+        logger.info(f"Using default counter=0 for tag: {relationship_tag}")
+        counter = 0  # Default fallback for other tags
     
+    logger.debug(f"Calculated counter={counter} for {relationship_tag} - {appointment_status_label} - {days_interval} days")
     # Try to get message with encoded counter
     message = Message.objects.filter(
         relationship_tag=relationship_tag,
-        counter=encoded_counter
+        counter=counter
     ).first()
     
     if not message:
-        logger.info(f"No specific message found for status={appointment_status_label}, days={days_interval}")
-        # Try to get a default message (counter=0)
-        message = Message.objects.filter(
-            relationship_tag=relationship_tag,
-            counter=0
-        ).first()
-        
-    if message:
-        logger.info(f"Found appointment message id={message.id}")
-    else:
-        logger.warning(f"No message found for appointment: status={appointment_status_label}, days={days_interval}")
-        
+        logger.warning(f"No message found for {relationship_tag} (counter={counter}, type={contact_type})")
+        return None
+
+    logger.info(f"Found message id={message.id} for {relationship_tag}")        
     return message
