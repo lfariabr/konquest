@@ -17,6 +17,7 @@ from apiCrm.models.lead import Lead
 from apiCrm.utils.create_store import create_store
 from apiCrm.utils.create_region import create_region
 from messageShooter.services.get_message_for_contact import get_message_for_contact
+from core.models.userphone import UserPhone
 
 logger = logging.getLogger(__name__)
 
@@ -359,17 +360,17 @@ class QueueProcessor:
         try:
             from messageShooter.resolvers.get_counter import get_counter_whatsapp
             from messageShooter.resolvers.get_message import get_message
-            
+            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps
+
             # Get related objects using sync_to_async
-            # TODO adjust here...
             @sync_to_async
             def get_related():
                 if not queue_item.target_list:
                     raise ValueError("Queue item missing target list")
                 contacts = list(queue_item.target_list.get_contacts())  # Evaluate queryset here
-                return queue_item.target_list, queue_item.userphone, contacts
+                return queue_item.target_list, contacts
 
-            target_list, userphone, contacts = await get_related()
+            target_list, contacts = await get_related()
             total_contacts = len(contacts)
             
             self.logger.info(f"🔄 Queue {queue_item.id}: Starting to process {total_contacts} contacts...")
@@ -395,6 +396,47 @@ class QueueProcessor:
                             "processed_at": timezone.now().isoformat(),
                             "message_counter": counter
                         }
+                        continue
+
+                    # Get appropriate userphone based on contact tag
+                    @sync_to_async
+                    def get_userphone_wrapper():
+                        if target_list.contact_tag == 'NPS':
+                            # For NPS, get store-specific userphone
+                            phone, token = get_userphone_nps(target_list.contact_tag, contact.store)
+                            if phone and token:
+                                try:
+                                    # Try to get existing UserPhone
+                                    userphone = UserPhone.objects.get(
+                                        phone_number=phone,
+                                        relationship_tag=target_list.contact_tag
+                                    )
+                                    return userphone
+                                except UserPhone.DoesNotExist:
+                                    # Create new UserPhone if it doesn't exist
+                                    userphone = UserPhone.objects.create(
+                                        phone_number=phone,
+                                        phone_token=token,
+                                        relationship_tag=target_list.contact_tag,
+                                        user=contact.user
+                                    )
+                                    logger.info(f"Created new UserPhone for NPS store {contact.store}")
+                                    return userphone
+                        else:
+                            # For non-NPS, use regular get_userphone
+                            userphone, token = get_userphone(target_list.contact_tag)
+                            return userphone
+                        return None
+
+                    userphone = await get_userphone_wrapper()
+                    if not userphone:
+                        self.logger.error(f"❌ Queue {queue_item.id}: No userphone found for contact {contact.phone}")
+                        processed_contacts[str(contact.id)] = {
+                            "status": "error",
+                            "error": "No userphone found",
+                            "processed_at": timezone.now().isoformat()
+                        }
+                        error_count += 1
                         continue
                     
                     # Apply rate limiting per phone
@@ -551,6 +593,11 @@ class QueueProcessor:
         asyncio.set_event_loop(loop)
         return loop.run_until_complete(self.process_queue_item_async(queue_item))
     
+    def send_message(self, contact, message, userphone):
+        """Send a message (sync version)"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop.run_until_complete(self.send_message_async(contact, message, userphone))
     def send_message(self, contact, message, userphone):
         """Send a message (sync version)"""
         loop = asyncio.new_event_loop()

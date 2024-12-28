@@ -74,7 +74,10 @@ class QueueAdmin(admin.ModelAdmin):
                     success, total, obj.retry_count
                 )
             else:
-                result = f"{success}/{total}"
+                result = format_html(
+                    '{}/{}',
+                    success, total
+                )
                 
             # Cache the result
             self.request.queue_counters[cache_key] = result

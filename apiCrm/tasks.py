@@ -1,21 +1,24 @@
-import logging
-from celery import shared_task
+# apiCrm/tasks.py
+from django.conf import settings
+from decouple import config
 from django.db import connection, transaction
+from core.models.contact import Contact
+from django.utils import timezone
+from datetime import timedelta, datetime
+from django.db.models import Q
+from apiCrm.schemas.resolve_all_data import Query
+from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, process_appointments_batch, process_bill_charges_batch
+from celery import shared_task
+import logging
+
+token = config('TOKEN')
+logger = logging.getLogger(__name__)
+
+# Are we using these?
 from django.db.models import ProtectedError
 from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
 from apiCrm.models.billcharge import BillCharge
-from core.models.contact import Contact
-from django.utils import timezone
-from datetime import timedelta, datetime
-from django.utils import timezone
-from django.conf import settings
-from decouple import config
-from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, process_appointments_batch, process_bill_charges_batch
-
-token = config('TOKEN')
-
-logger = logging.getLogger(__name__)
 
 @shared_task(
     name='apiCrm.cleanup_crm_tables',
@@ -77,7 +80,6 @@ def cleanup_crm_tables():
         logger.error(f"Failed to clean CRM tables: {str(e)}", exc_info=True)
         raise
 
-# This task should be triggered right after apiCrm.fetch_all_data when it's implemented
 @shared_task(
     name='apiCrm.check_contacts_in_crm',
     autoretry_for=(Exception,),
@@ -105,7 +107,9 @@ def check_contacts_in_crm():
     
     try:
         # Get most recent contacts
-        contacts = Contact.objects.all().order_by('-id')[:3000]
+        # contacts = Contact.objects.all().order_by('-id')[:3000]
+        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:2000]
+
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
         
@@ -153,8 +157,6 @@ def check_contacts_in_crm():
         logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
         raise
 
-# This task should be triggered right after cleanup_crm_tables
-from apiCrm.schemas.resolve_all_data import Query
 
 @shared_task(
     name='apiCrm.fetch_all_data',
@@ -195,3 +197,27 @@ def fetch_all_data():
     except Exception as e:
         logger.error(f"Error in fetch_all_data: {str(e)}", exc_info=True)
         raise
+
+@shared_task(
+    name='campaign.process_scheduled_campaigns',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True,
+    soft_time_limit=3600
+)
+def process_scheduled_campaigns():
+    """
+    Periodic task to process campaigns that are scheduled to run.
+    This task is scheduled to run every minute to check for campaigns
+    that need to be processed.
+    """
+    from messageShooter.services.scheduler import CampaignScheduler
+    from messageShooter.services.queue_processor import QueueProcessor
+    
+    logger.info(f"Starting to process scheduled campaigns @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    campaign_scheduler = CampaignScheduler()
+    campaign_scheduler.process_campaigns()
+    
+    logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    queue_processor = QueueProcessor()
+    queue_processor.process_queue()

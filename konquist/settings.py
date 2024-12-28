@@ -13,7 +13,7 @@ WSGI_APPLICATION = 'konquist.wsgi.application'
 DATABASE_ENGINE = 'sqlite3' 
 CONTACTS_START = 90
 CONTACTS_END = 700
-CONTACTS_TO_LOAD = 700 # messageShooter/resolvers/get_contacts.py
+CONTACTS_TO_LOAD = 10 # messageShooter/resolvers/get_contacts.py
 
 
 INSTALLED_APPS = [
@@ -24,23 +24,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Extra Libraries
     'rest_framework',
     'graphene_django',
     # 'debug_toolbar',
+
     # Apps
     'django_celery_beat',
     'apiCrm',
     'core',
     'apiSocialHub',
+
     # Controller:
     'messageShooter'
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',  # Add this first
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware', # New
-    'django.middleware.security.SecurityMiddleware', # New
+    'django.middleware.cache.UpdateCacheMiddleware',  # Add this first - performance
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware', 
+    'django.middleware.security.SecurityMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Add this last
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Add this last - performance
 
 ]
 
