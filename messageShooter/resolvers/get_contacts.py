@@ -22,12 +22,13 @@ from messageShooter.utils.is_appointment_es import (
     reschedule_desired_status_es,
     reschedule_undesired_status_es,
     nps_desired_status_es,
-    nps_undesired_status_es
+    nps_undesired_status_es,
+    nps_stores_include_es
 )
 from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact
 
 
-from konquist.settings import CONTACTS_TO_LOAD
+from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END
 logger = logging.getLogger(__name__)
 
 def get_contact_whatsapp(contact_type, contact_tag):
@@ -46,7 +47,7 @@ def get_contact_whatsapp(contact_type, contact_tag):
         # status__in=['landing page', 'active', None],
         is_lead=False,
         is_appointment=False,
-    ).order_by('-created_at')[:CONTACTS_TO_LOAD]
+    ).order_by('-created_at')[:CONTACTS_TO_LOAD]  #:CONTACTS_TO_LOAD CONTACTS_START:CONTACTS_END
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")
@@ -81,6 +82,12 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     )
     # Just removed "store_name" to get all stores and filter within the contact tag.
 
+    base_query_nps = Appointment.objects.filter(
+        store_name__in=nps_stores_include_es
+        ).exclude(
+            procedure_name__in=procedures_es
+    )
+
     try:
         if contact_tag == 'Reminder':
             """
@@ -95,8 +102,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             # Get all potential appointments
             potential_appointments = base_query.filter(
                 Q(status_label__in=reminder_desired_status_es) &
-                Q(appointment_date__range=(now, five_days_future) &
-                Q(store_name__in=stores_include_es))
+                Q(appointment_date__range=(now, five_days_future)) &
+                Q(store_name__in=stores_include_es)
             ).order_by('appointment_date')
 
             # Get excluded appointments by existing customer_phone
@@ -145,9 +152,28 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             logger.info(f"Reschedule - Found {len(appointments)} appointments")
 
         elif contact_tag == 'NPS':
-            pass
-            # Work In Progress
-            # Get appointments that were served on the past 2 days
+            
+            # Define NPS period: past 2 days
+            last_2_days = now - timedelta(days=2)
+            
+            # Get all potential appointments
+            nps_appointments = base_query_nps.filter(
+                    Q(status_label__in=nps_desired_status_es) &
+                    Q(appointment_date__range=(last_2_days, now)) &
+                    Q(store_name__in=nps_stores_include_es)
+                ).order_by('appointment_date')
+
+            # Create a dictionary to keep track of unique phone numbers
+            # Keep only the first (earliest) appointment for each phone
+            unique_appointments = {}
+            for apt in nps_appointments:
+                if apt.customer_phone not in unique_appointments:
+                    unique_appointments[apt.customer_phone] = apt
+
+            # Convert back to list and apply limit
+            appointments = list(unique_appointments.values())[:CONTACTS_TO_LOAD]
+
+            logger.info(f"NPS - Found {len(nps_appointments)} total appointments, {len(appointments)} unique appointments")
 
         else:
             # Default case: return all relevant appointments

@@ -8,6 +8,8 @@ from django.conf.urls.static import static
 from graphene_django.views import GraphQLView
 from django.views.generic.base import RedirectView
 from apiCrm.schemas.resolve_all_data import schema
+from django.views.generic import TemplateView
+from core.views import get_terminal_logs
 
 main_urlpatterns = [
     path('admin/', admin_site.urls),
@@ -19,6 +21,8 @@ urlpatterns = [
     path('', include(main_urlpatterns)),
     path('apiCrm/graphql/', GraphQLView.as_view(graphiql=True, schema=schema)),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.svg', permanent=True)),
+    path('terminal_logs/', TemplateView.as_view(template_name='pages/terminal_logs.html'), name='terminal_logs'),
+    path('terminal_logs/data/', get_terminal_logs, name='get_terminal_logs'),
 
 ]
 

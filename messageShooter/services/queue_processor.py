@@ -361,6 +361,7 @@ class QueueProcessor:
             from messageShooter.resolvers.get_message import get_message
             
             # Get related objects using sync_to_async
+            # TODO adjust here...
             @sync_to_async
             def get_related():
                 if not queue_item.target_list:

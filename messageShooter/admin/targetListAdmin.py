@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.core.cache import cache
 import json
 from messageShooter.resolvers.get_counter import get_counter_appointment
+from messageShooter.resolvers.get_counter import get_counter_whatsapp
+
 
 logger = logging.getLogger(__name__)
 
@@ -73,9 +75,13 @@ class TargetListAdmin(admin.ModelAdmin):
                 elif obj.contact_tag.lower() == 'preenchimento':
                     return obj.contact.preenchimento_messages_sent
             if obj.contact_type == 'Appointment':
-                from messageShooter.resolvers.get_days_interval import calculate_interval
-                if obj.contact.appointment_created_at:
-                    return calculate_interval(obj.contact.appointment_created_at)
+                if obj.contact_tag == "NPS":
+                    counter = get_counter_whatsapp(obj.contact.phone, obj.contact_tag)
+                    return counter
+                elif obj.contact_tag == "Reminder" or obj.contact_tag == "Reschedule":
+                    from messageShooter.resolvers.get_days_interval import calculate_interval
+                    if obj.contact.appointment_created_at:
+                        return calculate_interval(obj.contact.appointment_created_at)
             
             return 0
         except Exception as e:

@@ -91,7 +91,7 @@ class MessageLogsAdmin(admin.ModelAdmin):
 admin.site.register(MessageLogs, MessageLogsAdmin)
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'relationship_tag', 'created_at', 'source',
+    list_display = ('name', 'phone', 'created_at', 'source', 'relationship_tag',  
                     'store', 'region', 'external_tag', 'status', 
                     # Lead related data
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
