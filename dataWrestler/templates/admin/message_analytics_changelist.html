@@ -1,0 +1,144 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .chart-container {
+        width: 100%;
+        margin: 20px 0;
+        padding: 20px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <!-- Original change list content -->
+    {{ block.super }}
+    
+    <!-- Analytics Dashboard -->
+    <div class="chart-grid">
+        <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="tagChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="phoneChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chartData = {{ chart_data|safe }};
+    
+    // Monthly Messages Chart
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'line',
+        data: {
+            labels: chartData.monthly_data.map(d => d[0]),
+            datasets: [{
+                label: 'Monthly Messages',
+                data: chartData.monthly_data.map(d => d[1]),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Messages per Month'
+                }
+            }
+        }
+    });
+    
+    // Tag Distribution Chart
+    new Chart(document.getElementById('tagChart'), {
+        type: 'pie',
+        data: {
+            labels: chartData.tag_data.map(d => d[0]),
+            datasets: [{
+                data: chartData.tag_data.map(d => d[1]),
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(153, 102, 255)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribution by Relationship Tag'
+                }
+            }
+        }
+    });
+    
+    // Status Distribution Chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.status_data.map(d => d[0]),
+            datasets: [{
+                label: 'Messages by Status',
+                data: chartData.status_data.map(d => d[1]),
+                backgroundColor: 'rgb(54, 162, 235)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribution by Status'
+                }
+            }
+        }
+    });
+    
+    // Phone Distribution Chart
+    new Chart(document.getElementById('phoneChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.phone_data.map(d => d[0]),
+            datasets: [{
+                label: 'Messages by Phone',
+                data: chartData.phone_data.map(d => d[1]),
+                backgroundColor: 'rgb(75, 192, 192)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribution by Phone'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

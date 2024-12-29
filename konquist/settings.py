@@ -18,6 +18,7 @@ CONTACTS_TO_LOAD = 10 # messageShooter/resolvers/get_contacts.py
 
 INSTALLED_APPS = [
     'django_daisy',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'apiCrm',
     'core',
     'apiSocialHub',
+    'dataWrestler',
 
     # Controller:
     'messageShooter'
@@ -60,7 +62,10 @@ ROOT_URLCONF = 'konquist.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend','templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'frontend', 'templates'),
+            os.path.join(BASE_DIR, 'dataWrestler', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
