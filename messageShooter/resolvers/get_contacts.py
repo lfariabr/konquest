@@ -52,8 +52,7 @@ def get_contact_whatsapp(contact_type, contact_tag):
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")
     
-    #TODO think about how to remove duplicates
-    return contacts
+    return contacts #TODO think about how to remove duplicates
     
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """
@@ -77,10 +76,10 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     
     # Base query with common filters
     base_query = Appointment.objects.filter(
-        # store_name__in=stores_include_es, 
         procedure_name__in=procedures_es
+        # store_name__in=stores_include_es, 
+        # Removed "store_name" to get all stores and filter within the contact tag.
     )
-    # Just removed "store_name" to get all stores and filter within the contact tag.
 
     base_query_nps = Appointment.objects.filter(
         store_name__in=nps_stores_include_es

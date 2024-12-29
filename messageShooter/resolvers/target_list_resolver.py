@@ -115,7 +115,7 @@ def create_target_list(campaign_id, force_run=False):
                     contact_id = contact.id
 
                 # Skip if phone number is invalid
-                if not phone or not phone.isdigit():                # contact.id changed to contact_id
+                if not phone or not phone.isdigit():
                     logger.debug(f"Invalid phone number for contact {contact_id} - skipping")
                     skipped_count += 1
                     continue

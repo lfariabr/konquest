@@ -22,6 +22,9 @@ class Contact(models.Model):
     botox_messages_sent = models.IntegerField(default=0, help_text="Number of Botox campaign messages sent")
     preenchimento_messages_sent = models.IntegerField(default=0, help_text="Number of Preenchimento campaign messages sent")
     last_message_sent_at = models.DateTimeField(null=True, blank=True)
+    # reminder_messages_sent = models.IntegerField(default=0, help_text="Number of Reminder campaign messages sent")
+    # reschedule_messages_sent = models.IntegerField(default=0, help_text="Number of Reschedule campaign messages sent")
+    # nps_messages_sent = models.IntegerField(default=0, help_text="Number of NPS campaign messages sent")
     
     # External Info - CRM / Social Hub
     reference_code = models.CharField(max_length=100, null=True, blank=True)

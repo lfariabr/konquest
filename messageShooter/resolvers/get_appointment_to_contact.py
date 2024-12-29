@@ -37,12 +37,15 @@ def convert_appointment_to_contact(appointment, contact_tag, user=None):
             # is_appointment=True
         ).first()
         
+        
         if existing_contact:
+            logger.info(f"Found existing contact for phone {appointment.customer_phone}: {existing_contact}. \n This means we are updating an existing contact, not creating neither duplication.")
             existing_contact.appointment_status = appointment.status_label
             existing_contact.appointment_id = appointment.id_crm  # Update to latest appointment
             existing_contact.is_appointment = True
             existing_contact.save()
             return existing_contact
+
             
         contact = Contact(
             name=appointment.customer_name,
