@@ -1,9 +1,20 @@
 # Konquista Django App
 
 ## Commands
+### Dev
 python manage.py runserver
 celery -A konquist worker -l INFO
 celery -A konquist beat -l INFO
+
+### Homolog
+for changes in requirements, Dockerfile or docker-compose.yml:
+- docker-compose up --build 
+
+for regular code changes:
+- docker-compose restart
+
+- stop all: docker-compose down
+- logs: docker-compose logs -f
 
 ## Goal
 Konquista Django App is designed to manage CRM-related data.
@@ -82,6 +93,8 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Check Contact Bill Charges
 - Build rationale to integrate Reschedule Campaign
 - get contacts / get counter / get phone / get message / customize message / calculate days interval
+- dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
+- Docker Prep done: docker-compose up --build 
 
 # In progress
 
@@ -91,7 +104,6 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Build "NPS" Campaign
 
 ## Backlog:
-- dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 
 ## Setup and Installation

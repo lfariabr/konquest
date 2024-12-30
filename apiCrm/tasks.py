@@ -10,6 +10,8 @@ from apiCrm.schemas.resolve_all_data import Query
 from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, process_appointments_batch, process_bill_charges_batch
 from celery import shared_task
 import logging
+from django.core.cache import cache
+
 
 token = config('TOKEN')
 logger = logging.getLogger(__name__)
@@ -221,3 +223,22 @@ def process_scheduled_campaigns():
     logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     queue_processor = QueueProcessor()
     queue_processor.process_queue()
+
+@shared_task(
+    name='apiCrm.test_redis',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True,
+    soft_time_limit=27000 # 45 minutes
+)
+def test_redis():
+    """Test task to verify Redis connection and Celery worker."""
+    try:
+        # Test Redis cache
+        cache.set('celery_test', 'Redis connection working!')
+        result = cache.get('celery_test')
+        logger.info(f'Redis test result: {result}')
+        return True
+    except Exception as e:
+        logger.error(f'Redis test failed: {str(e)}')
+        return False

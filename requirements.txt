@@ -1,104 +1,101 @@
-aiohappyeyeballs==2.4.3
-aiohttp==3.10.10
-aiosignal==1.3.1
-amqp==5.2.0
-asgiref==3.8.1
-async-timeout==4.0.3
-asyncio==3.4.3
-asynctest==0.13.0
-attrs==24.2.0
-autobahn==24.4.2
-Automat==24.8.1
-billiard==4.2.1
-celery==5.4.0
-certifi==2024.8.30
-cffi==1.17.1
-channels==4.2.0
-channels_redis==4.2.1
-charset-normalizer==3.4.0
-click==8.1.7
-click-didyoumean==0.3.1
-click-plugins==1.1.1
-click-repl==0.3.0
-constantly==23.10.4
-cron-descriptor==1.4.5
-cryptography==44.0.0
-daphne==4.1.2
-datetime-truncate==1.1.1
-debugpy==1.8.8
-Django==5.1.3
-django-admin-charts==1.4.0
-django-bower==5.2.0
-django-celery-beat==2.7.0
+# Django and Core
 django-daisy==0.1.30
-django-debug-toolbar==4.4.6
+Django==5.1.2
+asgiref>=3.8.1,<4.0.0  # Required by Django
+sqlparse>=0.3.1  # Required by Django
+django-admin==2.0.2
+django-filter==24.3
 django-jazzmin==3.0.1
-django-memoize==2.3.1
-django-multiselectfield==0.1.13
-django-nvd3==0.10.1
-django-redis==5.4.0
-django-timezone-field==7.0
 djangorestframework==3.15.2
-docker==7.1.0
-et_xmlfile==2.0.0
-exceptiongroup==1.2.2
-freezegun==1.5.1
-frozenlist==1.5.0
-graphene==3.4.1
-graphene-django==3.2.2
-graphql-core==3.2.5
-graphql-relay==3.2.0
-h11==0.14.0
-hyperlink==21.0.0
-idna==3.10
-incremental==24.7.2
-iniconfig==2.0.0
-Jinja2==3.1.5
-kombu==5.4.2
-MarkupSafe==3.0.2
-msgpack==1.1.0
-multidict==6.1.0
-numpy==2.1.3
-openpyxl==3.1.5
-packaging==24.2
-pandas==2.2.3
-pluggy==1.5.0
-promise==2.3
-prompt_toolkit==3.0.48
-propcache==0.2.0
-psutil==6.1.0
-psycopg==3.2.3
-pyasn1==0.6.1
-pyasn1_modules==0.4.1
-pycparser==2.22
-pyOpenSSL==24.3.0
-pytest==8.3.3
-pytest-asyncio==0.24.0
-pytest-celery==1.1.3
-pytest-django==4.9.0
-pytest-docker-tools==3.1.3
-pytest-mock==3.14.0
-python-crontab==3.2.0
-python-dateutil==2.9.0.post0
-python-decouple==3.8
-python-nvd3==0.16.0
-python-slugify==8.0.4
-pytz==2024.2
+djangorestframework-simplejwt==5.3.1
+
+# Admin Dependencies
+six>=1.16.0  # Required by multiple packages
+django-six>=1.0.5  # Required by django-admin
+django-excel-response2>=3.0.0  # Required by django-admin
+excel-base>=1.0.4  # Required by django-excel-response2
+xlwt>=1.3.0  # Required by excel-base
+
+# Celery and Task Management
+celery==5.4.0
+django-celery-beat==2.7.0
+django-timezone-field==7.0  # Required by django-celery-beat
+python-crontab>=2.3.4  # Required by django-celery-beat
+cron-descriptor>=1.2.32  # Required by django-celery-beat
+tzdata>=2024.1  # Required by django-celery-beat
+kombu>=5.3.0  # Required by celery
+billiard>=4.2.0  # Required by celery
+click>=8.0.3  # Required by celery
+click-didyoumean>=0.3.0  # Required by celery
+click-plugins>=1.1.1  # Required by celery
+click-repl>=0.2.0  # Required by celery
+python-dateutil>=2.8.2  # Required by celery
+
+# Data Processing
+pandas>=2.1.0  # Required for CSV processing
+numpy>=1.24.0  # Required by pandas
+pytz>=2023.3  # Required by pandas
+python-dateutil>=2.8.2  # Required by pandas
+
+# Database and Caching
+psycopg2-binary==2.9.10
+django-db-connection-pool==1.2.5
+django-redis==5.4.0
 redis==5.2.0
-requests==2.32.3
-service-identity==24.2.0
-six==1.16.0
-sqlparse==0.5.1
-tenacity==9.0.0
-text-unidecode==1.3
-tomli==2.1.0
-Twisted==24.11.0
-txaio==23.1.1
-typing_extensions==4.12.2
-tzdata==2024.2
-urllib3==2.2.3
-uvicorn==0.34.0
-vine==5.1.0
-wcwidth==0.2.13
-yarl==1.17.1
-zope.interface==7.2
+sqlparams>=4.0.0
+SQLAlchemy>=1.4.24
+
+# HTTP and API
+gunicorn==21.1.0
+packaging>=20.0 
+httpx>=0.23.0,<0.26.0
+requests==2.31.0
+aiohttp==3.10.10
+urllib3>=2.0.0  # Required by requests
+certifi>=2023.7.22  # Required by requests
+charset-normalizer>=2.0.0  # Required by requests
+idna>=2.5  # Required by requests
+vine<6.0,>=5.1.0
+
+# Async HTTP
+aiohttp==3.10.10
+multidict>=4.5,<7.0  # Required by aiohttp
+async-timeout>=4.0.3,<5.0  # Required by both redis and aiohttp
+yarl>=1.0,<2.0  # Required by aiohttp
+frozenlist>=1.1.0  # Required by aiohttp
+aiosignal>=1.1.2  # Required by aiohttp
+attrs>=17.3.0  # Required by aiohttp
+aiohappyeyeballs>=2.3.0
+
+# Authentication and Security
+bcrypt==4.2.1
+python-jose==3.3.0
+ecdsa>=0.16.0  # Required by python-jose (avoiding 0.15)
+pyasn1>=0.4.9  # Required by python-jose
+rsa>=4.9.0  # Required by python-jose
+
+# Data Validation
+pydantic==2.3.0
+pydantic-core==2.6.3  # Required by pydantic
+typing-extensions>=4.6.1  # Required by pydantic
+annotated-types>=0.4.0  # Required by pydantic
+
+# Hashing and Encryption
+argon2-cffi==23.1.0
+argon2-cffi-bindings>=21.2.0  # Required by argon2-cffi
+PyJWT==2.10.0
+cryptography==43.0.3
+
+# Configuration
+python-decouple==3.8
+python-dotenv==1.0.0
+
+# GraphQL
+graphene>=3.3.0,<3.4.0
+graphene-django>=3.1.5,<3.2.0
+graphql-core>=3.2.0,<3.3.0
+graphql-relay>=3.2.0,<3.3.0
+promise>=2.3  # Required by graphql-core
+aniso8601>=8.0.0  # Required by graphene
+
+django-debug-toolbar>=4.2.0  # Updated to latest version compatible with Django 5.1

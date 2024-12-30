@@ -4,6 +4,8 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from celery.signals import worker_ready
+from celery import signals
+
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
@@ -14,7 +16,8 @@ app.conf.broker_connection_retry_on_startup = True
 app.conf.imports = ['apiCrm.tasks']
 app.autodiscover_tasks()
 
-@worker_ready.connect
+# @worker_ready.connect
+@signals.worker_ready.connect
 def on_worker_ready(**_):
     print('\033[92m\n🚀 Celery worker is up and running!\033[0m\n')
 
@@ -36,6 +39,19 @@ app.conf.beat_schedule = {
 
     'process_scheduled_campaigns': {
         'task': 'campaign.process_scheduled_campaigns',
-        'schedule': 150.0,
+        'schedule': 4000.0, # Seconds
     },
+
+    'test_redis_connection': {
+        'task': 'apiCrm.test_redis',
+        'schedule': crontab(minute='*/1'),  # Every minute (for testing)
+    }
 }
+
+@signals.task_success.connect
+def task_success_handler(sender=None, **kwargs):
+    print(f'\033[92mTask {sender.name} completed successfully\033[0m')
+
+@signals.task_failure.connect
+def task_failure_handler(sender=None, **kwargs):
+    print(f'\033[91mTask {sender.name} failed: {kwargs.get("exception")}\033[0m')

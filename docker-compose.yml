@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  django:
+    build: .
+    container_name: konquest_django
+    command: >
+      bash -c "python manage.py migrate &&
+              python manage.py collectstatic --noinput &&
+              gunicorn konquist.wsgi:application --bind 0.0.0.0:8001 
+              --workers 3 
+              --timeout 300 
+              --keep-alive 65 
+              --log-level info 
+              --access-logfile - 
+              --error-logfile -"
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8001:8001"  # Changed from 8000
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - redis
+    networks:
+      - konquest_network
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: konquest_redis
+    ports:
+      - "6380:6380"  # Changed both host and container ports to 6380
+    volumes:
+      - redis_data:/data
+    command: redis-server --port 6380 --appendonly yes --requirepass ${REDIS_PASSWORD}
+    networks:
+      - konquest_network
+
+  redis_commander:
+    image: rediscommander/redis-commander:latest
+    container_name: konquest_redis_commander
+    environment:
+      - REDIS_HOSTS=local:redis:6380:0:${REDIS_PASSWORD}
+    ports:
+      - "8082:8081"  # Changed from 8081
+    depends_on:
+      - redis
+    networks:
+      - konquest_network
+
+  celery_worker:
+    build: .
+    container_name: konquest_celery_worker
+    command: celery -A konquist worker -l INFO
+    volumes:
+      - .:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - redis
+      - django
+    networks:
+      - konquest_network
+
+  celery_beat:
+    build: .
+    container_name: konquest_celery_beat
+    command: celery -A konquist beat -l INFO
+    volumes:
+      - .:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - redis
+      - django
+      - celery_worker
+    networks:
+      - konquest_network
+
+networks:
+  konquest_network:
+    name: konquest_network_new  # Changed network name
+    driver: bridge
+
+volumes:
+  redis_data:
+  static_volume:
+  media_volume:

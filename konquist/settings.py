@@ -115,19 +115,6 @@ DATABASE_OPTIONS = {
 # Query optimization
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
-# Cache settings
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'MAX_ENTRIES': 1000,
-            'CULL_FREQUENCY': 3
-        }
-    }
-}
-
 # Cache middleware settings
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 300
@@ -192,10 +179,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100 MB
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CELERY
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -235,6 +218,21 @@ LOGGING = {
     }
 }
 
+# Redis Configuration
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+REDIS_PORT = os.environ.get('REDIS_PORT', '6380')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+REDIS_DB = '0'
+
+REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
+CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
+CELERY_RESULT_BACKEND = REDIS_URL
+
+# Celery Configuration
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
 # Debug toolbar settings
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -253,3 +251,19 @@ if DEBUG:
         'debug_toolbar.panels.cache.CachePanel',
         'debug_toolbar.panels.profiling.ProfilingPanel',
     ]
+
+# Cache Settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': 5,
+            'SOCKET_TIMEOUT': 5,
+            'RETRY_ON_TIMEOUT': True,
+            'MAX_ENTRIES': 1000,
+            'CULL_FREQUENCY': 3,
+        }
+    }
+}
