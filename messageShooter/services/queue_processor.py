@@ -158,8 +158,6 @@ class QueueProcessor:
                                 relationship_tag=f"{campaign_name}"
                             )
                             self.logger.info(f"Lead created and logged for {contact.phone} in campaign {campaign_name}")
-                            time.sleep(60)
-                            print("Resting 60 seconds before creating next lead...")
                             return True, None
                         return False, "Failed to create lead in CRM"
 
@@ -167,6 +165,10 @@ class QueueProcessor:
                     if not lead_success:
                         self.logger.error(f"Failed to create lead for {contact.phone}: {lead_error}")
                         return False, lead_error
+                    
+                    # Add delay after successful lead creation
+                    self.logger.info("Resting 60 seconds before creating next lead...")
+                    await asyncio.sleep(60)
                     
                     # Return here after successful lead creation to prevent message sending
                     return True, None

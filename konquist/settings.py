@@ -11,9 +11,9 @@ WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
 DATABASE_ENGINE = 'sqlite3' 
-CONTACTS_START = 90
-CONTACTS_END = 700
-CONTACTS_TO_LOAD = 10 # messageShooter/resolvers/get_contacts.py
+CONTACTS_START = 121
+CONTACTS_END = 300
+CONTACTS_TO_LOAD = 700 # messageShooter/resolvers/get_contacts.py
 
 
 INSTALLED_APPS = [

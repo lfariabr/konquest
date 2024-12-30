@@ -110,7 +110,7 @@ def check_contacts_in_crm():
     try:
         # Get most recent contacts
         # contacts = Contact.objects.all().order_by('-id')[:3000]
-        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:2000]
+        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:1500]
 
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
@@ -169,39 +169,55 @@ def check_contacts_in_crm():
     rate_limit='1/h'
 )
 def fetch_all_data():
-    """
-    Fetch all CRM data for the last 30 days and upcoming 15 days.
-    This task should run after cleanup_crm_tables and before check_contacts_in_crm.
-    """
-    today = datetime.now().date()
-    start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
-    end_date = today.strftime('%Y-%m-%d')
-    extended_end_date = (today + timedelta(days=20)).strftime('%Y-%m-%d')
-
+    lock_id = "fetch_all_data_lock"
+    # Try to acquire lock
+    if not cache.add(lock_id, "true", timeout=3600):  # 1 hour timeout
+        return "Task already running"
+    
     try:
+        today = datetime.now().date()
+        start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
+        end_date = today.strftime('%Y-%m-%d')
+        extended_end_date = (today + timedelta(days=20)).strftime('%Y-%m-%d')
+
         logger.info(f"Fetching data for dates: {start_date} to {extended_end_date}")
         
-        # Use the same resolver as the GraphQL endpoint
-        query = Query()
-        result = query.resolve_all_data(None, start_date, end_date, extended_end_date)
+        # Fetch raw data using the existing fetch_data function
+        leads_data, appointments_data, bill_charges_data = fetch_data(start_date, end_date, extended_end_date, token)
         
-        # Return counts instead of GraphQL types
-        stats = {
-            'leads_count': len(result.leads) if result.leads else 0,
-            'appointments_count': len(result.appointments) if result.appointments else 0,
-            'bill_charges_count': len(result.bill_charges) if result.bill_charges else 0,
+        stats = {'processed': 0, 'failed': 0}
+        
+        # Process each type of data in batches
+        leads = process_leads_batch(leads_data, stats, batch_size=1000)
+        logger.info(f"Processed {len(leads)} leads. Failed: {stats['failed']}")
+        
+        appointments = process_appointments_batch(appointments_data, stats, batch_size=1000)
+        logger.info(f"Processed {len(appointments)} appointments. Failed: {stats['failed']}")
+        
+        bill_charges = process_bill_charges_batch(bill_charges_data, stats, batch_size=1000)
+        logger.info(f"Processed {len(bill_charges)} bill charges. Failed: {stats['failed']}")
+        
+        # Return stats
+        result_stats = {
+            'leads_count': len(leads),
+            'appointments_count': len(appointments),
+            'bill_charges_count': len(bill_charges),
+            'failed_count': stats['failed'],
             'date_range': f"{start_date} to {extended_end_date}"
         }
         
-        logger.info(f"Successfully fetched and processed data")
-        return stats
+        logger.info(f"Successfully fetched and processed data: {result_stats}")
+        return result_stats
         
     except Exception as e:
         logger.error(f"Error in fetch_all_data: {str(e)}", exc_info=True)
         raise
+    finally:
+        # Release lock
+        cache.delete(lock_id)
 
 @shared_task(
-    name='campaign.process_scheduled_campaigns',
+    name='apiCrm.process_scheduled_campaigns',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
@@ -220,6 +236,19 @@ def process_scheduled_campaigns():
     campaign_scheduler = CampaignScheduler()
     campaign_scheduler.process_campaigns()
     
+    # logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    # queue_processor = QueueProcessor()
+    # queue_processor.process_queue()
+
+@shared_task(
+    name='queue.process_queues',
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3},
+    retry_backoff=True,
+    soft_time_limit=3600
+)
+def process_available_queues():
+    from messageShooter.services.queue_processor import QueueProcessor
     logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     queue_processor = QueueProcessor()
     queue_processor.process_queue()
@@ -234,11 +263,35 @@ def process_scheduled_campaigns():
 def test_redis():
     """Test task to verify Redis connection and Celery worker."""
     try:
-        # Test Redis cache
+        # Test Redis cache with multiple operations to keep connection warm
         cache.set('celery_test', 'Redis connection working!')
+        cache.set('celery_heartbeat', timezone.now().isoformat())
+        cache.set('celery_counter', cache.get('celery_counter', 0) + 1)
+        
+        # Read values back to ensure connection is working both ways
         result = cache.get('celery_test')
+        heartbeat = cache.get('celery_heartbeat')
+        counter = cache.get('celery_counter')
+        
         logger.info(f'Redis test result: {result}')
+        logger.info(f'Redis heartbeat: {heartbeat}')
+        logger.info(f'Redis counter: {counter}')
+        
+        # Force connection to stay alive with a small pipeline
+        cache.set_many({
+            'test1': 1,
+            'test2': 2,
+            'test3': 3
+        }, timeout=60)
+        
         return True
     except Exception as e:
         logger.error(f'Redis test failed: {str(e)}')
+        # Try to reconnect immediately
+        try:
+            cache.close()
+            cache.set('celery_reconnect', timezone.now().isoformat())
+            logger.info('Redis reconnection successful')
+        except Exception as re:
+            logger.error(f'Redis reconnection failed: {str(re)}')
         return False

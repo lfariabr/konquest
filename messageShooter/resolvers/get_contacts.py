@@ -47,12 +47,16 @@ def get_contact_whatsapp(contact_type, contact_tag):
         # status__in=['landing page', 'active', None],
         is_lead=False,
         is_appointment=False,
-    ).order_by('-created_at')[:CONTACTS_TO_LOAD]  #:CONTACTS_TO_LOAD CONTACTS_START:CONTACTS_END
+    ).order_by('-created_at')[:CONTACTS_TO_LOAD]  
+            
+            # Option 1:     :CONTACTS_TO_LOAD 
+            # Option 2:     CONTACTS_START:CONTACTS_END
     
     count = contacts.count()
     logger.info(f"Found {count} contacts with tag {contact_tag}")
     
-    return contacts #TODO think about how to remove duplicates
+    return contacts 
+    #TODO think about how to remove duplicates
     
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """

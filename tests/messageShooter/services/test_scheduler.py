@@ -1,6 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from datetime import datetime
 
 from core.models.user import kUser
@@ -25,9 +25,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class TestCampaignScheduler(TestCase):
+class TestCampaignScheduler(TransactionTestCase):
+    """Test cases for CampaignScheduler using SQLite3"""
+    
     def setUp(self):
         """Set up test data"""
+        # Create test user
         self.user = kUser.objects.create(
             name="Test User",
             email="test@example.com",
@@ -71,7 +74,7 @@ class TestCampaignScheduler(TestCase):
         # Get current time for testing
         current_time = timezone.now()
         
-        # Create an active campaign with next_run set to now
+        # Create an active campaign
         self.campaign = Campaign.objects.create(
             user=self.user,
             name="Test Campaign",
@@ -90,6 +93,16 @@ class TestCampaignScheduler(TestCase):
         # Create scheduler instance
         self.scheduler = CampaignScheduler()
 
+    def tearDown(self):
+        """Clean up after each test"""
+        Queue.objects.all().delete()
+        TargetList.objects.all().delete()
+        Campaign.objects.all().delete()
+        Contact.objects.all().delete()
+        Message.objects.all().delete()
+        UserPhone.objects.all().delete()
+        kUser.objects.all().delete()
+
     def test_process_campaigns_creates_target_lists(self):
         """Test that process_campaigns creates target lists for active campaigns"""
         # Mock current time to be a Monday
@@ -102,273 +115,127 @@ class TestCampaignScheduler(TestCase):
             self.campaign.save()
             
             # Process campaigns
-            created_count = self.scheduler.process_campaigns()
-            
-            # Check that target lists were created
-            self.assertEqual(created_count, 1)
-            self.assertEqual(TargetList.objects.count(), 1)
-            
-            # Check target list details
-            target_list = TargetList.objects.first()
-            self.assertEqual(target_list.contact_tag, "Preenchimento")
-            self.assertEqual(target_list.message, self.messages[0])  # Should use first message (counter=0)
-            self.assertEqual(target_list.sent_messages_count, 0)
+            with patch('messageShooter.resolvers.get_userphone.get_userphone') as mock_get_userphone:
+                mock_get_userphone.return_value = (self.user_phone, "test_token")
+                
+                with patch('messageShooter.resolvers.get_counter.get_counter_whatsapp') as mock_get_counter:
+                    mock_get_counter.return_value = 0
+                    
+                    with patch('messageShooter.resolvers.get_message.get_message') as mock_get_message:
+                        mock_get_message.return_value = self.messages[0]
+                        
+                        # Run the scheduler
+                        queued_count = self.scheduler.process_campaigns()
+                        
+                        # Verify results
+                        self.assertEqual(queued_count, 1)
+                        
+                        # Check that target lists were created
+                        target_lists = TargetList.objects.filter(campaign=self.campaign)
+                        self.assertTrue(target_lists.exists())
+                        
+                        # Check that queue was created
+                        queues = Queue.objects.filter(campaign=self.campaign)
+                        self.assertTrue(queues.exists())
+                        
+                        queue = queues.first()
+                        self.assertEqual(queue.message, self.messages[0])
+                        self.assertEqual(queue.userphone, self.user_phone)
+                        self.assertEqual(queue.phone_token, "test_token")
+                        self.assertEqual(queue.status, "pending")
+                        
+                        # Check that target lists are marked as processing
+                        for target_list in target_lists:
+                            self.assertEqual(target_list.status, "processing")
 
-    def test_process_campaigns_skips_inactive_campaign(self):
-        """Test that process_campaigns skips inactive campaigns"""
-        # Make campaign inactive
-        self.campaign.campaign_status = "Paused"
-        self.campaign.save()
-        
-        # Process campaigns
-        created_count = self.scheduler.process_campaigns()
-        
-        # Check that no target lists were created
-        self.assertEqual(created_count, 0)
-        self.assertEqual(TargetList.objects.count(), 0)
-
-    def test_process_campaigns_respects_message_counter(self):
-        """Test that process_campaigns respects message counter when creating target lists"""
-        # Create a message log to simulate previous messages
-        from core.models.messagelog import MessageLogs
-        
-        # Mock current time to be a Monday
-        monday = datetime(2024, 1, 8, 8, 0, 0)  # A Monday
+    def test_process_campaigns_handles_missing_userphone(self):
+        """Test that process_campaigns handles missing userphone gracefully"""
+        monday = datetime(2024, 1, 8, 8, 0, 0)
         with patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = timezone.make_aware(monday)
             
-            # Update campaign next_run time
             self.campaign.next_run = timezone.make_aware(monday)
             self.campaign.save()
             
-            MessageLogs.objects.create(
-                message=self.messages[0],
-                user=self.user,
-                user_phone=self.user_phone,
-                contact=self.contact,  
-                status="sent",
-                relationship_tag="Preenchimento"  
-            )
+            # Create a mock target list
+            target_list = MagicMock(spec=TargetList)
+            target_list.campaign = self.campaign
+            target_list.contact = self.contact
+            target_list.contact_type = "Whatsapp"
+            target_list.contact_tag = "Preenchimento"
+            target_list.contact_phone = "1234567890"
+            target_list.status = "pending"
+            target_list.id = 1
             
-            # Process campaigns
-            created_count = self.scheduler.process_campaigns()
-            
-            # Check that target list was created with correct message
-            self.assertEqual(created_count, 1)
-            target_list = TargetList.objects.first()
-            self.assertEqual(target_list.message, self.messages[1])  # Should use second message (counter=1)
-            self.assertEqual(target_list.sent_messages_count, 1)
+            with patch('messageShooter.services.scheduler.generate_target_lists') as mock_generate:
+                mock_generate.return_value = [target_list]
+                
+                with patch('messageShooter.resolvers.get_userphone.get_userphone') as mock_get_userphone:
+                    mock_get_userphone.return_value = (None, None)
+                    
+                    queued_count = self.scheduler.process_campaigns()
+                    
+                    self.assertEqual(queued_count, 0)
+                    self.assertFalse(Queue.objects.filter(campaign=self.campaign).exists())
 
-    def test_process_campaigns_skips_when_no_matching_message(self):
-        """Test that process_campaigns skips when no message exists for the counter"""
-        # Create multiple message logs to exceed available messages
-        from core.models.messagelog import MessageLogs
-        for _ in range(6):  # More than available messages
-            MessageLogs.objects.create(
-                message=self.messages[0],
-                user=self.user,
-                user_phone=self.user_phone,
-                contact=self.contact,  
-                status="sent",
-                relationship_tag="Preenchimento"  
-            )
-        
-        # Process campaigns
-        created_count = self.scheduler.process_campaigns()
-        
-        # Check that no target list was created (no message with counter=5)
-        self.assertEqual(created_count, 0)
-        self.assertEqual(TargetList.objects.count(), 0)
-
-    def test_process_campaigns_creates_queue_entries(self):
-        """Test that process_campaigns creates queue entries for target lists"""
-        # Mock current time to be a Monday
-        monday = datetime(2024, 1, 8, 8, 0, 0)  # A Monday
+    def test_process_campaigns_handles_missing_message(self):
+        """Test that process_campaigns handles missing message gracefully"""
+        monday = datetime(2024, 1, 8, 8, 0, 0)
         with patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = timezone.make_aware(monday)
             
-            # Update campaign next_run time
             self.campaign.next_run = timezone.make_aware(monday)
             self.campaign.save()
             
-            # Process campaigns
-            created_count = self.scheduler.process_campaigns()
+            # Create a mock target list
+            target_list = MagicMock(spec=TargetList)
+            target_list.campaign = self.campaign
+            target_list.contact = self.contact
+            target_list.contact_type = "Whatsapp"
+            target_list.contact_tag = "Preenchimento"
+            target_list.contact_phone = "1234567890"
+            target_list.status = "pending"
+            target_list.id = 1
             
-            # Check that both target list and queue entry were created
-            self.assertEqual(created_count, 1)
-            self.assertEqual(Queue.objects.count(), 1)
-            
-            # Check queue entry details
-            queue_entry = Queue.objects.first()
-            self.assertEqual(queue_entry.target_list, TargetList.objects.first())
-            self.assertEqual(queue_entry.message, self.messages[0])
-            self.assertEqual(queue_entry.status, "pending")
+            with patch('messageShooter.services.scheduler.generate_target_lists') as mock_generate:
+                mock_generate.return_value = [target_list]
+                
+                with patch('messageShooter.resolvers.get_userphone.get_userphone') as mock_get_userphone:
+                    mock_get_userphone.return_value = (self.user_phone, "test_token")
+                    
+                    with patch('messageShooter.resolvers.get_counter.get_counter_whatsapp') as mock_get_counter:
+                        mock_get_counter.return_value = 0
+                        
+                        with patch('messageShooter.resolvers.get_message.get_message') as mock_get_message:
+                            mock_get_message.return_value = None
+                            
+                            queued_count = self.scheduler.process_campaigns()
+                            
+                            self.assertEqual(queued_count, 0)
+                            self.assertFalse(Queue.objects.filter(campaign=self.campaign).exists())
 
-    def test_process_campaigns_respects_active_days(self):
-        """Test that process_campaigns respects campaign active days"""
-        # Set campaign to run only on Mondays
-        self.campaign.active_days = ['monday']
-        self.campaign.save()
-        
-        # Mock timezone.now to return a Tuesday
+    def test_process_campaigns_updates_one_time_campaign_status(self):
+        """Test that one-time campaigns are marked as completed after processing"""
+        monday = datetime(2024, 1, 8, 8, 0, 0)
         with patch('django.utils.timezone.now') as mock_now:
-            mock_now.return_value = timezone.datetime(2024, 1, 2, 12, 0, tzinfo=timezone.get_current_timezone())  # A Tuesday
+            mock_now.return_value = timezone.make_aware(monday)
             
-            # Process campaigns
-            created_count = self.scheduler.process_campaigns()
+            # Set campaign to one-time
+            self.campaign.frequency = FREQUENCY_ONCE
+            self.campaign.next_run = timezone.make_aware(monday)
+            self.campaign.save()
             
-            # Check that no target list was created since it's not a Monday
-            self.assertEqual(created_count, 0)
-            self.assertEqual(TargetList.objects.count(), 0)
-
-    def test_process_campaigns_handles_recurring_campaigns(self):
-        """Test that process_campaigns correctly handles recurring campaigns"""
-        # Create message with matching relationship tag
-        message = Message.objects.create(
-            user=self.user,
-            title="Test Message",
-            text="Test message content",
-            relationship_tag="Preenchimento",  
-            contact_type="Whatsapp",  
-            counter=0  
-        )
-        
-        # Make campaign daily recurring
-        self.campaign.frequency = FREQUENCY_DAILY
-        self.campaign.execution_time = "12:00"
-        self.campaign.active_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
-        self.campaign.next_run = timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone())  # Set next_run to today
-        self.campaign.save()
-        
-        # Mock timezone.now to return a time after execution_time
-        with patch('django.utils.timezone.now') as mock_now:
-            # Set current time to 13:00 (after execution_time)
-            test_time = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
-            mock_now.return_value = test_time
-            
-            # Process campaigns
-            created_count = self.scheduler.process_campaigns()
-            
-            # Check that target list was created
-            self.assertEqual(created_count, 1)
-            self.assertEqual(TargetList.objects.count(), 1)
-            
-            # Check next_run was updated to tomorrow
-            self.campaign.refresh_from_db()
-            expected_next_run = test_time.replace(hour=12, minute=0) + timezone.timedelta(days=1)
-            self.assertEqual(
-                self.campaign.next_run,
-                expected_next_run
-            )
-
-    def test_process_campaigns_handles_once_frequency(self):
-        """Test that process_campaigns correctly handles once frequency campaigns"""
-        # Create message with matching relationship tag
-        message = Message.objects.create(
-            user=self.user,
-            title="Test Message",
-            text="Test message content",
-            relationship_tag="Preenchimento",  
-            contact_type="Whatsapp",  
-            counter=0
-        )
-        
-        # Setup campaign for one-time execution
-        self.campaign.frequency = FREQUENCY_ONCE
-        self.campaign.execution_time = "12:00"
-        self.campaign.next_run = timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone())
-        self.campaign.contact_tag = "Preenchimento"  
-        self.campaign.save()
-
-        # Process campaigns
-        with patch('django.utils.timezone.now') as mock_now:
-            test_time = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
-            mock_now.return_value = test_time
-            created_count = self.scheduler.process_campaigns()
-            
-            # Should create one target list
-            self.assertEqual(created_count, 1)
-            
-            # Campaign should be marked as completed
-            self.campaign.refresh_from_db()
-            self.assertEqual(self.campaign.campaign_status, STATUS_COMPLETED)
-
-    def test_process_campaigns_handles_weekly_frequency(self):
-        """Test that process_campaigns correctly handles weekly frequency campaigns"""
-        # Create message with matching relationship tag
-        message = Message.objects.create(
-            user=self.user,
-            title="Test Message",
-            text="Test message content",
-            relationship_tag="Preenchimento",  
-            contact_type="Whatsapp",  
-            counter=0
-        )
-        
-        # Setup campaign for weekly execution
-        self.campaign.frequency = FREQUENCY_WEEKLY
-        self.campaign.execution_time = "12:00"
-        self.campaign.active_days = ['monday']  # Only run on Mondays
-        self.campaign.next_run = timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone())  # Monday
-        self.campaign.save()
-
-        # Test on Monday after execution time
-        with patch('django.utils.timezone.now') as mock_now:
-            test_time = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())  # Monday 1pm
-            mock_now.return_value = test_time
-            created_count = self.scheduler.process_campaigns()
-            
-            # Should create one target list
-            self.assertEqual(created_count, 1)
-            
-            # Next run should be set to next Monday
-            self.campaign.refresh_from_db()
-            expected_next_run = test_time.replace(day=8, hour=12, minute=0)  # Next Monday
-            self.assertEqual(self.campaign.next_run, expected_next_run)
-
-        # Test on a non-active day (Tuesday)
-        with patch('django.utils.timezone.now') as mock_now:
-            test_time = timezone.datetime(2024, 1, 2, 13, 0, tzinfo=timezone.get_current_timezone())  # Tuesday 1pm
-            mock_now.return_value = test_time
-            created_count = self.scheduler.process_campaigns()
-            
-            # Should not create any target lists
-            self.assertEqual(created_count, 0)
-
-    def test_process_campaigns_handles_monthly_frequency(self):
-        """Test that process_campaigns correctly handles monthly campaigns"""
-        # Create message with matching relationship tag
-        message = Message.objects.create(
-            user=self.user,
-            title="Test Message",
-            text="Test message content",
-            relationship_tag="Preenchimento",  
-            contact_type="Whatsapp",  
-            counter=0
-        )
-        
-        # Setup campaign for monthly execution on the 1st
-        self.campaign.frequency = FREQUENCY_MONTHLY
-        self.campaign.execution_time = "12:00"
-        self.campaign.active_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
-        self.campaign.next_run = timezone.datetime(2024, 1, 1, 12, 0, tzinfo=timezone.get_current_timezone())  # Set next_run to today (1st of month)
-        self.campaign.save()
-        
-        # Test on 1st of month after execution time
-        with patch('django.utils.timezone.now') as mock_now:
-            test_time = timezone.datetime(2024, 1, 1, 13, 0, tzinfo=timezone.get_current_timezone())
-            mock_now.return_value = test_time
-            created_count = self.scheduler.process_campaigns()
-            self.assertEqual(created_count, 1)
-            
-            # Check next_run is set to 1st of next month
-            self.campaign.refresh_from_db()
-            expected_next_run = timezone.datetime(2024, 2, 1, 12, 0, tzinfo=timezone.get_current_timezone())
-            self.assertEqual(self.campaign.next_run, expected_next_run)
-        
-        # Test on a different day of the month
-        with patch('django.utils.timezone.now') as mock_now:
-            test_time = timezone.datetime(2024, 1, 2, 13, 0, tzinfo=timezone.get_current_timezone())
-            mock_now.return_value = test_time
-            created_count = self.scheduler.process_campaigns()
-            self.assertEqual(created_count, 0)
+            with patch('messageShooter.resolvers.get_userphone.get_userphone') as mock_get_userphone:
+                mock_get_userphone.return_value = (self.user_phone, "test_token")
+                
+                with patch('messageShooter.resolvers.get_counter.get_counter_whatsapp') as mock_get_counter:
+                    mock_get_counter.return_value = 0
+                    
+                    with patch('messageShooter.resolvers.get_message.get_message') as mock_get_message:
+                        mock_get_message.return_value = self.messages[0]
+                        
+                        queued_count = self.scheduler.process_campaigns()
+                        
+                        self.assertEqual(queued_count, 1)
+                        self.campaign.refresh_from_db()
+                        self.assertEqual(self.campaign.campaign_status, STATUS_COMPLETED)

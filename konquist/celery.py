@@ -3,55 +3,124 @@ from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 from celery.schedules import crontab
-from celery.signals import worker_ready
+from celery.signals import worker_ready, setup_logging, task_success, task_failure
 from celery import signals
+from django.db import connection
+from celery.signals import task_prerun, task_postrun
 
+@task_prerun.connect
+def task_prerun_handler(**kwargs):
+    """Ensure clean database connection at start"""
+    connection.close()
 
+@task_postrun.connect
+def task_postrun_handler(**kwargs):
+    """Close database connection after task"""
+    connection.close()
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
 
 app = Celery('konquist')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.broker_connection_retry_on_startup = True
+
+# Add the new configuration here
+app.conf.update(
+    broker_transport_options={
+        'visibility_timeout': 43200,    # 12 hours
+        'socket_timeout': 60,           # 1 minute
+        'socket_connect_timeout': 30,   # 30 seconds
+        'socket_keepalive': True,
+        'max_retries': 3,
+        'retry_on_timeout': True,
+        'retry_backoff': 5,            # Start with 5 second backoff
+        'retry_backoff_max': 300       # Max backoff of 5 minutes
+    },
+    broker_connection_retry=True,      # Retry connection on startup
+    broker_connection_max_retries=None,  # Retry forever
+    broker_connection_timeout=30,      # Connection timeout
+    broker_heartbeat=10,              # Heartbeat every 10 seconds
+    task_acks_late=True,              # Only acknowledge after task completion
+    task_reject_on_worker_lost=True,   # Reject tasks if worker disconnects
+    worker_prefetch_multiplier=1,      # One task at a time per worker
+    worker_max_tasks_per_child=10000,  # Restart worker after 10000 tasks
+    worker_lost_wait=60,              # Wait 1 minute for lost workers
+    task_track_started=True,          # Track task states for better timeout handling
+    task_ignore_result=True,          # Don't store task results
+    worker_send_task_events=False,    # Don't send task events
+    worker_disable_rate_limits=True,  # Disable rate limits since we handle them in QueueProcessor
+    task_store_errors_even_if_ignored=False,  # Don't store errors,
+    redis_max_connections=10,
+    redis_socket_connect_timeout=30,
+    broker_pool_limit=10,  # Limit Redis connections
+    redis_socket_keepalive=True,
+    redis_retry_on_timeout=True
+)
 app.conf.imports = ['apiCrm.tasks']
-app.autodiscover_tasks()
 
-# @worker_ready.connect
-@signals.worker_ready.connect
-def on_worker_ready(**_):
-    print('\033[92m\n🚀 Celery worker is up and running!\033[0m\n')
+# Configure timezone to match Django settings
+app.conf.timezone = 'America/Sao_Paulo'
+app.conf.enable_utc = False
 
-app.conf.beat_schedule = {
-    'cleaner_crm_tables': {
-        'task': 'apiCrm.cleanup_crm_tables',
-        'schedule': crontab(hour=2, minute=54),
-    },
-
-    'fetch_all_data': {
-        'task': 'apiCrm.fetch_all_data',
-        'schedule': crontab(hour=2, minute=55),
-    },
-
-    'check_contacts_in_crm': {
-        'task': 'apiCrm.check_contacts_in_crm',
-        'schedule': crontab(hour=3, minute=40),
-    },
-
-    'process_scheduled_campaigns': {
-        'task': 'campaign.process_scheduled_campaigns',
-        'schedule': 4000.0, # Seconds
-    },
-
-    'test_redis_connection': {
-        'task': 'apiCrm.test_redis',
-        'schedule': crontab(minute='*/1'),  # Every minute (for testing)
-    }
+# Configure task queues
+app.conf.task_routes = {
+    # 'apiCrm.process_scheduled_campaigns': {'queue': 'campaign_queue'},
+    'apiCrm.test_redis': {'queue': 'default'},
+    # 'apiCrm.fetch_all_data': {'queue': 'default'},
+    # 'apiCrm.check_contacts_in_crm': {'queue': 'default'},
+    # 'queue.process_queues': {'queue': 'default'}  # Updated task name
 }
 
-@signals.task_success.connect
-def task_success_handler(sender=None, **kwargs):
-    print(f'\033[92mTask {sender.name} completed successfully\033[0m')
+# Enable task autodiscovery
+app.autodiscover_tasks()
 
-@signals.task_failure.connect
-def task_failure_handler(sender=None, **kwargs):
-    print(f'\033[91mTask {sender.name} failed: {kwargs.get("exception")}\033[0m')
+@signals.setup_logging.connect
+def setup_celery_logging(**kwargs):
+    print('\033[92m\n🚀 Celery worker is up and running!\033[0m\n')
+
+@task_success.connect
+def task_success_handler(**kwargs):
+    """Log successful task completion"""
+    pass
+
+@task_failure.connect
+def task_failure_handler(**kwargs):
+    """Log task failures"""
+    pass
+
+app.conf.beat_schedule = {
+    'test_redis_connection': {
+        'task': 'apiCrm.test_redis',
+        'schedule': crontab(minute='*/5')
+    },
+
+    # 'cleaner_crm_tables': {
+    #     'task': 'apiCrm.cleanup_crm_tables',
+    #     'schedule': crontab(hour=2, minute=54),
+    # },
+
+    # # Daily data pipeline sequence
+    # 'fetch_all_data': {
+    #     'task': 'apiCrm.fetch_all_data',
+    #     'schedule': crontab(hour=6, minute=20),  # 5:30 AM
+    #     'options': {'expires': 3600}  # Task expires after 1 hour
+    # },
+
+    # 'check_contacts_in_crm': {
+    #     'task': 'apiCrm.check_contacts_in_crm',
+    #     'schedule': crontab(hour=6, minute=30),  # 6:00 AM
+    #     'options': {'expires': 1800}  # Task expires after 30 minutes
+    # },
+
+    # 'process_scheduled_campaigns': {
+    #     'task': 'apiCrm.process_scheduled_campaigns',
+    #     'schedule': crontab(hour=7, minute=55),  # 7:00 AM
+    #     'options': {'expires': 1800}  # Task expires after 30 minutes
+    # },
+
+    # 'process_queues': {
+    #     'task': 'queue.process_queues',
+    #     'schedule': crontab(hour=8, minute=0),  # 8:00 AM
+    #     'options': {'expires': 3600}  # Task expires after 1 hour
+    # }
+}

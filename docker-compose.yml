@@ -1,94 +1,187 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:7.0-alpine
+    container_name: k_redis
+    restart: unless-stopped
+    ports:
+      - "6380:6380"
+    volumes:
+      - redis_data:/data
+    command: >
+      redis-server 
+      --port 6380 
+      --appendonly yes
+      --save 900 1 
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 4gb
+      --maxmemory-policy allkeys-lru
+      --tcp-keepalive 300
+      --tcp-backlog 511
+      --io-threads 4
+    networks:
+      - konquest_network
+    deploy:
+      resources:
+        limits:
+          memory: 4.5G
+        reservations:
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6380", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   django:
     build: .
     container_name: konquest_django
+    restart: unless-stopped
     command: >
-      bash -c "python manage.py migrate &&
-              python manage.py collectstatic --noinput &&
-              gunicorn konquist.wsgi:application --bind 0.0.0.0:8001 
-              --workers 3 
-              --timeout 300 
-              --keep-alive 65 
-              --log-level info 
-              --access-logfile - 
-              --error-logfile -"
+      bash -c "
+        echo 'Waiting for Redis...' &&
+        while ! nc -z redis 6380; do sleep 1; done &&
+        echo 'Redis is up!' &&
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        gunicorn konquist.wsgi:application --bind=0.0.0.0:8001 --workers=4 --threads=4 --timeout=600 --keep-alive=65 --max-requests=2000 --max-requests-jitter=200 --worker-tmp-dir=/dev/shm --worker-class=gthread --log-level=debug --access-logfile=- --error-logfile=- --capture-output --enable-stdio-inheritance"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
-      - media_volume:/app/media
+      - media_volume:/app/core/media
+      - /dev/shm:/dev/shm
+    tmpfs:
+      - /tmp
     ports:
-      - "8001:8001"  # Changed from 8000
+      - "8001:8001"
     environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=konquist.settings
       - REDIS_HOST=redis
-      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PORT=6380
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,konquest_django
+      - DEBUG=True
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     networks:
       - konquest_network
-
-  redis:
-    image: redis:7.0-alpine
-    container_name: konquest_redis
-    ports:
-      - "6380:6380"  # Changed both host and container ports to 6380
-    volumes:
-      - redis_data:/data
-    command: redis-server --port 6380 --appendonly yes --requirepass ${REDIS_PASSWORD}
-    networks:
-      - konquest_network
-
-  redis_commander:
-    image: rediscommander/redis-commander:latest
-    container_name: konquest_redis_commander
-    environment:
-      - REDIS_HOSTS=local:redis:6380:0:${REDIS_PASSWORD}
-    ports:
-      - "8082:8081"  # Changed from 8081
-    depends_on:
-      - redis
-    networks:
-      - konquest_network
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   celery_worker:
     build: .
-    container_name: konquest_celery_worker
-    command: celery -A konquist worker -l INFO
+    container_name: k_celery_worker
+    restart: unless-stopped
+    command: >
+      bash -c "
+        echo 'Waiting for Redis...' &&
+        while ! nc -z redis 6380; do sleep 1; done &&
+        echo 'Redis is up!' &&
+        celery -A konquist worker -l INFO
+        --loglevel=DEBUG 
+        --concurrency=4 
+        -Q default,campaign_queue 
+        --max-tasks-per-child=500 
+        --max-memory-per-child=512000"
     volumes:
       - .:/app
+      - media_volume:/app/core/media
+      - /dev/shm:/dev/shm
+    tmpfs:
+      - /tmp
     environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=konquist.settings
       - REDIS_HOST=redis
-      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PORT=6380
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - C_FORCE_ROOT=true
     depends_on:
-      - redis
-      - django
+      redis:
+        condition: service_healthy
+      django:
+        condition: service_healthy
     networks:
       - konquest_network
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
 
   celery_beat:
     build: .
-    container_name: konquest_celery_beat
-    command: celery -A konquist beat -l INFO
+    container_name: k_celery_beat
+    restart: unless-stopped
+    command: >
+      bash -c "
+        echo 'Waiting for Redis...' &&
+        while ! nc -z redis 6380; do sleep 1; done &&
+        echo 'Redis is up!' &&
+        rm -f celerybeat.pid &&
+        celery -A konquist beat -l INFO
+        --loglevel=DEBUG"
     volumes:
       - .:/app
     environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=konquist.settings
       - REDIS_HOST=redis
-      - REDIS_PORT=6380  # Changed from 6379
+      - REDIS_PORT=6380
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - C_FORCE_ROOT=true
     depends_on:
-      - redis
-      - django
-      - celery_worker
+      redis:
+        condition: service_healthy
+      django:
+        condition: service_healthy
+      celery_worker:
+        condition: service_started
+    networks:
+      - konquest_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  redis_commander:
+    image: rediscommander/redis-commander:latest
+    container_name: k_redis_commander
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:k_redis:6380:0:${REDIS_PASSWORD}
+    ports:
+      - "8082:8081"
+    depends_on:
+      redis:
+        condition: service_healthy
     networks:
       - konquest_network
 
 networks:
   konquest_network:
-    name: konquest_network_new  # Changed network name
-    driver: bridge
+    name: konquest_network_new
 
 volumes:
   redis_data:
