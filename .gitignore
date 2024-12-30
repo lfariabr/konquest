@@ -36,4 +36,4 @@ migrations/
 references/
 
 # Other
-messageShooter/references/
+messageShooter/references/celerybeat-schedule
