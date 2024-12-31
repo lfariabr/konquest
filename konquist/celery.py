@@ -122,7 +122,7 @@ app.conf.beat_schedule = {
 
     'check_contacts_in_crm': {
         'task': 'apiCrm.check_contacts_in_crm',
-        'schedule': crontab(hour=3, minute=42),  # 6:00 AM
+        'schedule': crontab(hour=19, minute=20),  # 6:00 AM
         'options': {'expires': 270000}  # Task expires after 30 minutes
     },
 

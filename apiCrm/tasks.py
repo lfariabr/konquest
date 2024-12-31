@@ -262,57 +262,59 @@ def process_available_queues():
 )
 def test_redis():
     """Test task to verify Redis connection and Celery worker."""
-    logger.info('='*50)
-    logger.info('Starting test_redis task')
+    logger.info('\n' + '🔄 REDIS CONNECTION TEST '.center(80, '='))
+    logger.info('📅 Started at: %s', timezone.now().strftime('%Y-%m-%d %H:%M:%S'))
     try:
-        logger.info('Attempting to connect to Redis...')
+        logger.info('🔌 Attempting to connect to Redis...')
         # Test Redis cache with multiple operations to keep connection warm
-        logger.info('Setting celery_test key...')
+        logger.info('📝 Setting celery_test key...')
         cache.set('celery_test', 'Redis connection working!')
         
-        logger.info('Setting celery_heartbeat key...')
+        logger.info('⏱️ Setting celery_heartbeat key...')
         current_time = timezone.now().isoformat()
         cache.set('celery_heartbeat', current_time)
         
-        logger.info('Setting celery_counter key...')
+        logger.info('🔢 Setting celery_counter key...')
         current_counter = cache.get('celery_counter', 0)
         new_counter = current_counter + 1
         cache.set('celery_counter', new_counter)
         
         # Read values back to ensure connection is working both ways
-        logger.info('Reading back values...')
+        logger.info('📖 Reading back values...')
         result = cache.get('celery_test')
         heartbeat = cache.get('celery_heartbeat')
         counter = cache.get('celery_counter')
         
-        logger.info('='*50)
-        logger.info('TEST RESULTS:')
-        logger.info(f'Redis test result: {result}')
-        logger.info(f'Redis heartbeat: {heartbeat}')
-        logger.info(f'Redis counter: {counter}')
-        logger.info('='*50)
+        logger.info('\n' + ' TEST RESULTS '.center(80, '▰'))
+        logger.info('✅ Redis test result: %s', result)
+        logger.info('🕐 Redis heartbeat: %s', heartbeat)
+        logger.info('🔢 Redis counter: %d', counter)
+        logger.info(''.center(80, '▰') + '\n')
         
         # Force connection to stay alive with a small pipeline
-        logger.info('Testing pipeline operations...')
+        logger.info('🔄 Testing pipeline operations...')
         cache.set_many({
             'test1': 1,
             'test2': 2,
             'test3': 3
         }, timeout=60)
         
-        logger.info('Test completed successfully!')
-        logger.info('='*50)
+        logger.info('✨ Test completed successfully!')
+        logger.info('📅 Completed at: %s', timezone.now().strftime('%Y-%m-%d %H:%M:%S'))
+        logger.info(''.center(80, '=') + '\n')
         return True
 
     except Exception as e:
-        logger.error(f'Redis test failed with error: {str(e)}')
-        logger.error(f'Error type: {type(e).__name__}')
+        logger.error('\n' + ' ❌ REDIS ERROR '.center(80, '!'))
+        logger.error('❌ Redis test failed with error: %s', str(e))
+        logger.error('❌ Error type: %s', type(e).__name__)
         # Try to reconnect immediately
         try:
-            logger.info('Attempting to reconnect to Redis...')
+            logger.info('🔄 Attempting to reconnect to Redis...')
             cache.close()
             cache.set('celery_reconnect', timezone.now().isoformat())
-            logger.info('Redis reconnection successful')
+            logger.info('✅ Redis reconnection successful')
         except Exception as re:
-            logger.error(f'Redis reconnection failed with error: {str(re)}')
-            logger.error(f'Reconnection error type: {type(re).__name__}')
+            logger.error('❌ Redis reconnection failed with error: %s', str(re))
+            logger.error('❌ Reconnection error type: %s', type(re).__name__)
+        logger.error(''.center(80, '!') + '\n')
