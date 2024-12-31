@@ -28,7 +28,8 @@ db.sqlite3
 htmlcov/
 
 # Logs
-apiSocialHub/logs/
+apiSocialHub/logs/*
+!apiSocialHub/logs/.gitkeep
 *.log
 *.logs
 
