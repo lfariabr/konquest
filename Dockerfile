@@ -53,6 +53,13 @@ COPY --from=builder /app/requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir /wheels/*
 
+# Create necessary directories
+RUN mkdir -p /app/staticfiles /app/media /app/logs /app/apiSocialHub/logs && \
+    chmod -R 777 /app/apiSocialHub/logs
+
+# Change ownership of the app directory to appuser
+RUN chown -R appuser:appuser /app
+
 # Copy project
 COPY . .
 

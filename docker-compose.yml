@@ -52,6 +52,8 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
+      - logs_volume:/app/apiSocialHub/logs
+
     tmpfs:
       - /tmp
     ports:
@@ -187,3 +189,4 @@ volumes:
   redis_data:
   static_volume:
   media_volume:
+  logs_volume:
