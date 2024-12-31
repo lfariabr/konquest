@@ -7,16 +7,27 @@ from celery.signals import worker_ready, setup_logging, task_success, task_failu
 from celery import signals
 from django.db import connection
 from celery.signals import task_prerun, task_postrun
+import logging
+from celery.signals import after_task_publish
+
+logger = logging.getLogger(__name__)
 
 @task_prerun.connect
-def task_prerun_handler(**kwargs):
-    """Ensure clean database connection at start"""
+def task_prerun_handler(task_id, task, *args, **kwargs):
+    """Ensure clean database connection at start and log task start"""
+    logger.info('Task starting: %s[%s]', task.name, task_id)
     connection.close()
 
 @task_postrun.connect
-def task_postrun_handler(**kwargs):
-    """Close database connection after task"""
+def task_postrun_handler(task_id, task, *args, retval=None, state=None, **kwargs):
+    """Close database connection after task and log completion"""
+    logger.info('Task complete: %s[%s] -> %s', task.name, task_id, state)
     connection.close()
+
+@after_task_publish.connect
+def task_sent_handler(sender=None, headers=None, body=None, **kwargs):
+    """Log when task is sent to queue"""
+    logger.info('Task sent to queue: %s', sender)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'konquist.settings')
 
@@ -24,8 +35,14 @@ app = Celery('konquist')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.broker_connection_retry_on_startup = True
 
+# Enable task autodiscovery
+app.autodiscover_tasks()
+
 # Add the new configuration here
 app.conf.update(
+    worker_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(message)s",
+    worker_task_log_format="[%(asctime)s: %(levelname)s/%(processName)s] [%(task_name)s(%(task_id)s)] %(message)s",
+    worker_redirect_stdouts_level='DEBUG',
     broker_transport_options={
         'visibility_timeout': 43200,    # 12 hours
         'socket_timeout': 60,           # 1 minute
@@ -65,14 +82,11 @@ app.conf.enable_utc = False
 # Configure task queues
 app.conf.task_routes = {
     # 'apiCrm.process_scheduled_campaigns': {'queue': 'campaign_queue'},
-    'apiCrm.test_redis': {'queue': 'default'},
+    'apiCrm.tasks.test_redis': {'queue': 'default'},
     # 'apiCrm.fetch_all_data': {'queue': 'default'},
     # 'apiCrm.check_contacts_in_crm': {'queue': 'default'},
     # 'queue.process_queues': {'queue': 'default'}  # Updated task name
 }
-
-# Enable task autodiscovery
-app.autodiscover_tasks()
 
 @signals.setup_logging.connect
 def setup_celery_logging(**kwargs):
@@ -91,26 +105,26 @@ def task_failure_handler(**kwargs):
 app.conf.beat_schedule = {
     'test_redis_connection': {
         'task': 'apiCrm.test_redis',
-        'schedule': crontab(minute='*/5')
+        'schedule': crontab(minute='*/1')
     },
 
     # 'cleaner_crm_tables': {
     #     'task': 'apiCrm.cleanup_crm_tables',
-    #     'schedule': crontab(hour=2, minute=54),
+    #     'schedule': crontab(minute='*/2'), # crontab(hour=2, minute=54),
     # },
 
-    # # Daily data pipeline sequence
+    # Daily data pipeline sequence
     # 'fetch_all_data': {
     #     'task': 'apiCrm.fetch_all_data',
-    #     'schedule': crontab(hour=6, minute=20),  # 5:30 AM
+    #     'schedule': crontab(hour=0, minute=50),  # 5:30 AM
     #     'options': {'expires': 3600}  # Task expires after 1 hour
     # },
 
-    # 'check_contacts_in_crm': {
-    #     'task': 'apiCrm.check_contacts_in_crm',
-    #     'schedule': crontab(hour=6, minute=30),  # 6:00 AM
-    #     'options': {'expires': 1800}  # Task expires after 30 minutes
-    # },
+    'check_contacts_in_crm': {
+        'task': 'apiCrm.check_contacts_in_crm',
+        'schedule': crontab(hour=3, minute=42),  # 6:00 AM
+        'options': {'expires': 270000}  # Task expires after 30 minutes
+    },
 
     # 'process_scheduled_campaigns': {
     #     'task': 'apiCrm.process_scheduled_campaigns',
@@ -124,3 +138,4 @@ app.conf.beat_schedule = {
     #     'options': {'expires': 3600}  # Task expires after 1 hour
     # }
 }
+

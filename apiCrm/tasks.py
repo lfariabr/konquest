@@ -87,7 +87,7 @@ def cleanup_crm_tables():
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
-    soft_time_limit=27000 # 45 minutes
+    soft_time_limit=270000 # 45 minutes
 )
 def check_contacts_in_crm():
     """
@@ -110,7 +110,7 @@ def check_contacts_in_crm():
     try:
         # Get most recent contacts
         # contacts = Contact.objects.all().order_by('-id')[:3000]
-        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:1500]
+        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:50000]
 
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
@@ -176,9 +176,9 @@ def fetch_all_data():
     
     try:
         today = datetime.now().date()
-        start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
+        start_date = (today - timedelta(days=100)).strftime('%Y-%m-%d')
         end_date = today.strftime('%Y-%m-%d')
-        extended_end_date = (today + timedelta(days=20)).strftime('%Y-%m-%d')
+        extended_end_date = (today + timedelta(days=30)).strftime('%Y-%m-%d')
 
         logger.info(f"Fetching data for dates: {start_date} to {extended_end_date}")
         
@@ -262,36 +262,57 @@ def process_available_queues():
 )
 def test_redis():
     """Test task to verify Redis connection and Celery worker."""
+    logger.info('='*50)
+    logger.info('Starting test_redis task')
     try:
+        logger.info('Attempting to connect to Redis...')
         # Test Redis cache with multiple operations to keep connection warm
+        logger.info('Setting celery_test key...')
         cache.set('celery_test', 'Redis connection working!')
-        cache.set('celery_heartbeat', timezone.now().isoformat())
-        cache.set('celery_counter', cache.get('celery_counter', 0) + 1)
+        
+        logger.info('Setting celery_heartbeat key...')
+        current_time = timezone.now().isoformat()
+        cache.set('celery_heartbeat', current_time)
+        
+        logger.info('Setting celery_counter key...')
+        current_counter = cache.get('celery_counter', 0)
+        new_counter = current_counter + 1
+        cache.set('celery_counter', new_counter)
         
         # Read values back to ensure connection is working both ways
+        logger.info('Reading back values...')
         result = cache.get('celery_test')
         heartbeat = cache.get('celery_heartbeat')
         counter = cache.get('celery_counter')
         
+        logger.info('='*50)
+        logger.info('TEST RESULTS:')
         logger.info(f'Redis test result: {result}')
         logger.info(f'Redis heartbeat: {heartbeat}')
         logger.info(f'Redis counter: {counter}')
+        logger.info('='*50)
         
         # Force connection to stay alive with a small pipeline
+        logger.info('Testing pipeline operations...')
         cache.set_many({
             'test1': 1,
             'test2': 2,
             'test3': 3
         }, timeout=60)
         
+        logger.info('Test completed successfully!')
+        logger.info('='*50)
         return True
+
     except Exception as e:
-        logger.error(f'Redis test failed: {str(e)}')
+        logger.error(f'Redis test failed with error: {str(e)}')
+        logger.error(f'Error type: {type(e).__name__}')
         # Try to reconnect immediately
         try:
+            logger.info('Attempting to reconnect to Redis...')
             cache.close()
             cache.set('celery_reconnect', timezone.now().isoformat())
             logger.info('Redis reconnection successful')
         except Exception as re:
-            logger.error(f'Redis reconnection failed: {str(re)}')
-        return False
+            logger.error(f'Redis reconnection failed with error: {str(re)}')
+            logger.error(f'Reconnection error type: {type(re).__name__}')

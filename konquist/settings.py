@@ -211,6 +211,16 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'apiCrm': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # Set to DEBUG to see all logs
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
     'root': {
         'handlers': ['console'],
@@ -219,17 +229,27 @@ LOGGING = {
 }
 
 # Redis Configuration
-REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
-REDIS_PORT = os.environ.get('REDIS_PORT', '6380')
-REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+REDIS_HOST = config('REDIS_HOST', default='redis')
+REDIS_PORT = config('REDIS_PORT', default='6379')
+REDIS_PASSWORD = config('REDIS_PASSWORD', default='')
 REDIS_DB = '0'
 
 REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
 CELERY_RESULT_BACKEND = REDIS_URL
 
+# # Redis Configuration
+# REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+# REDIS_PORT = os.environ.get('REDIS_PORT', '6380')
+# REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+# REDIS_DB = '0'
+
+# REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
+# CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
+# CELERY_RESULT_BACKEND = REDIS_URL
+
 # Celery Configuration
-CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 

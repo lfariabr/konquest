@@ -95,13 +95,15 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - get contacts / get counter / get phone / get message / customize message / calculate days interval
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - Docker Prep done: docker-compose up --build 
+- Import data from spreadsheet history rpdprocorpo@gmail.com
 
 # In progress
+- Push this docker image to droplet in digital ocean
+- Test LIVE ENVIRONMENT
+- Test deeply Appointment Campaigns
 
 # Test in prod
-- Run "Reminder" Campaign
-- Run "Reschedule" Campaign
-- Build "NPS" Campaign
+- Run "Reminder" Campaign + "Reschedule" and "NPS"
 
 ## Backlog:
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
