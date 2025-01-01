@@ -1,0 +1,11 @@
+echo """
+.git
+.env
+*.mp4
+celerybeat-schedule*
+dump.rdb
+__pycache__
+*.pyc
+uploads/*
+staticfiles/*
+""" > .dockerignore

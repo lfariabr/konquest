@@ -99,14 +99,32 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 
 # In progress
 - Push this docker image to droplet in digital ocean
+
+    # Create directory for Konquest
+    mkdir -p /var/www/konquest
+
+    # Navigate to the directory
+    cd /var/www/konquest
+
+    # Clone your repository
+    git clone https://github.com/lfariabr/konquest.git
+
+    # Navigate into the cloned directory
+    cd konquest
+
+    # Check if we have the necessary files
+    ls -la
+
+    # Run docker-compose
+    docker-compose build
+    docker-compose up -d
+
 - Test LIVE ENVIRONMENT
 - Test deeply Appointment Campaigns
-
-# Test in prod
 - Run "Reminder" Campaign + "Reschedule" and "NPS"
 
 ## Backlog:
-- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
+- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id and update spreadsheet data so that marketing can have access to it
 
 ## Setup and Installation
 ### Requirements
