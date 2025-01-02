@@ -1,4 +1,7 @@
 dic_store_address = {
+        'JARDINS': 'R. Augusta, 2677 - Cerqueira César, São Paulo',
+        
+        # Pending:
         'LONDRINA': '803810ca-8229-44a4-b8e4-de9bcd6fe785',
         'COPACABANA' : '8cc1023c-1307-432b-8c4a-bc3970f71920',
         'ITAIM': '33a118f1-154b-409e-9035-4629690acc46',
@@ -7,7 +10,6 @@ dic_store_address = {
         'TIJUCA': 'dca5f66d-ece5-4607-a427-fcb1f509300b',
         'SANTOS': '68274ae5-09f5-4ddd-af7b-f54ce1702520',
         'LAPA': '1711855b-5948-4d20-8c77-53d002f5396e',
-        'JARDINS': 'R. Augusta, 2677 - Cerqueira César, São Paulo',
         'SANTO AMARO': 'b6794107-f3a5-445a-9bc3-057b2db6b26d',
         'BELO HORIZONTE': '78e4abe4-f134-485d-8f52-fd75055032b0',
         'TUCURUVI': '448f28e6-15a3-4beb-9e2a-56feb0ec8622',
@@ -24,5 +26,5 @@ dic_store_address = {
         'CENTRAL': '70afc90f-a9ef-4dc9-9572-1d8b62ef0dfd',
         'VILA MASCOTE': "dcfefa62-a763-4a22-aa86-1b416b1ef2e3",
         'GUARULHOS': "24e2af43-c29e-4983-8fc9-d5a4d02db3f3",
-        'SÃO BERNARDO': "?" #TODO
+        'SÃO BERNARDO': "0e8b9a30-9af3-4690-a28d-c9178616e0e6",
 }

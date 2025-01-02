@@ -6,6 +6,7 @@ from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.get_counter import get_counter_whatsapp
 from messageShooter.resolvers.get_message import get_message, get_message_for_interval, customize_message_text
 from messageShooter.resolvers.get_days_interval import calculate_interval
+from messageShooter.resolvers.get_counter import get_counter_appointment
 
 logger = logging.getLogger(__name__)
 
@@ -40,14 +41,41 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
                 days_interval=days_interval,
                 appointment_status_label=contact.appointment_status
             )
-            
             # Customize message with contact variables
             if message:
                 message.text = customize_message_text(message.text, contact.message_variables)
                 
-            if target_list.contact_tag == "Reminder" or target_list.contact_tag == "Reschedule":
+            if target_list.contact_tag == "Reminder": # or target_list.contact_tag == "Reschedule":
                 logger.info(f"Using days_interval counter: {days_interval} for {target_list.contact_tag}") 
                 return days_interval, message
+            
+            if target_list.contact_tag == "NPS":
+                actual_counter = get_counter_appointment(contact.phone, target_list.contact_tag)
+                message = get_message_for_interval(
+                    contact_type=target_list.contact_type,
+                    relationship_tag=target_list.contact_tag,
+                    counter=actual_counter,
+                    days_interval=days_interval,
+                    appointment_status_label=contact.appointment_status,
+                    appointment_data={"phone": contact.phone}
+                )
+                message.text = customize_message_text(message.text, contact.message_variables) 
+                logger.info(f"NPS using actual counter: {actual_counter} for {target_list.contact_tag}")
+                return actual_counter, message
+            
+            if target_list.contact_tag == "Reschedule":
+                actual_counter = get_counter_appointment(contact.phone, target_list.contact_tag)
+                message = get_message_for_interval(
+                    contact_type=target_list.contact_type,
+                    relationship_tag=target_list.contact_tag,
+                    counter=actual_counter,
+                    days_interval=days_interval,
+                    appointment_status_label=contact.appointment_status
+                )
+                message.text = customize_message_text(message.text, contact.message_variables) 
+                logger.info(f"Reschedule using actual counter: {actual_counter} for {target_list.contact_tag}")
+                return actual_counter, message
+
             else:
                 counter = get_counter_whatsapp(contact.phone, target_list.contact_tag)
                 logger.info(f"Using regular whatsapp counter: {counter} for {target_list.contact_tag}")

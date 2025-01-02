@@ -68,6 +68,27 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - Mocking and Isolation: Ensures tests do not send real HTTP requests by mocking network interactions, leading to reliable and fast test execution.
 - Asynchronous Testing: Handles asynchronous code testing effectively, avoiding common pitfalls like TypeError related to asynchronous context managers.
 
+8. Dockerization
+- Dockerization: Utilizes Docker for consistent and portable environment setup, ensuring consistent behavior across different environments.
+- Create / Navigate to directory for Konquest
+mkdir -p /var/www/konquest
+cd /var/www/konquest
+- Clone your repository
+git clone https://github.com/lfariabr/konquest.git
+- Navigate into the cloned directory
+cd konquest
+- Check if we have the necessary files
+ls -la
+- Run docker-compose
+docker-compose build
+docker-compose up -d
+cd /var/www/konquest
+- check running containers
+ssh root@209.38.90.25
+docker logs -f k_celery_beat
+docker logs -f k_celery_worker
+docker-compose logs -f
+
 # Done
 - messageShooter: create campaigns, target lists, queue 
 - possibility to schedule messages and send them asynchronously
@@ -96,32 +117,12 @@ Konquista is a Django project configured with Celery and Redis to handle asynchr
 - dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
 - Docker Prep done: docker-compose up --build 
 - Import data from spreadsheet history rpdprocorpo@gmail.com
+- Push this docker image to droplet in digital ocean
+- Test deeply Appointment Campaigns
 
 # In progress
-- Push this docker image to droplet in digital ocean
-
-    # Create directory for Konquest
-    mkdir -p /var/www/konquest
-
-    # Navigate to the directory
-    cd /var/www/konquest
-
-    # Clone your repository
-    git clone https://github.com/lfariabr/konquest.git
-
-    # Navigate into the cloned directory
-    cd konquest
-
-    # Check if we have the necessary files
-    ls -la
-
-    # Run docker-compose
-    docker-compose build
-    docker-compose up -d
-
-- Test LIVE ENVIRONMENT
-- Test deeply Appointment Campaigns
 - Run "Reminder" Campaign + "Reschedule" and "NPS"
+- Reminder HOMA
 
 ## Backlog:
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id and update spreadsheet data so that marketing can have access to it

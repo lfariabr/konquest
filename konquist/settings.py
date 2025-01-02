@@ -6,15 +6,15 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['209.38.90.25', 'localhost', '127.0.0.1', 'konquista.com.br', 'www.konquista.com.br']
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'postgresql' 
+DATABASE_ENGINE = 'sqlite3' 
 CONTACTS_START = 121
 CONTACTS_END = 300
 CONTACTS_TO_LOAD = 700 # messageShooter/resolvers/get_contacts.py
-
+CONTACTS_TO_LOAD_APT = 1000
 
 INSTALLED_APPS = [
     'django_daisy',

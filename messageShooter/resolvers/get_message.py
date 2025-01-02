@@ -4,6 +4,7 @@
 from core.models.message import Message
 from django.core.exceptions import ObjectDoesNotExist
 from messageShooter.resolvers.get_days_interval import calculate_interval
+from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment
 import logging
 
 def get_message(contact_type, relationship_tag=None, counter=0):
@@ -122,26 +123,49 @@ def get_message_for_interval(contact_type,
         else:
             logger.warning(f"Invalid combination for Reminder: status={appointment_status_label}, days={days_interval}")
             return None  # Invalid combination for Reminder
+    
+    # Maybe fit in NPS here?
+    elif relationship_tag == "NPS":
+        if not appointment_data or "phone" not in appointment_data:
+            logger.warning("Missing appointment_data or phone for NPS message")
+            return None
+            
+        counter = get_counter_appointment(appointment_data["phone"], "NPS")
+        logger.info(f"Using appointment counter {counter} for NPS message")
 
     elif relationship_tag == "Reschedule":
             if appointment_status_label == "Falta":
+                expected_counter = 0
                 if -7 < days_interval <= -1:  # Changed to match get_message_for_interval
-                    counter = 0      # Recent miss (0-7 days_interval ago)
+                    expected_counter = 0      # Recent miss (0-7 days_interval ago)
                 elif -14 < days_interval <= -7:
-                    counter = 1      # Week-old miss (7-14 days_interval ago)
+                    expected_counter = 1      # Week-old miss (7-14 days_interval ago)
                 elif days_interval <= -14:
-                    counter = 2      # Old miss (14+ days_interval ago)
-                else:
-                    counter = 0
+                    expected_counter = 2      # Old miss (14+ days_interval ago)
+                
+                # Only proceed if the actual counter matches what we expect for this period
+                if counter != expected_counter:
+                    logger.info(f"Counter mismatch - Expected: {expected_counter}, Actual: {counter}. Skipping message.")
+                    return None
+                
+                counter = expected_counter  # Set the counter for message lookup
+
             elif appointment_status_label == "Cancelado":
-                if 1 <= days_interval < 7:    # Changed to match get_message_for_interval
-                    counter = 0      # Recent cancellation
-                elif 7 <= days_interval < 14:
-                    counter = 1      # Week-old cancellation
-                elif days_interval >= 14:
-                    counter = 2      # Old cancellation
-                else:
-                    counter = 0
+                expected_counter = 0
+                if -7 <= days_interval <= -1:    # Changed to match get_message_for_interval
+                    expected_counter = 0      # Recent cancellation
+                elif -14 <= days_interval <= -7:
+                    expected_counter = 1      # Week-old cancellation
+                elif days_interval <= -14:
+                    expected_counter = 2      # Old cancellation
+                
+                # Only proceed if the actual counter matches what we expect for this period
+                if counter != expected_counter:
+                    logger.info(f"Counter mismatch - Expected: {expected_counter}, Actual: {counter}. Skipping message.")
+                    return None
+                
+                counter = expected_counter  # Set the counter for message lookup
+
             else:
                 logger.warning(f"Invalid appointment_status_label for Reschedule: appointment_status_label={appointment_status_label}, days={days}")
                 return None  # Invalid status for Reschedule

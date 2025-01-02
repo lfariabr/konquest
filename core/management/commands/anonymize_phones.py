@@ -19,6 +19,8 @@ class Command(BaseCommand):
         """Generate a fake phone number starting from 9999999999"""
         base = 9999999999 - counter
         return str(base)
+        # 9999999999
+        # 0000000000
 
     @transaction.atomic
     def handle(self, *args, **kwargs):

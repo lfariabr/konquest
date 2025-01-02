@@ -29,7 +29,7 @@ htmlcov/
 
 # Logs
 *.log
-*.logs
+# *.logs
 
 migrations/
 references/

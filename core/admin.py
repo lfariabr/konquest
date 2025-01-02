@@ -63,32 +63,69 @@ class MessageAdmin(admin.ModelAdmin):
 
 admin.site.register(Message, MessageAdmin)
 
-class MessageLogsAdmin(admin.ModelAdmin):
-    list_display = ('get_message_text', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number')
-    search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
-    list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
-    ordering = ['-sent_at']
-    list_per_page = 20
+# class MessageLogsAdmin(admin.ModelAdmin):
+#     list_display = ('get_message_text', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number')
+#     search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
+#     list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
+#     ordering = ['-sent_at']
+#     list_per_page = 20
 
+#     def get_contact_phone_number(self, obj): 
+#         return obj.contact.phone if obj.contact else '-'
+#     get_contact_phone_number.short_description = 'Contact Phone'
+
+#     def get_message_text(self, obj):
+#         return obj.message.text
+#     get_message_text.short_description = 'Message'
+
+#     def get_phone_number(self, obj):
+#         # return obj.phone_number
+#         return obj.user_phone.phone_number if obj.user_phone else '-'
+
+#     get_phone_number.short_description = 'Phone Number'
+
+#     def get_queryset(self, request):
+#         queryset = super().get_queryset(request)
+#         return queryset.select_related('message', 'user', 'user_phone', 'contact')
+# admin.site.register(MessageLogs, MessageLogsAdmin)
+
+class MessageLogsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag')
+    search_fields = ('contact__phone', 'relationship_tag')
+    list_filter = (
+        ('sent_at', admin.DateFieldListFilter),
+        'relationship_tag',
+        'status'
+    )
+    ordering = ['-sent_at']
+    list_per_page = 50
+    date_hierarchy = 'sent_at'
+    raw_id_fields = ('message', 'user', 'user_phone', 'contact')
+    
     def get_contact_phone_number(self, obj): 
         return obj.contact.phone if obj.contact else '-'
     get_contact_phone_number.short_description = 'Contact Phone'
-
-    def get_message_text(self, obj):
-        return obj.message.text
-    get_message_text.short_description = 'Message'
-
-    def get_phone_number(self, obj):
-        # return obj.phone_number
-        return obj.user_phone.phone_number if obj.user_phone else '-'
-
-    get_phone_number.short_description = 'Phone Number'
+    get_contact_phone_number.admin_order_field = 'contact__phone'
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        return queryset.select_related('message', 'user', 'user_phone', 'contact')
+        return queryset.select_related(
+            'contact'
+        ).defer(
+            'message__text',
+            'message__title',
+            'user__name',
+            'user_phone__phone_number'
+        )
+
+    def has_add_permission(self, request):
+        return False  # Logs shouldn't be added manually
+
+    def has_change_permission(self, request, obj=None):
+        return False  # Logs shouldn't be modified
 
 admin.site.register(MessageLogs, MessageLogsAdmin)
+
 
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'created_at', 'source', 'relationship_tag',  

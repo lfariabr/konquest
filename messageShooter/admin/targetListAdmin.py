@@ -75,10 +75,10 @@ class TargetListAdmin(admin.ModelAdmin):
                 elif obj.contact_tag.lower() == 'preenchimento':
                     return obj.contact.preenchimento_messages_sent
             if obj.contact_type == 'Appointment':
-                if obj.contact_tag == "NPS":
+                if obj.contact_tag == "NPS" or obj.contact_tag == "Reschedule":
                     counter = get_counter_whatsapp(obj.contact.phone, obj.contact_tag)
                     return counter
-                elif obj.contact_tag == "Reminder" or obj.contact_tag == "Reschedule":
+                elif obj.contact_tag == "Reminder": # or obj.contact_tag == "Reschedule":
                     from messageShooter.resolvers.get_days_interval import calculate_interval
                     if obj.contact.appointment_created_at:
                         return calculate_interval(obj.contact.appointment_created_at)

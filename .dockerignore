@@ -2,7 +2,7 @@ echo """
 .git
 .env
 *.mp4
-celerybeat-schedule*
+# celerybeat-schedule*
 dump.rdb
 __pycache__
 *.pyc

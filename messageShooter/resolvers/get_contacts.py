@@ -28,7 +28,7 @@ from messageShooter.utils.is_appointment_es import (
 from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact
 
 
-from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END
+from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
 logger = logging.getLogger(__name__)
 
 def get_contact_whatsapp(contact_type, contact_tag):
@@ -123,41 +123,105 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             appointments = [
                 apt for apt in potential_appointments 
                 if apt.customer_phone not in excluded_phones
-            ][:CONTACTS_TO_LOAD]
+            ][:CONTACTS_TO_LOAD_APT]
 
             logger.info(f"Reminder - Found {len(appointments)} appointments between {now} and {five_days_future}")
-
+        
         elif contact_tag == 'Reschedule':
+            logger.info("Starting reschedule appointments processing")
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
             
-            # Potential reschedule appointments
+            # # Get sample of excluded phone numbers
+            # excluded_sample = Appointment.objects.filter(
+            #     Q(status_label__in=reschedule_undesired_status_es) &
+            #     Q(appointment_date__range=(thirty_days_past, thirty_days_future))
+            # ).values('customer_phone', 'status_label', 'store_name', 'appointment_date')[:5]
+            
+            # # Log initial counts
+            # total_desired = base_query.filter(
+            #     Q(status_label__in=reschedule_desired_status_es) &
+            #     Q(store_name__in=stores_include_es_reschedule) &
+            #     Q(procedure_name__in=procedures_es) &
+            #     Q(appointment_date__lt=now)  # Only past appointments
+            # ).count()
+            
+            # total_excluded = Appointment.objects.filter(
+            #     Q(status_label__in=reschedule_undesired_status_es) &
+            #     Q(appointment_date__range=(thirty_days_past, thirty_days_future))
+            # ).values('customer_phone').distinct().count()
+            
+            # Step 1: Get potential reschedule appointments with optimized query
             reschedule_appointments = base_query.filter(
                 Q(status_label__in=reschedule_desired_status_es) &
-                Q(store_name__in=stores_include_es_reschedule)
-            ).order_by('appointment_date')
+                Q(store_name__in=stores_include_es_reschedule) &
+                Q(appointment_date__lt=now) &  # Only past appointments
+                ~Q(customer_phone__in=Appointment.objects.filter(
+                    Q(status_label__in=reschedule_undesired_status_es) &
+                    Q(procedure_name__in=procedures_es) &
+                    Q(appointment_date__range=(thirty_days_past, thirty_days_future))
+                ).values('customer_phone').distinct())
+            ).order_by('-appointment_date')[:CONTACTS_TO_LOAD_APT]  # Most recent appointments first
 
-            # Exclude appointments with undesired statuses
-            excluded_appointments = Appointment.objects.filter(
-                Q(status_label__in=reschedule_undesired_status_es) &
-                Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-            ).values('customer_phone')
+            appointments = list(reschedule_appointments)
+            
+            # Get sample of included appointments
+            # included_sample = appointments[:5]
+            
+            # logger.info(
+            #     f"Reschedule processing completed:\n"
+            #     f"- Total potential appointments (before exclusion): {total_desired}\n"
+            #     f"- Total excluded phone numbers: {total_excluded}\n"
+            #     f"- Final appointments count: {len(appointments)}\n"
+            #     f"\nSAMPLE OF EXCLUDED APPOINTMENTS:\n"
+            #     f"{'='*50}\n" +
+            #     '\n'.join([f"Phone: {apt['customer_phone']} | Status: {apt['status_label']} | "
+            #               f"Store: {apt['store_name']} | Date: {apt['appointment_date']}"
+            #               for apt in excluded_sample]) +
+            #     f"\n{'='*50}\n"
+            #     f"\nSAMPLE OF INCLUDED APPOINTMENTS:\n"
+            #     f"{'='*50}\n" +
+            #     '\n'.join([f"Phone: {apt.customer_phone} | Status: {apt.status_label} | "
+            #               f"Store: {apt.store_name} | Date: {apt.appointment_date}"
+            #               for apt in included_sample]) +
+            #     f"\n{'='*50}\n"
+            #     f"\nTime window: {thirty_days_past} to {thirty_days_future}\n"
+            #     f"Desired statuses: {reschedule_desired_status_es}\n"
+            #     f"Undesired statuses: {reschedule_undesired_status_es}\n"
+            #     f"Included stores: {stores_include_es_reschedule}"
+            # )
 
-            # Create set of excluded phone numbers
-            excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
+        # elif contact_tag == 'Reschedule':
+        #     thirty_days_past = now - timedelta(days=30)
+        #     thirty_days_future = now + timedelta(days=30)
+            
+        #     # Potential reschedule appointments
+        #     reschedule_appointments = base_query.filter(
+        #         Q(status_label__in=reschedule_desired_status_es) &
+        #         Q(store_name__in=stores_include_es_reschedule)
+        #     ).order_by('appointment_date')
 
-            # Final filtering
-            appointments = [
-                apt for apt in reschedule_appointments 
-                if apt.customer_phone not in excluded_phones
-            ][:CONTACTS_TO_LOAD]
+        #     # Exclude appointments with undesired statuses
+        #     excluded_appointments = Appointment.objects.filter(
+        #         Q(status_label__in=reschedule_undesired_status_es) &
+        #         Q(appointment_date__range=(thirty_days_past, thirty_days_future))
+        #     ).values('customer_phone')
+
+        #     # Create set of excluded phone numbers
+        #     excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
+
+        #     # Final filtering
+        #     appointments = [
+        #         apt for apt in reschedule_appointments 
+        #         if apt.customer_phone not in excluded_phones
+        #     ][:CONTACTS_TO_LOAD_APT]
 
             logger.info(f"Reschedule - Found {len(appointments)} appointments")
 
         elif contact_tag == 'NPS':
             
             # Define NPS period: past 2 days
-            last_2_days = now - timedelta(days=2)
+            last_2_days = now - timedelta(days=4)
             
             # Get all potential appointments
             nps_appointments = base_query_nps.filter(
@@ -174,13 +238,13 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                     unique_appointments[apt.customer_phone] = apt
 
             # Convert back to list and apply limit
-            appointments = list(unique_appointments.values())[:CONTACTS_TO_LOAD]
+            appointments = list(unique_appointments.values())[:CONTACTS_TO_LOAD_APT]
 
             logger.info(f"NPS - Found {len(nps_appointments)} total appointments, {len(appointments)} unique appointments")
 
         else:
             # Default case: return all relevant appointments
-            appointments = base_query.order_by('appointment_date')[:CONTACTS_TO_LOAD]
+            appointments = base_query.order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
             logger.info(f"Default - Found {len(appointments)} appointments")
             
         # Convert appointments to contacts

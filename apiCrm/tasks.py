@@ -318,3 +318,37 @@ def test_redis():
             logger.error('❌ Redis reconnection failed with error: %s', str(re))
             logger.error('❌ Reconnection error type: %s', type(re).__name__)
         logger.error(''.center(80, '!') + '\n')
+
+
+# If we want to delete data from SQLite:
+#             # Check if tables exist using SQLite syntax
+#             cursor.execute("""
+#                 SELECT COUNT(*) FROM sqlite_master 
+#                 WHERE type='table' AND name IN ('apiCrm_billcharge', 'apiCrm_appointment', 'apiCrm_lead');
+#             """)
+#             tables_exist = cursor.fetchone()[0] == 3  # All three tables should exist
+            
+#             if not tables_exist:
+#                 logger.warning("One or more CRM tables do not exist. Skipping cleanup.")
+#                 return False
+            
+#             try:
+#                 with transaction.atomic():
+#                     # Try to clean each table individually to handle partial existence
+#                     for table in ['apiCrm_billcharge', 'apiCrm_appointment', 'apiCrm_lead']:
+#                         try:
+#                             cursor.execute('DELETE FROM "%s";' % table)  # Using DELETE instead of TRUNCATE for SQLite
+#                             logger.info(f"Successfully cleaned {table}")
+#                         except Exception as e:
+#                             logger.warning(f"Could not clean {table}: {str(e)}")
+                    
+#                     # Log final table counts
+#                     cursor.execute("""
+#                         SELECT 
+#                             (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='apiCrm_billcharge') as billcharges_exists,
+#                             (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='apiCrm_appointment') as appointments_exists,
+#                             (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='apiCrm_lead') as leads_exists;
+#                     """)
+# Then, on terminal:
+# 1- Run worker: celery -A konquist worker -l INFO
+# 2- Run the call function for this task: celery -A konquist call apiCrm.cleanup_crm_tables
