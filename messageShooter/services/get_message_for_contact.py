@@ -51,16 +51,20 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
             
             if target_list.contact_tag == "NPS":
                 actual_counter = get_counter_appointment(contact.phone, target_list.contact_tag)
-                message = get_message_for_interval(
+                logger.info(f"Using appointment counter {actual_counter} for NPS message")
+                
+                message = get_message(
                     contact_type=target_list.contact_type,
                     relationship_tag=target_list.contact_tag,
-                    counter=actual_counter,
-                    days_interval=days_interval,
-                    appointment_status_label=contact.appointment_status,
-                    appointment_data={"phone": contact.phone}
+                    counter=actual_counter
                 )
-                message.text = customize_message_text(message.text, contact.message_variables) 
-                logger.info(f"NPS using actual counter: {actual_counter} for {target_list.contact_tag}")
+                
+                if message:
+                    message.text = customize_message_text(message.text, contact.message_variables)
+                    logger.info(f"Found NPS message for counter {actual_counter}")
+                else:
+                    logger.warning(f"No NPS message found for counter {actual_counter}")
+                    
                 return actual_counter, message
             
             if target_list.contact_tag == "Reschedule":

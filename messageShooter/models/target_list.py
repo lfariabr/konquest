@@ -21,6 +21,7 @@ from core.models.contact import Contact
 from messageShooter.models.campaign import Campaign
 from django.utils import timezone
 from django.core import validators
+from django.core.cache import cache
 
 class TargetList(models.Model):
     CONTACT_TYPE_CHOICES = [
@@ -54,6 +55,9 @@ class TargetList(models.Model):
     userphone = models.ForeignKey('core.UserPhone', on_delete=models.CASCADE, null=False)
     token = models.CharField(max_length=100, null=True, blank=True)  # Making token nullable
 
+    # Cache settings
+    CACHE_TIMEOUT = 3600  # 1 hour
+
     # Processing
     status = models.CharField(max_length=100, default='pending')  # pending, processing, completed, failed
     priority = models.IntegerField(default=0)  # Default 0 for FIFO
@@ -70,34 +74,86 @@ class TargetList(models.Model):
                 'contact_type': 'Contact type must be either Whatsapp or Appointment'
             })
 
+    @classmethod
+    def get_cached_target_lists(cls, user_id, contact_type=None, contact_tag=None):
+        """Get cached target lists for a user"""
+        cache_key = f'target_lists_{user_id}_{contact_type}_{contact_tag}'
+        cached_lists = cache.get(cache_key)
+        
+        if cached_lists is not None:
+            return cached_lists
+            
+        # Build query
+        query = cls.objects.filter(userphone__user_id=user_id)
+        if contact_type:
+            query = query.filter(contact_type=contact_type)
+        if contact_tag:
+            query = query.filter(contact_tag=contact_tag)
+            
+        # Get lists and cache them
+        target_lists = list(query.select_related('contact', 'userphone'))
+        cache.set(cache_key, target_lists, timeout=cls.CACHE_TIMEOUT)
+        
+        return target_lists
+    
+    def invalidate_cache(self):
+        """Invalidate cache for this target list's user"""
+        cache_key = f'target_lists_{self.userphone.user_id}_{self.contact_type}_{self.contact_tag}'
+        cache.delete(cache_key)
+    
     def save(self, *args, **kwargs):
-        """Override save to enforce validation"""
+        """Override save to enforce validation and handle cache"""
         self.full_clean()
         super().save(*args, **kwargs)
+        self.invalidate_cache()  # Clear cache on save
 
     def get_contacts(self):
         """
         Get contacts associated with this target list using the appropriate resolver
-        based on contact_type.
+        based on contact_type. Results are cached to prevent repeated API/DB calls.
         """
         from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
         import logging
+        from django.core.cache import cache
         
         logger = logging.getLogger(__name__)
-
+        
+        # Generate cache key based on target list attributes
+        cache_key = f'target_list_contacts_{self.id}_{self.contact_type}_{self.contact_tag}'
+        
+        # Try to get from cache first
+        cached_contacts = cache.get(cache_key)
+        if cached_contacts is not None:
+            logger.debug(f"Using cached contacts for target list {self.id}")
+            return cached_contacts
+            
+        # If not in cache, fetch contacts based on type
         if self.contact_type == 'Whatsapp':
-            return get_contact_whatsapp(self.contact_type, self.contact_tag)
+            contacts = get_contact_whatsapp(self.contact_type, self.contact_tag)
+            # Cache for 1 hour since WhatsApp contacts change less frequently
+            cache.set(cache_key, contacts, timeout=3600)
+            return contacts
+            
         elif self.contact_type == 'Appointment':
             # Get user from userphone
-            user = None
             if self.userphone and self.userphone.user:
                 user = self.userphone.user
                 logger.info(f"Getting appointments for user {user.email}")
-                return get_contact_appointment(self.contact_type, self.contact_tag, user=user)
+                contacts = get_contact_appointment(self.contact_type, self.contact_tag, user=user)
+                # Cache for 5 minutes since appointments change more frequently
+                cache.set(cache_key, contacts, timeout=300)
+                return contacts
             else:
                 logger.error(f"Missing user for appointment processing in target list {self.id}")
                 return []
+                
         return []
+        
+    def invalidate_contacts_cache(self):
+        """Invalidate the contacts cache for this target list"""
+        from django.core.cache import cache
+        cache_key = f'target_list_contacts_{self.id}_{self.contact_type}_{self.contact_tag}'
+        cache.delete(cache_key)
 
     class Meta:
         ordering = ['priority', 'sequence_order', 'created_at']  # FIFO ordering

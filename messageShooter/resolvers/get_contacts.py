@@ -10,6 +10,7 @@ from django.db.models import Q
 from datetime import timedelta
 from django.utils import timezone
 from core.models.contact import Contact
+from django.core.cache import cache
 from apiCrm.models.appointment import Appointment
 from messageShooter.utils.is_appointment_es import (
     procedures_es, 
@@ -25,7 +26,7 @@ from messageShooter.utils.is_appointment_es import (
     nps_undesired_status_es,
     nps_stores_include_es
 )
-from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact
+from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact, convert_appointments_to_contacts_bulk
 
 
 from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
@@ -68,195 +69,163 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     """
     logger = logging.getLogger(__name__)
 
-    if contact_type != "Appointment":
-        return []
-
-    if not user:
-        logger.error("No user provided for appointment processing")
+    if contact_type != "Appointment" or not user:
+        logger.error("Invalid contact type or no user provided")
         return []
 
     now = timezone.now()
-    logger = logging.getLogger(__name__)
     
-    # Base query with common filters
-    base_query = Appointment.objects.filter(
-        procedure_name__in=procedures_es
-        # store_name__in=stores_include_es, 
-        # Removed "store_name" to get all stores and filter within the contact tag.
-    )
+    # Try to get from cache first for all types
+    cache_key = f'appointments_{contact_tag}_{user.id}'
+    cached_contacts = cache.get(cache_key)
+    if cached_contacts is not None:
+        logger.info(f"Using cached contacts for {contact_tag}")
+        return cached_contacts
 
+    # Base queries with optimized filters
+    base_query = Appointment.objects.filter(procedure_name__in=procedures_es)
     base_query_nps = Appointment.objects.filter(
         store_name__in=nps_stores_include_es
-        ).exclude(
-            procedure_name__in=procedures_es
-    )
+    ).exclude(procedure_name__in=procedures_es)
 
     try:
         if contact_tag == 'Reminder':
-            """
-            - Get appointments in the next 5 days
-            - Exclude appointments that are reminder_undesired_status_es in the last AND future 30 days
-            """
-            # Get appointments in the next 5 days
+            # Optimize time ranges
             five_days_future = now + timedelta(days=5)
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
             
-            # Get all potential appointments
-            potential_appointments = base_query.filter(
-                Q(status_label__in=reminder_desired_status_es) &
-                Q(appointment_date__range=(now, five_days_future)) &
-                Q(store_name__in=stores_include_es)
-            ).order_by('appointment_date')
-
-            # Get excluded appointments by existing customer_phone
-            excluded_appointments = Appointment.objects.filter(
-                Q(status_label__in=reminder_undesired_status_es) &
-                Q(procedure_name__in=procedures_es) &
-                Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-            ).values('customer_phone')
-
-            # Create set exclusion criteria
-            excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
-
-            # Filter appointments that don't match exclusion criteria
-            appointments = [
-                apt for apt in potential_appointments 
-                if apt.customer_phone not in excluded_phones
-            ][:CONTACTS_TO_LOAD_APT]
-
-            logger.info(f"Reminder - Found {len(appointments)} appointments between {now} and {five_days_future}")
+            # Get excluded phones first (can be cached)
+            excluded_cache_key = f'excluded_phones_reminder_{user.id}'
+            excluded_phones = cache.get(excluded_cache_key)
+            
+            if excluded_phones is None:
+                excluded_phones = set(Appointment.objects.filter(
+                    status_label__in=reminder_undesired_status_es,
+                    procedure_name__in=procedures_es,
+                    appointment_date__range=(thirty_days_past, thirty_days_future)
+                ).values_list('customer_phone', flat=True))
+                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
+            
+            # Get appointments with optimized query
+            appointments = base_query.filter(
+                status_label__in=reminder_desired_status_es,
+                appointment_date__range=(now, five_days_future),
+                store_name__in=stores_include_es
+            ).exclude(
+                customer_phone__in=excluded_phones
+            ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
+            
+            appointments = list(appointments)
+            logger.info(f"Reminder - Found {len(appointments)} appointments")
         
         elif contact_tag == 'Reschedule':
-            logger.info("Starting reschedule appointments processing")
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
             
-            # # Get sample of excluded phone numbers
-            # excluded_sample = Appointment.objects.filter(
-            #     Q(status_label__in=reschedule_undesired_status_es) &
-            #     Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-            # ).values('customer_phone', 'status_label', 'store_name', 'appointment_date')[:5]
+            # Get excluded phones (cached)
+            excluded_cache_key = f'excluded_phones_reschedule_{user.id}'
+            excluded_phones = cache.get(excluded_cache_key)
             
-            # # Log initial counts
-            # total_desired = base_query.filter(
-            #     Q(status_label__in=reschedule_desired_status_es) &
-            #     Q(store_name__in=stores_include_es_reschedule) &
-            #     Q(procedure_name__in=procedures_es) &
-            #     Q(appointment_date__lt=now)  # Only past appointments
-            # ).count()
+            if excluded_phones is None:
+                excluded_phones = set(Appointment.objects.filter(
+                    status_label__in=reschedule_undesired_status_es,
+                    procedure_name__in=procedures_es,
+                    appointment_date__range=(thirty_days_past, thirty_days_future)
+                ).values_list('customer_phone', flat=True))
+                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
             
-            # total_excluded = Appointment.objects.filter(
-            #     Q(status_label__in=reschedule_undesired_status_es) &
-            #     Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-            # ).values('customer_phone').distinct().count()
+            # Optimized query with distinct handling
+            appointments = base_query.filter(
+                status_label__in=reschedule_desired_status_es,
+                store_name__in=stores_include_es_reschedule,
+                appointment_date__lt=now
+            ).exclude(
+                customer_phone__in=excluded_phones
+            ).order_by('-appointment_date')
             
-            # Step 1: Get potential reschedule appointments with optimized query
-            reschedule_appointments = base_query.filter(
-                Q(status_label__in=reschedule_desired_status_es) &
-                Q(store_name__in=stores_include_es_reschedule) &
-                Q(appointment_date__lt=now) &  # Only past appointments
-                ~Q(customer_phone__in=Appointment.objects.filter(
-                    Q(status_label__in=reschedule_undesired_status_es) &
-                    Q(procedure_name__in=procedures_es) &
-                    Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-                ).values('customer_phone').distinct())
-            ).order_by('-appointment_date')[:CONTACTS_TO_LOAD_APT]  # Most recent appointments first
-
-            appointments = list(reschedule_appointments)
+            # Handle distinct in Python for better compatibility
+            seen_phones = set()
+            unique_appointments = []
+            for apt in appointments:
+                if apt.customer_phone not in seen_phones:
+                    seen_phones.add(apt.customer_phone)
+                    unique_appointments.append(apt)
+                if len(unique_appointments) >= CONTACTS_TO_LOAD_APT:
+                    break
             
-            # Get sample of included appointments
-            # included_sample = appointments[:5]
-            
-            # logger.info(
-            #     f"Reschedule processing completed:\n"
-            #     f"- Total potential appointments (before exclusion): {total_desired}\n"
-            #     f"- Total excluded phone numbers: {total_excluded}\n"
-            #     f"- Final appointments count: {len(appointments)}\n"
-            #     f"\nSAMPLE OF EXCLUDED APPOINTMENTS:\n"
-            #     f"{'='*50}\n" +
-            #     '\n'.join([f"Phone: {apt['customer_phone']} | Status: {apt['status_label']} | "
-            #               f"Store: {apt['store_name']} | Date: {apt['appointment_date']}"
-            #               for apt in excluded_sample]) +
-            #     f"\n{'='*50}\n"
-            #     f"\nSAMPLE OF INCLUDED APPOINTMENTS:\n"
-            #     f"{'='*50}\n" +
-            #     '\n'.join([f"Phone: {apt.customer_phone} | Status: {apt.status_label} | "
-            #               f"Store: {apt.store_name} | Date: {apt.appointment_date}"
-            #               for apt in included_sample]) +
-            #     f"\n{'='*50}\n"
-            #     f"\nTime window: {thirty_days_past} to {thirty_days_future}\n"
-            #     f"Desired statuses: {reschedule_desired_status_es}\n"
-            #     f"Undesired statuses: {reschedule_undesired_status_es}\n"
-            #     f"Included stores: {stores_include_es_reschedule}"
-            # )
-
-        # elif contact_tag == 'Reschedule':
-        #     thirty_days_past = now - timedelta(days=30)
-        #     thirty_days_future = now + timedelta(days=30)
-            
-        #     # Potential reschedule appointments
-        #     reschedule_appointments = base_query.filter(
-        #         Q(status_label__in=reschedule_desired_status_es) &
-        #         Q(store_name__in=stores_include_es_reschedule)
-        #     ).order_by('appointment_date')
-
-        #     # Exclude appointments with undesired statuses
-        #     excluded_appointments = Appointment.objects.filter(
-        #         Q(status_label__in=reschedule_undesired_status_es) &
-        #         Q(appointment_date__range=(thirty_days_past, thirty_days_future))
-        #     ).values('customer_phone')
-
-        #     # Create set of excluded phone numbers
-        #     excluded_phones = set(excluded_appointments.values_list('customer_phone', flat=True))
-
-        #     # Final filtering
-        #     appointments = [
-        #         apt for apt in reschedule_appointments 
-        #         if apt.customer_phone not in excluded_phones
-        #     ][:CONTACTS_TO_LOAD_APT]
-
+            appointments = unique_appointments
             logger.info(f"Reschedule - Found {len(appointments)} appointments")
-
+        
         elif contact_tag == 'NPS':
+            # Define NPS period
+            last_2_days = now - timedelta(days=2)
             
-            # Define NPS period: past 2 days
-            last_2_days = now - timedelta(days=4)
+            # Debug: Count total appointments before filtering
+            total_appointments = Appointment.objects.filter(
+                appointment_date__range=(last_2_days, now)
+            ).count()
+            logger.info(f"Total appointments in last 10 days: {total_appointments}")
             
-            # Get all potential appointments
-            nps_appointments = base_query_nps.filter(
-                    Q(status_label__in=nps_desired_status_es) &
-                    Q(appointment_date__range=(last_2_days, now)) &
-                    Q(store_name__in=nps_stores_include_es)
-                ).order_by('appointment_date')
+            # Debug: Count after store filter
+            store_filtered = Appointment.objects.filter(
+                appointment_date__range=(last_2_days, now),
+                store_name__in=nps_stores_include_es
+            ).count()
+            logger.info(f"Appointments after store filter: {store_filtered}")
+            
+            # Debug: Count after procedure exclusion
+            procedure_filtered = Appointment.objects.filter(
+                appointment_date__range=(last_2_days, now),
+                store_name__in=nps_stores_include_es
+            ).exclude(
+                procedure_name__in=procedures_es
+            ).count()
+            logger.info(f"Appointments after procedure exclusion: {procedure_filtered}")
+            
+            # Debug: Count after status filter
+            status_filtered = Appointment.objects.filter(
+                appointment_date__range=(last_2_days, now),
+                store_name__in=nps_stores_include_es,
+                status_label__in=nps_desired_status_es
+            ).exclude(
+                procedure_name__in=procedures_es
+            ).count()
+            logger.info(f"Appointments after status filter: {status_filtered}")
 
-            # Create a dictionary to keep track of unique phone numbers
-            # Keep only the first (earliest) appointment for each phone
-            unique_appointments = {}
-            for apt in nps_appointments:
-                if apt.customer_phone not in unique_appointments:
-                    unique_appointments[apt.customer_phone] = apt
-
-            # Convert back to list and apply limit
-            appointments = list(unique_appointments.values())[:CONTACTS_TO_LOAD_APT]
-
-            logger.info(f"NPS - Found {len(nps_appointments)} total appointments, {len(appointments)} unique appointments")
-
+            # Optimized query
+            appointments = base_query_nps.filter(
+                status_label__in=nps_desired_status_es,
+                appointment_date__range=(last_2_days, now),
+                store_name__in=nps_stores_include_es
+            ).order_by('appointment_date')
+            
+            # Handle distinct
+            seen_phones = set()
+            unique_appointments = []
+            for apt in appointments:
+                if apt.customer_phone not in seen_phones:
+                    seen_phones.add(apt.customer_phone)
+                    unique_appointments.append(apt)
+                if len(unique_appointments) >= CONTACTS_TO_LOAD_APT:
+                    break
+            
+            appointments = unique_appointments
+            logger.info(f"NPS - Found {len(appointments)} unique appointments")
+        
         else:
-            # Default case: return all relevant appointments
-            appointments = base_query.order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
-            logger.info(f"Default - Found {len(appointments)} appointments")
-            
-        # Convert appointments to contacts
-        contacts = []
-        for appointment in appointments:
-            contact = convert_appointment_to_contact(appointment, contact_tag, user)
-            if contact:
-                contacts.append(contact)
-            
-        logger.info(f"Converted {len(contacts)} appointments to contacts with tag '{contact_tag}'")
+            logger.warning(f"Unknown contact tag: {contact_tag}")
+            return []
+        
+        # Convert all appointments to contacts using bulk operation
+        contacts = convert_appointments_to_contacts_bulk(appointments, contact_tag, user)
+        
+        # Cache the results
+        cache_timeout = 300 if contact_tag == 'NPS' else 3600  # 5 mins for NPS, 1 hour for others
+        cache.set(cache_key, contacts, timeout=cache_timeout)
+        
         return contacts
-
+        
     except Exception as e:
-        logger.error(f"Error getting appointments: {str(e)}")
+        logger.error(f"Error processing {contact_tag} appointments: {str(e)}")
         return []

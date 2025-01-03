@@ -5,6 +5,8 @@ from core.models.userphone import UserPhone
 from core.models.user import kUser
 from core.models.message import Message  
 from core.models.contact import Contact 
+from django.core.cache import cache
+from django.db import transaction
 
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
@@ -270,45 +272,67 @@ class Campaign(models.Model):
         from messageShooter.models.target_list import TargetList
         from messageShooter.resolvers.get_counter import get_counter_whatsapp
         from core.models.contact import Contact
-
-        # Get eligible contacts based on campaign type
-        if self.contact_type == CONTACT_TYPE_WHATSAPP:
-            contacts = Contact.objects.filter(
-                relationship_tag=self.contact_tag,
-                status='Active'
-            )
-        elif self.contact_type == CONTACT_TYPE_APPOINTMENT:
-            # Add appointment-specific logic here
-            contacts = []
+        
+        # Try to get from cache first
+        cache_key = f'campaign_contacts_{self.id}'
+        contacts = cache.get(cache_key)
+        
+        if contacts is None:
+            # Get eligible contacts based on campaign type
+            if self.contact_type == CONTACT_TYPE_WHATSAPP:
+                contacts = list(Contact.objects.filter(
+                    relationship_tag=self.contact_tag,
+                    status='Active'
+                ).select_related('userphone'))
+                
+                # Cache for 1 hour
+                cache.set(cache_key, contacts, timeout=3600)
+            elif self.contact_type == CONTACT_TYPE_APPOINTMENT:
+                from messageShooter.resolvers.get_contacts import get_contact_appointment
+                contacts = get_contact_appointment(self.contact_type, self.contact_tag, self.user)
+                
+                # Cache for 5 minutes for appointments since they're more dynamic
+                cache.set(cache_key, contacts, timeout=300)
         
         if not contacts:
             return []
 
-        # Create one target list for all contacts
-        # Use the first contact's counter to get initial message
-        first_contact = contacts[0]
-        counter = get_counter_whatsapp(first_contact.phone, self.contact_tag)
-        message = Message.objects.filter(
-            relationship_tag=self.contact_tag,
-            counter=counter
-        ).first()
+        # Process contacts in batches
+        batch_size = 100
+        target_lists = []
         
-        if not message:
-            return []
-
-        # Create single target list for all contacts
-        target_list = TargetList.objects.create(
-            contact=first_contact,  # Use first contact as reference
-            contact_phone=first_contact.phone,
-            contact_type=self.contact_type,
-            contact_tag=self.contact_tag,
-            message=message,
-            userphone=self.userphone,
-            status='pending',
-            campaign=self
-        )
+        with transaction.atomic():
+            for i in range(0, len(contacts), batch_size):
+                batch = contacts[i:i + batch_size]
+                
+                # Get counter and message once per batch
+                counter = get_counter_whatsapp(batch[0].phone, self.contact_tag)
+                message = Message.objects.filter(
+                    relationship_tag=self.contact_tag,
+                    counter=counter
+                ).first()
+                
+                if not message:
+                    continue
+                
+                # Create target lists in bulk
+                batch_lists = [
+                    TargetList(
+                        contact=contact,
+                        contact_phone=contact.phone,
+                        contact_type=self.contact_type,
+                        contact_tag=self.contact_tag,
+                        message=message,
+                        userphone=self.userphone,
+                        status='pending',
+                        campaign=self
+                    ) for contact in batch
+                ]
+                
+                TargetList.objects.bulk_create(batch_lists)
+                target_lists.extend(batch_lists)
         
-        return [target_list]
+        return target_lists
 
     def process_campaign(self):
         """

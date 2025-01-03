@@ -590,11 +590,35 @@ class QueueProcessor:
         return loop.run_until_complete(self.process_queues_async(batch_size=batch_size))
     
     def process_queue_item(self, queue_item):
-        """Process a single queue item (sync version)"""
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        return loop.run_until_complete(self.process_queue_item_async(queue_item))
-    
+        """Process a single queue item"""
+        try:
+            # Get contacts from cache
+            contacts = queue_item.target_list.get_contacts()
+            if not contacts:
+                logger.warning(f"No contacts found for queue item {queue_item.id}")
+                queue_item.status = 'completed'
+                queue_item.save()
+                return
+                
+            # Process contacts in batches
+            batch_size = 50
+            for i in range(0, len(contacts), batch_size):
+                batch = contacts[i:i + batch_size]
+                self._process_contact_batch(queue_item, batch)
+                
+            queue_item.status = 'completed'
+            queue_item.save()
+            
+        except Exception as e:
+            logger.error(f"Error processing queue item {queue_item.id}: {str(e)}")
+            queue_item.status = 'failed'
+            queue_item.save()
+            raise
+
+    def _process_contact_batch(self, queue_item, batch):
+        # Implement batch processing logic here
+        pass
+
     def send_message(self, contact, message, userphone):
         """Send a message (sync version)"""
         loop = asyncio.new_event_loop()

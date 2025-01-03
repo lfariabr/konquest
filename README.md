@@ -119,9 +119,10 @@ docker-compose logs -f
 - Import data from spreadsheet history rpdprocorpo@gmail.com
 - Push this docker image to droplet in digital ocean
 - Test deeply Appointment Campaigns
+- Run "Reminder" Campaign + "Reschedule" and "NPS"
 
 # In progress
-- Run "Reminder" Campaign + "Reschedule" and "NPS"
+- Performance Boost
 - Reminder HOMA
 
 ## Backlog:

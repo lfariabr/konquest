@@ -3,28 +3,33 @@ from django.utils.html import format_html
 from messageShooter.models.target_list import TargetList
 from messageShooter.models.queue import Queue
 from messageShooter.services.queue_processor import QueueProcessor
+from django.core.cache import cache
 import logging
+from django.db.models import Prefetch
 from asgiref.sync import async_to_sync
 
 logger = logging.getLogger(__name__)
 
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_contact_type', 'get_campaign_name', 'status', 'get_progress_display', 'get_recipients_count', 'get_userphone_number', 'get_target_list_link')
+    list_display = ('id', 'get_contact_type', 'get_campaign_name', 'status', 'get_recipients_count', 'get_userphone_number', 'get_target_list_link')
     list_filter = ('status', 'target_list__contact_type', 'target_list__campaign', 'userphone')
     search_fields = ('target_list__contact_tag', 'contact__phone', 'userphone__phone_number', 'target_list__campaign__name')
     ordering = ('-priority', 'scheduled_time', 'created_at')
     actions = ['instant_process_queue', 'resume_interrupted_queues']
 
     def get_queryset(self, request):
-        """Override get_queryset to store request and setup cache"""
+        """Override get_queryset to optimize queries and batch load data"""
         self.request = request
-        qs = super().get_queryset(request)
+        queryset = super().get_queryset(request)
         
-        # Setup cache for counters
-        if not hasattr(request, 'queue_counters'):
-            request.queue_counters = {}
-            
-        return qs
+        # Prefetch all target lists at once with all needed relations
+        return queryset.select_related(
+            'target_list',
+            'target_list__campaign',
+            'target_list__userphone',
+            'target_list__contact',
+            'userphone'
+        )
 
     def get_contact_type(self, obj):
         return obj.target_list.contact_type if obj.target_list else '-'
@@ -90,28 +95,28 @@ class QueueAdmin(admin.ModelAdmin):
     get_progress_display.short_description = '📊 Progress'
     
     def get_recipients_count(self, obj):
-        """Get total number of recipients in target list with caching"""
+        """Get count of recipients for this queue item with caching"""
         if not obj.target_list:
-            return 0
+            return '-'
             
-        cache_key = f'recipients_count_{obj.target_list.id}'
+        cache_key = f'queue_recipients_count_{obj.id}'
+        count = cache.get(cache_key)
         
-        if not hasattr(self, 'request'):
-            logger.error("No request object found for recipients count")
-            return 0
+        if count is not None:
+            return count
             
-        # Try to get from cache
-        if cache_key in self.request.queue_counters:
-            logger.debug(f"Cache hit for recipients {cache_key}")
-            return self.request.queue_counters[cache_key]
-            
+        # Get count from target list with caching
         try:
-            count = len(obj.target_list.get_contacts())
-            self.request.queue_counters[cache_key] = count
+            contacts = obj.target_list.get_contacts()
+            count = len(contacts) if contacts else 0
+            
+            # Cache for 5 minutes for appointments, 1 hour for others
+            timeout = 300 if obj.target_list.contact_type == 'Appointment' else 3600
+            cache.set(cache_key, count, timeout=timeout)
+            
             return count
         except Exception as e:
             logger.error(f"Error getting recipients count for queue {obj.id}: {str(e)}")
-            self.request.queue_counters[cache_key] = 0
             return 0
     get_recipients_count.short_description = '👥 Recipients'
 
@@ -132,6 +137,14 @@ class QueueAdmin(admin.ModelAdmin):
             return format_html('<a href="{}">{}</a>', url, obj.target_list.campaign.name)
         return '-'
     get_campaign_name.short_description = '📢 Campaign'
+
+    def get_contact_count(self, obj):
+        """Get count of contacts for this queue item"""
+        if obj.target_list:
+            contacts = obj.target_list.get_contacts()
+            return len(contacts) if contacts else 0
+        return 0
+    get_contact_count.short_description = 'Contact Count'
 
     def instant_process_queue(self, request, queryset):
         """Process selected queues immediately"""
@@ -249,6 +262,44 @@ class QueueAdmin(admin.ModelAdmin):
                 f"Error resuming queues: {error_msg}",
                 level='ERROR'
             )
+    
+    def changelist_view(self, request, extra_context=None):
+        """Override changelist view to add performance monitoring"""
+        from django.db import connection
+        from time import time
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        # Start timing
+        start_time = time()
+        initial_queries = len(connection.queries)
+        
+        try:
+            response = super().changelist_view(request, extra_context)
+            
+            # Log performance metrics
+            end_time = time()
+            total_queries = len(connection.queries) - initial_queries
+            execution_time = end_time - start_time
+            
+            logger.info(
+                f"Queue list view performance: {total_queries} queries in {execution_time:.2f}s"
+            )
+            
+            return response
+            
+        except Exception as e:
+            logger.error(f"Error in queue list view: {str(e)}")
+            raise
+    
+    def save_model(self, request, obj, form, change):
+        """Override save to handle contact count"""
+        super().save_model(request, obj, form, change)
+        
+        # Invalidate cache after save
+        if obj.target_list:
+            obj.target_list.invalidate_contacts_cache()
     
     instant_process_queue.short_description = "💥 Process Queue"
     resume_interrupted_queues.short_description = "▶️ Resume interrupted Queue"

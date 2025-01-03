@@ -20,6 +20,8 @@ class Appointment(models.Model):
             models.Index(fields=['customer_phone']),
             models.Index(fields=['id_crm']),
             models.Index(fields=['store_name']),
+            models.Index(fields=['status_label', 'appointment_date']),
+            models.Index(fields=['store_name', 'procedure_name']),
         ]
 
     def __str__(self):
