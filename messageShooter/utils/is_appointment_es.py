@@ -27,23 +27,43 @@ stores_include_es = ["JARDINS"] # store for store in stores
 
 store_include_pl = ['PLÁSTICA']
 
+# REMINDER RULES - PLÁSTICA
+reminder_desired_status_pl = ['Confirmado', 
+                              'Agendado']
+
+reminder_undesired_status_pl = ['Atendido', 
+                                'Falta', 
+                                'Cancelado',
+                                'Reagendado']
+
 # RESCHEDULE RULES
 stores_include_es_reschedule = [store for store in stores] # store for store in stores
+reschedule_stores_include_es = ['all']
 
 reschedule_desired_status_es = ['Falta',
                                 'Cancelado']
 reschedule_undesired_status_es = ['Atendido', 
                                     'Agendado', 
                                     'Confirmado']
-reschedule_stores_include_es = ['all']
+
+# RESCHEDULE RULES - PLÁSTICA
+stores_include_pl_reschedule = ['PLÁSTICA']
+reschedule_stores_include_pl = ['PLÁSTICA']
+
+reschedule_desired_status_pl = ['Falta',
+                                'Cancelado']
+reschedule_undesired_status_pl = ['Atendido', 
+                                    'Agendado', 
+                                    'Confirmado']
 
 # NPS RULES
+nps_stores_include_es = [store for store in stores]
+
 nps_desired_status_es = ['Atendido']
 nps_undesired_status_es = ['Falta', 
                             'Cancelado', 
                             'Agendado', 
                             'Confirmado']
-nps_stores_include_es = [store for store in stores]
 
 # Stores:
 stores_exclude_es = ['PRAIA GRANDE', 

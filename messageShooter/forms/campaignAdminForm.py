@@ -22,14 +22,20 @@ class CampaignAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Get unique relationship tags from messages
-        relationship_tags = Message.objects.exclude(
-            Q(relationship_tag__isnull=True) | Q(relationship_tag='')
-        ).values_list('relationship_tag', flat=True).distinct().order_by('relationship_tag')
+        # # Get unique relationship tags from messages
+        # relationship_tags = Message.objects.exclude(
+        #     Q(relationship_tag__isnull=True) | Q(relationship_tag='')
+        # ).values_list('relationship_tag', flat=True).distinct().order_by('relationship_tag')
+        
+        # Get relationship tags from CONTACT_TAGS instead of querying the database
+        from messageShooter.models.campaign import CONTACT_TAGS
+        all_tags = []
+        for tags in CONTACT_TAGS.values():
+            all_tags.extend(tags)
         
         # Update contact_tag field to only show existing relationship tags
         self.fields['contact_tag'] = forms.ChoiceField(
-            choices=[('', '---------')] + [(tag, tag) for tag in relationship_tags],
+            choices=[('', '---------')] + [(tag, tag) for tag in sorted(set(all_tags))], # for tag in relationship_tags],
             required=True,
             help_text="Select the tag that determines which messages will be sent"
         )

@@ -13,8 +13,9 @@ WSGI_APPLICATION = 'konquist.wsgi.application'
 DATABASE_ENGINE = 'sqlite3' 
 CONTACTS_START = 121
 CONTACTS_END = 300
-CONTACTS_TO_LOAD = 700 # messageShooter/resolvers/get_contacts.py
-CONTACTS_TO_LOAD_APT = 2000
+
+CONTACTS_TO_LOAD = 5 # messageShooter/resolvers/get_contacts.py
+CONTACTS_TO_LOAD_APT = 5
 
 INSTALLED_APPS = [
     'django_daisy',

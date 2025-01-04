@@ -21,7 +21,11 @@ CONTACT_TYPES = [
 # Contact Tags by Type
 CONTACT_TAGS = {
     CONTACT_TYPE_WHATSAPP: ["Preenchimento", "Botox"],
-    CONTACT_TYPE_APPOINTMENT: ["Reminder", "Reschedule", "NPS", "Google My Business"],
+    CONTACT_TYPE_APPOINTMENT: [
+                                # Pró-Corpo
+                                "Reminder", "Reschedule", "NPS", "Google My Business", 
+                                # Plástica
+                                "ReschedulePL", "ReminderPL"],
 } # "Lead": ["NCC", "Verifique seu Blip"], "BillCharge": ["NCC", "Verifique seu Blip"],
 
 # Campaign Status

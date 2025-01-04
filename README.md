@@ -120,12 +120,20 @@ docker-compose logs -f
 - Push this docker image to droplet in digital ocean
 - Test deeply Appointment Campaigns
 - Run "Reminder" Campaign + "Reschedule" and "NPS"
+- Performance Boost
+- Reminder and Reschedule Plastica
+- Tip: clean cache: python manage.py shell -c "from django.core.cache import cache; cache.clear()"
+- Reminder Plástica campaigns + Reschedule Plástica campaigns
+- Now create a new branch to adjust name = Null issue
+python manage.py update_null_contact_names --dry-run
 
 # In progress
-- Performance Boost
-- Reminder HOMA
+- Review changes, pytest and commit
+- Prepare next shooting for tomorrow
 
 ## Backlog:
+- Point DNS new server
+- if everything’s allright, build new image to use on docker (Celery tasks flow)
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id and update spreadsheet data so that marketing can have access to it
 
 ## Setup and Installation

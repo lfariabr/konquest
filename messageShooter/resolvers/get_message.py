@@ -175,6 +175,7 @@ def get_message_for_interval(contact_type,
         counter = 0  # Default fallback for other tags
     
     logger.debug(f"Calculated counter={counter} for {relationship_tag} - {appointment_status_label} - {days_interval} days")
+    
     # Try to get message with encoded counter
     message = Message.objects.filter(
         relationship_tag=relationship_tag,

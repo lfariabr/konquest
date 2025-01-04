@@ -45,10 +45,22 @@ class UserPhoneAdmin(admin.ModelAdmin):
     search_fields = ('phone_number', 'user__name', 'relationship_tag')
     list_filter = ('user', 'phone_description', 'relationship_tag')
     ordering = ['-created_at']
+    exclude = ('user',)  # Hide user field from the form
+
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        return queryset
+        return queryset.select_related('user')
+    
+    def save_model(self, request, obj, form, change):
+        if not obj.user_id:
+            try:
+                kuser = kUser.objects.get(id=request.user.id)
+                obj.user = kuser
+            except kUser.DoesNotExist:
+                logger.warning(f"User with id {request.user.id} does not exist")
+                pass
+        super().save_model(request, obj, form, change)
 
 admin.site.register(UserPhone, UserPhoneAdmin)
 
@@ -56,10 +68,21 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ('user', 'title', 'text', 'counter' ,'file_type', 'relationship_tag', 'created_at')
     search_fields = ('user__name', 'title', 'text', 'relationship_tag')
     list_filter = ('user', 'title', 'relationship_tag', 'created_at')
+    exclude = ('user',)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset
+
+    def save_model(self, request, obj, form, change):
+        if not obj.user_id:
+            try:
+                kuser = kUser.objects.get(id=request.user.id)
+                obj.user = kuser
+            except kUser.DoesNotExist:
+                logger.warning(f"User with id {request.user.id} does not exist")
+                pass
+        super().save_model(request, obj, form, change)
 
 admin.site.register(Message, MessageAdmin)
 
@@ -143,7 +166,7 @@ class ContactAdmin(admin.ModelAdmin):
                     'formatted_bill_charge_amount', 'formatted_bill_charge_total_history',
                     )
 
-    list_filter = ('source', 'store', 'relationship_tag')
+    list_filter = ('source', 'store', 'relationship_tag', 'created_at')
     search_fields = ['phone']
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments', 'check_bill_charges'] # send_text_message_action, send_file_message_action
