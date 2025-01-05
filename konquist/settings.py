@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ['209.38.90.25', 'localhost', '127.0.0.1', 'konquista.com.br', '
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'sqlite3' 
+DATABASE_ENGINE = 'postgresql' 
 CONTACTS_START = 121
 CONTACTS_END = 300
 

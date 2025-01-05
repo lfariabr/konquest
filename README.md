@@ -126,15 +126,17 @@ docker-compose logs -f
 - Reminder Plástica campaigns + Reschedule Plástica campaigns
 - Now create a new branch to adjust name = Null issue
 python manage.py update_null_contact_names --dry-run
+- check issue with get-message-pl **FIXED**
+- migrate data from ReschedulePL csvs
+- publicApi: update spreadsheet data so that marketing can have access to it
 
 # In progress
-- check issue with get-message-pl
-
-## Backlog:
 - Point DNS new server
 - if everything’s allright, build new image to use on docker (Celery tasks flow)
-- migrate data from ReschedulePL csvs
-- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id and update spreadsheet data so that marketing can have access to it
+
+## Backlog:
+- integrate NPS message 2 follow up (Google My Business)
+- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
 
 ## Setup and Installation
 ### Requirements

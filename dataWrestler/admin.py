@@ -1,9 +1,15 @@
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Count, Q, Sum
 from django.db.models.functions import TruncMonth
 from django.template.response import TemplateResponse
-from .models import ContactAnalytics, MessageAnalytics
+from dataWrestler.models import ContactAnalytics, MessageAnalytics, ContactAnalyticsForMedia
 import json
+from django.utils import timezone
+from datetime import datetime
+import logging
+from django.http import HttpResponse, HttpResponseRedirect
+
+logger = logging.getLogger(__name__)
 
 @admin.register(ContactAnalytics)
 class ContactAnalyticsAdmin(admin.ModelAdmin):
@@ -138,4 +144,68 @@ class MessageAnalyticsAdmin(admin.ModelAdmin):
         }
         
         response.context_data['chart_data'] = json.dumps(as_json, default=str)
+        return response
+
+@admin.register(ContactAnalyticsForMedia)
+class ContactAnalyticsForMediaAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/contact_analytics_for_media_changelist.html'
+    date_hierarchy = 'created_at'
+    list_filter = ('store', 'region', 'created_at')
+    list_display = ('relationship_tag', 'store', 'region', 'created_at', 'is_lead', 'is_appointment')
+    list_per_page = 50
+    
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+        
+        # Use model's queryset directly instead of filtered queryset
+        qs = self.model.objects.all()
+            
+        # Get data for Botox
+        botox_data = list(
+            qs.filter(relationship_tag='Botox')
+            .values('created_at__date')
+            .annotate(
+                total_contacts=Count('id'),
+                total_leads=Count('id', filter=Q(is_lead=True)),
+                total_appointments=Count('id', filter=Q(is_appointment=True)),
+                total_revenue=Sum('bill_charge_total_history', default=0)
+            )
+            .order_by('-created_at__date')  # Most recent first
+        )
+        
+        # Get data for Preenchimento
+        preenchimento_data = list(
+            qs.filter(relationship_tag='Preenchimento')
+            .values('created_at__date')
+            .annotate(
+                total_contacts=Count('id'),
+                total_leads=Count('id', filter=Q(is_lead=True)),
+                total_appointments=Count('id', filter=Q(is_appointment=True)),
+                total_revenue=Sum('bill_charge_total_history', default=0)
+            )
+            .order_by('-created_at__date')  # Most recent first
+        )
+        
+        # Format data for template
+        def format_data(data):
+            return [
+                {
+                    'date': item['created_at__date'].strftime('%d/%m/%Y'),
+                    'total_contacts': item['total_contacts'],
+                    'total_leads': item['total_leads'],
+                    'total_appointments': item['total_appointments'],
+                    'total_revenue': float(item['total_revenue'] or 0),
+                }
+                for item in data
+            ]
+        
+        # Prepare JSON data
+        as_json = {
+            'botox_data': format_data(botox_data),
+            'preenchimento_data': format_data(preenchimento_data),
+        }
+        
+        response.context_data['analytics_data'] = json.dumps(as_json, default=str)
+        response.context_data['title'] = 'Media Analytics Dashboard'
+        
         return response

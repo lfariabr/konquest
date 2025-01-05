@@ -1,0 +1,292 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block content_title %}
+    <h1>Media Analytics Dashboard</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="analytics-container">
+        <!-- Month Filter -->
+        <div class="filter-section">
+            <input type="month" id="month-filter" class="month-select">
+            <button onclick="filterByMonth()" class="filter-button">Filter</button>
+            <button onclick="showAllData()" class="filter-button">Show All</button>
+        </div>
+
+        <!-- Botox Analytics Table -->
+        <div class="analytics-section">
+            <div class="header-with-button">
+                <h2>Botox Analytics</h2>
+                <button onclick="downloadCSV('botox-table', 'botox_analytics')" class="download-button">Download CSV</button>
+            </div>
+            <table id="botox-table" class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Total Contacts</th>
+                        <th>Total Leads</th>
+                        <th>Total Appointments</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td id="botox-total-contacts">0</td>
+                        <td id="botox-total-leads">0</td>
+                        <td id="botox-total-appointments">0</td>
+                        <td id="botox-total-revenue">R$ 0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Preenchimento Analytics Table -->
+        <div class="analytics-section">
+            <div class="header-with-button">
+                <h2>Preenchimento Analytics</h2>
+                <button onclick="downloadCSV('preenchimento-table', 'preenchimento_analytics')" class="download-button">Download CSV</button>
+            </div>
+            <table id="preenchimento-table" class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Total Contacts</th>
+                        <th>Total Leads</th>
+                        <th>Total Appointments</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td id="preenchimento-total-contacts">0</td>
+                        <td id="preenchimento-total-leads">0</td>
+                        <td id="preenchimento-total-appointments">0</td>
+                        <td id="preenchimento-total-revenue">R$ 0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <style>
+        .analytics-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .filter-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .month-select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+        .filter-button {
+            padding: 8px 15px;
+            background: #79aec8;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .filter-button:hover {
+            background: #417690;
+        }
+        .header-with-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .download-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-button:hover {
+            background: #218838;
+        }
+        .analytics-section {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .analytics-section h2 {
+            color: #333;
+            margin: 0;
+        }
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .analytics-table th,
+        .analytics-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .analytics-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        .analytics-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .analytics-table tfoot {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        .analytics-table td:last-child {
+            font-weight: 600;
+            color: #2e7d32;
+        }
+    </style>
+
+    <script>
+        django.jQuery(function($) {
+            window.analyticsData = null;
+            
+            try {
+                window.analyticsData = JSON.parse('{{ analytics_data|escapejs }}');
+                populateAllTables(window.analyticsData);
+            } catch (error) {
+                console.error('Error parsing analytics data:', error);
+            }
+        });
+
+        function filterByMonth() {
+            const monthFilter = document.getElementById('month-filter').value;
+            if (!monthFilter) return;
+
+            const [year, month] = monthFilter.split('-');
+            const filteredData = {
+                botox_data: window.analyticsData.botox_data.filter(row => {
+                    const [day, rowMonth, rowYear] = row.date.split('/');
+                    return rowMonth === month && rowYear === year;
+                }),
+                preenchimento_data: window.analyticsData.preenchimento_data.filter(row => {
+                    const [day, rowMonth, rowYear] = row.date.split('/');
+                    return rowMonth === month && rowYear === year;
+                })
+            };
+
+            populateAllTables(filteredData);
+        }
+
+        function showAllData() {
+            document.getElementById('month-filter').value = '';
+            populateAllTables(window.analyticsData);
+        }
+
+        function populateAllTables(data) {
+            populateTable(data.botox_data, 'botox-table');
+            populateTable(data.preenchimento_data, 'preenchimento-table');
+        }
+
+        function populateTable(data, tableId) {
+            const tbody = django.jQuery(`#${tableId} tbody`);
+            tbody.empty();
+            
+            if (!data || data.length === 0) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="5" style="text-align: center;">No data available</td>
+                    </tr>
+                `);
+                return;
+            }
+            
+            let totalContacts = 0;
+            let totalLeads = 0;
+            let totalAppointments = 0;
+            let totalRevenue = 0;
+            
+            data.forEach(row => {
+                tbody.append(`
+                    <tr>
+                        <td>${row.date}</td>
+                        <td>${row.total_contacts}</td>
+                        <td>${row.total_leads}</td>
+                        <td>${row.total_appointments}</td>
+                        <td>R$ ${parseFloat(row.total_revenue).toFixed(2)}</td>
+                    </tr>
+                `);
+                
+                totalContacts += row.total_contacts;
+                totalLeads += row.total_leads;
+                totalAppointments += row.total_appointments;
+                totalRevenue += parseFloat(row.total_revenue);
+            });
+            
+            // Update totals
+            django.jQuery(`#${tableId.split('-')[0]}-total-contacts`).text(totalContacts);
+            django.jQuery(`#${tableId.split('-')[0]}-total-leads`).text(totalLeads);
+            django.jQuery(`#${tableId.split('-')[0]}-total-appointments`).text(totalAppointments);
+            django.jQuery(`#${tableId.split('-')[0]}-total-revenue`).text(`R$ ${totalRevenue.toFixed(2)}`);
+        }
+
+        function downloadCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            let csv = [];
+            
+            // Get headers
+            const headers = [];
+            for (const cell of table.querySelectorAll('thead th')) {
+                headers.push(cell.textContent);
+            }
+            csv.push(headers.join(','));
+            
+            // Get data rows
+            for (const row of table.querySelectorAll('tbody tr')) {
+                const rowData = [];
+                for (const cell of row.querySelectorAll('td')) {
+                    // Remove currency symbol and clean the data
+                    let cellText = cell.textContent.replace('R$ ', '').trim();
+                    // If the cell contains commas, wrap it in quotes
+                    if (cellText.includes(',')) {
+                        cellText = `"${cellText}"`;
+                    }
+                    rowData.push(cellText);
+                }
+                csv.push(rowData.join(','));
+            }
+            
+            // Get totals row
+            const totals = ['Total'];
+            for (const cell of table.querySelectorAll('tfoot td:not(:first-child)')) {
+                totals.push(cell.textContent.replace('R$ ', '').trim());
+            }
+            csv.push(totals.join(','));
+            
+            // Create and trigger download
+            const csvContent = "data:text/csv;charset=utf-8," + csv.join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+{% endblock %}
