@@ -128,12 +128,12 @@ docker-compose logs -f
 python manage.py update_null_contact_names --dry-run
 
 # In progress
-- Review changes, pytest and commit
-- Prepare next shooting for tomorrow
+- check issue with get-message-pl
 
 ## Backlog:
 - Point DNS new server
 - if everything’s allright, build new image to use on docker (Celery tasks flow)
+- migrate data from ReschedulePL csvs
 - publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id and update spreadsheet data so that marketing can have access to it
 
 ## Setup and Installation

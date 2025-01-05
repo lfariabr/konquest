@@ -45,7 +45,7 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
             if message:
                 message.text = customize_message_text(message.text, contact.message_variables)
                 
-            if target_list.contact_tag == "Reminder": # or target_list.contact_tag == "Reschedule":
+            if target_list.contact_tag == "Reminder" or target_list.contact_tag == "ReminderPL": # or target_list.contact_tag == "Reschedule":
                 logger.info(f"Using days_interval counter: {days_interval} for {target_list.contact_tag}") 
                 return days_interval, message
             
@@ -67,7 +67,7 @@ def get_message_for_contact(contact: Contact, target_list: TargetList) -> Tuple[
                     
                 return actual_counter, message
             
-            if target_list.contact_tag == "Reschedule":
+            if target_list.contact_tag == "Reschedule" or target_list.contact_tag == "ReschedulePL":
                 actual_counter = get_counter_appointment(contact.phone, target_list.contact_tag)
                 message = get_message_for_interval(
                     contact_type=target_list.contact_type,

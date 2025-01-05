@@ -115,7 +115,7 @@ def get_message_for_interval(contact_type,
         return None
         
     # Calculate the counter based on tag and interval
-    if relationship_tag == "Reminder":
+    if relationship_tag == "Reminder" or relationship_tag == "ReminderPL":
         if appointment_status_label == "Agendado" and days_interval in [0, 1, 2]:
             counter = days_interval  # 0, 1, 2 for upcoming appointments
         elif appointment_status_label == "Confirmado" and days_interval in [0, 1, 2]:
@@ -133,7 +133,7 @@ def get_message_for_interval(contact_type,
         counter = get_counter_appointment(appointment_data["phone"], "NPS")
         logger.info(f"Using appointment counter {counter} for NPS message")
 
-    elif relationship_tag == "Reschedule":
+    elif relationship_tag == "Reschedule" or relationship_tag == "ReschedulePL":
             if appointment_status_label == "Falta":
                 expected_counter = 0
                 if -7 < days_interval <= -1:  # Changed to match get_message_for_interval
