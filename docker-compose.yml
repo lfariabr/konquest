@@ -105,6 +105,7 @@ services:
       - .:/app
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
+      - logs_volume:/app/apiSocialHub/logs
     tmpfs:
       - /tmp
     environment:
@@ -140,10 +141,11 @@ services:
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
         rm -f celerybeat.pid &&
-        celery -A konquist beat -l INFO
-        --loglevel=DEBUG"
+        cd /app &&
+        celery -A konquist beat -l INFO --loglevel=DEBUG"
     volumes:
       - .:/app
+      - logs_volume:/app/apiSocialHub/logs
     environment:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=konquist.settings
@@ -196,7 +198,6 @@ services:
       --no-eff-email 
       -d konquista.com.br 
       -d www.konquista.com.br 
-      --force-renewal
       --non-interactive
     networks:
       - konquest_network
@@ -216,8 +217,6 @@ services:
     depends_on:
       django:
         condition: service_healthy
-      certbot:
-        condition: service_completed_successfully
     networks:
       - konquest_network
     healthcheck:
@@ -245,3 +244,4 @@ volumes:
   nginx_logs:
   certbot_www:
   certbot_conf:
+  celerybeat_data:

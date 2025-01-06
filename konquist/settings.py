@@ -6,7 +6,15 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = ['209.38.90.25', 'localhost', '127.0.0.1', 'konquista.com.br', 'www.konquista.com.br']
+CSRF_TRUSTED_ORIGINS = [
+    'https://konquista.com.br',
+    'https://www.konquista.com.br',
+    'http://konquista.com.br',
+    'http://www.konquista.com.br'
+]
+
+ALLOWED_HOSTS = ['konquista.com.br', 'www.konquista.com.br', '209.38.90.25', 'localhost']
+
 WSGI_APPLICATION = 'konquist.wsgi.application'
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
