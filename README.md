@@ -132,7 +132,26 @@ python manage.py update_null_contact_names --dry-run
 
 # In progress
 - Point DNS new server
+sudo sed -i '' '/konquista/d' /etc/hosts
+sudo sh -c 'echo "209.38.90.25 konquista.com.br www.konquista.com.br" >> /etc/hosts'
+- versus
+sudo sed -i '' '/konquista/d' /etc/hosts
+sudo sh -c 'echo "127.0.0.1 konquista.com.br www.konquista.com.br" >> /etc/hosts'
+- check
+cat /etc/hosts | grep konquista
 - if everything’s allright, build new image to use on docker (Celery tasks flow)
+sudo lsof -i :80
+Password:
+COMMAND PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+nginx   295   root    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   360 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   361 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   362 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   363 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   364 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   365 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   366 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
+nginx   367 nobody    6u  IPv4 0x103bd31da73c1f83      0t0  TCP *:http (LISTEN)
 
 ## Backlog:
 - integrate NPS message 2 follow up (Google My Business)
