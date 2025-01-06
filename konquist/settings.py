@@ -13,7 +13,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://www.konquista.com.br'
 ]
 
-ALLOWED_HOSTS = ['konquista.com.br', 'www.konquista.com.br', '209.38.90.25', 'localhost']
+ALLOWED_HOSTS = ['konquista.com.br', 'www.konquista.com.br', '209.38.90.25', 'localhost'] # '127.0.0.1', 
 
 WSGI_APPLICATION = 'konquist.wsgi.application'
 

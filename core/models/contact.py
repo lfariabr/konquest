@@ -329,6 +329,7 @@ class Contact(models.Model):
         if self.is_appointment and self.appointment_id:
             logger.info(f"Contact {self.id} is an appointment with id {self.appointment_id}")
             from apiCrm.models.appointment import Appointment
+            from django.utils import timezone
             try:
                 # Get appointment data
                 appointment = Appointment.objects.filter(id_crm=self.appointment_id).first()
@@ -336,9 +337,11 @@ class Contact(models.Model):
                     logger.info(f"Found appointment: {appointment.id_crm} for contact {self.id}")
                     # Format date/time
                     if appointment.appointment_date:
+                        # Convert UTC to local time
+                        local_time = timezone.localtime(appointment.appointment_date)
                         variables.update({
-                            "[data]": appointment.appointment_date.strftime('%d/%m/%Y'),
-                            "[hora]": appointment.appointment_date.strftime('%H:%M'),
+                            "[data]": local_time.strftime('%d/%m/%Y'),
+                            "[hora]": local_time.strftime('%H:%M'),
                         })
                     # Add address from store dictionary
                     from apiCrm.dicts.dict_address import dic_store_address
