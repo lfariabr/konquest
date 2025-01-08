@@ -12,18 +12,20 @@ CSRF_TRUSTED_ORIGINS = [
     'http://konquista.com.br',
     'http://www.konquista.com.br'
 ]
-
-ALLOWED_HOSTS = ['konquista.com.br', 'www.konquista.com.br', '209.38.90.25', 'localhost'] # '127.0.0.1', 
-
 WSGI_APPLICATION = 'konquist.wsgi.application'
+ALLOWED_HOSTS = ['127.0.0.1', 
+                'konquista.com.br', 
+                'www.konquista.com.br', 
+                '209.38.90.25', 
+                'localhost']
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'postgresql' 
+DATABASE_ENGINE = 'sqlite3' 
 CONTACTS_START = 121
 CONTACTS_END = 300
 
-CONTACTS_TO_LOAD = 700 # messageShooter/resolvers/get_contacts.py
-CONTACTS_TO_LOAD_APT = 3000
+CONTACTS_TO_LOAD = 2 # messageShooter/resolvers/get_contacts.py
+CONTACTS_TO_LOAD_APT = 2
 
 INSTALLED_APPS = [
     'django_daisy',

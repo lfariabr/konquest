@@ -1,153 +1,130 @@
-# Konquista Django App
-
-## Commands
-### Dev
-python manage.py runserver
-celery -A konquist worker -l INFO
-celery -A konquist beat -l INFO
-
-### Homolog
-for changes in requirements, Dockerfile or docker-compose.yml:
-- docker-compose up --build 
-
-for regular code changes:
-- docker-compose restart
-
-- stop all: docker-compose down
-- logs: docker-compose logs -f
-
-## Goal
-Konquista Django App is designed to manage CRM-related data.
-It is a system that focus on sending customized WhatsApp Messages for contacts, whether they're contacts from WhatsApp, Leads and/or Appointments. It integrates with Celery and Redis to support asynchronous task processing and scheduled data cleanup. The application also includes a GraphQL API for easy querying and interaction with all the data available.
-On the frontend, using Django Admin, the App has a SaaS to manage contacts, messages, sent_messages, manage rules, shoot new messages.
-
-## Run Server + Worker + Beat
-To start the Django server, Celery worker, and Celery Beat for scheduled tasks, use the following commands:
+# Konquista - Enterprise WhatsApp Marketing Automation
 
 ## Overview
-Konquista is a Django project configured with Celery and Redis to handle asynchronous and periodic tasks efficiently. It leverages GraphQL for dynamic querying and fetching data, and aiohttp for managing asynchronous HTTP requests within the application. This setup is designed to manage and periodically clean up leads data, ensuring high performance and scalability.
+Konquista is an enterprise-grade WhatsApp marketing automation platform built with Django. It enables businesses to manage and automate customer communications through WhatsApp, integrating with CRM systems for lead management, appointment scheduling, and post-sale engagement.
 
-## Key Features
-1. Organized Codebase Structure
-- Modular Design: The application is organized into dedicated folders for models, schemas, resolvers, and tests.
-- Models: Encapsulate CRM data, customer information, and UTM tracking details for organized data management.
-- Schemas: Define GraphQL types and mutations using graphene-django.
-- Resolvers: Contain the logic for fetching and processing data, ensuring a clean separation of concerns.
-- Tests: Located in a specific folder, tests are split in a robust way to cover core functionalities.
+## Core Features
 
-2. Lead, Appointment, and Buyer Management
-- Data Fetching: Concurrently fetches and temporarily stores leads, appointments, and buyers data in the database.
-- Asynchronous Operations: Utilizes aiohttp and asyncio for efficient asynchronous HTTP requests and data fetching.
-- Data Processing: Formats and processes data using serializers and custom utility functions.
+### 1. Intelligent Message Management
+- **Campaign Management**: Create and manage targeted WhatsApp campaigns with customizable schedules
+- **Smart Targeting**: Filter contacts based on tags, appointment status, and customer journey stage
+- **Dynamic Content**: Personalize messages with variables like customer name, appointment time, and location
+- **Multi-Queue Processing**: Parallel message processing with rate limiting and error handling
+- **File Support**: Send images, videos, and documents through WhatsApp
 
-3. WhatsApp Messaging System
-- Automated Messaging: Sends customized WhatsApp messages to contacts based on specified rules.
-    - Support for sending both **text messages** and **file messages** through SocialHub.
-- Rule-Based Management: Enhances marketing efforts by targeting specific contacts through rule management.
-    - Comprehensive logging with dedicated log files (`send_text_message.log` and `send_file_message.log`) to track message dispatches and errors.
-    - Django Admin integration for managing and tracking sent messages directly from the interface.
-- Message Tracking: Keeps track of sent messages, allowing for analytics and follow-up actions.
+### 2. CRM Integration (apiCrm)
+- **Real-time Sync**: Bi-directional sync with CRM for leads, appointments, and customer data
+- **Automated Lead Management**: Track and update lead status automatically
+- **Appointment Handling**: Manage appointment confirmations, reminders, and follow-ups
+- **Payment Processing**: Track and manage bill charges and payment status
 
-4. GraphQL API Integration
-- Dynamic Querying: Uses graphene-django to create a robust GraphQL interface for efficient data retrieval.
-- Custom Types and Resolvers: Includes custom types (LeadType, AppointmentType, BillChargeType, AllDataType) and resolvers within the Query class.
-- Asynchronous Data Fetching: Integrates aiohttp within GraphQL operations to perform asynchronous data fetches, improving data retrieval efficiency from external APIs.
+### 3. Message Shooter System
+- **Campaign Engine**: 
+  - Create and schedule targeted campaigns
+  - Define execution times and active days
+  - Set campaign frequencies (one-time, daily, weekly)
+- **Target List Management**:
+  - Dynamic contact filtering
+  - Progress tracking
+  - Message counter management
+- **Queue Processing**:
+  - Asynchronous message delivery
+  - Rate limiting and retry logic
+  - Error handling and logging
 
-5. Asynchronous Task Processing with Celery
-- Background Tasks: Manages background tasks such as data fetching and message dispatch using Celery.
-- Redis Integration: Uses Redis as a message broker to queue tasks, enabling asynchronous task processing and scheduling.
-- Scheduled Tasks: Implements periodic tasks for data cleanup and maintenance using Celery Beat.
+### 4. Core System
+- **Contact Management**: 
+  - Centralized contact database
+  - Tag-based organization
+  - History tracking
+- **Message Templates**: 
+  - Variable substitution
+  - Multi-media support
+  - Counter-based sequencing
+- **User Management**:
+  - Role-based access control
+  - WhatsApp number management
+  - Activity logging
 
-6. Scheduled Data Cleanup
-- Database Optimization: Periodically cleans up outdated records to maintain database integrity and performance.
-- Clutter-Free System: Ensures the system remains efficient by deleting unnecessary data.
+### 5. Technical Features
+- **GraphQL API**: Flexible data querying and manipulation
+- **Asynchronous Processing**: Celery for task management
+- **Caching**: Redis for performance optimization
+- **Monitoring**: Comprehensive logging and error tracking
+- **Testing**: Pytest-based test suite with mocking
+- **Docker Support**: Containerized deployment with 7 containers
 
-7. Comprehensive Testing Suite
-- Pytest for Testing: Utilizes Pytest for powerful and straightforward syntax to handle unit tests and complex functional testing.
-- Test Coverage on Core Features: Focuses on testing critical components like fetching all data and resolving all data.
-- Mocking and Isolation: Ensures tests do not send real HTTP requests by mocking network interactions, leading to reliable and fast test execution.
-- Asynchronous Testing: Handles asynchronous code testing effectively, avoiding common pitfalls like TypeError related to asynchronous context managers.
+## Architecture
+- Django + Celery + Redis stack
+- PostgreSQL/SQLite database support
+- Docker containerization
+- GraphQL API layer
+- Asynchronous task processing
 
-8. Dockerization
-- Dockerization: Utilizes Docker for consistent and portable environment setup, ensuring consistent behavior across different environments.
-- Create / Navigate to directory for Konquest
-mkdir -p /var/www/konquest
-cd /var/www/konquest
-- Clone your repository
-git clone https://github.com/lfariabr/konquest.git
-- Navigate into the cloned directory
-cd konquest
-- Check if we have the necessary files
-ls -la
-- Run docker-compose
-docker-compose build
-docker-compose up -d
-cd /var/www/konquest
-- check running containers
-ssh root@209.38.90.25
-docker logs -f k_celery_beat
-docker logs -f k_celery_worker
+## Deployment
+The system runs in a containerized environment with:
+- Django web server
+- Celery workers
+- Celery beat scheduler
+- Redis cache
+- PostgreSQL database
+- Nginx reverse proxy
+- Monitoring services
+
+## Development Setup
+### Prerequisites
+- Python 3.10+
+- Docker and Docker Compose
+- Redis
+- PostgreSQL (optional)
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/yourusername/konquista.git
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run development server
+python manage.py runserver
+
+# Start Celery worker
+celery -A konquist worker -l INFO
+
+# Start Celery beat
+celery -A konquist beat -l INFO
+```
+
+### Docker Deployment
+```bash
+# Build and start containers
+docker-compose up --build
+
+# View logs
 docker-compose logs -f
 
-# Done
-- messageShooter: create campaigns, target lists, queue 
-- possibility to schedule messages and send them asynchronously
-- feature/whatsapp-implementation
-- feature mockup setup_test_data to make process easier
-- feature enhancing message shooter speed processing at target list and queue process
-- fixed behavior between target campaign, targetlist and queue
-- implement campaign scheduler (run_scheduler)
-- implemented async calls to run multiple queues
-- data migration implementing flask postgresql database
-- settings smart config to switch between sqlite and postgresql
-- first shooting @ 11/december/2024 - 60 contacts
-- fixed sending images and photos on the messages
-- fixed counter (removed lead count from counter log) and timezone at database
-- apiCrm optimization to process data in batches
-- apiCrm optimization to check if lead or appointment exists (only pytest left)
-- update images and videos + last trial and commit
-- feature/appointment-implementation
-- custom messages @messageShooter/resolvers/get_message
-- delete data apiCrm
-- feature worker to see if contacts are leads or appointments in worker
-- feature worker to fetch data from apiCrm daily at midnight:15 BRT
-- Check Contact Bill Charges
-- Build rationale to integrate Reschedule Campaign
-- get contacts / get counter / get phone / get message / customize message / calculate days interval
-- dataWrestler: component that will have data displaying features such as tables, graphics, charts, etc
-- Docker Prep done: docker-compose up --build 
-- Import data from spreadsheet history rpdprocorpo@gmail.com
-- Push this docker image to droplet in digital ocean
-- Test deeply Appointment Campaigns
-- Run "Reminder" Campaign + "Reschedule" and "NPS"
-- Performance Boost
-- Reminder and Reschedule Plastica
-- Tip: clean cache: python manage.py shell -c "from django.core.cache import cache; cache.clear()"
-- Reminder Plástica campaigns + Reschedule Plástica campaigns
-- Now create a new branch to adjust name = Null issue
-python manage.py update_null_contact_names --dry-run
-- check issue with get-message-pl **FIXED**
-- migrate data from ReschedulePL csvs
-- publicApi: update spreadsheet data so that marketing can have access to it
-- Point DNS new server
+# Stop services
+docker-compose down
+```
 
-# In progress
-
-## Backlog:
-- integrate NPS message 2 follow up (Google My Business)
-- publicApi: component that will serve existing graphQL api with MessageLogs based on reference_id
-
-## Setup and Installation
-### Requirements
-- Python: 3.10+
-- Django: 4.x
-- Celery: 5.x
-- Redis: For message brokering and task queuing
-- aiohttp: For asynchronous HTTP requests handling
-- Graphene-Django: For GraphQL API functionality
-- Pytest: For test-driven development (TDD)
-
-### Install Dependencies
+## Testing
 ```bash
-pip install -r requirements.txt
-pip freeze > requirements.txt
+# Run test suite
+pytest
+
+# Run with coverage
+pytest --cov=.
+```
+
+## Documentation
+- [API Documentation](./docs/api.md)
+- [Development Guide](./docs/development.md)
+- [Deployment Guide](./docs/deployment.md)
+- [User Guide](./docs/user-guide.md)
+
+## License
+Proprietary software. All rights reserved.
+
+## Support
+For support and inquiries, contact support@konquista.com.br

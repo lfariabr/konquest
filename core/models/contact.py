@@ -337,11 +337,11 @@ class Contact(models.Model):
                     logger.info(f"Found appointment: {appointment.id_crm} for contact {self.id}")
                     # Format date/time
                     if appointment.appointment_date:
-                        # Convert UTC to local time
-                        local_time = timezone.localtime(appointment.appointment_date)
+                        # Convert UTC to BRT by subtracting 3 hours
+                        brt_time = appointment.appointment_date - timezone.timedelta(hours=3)
                         variables.update({
-                            "[data]": local_time.strftime('%d/%m/%Y'),
-                            "[hora]": local_time.strftime('%H:%M'),
+                            "[data]": brt_time.strftime('%d/%m/%Y'),
+                            "[hora]": brt_time.strftime('%H:%M'),
                         })
                     # Add address from store dictionary
                     from apiCrm.dicts.dict_address import dic_store_address
