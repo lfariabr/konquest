@@ -117,10 +117,15 @@ class QueueProcessor:
         """Process a single contact with rate limiting per userphone"""
         try:
             # If message text indicates lead creation, create lead instead of sending message
-            if message.text in ["Lead da campanha Botox", "Lead da campanha Preenchimento"]:
+            if message.text in ["Lead da campanha Botox", "Lead da campanha Preenchimento", "Lead da bio do Instagram"]:
                 try:
-                    campaign_name = "Botox" if "Botox" in message.text else "Preenchimento"
-                    
+                    if "Botox" in message.text:
+                        campaign_name = "Botox"
+                    elif "Preenchimento" in message.text:
+                        campaign_name = "Preenchimento"
+                    elif "Instagram" in message.text:
+                        campaign_name = "Instagram"
+                                        
                     @sync_to_async
                     def create_campaign_lead():
                         # Create new Lead instance and set its attributes
@@ -454,7 +459,7 @@ class QueueProcessor:
                         success, error_message = await self.process_contact_async(contact, message, userphone)
                         
                         # Log successful message send only if it's not a lead creation message
-                        if success and message.text not in ["Lead da campanha Botox", "Lead da campanha Preenchimento"]:
+                        if success and message.text not in ["Lead da campanha Botox", "Lead da campanha Preenchimento", "Lead da bio do Instagram"]:
                             await sync_to_async(self._log_message)(contact, message, userphone, target_list)
                         
                     finally:

@@ -396,13 +396,14 @@ class ContactAdmin(admin.ModelAdmin):
             # Handle uploaded files
             botox_file = request.FILES.get('botox_file')
             preenchimento_file = request.FILES.get('preenchimento_file')
+            instagram_file = request.FILES.get('instagram_file')
 
-            if not botox_file and not preenchimento_file:
+            if not botox_file and not preenchimento_file and not instagram_file:
                 self.message_user(request, "No files selected.", level=messages.ERROR)
                 return HttpResponseRedirect(reverse('admin:core_contact_changelist'))
 
             # Process files
-            for csv_file in [botox_file, preenchimento_file]:
+            for csv_file in [botox_file, preenchimento_file, instagram_file]:
                 if csv_file:
                     self._process_csv_file(csv_file, created_date, request)
 
@@ -413,6 +414,17 @@ class ContactAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context['form'] = ContactCsvUploadForm()
         return super().changelist_view(request, extra_context=extra_context)
+    
+    @staticmethod
+    def get_relationship_tag(is_preenchimento, is_instagram, is_botox):
+        if is_preenchimento:
+            return 'Preenchimento'
+        elif is_instagram:
+            return 'Instagram'
+        elif is_botox:
+            return 'Botox'
+        else:
+            return None
 
     def _process_csv_file(self, csv_file, created_date, request):
         try:
@@ -424,9 +436,16 @@ class ContactAdmin(admin.ModelAdmin):
             try:
                 # Process CSV using process_csv_files
                 is_preenchimento = 'preenchimento' in csv_file.name.lower()
+                is_instagram = 'instagram' in csv_file.name.lower()
+                is_botox = 'botox' in csv_file.name.lower()
+
                 if is_preenchimento:
                     df_leads = process_csv_files(preenchimento_file_path=temp_path)
-                else:
+                
+                elif is_instagram:
+                    df_leads = process_csv_files(instagram_file_path=temp_path)
+                
+                elif is_botox:
                     df_leads = process_csv_files(botox_file_path=temp_path)
 
                 # Get or create kUser
@@ -450,7 +469,7 @@ class ContactAdmin(admin.ModelAdmin):
                             store=row['Unidade'],
                             region=row['Região'],
                             external_tag=row['Tags'],
-                            relationship_tag='Preenchimento' if is_preenchimento else 'Botox',
+                            relationship_tag=self.get_relationship_tag(is_preenchimento, is_instagram, is_botox),
                             source='Whatsapp',
                             user=k_user
                         )

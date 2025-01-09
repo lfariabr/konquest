@@ -13,12 +13,9 @@ from itertools import groupby
 from operator import attrgetter
 
 logger = logging.getLogger(__name__)
-if not os.path.exists('logs'):
-    os.makedirs('logs')
 
-# Create a file handler
-file_handler = logging.FileHandler('logs/scheduler.log')
-file_handler.setLevel(logging.INFO)
+log_path = os.path.join('/app', 'logs', 'scheduler.log')
+file_handler = logging.FileHandler(log_path)
 
 # Create a logging format
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')

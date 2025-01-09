@@ -7,7 +7,7 @@ from core.resolvers.create_stores import create_stores
 from core.resolvers.create_regions import create_regions
 from core.resolvers.clean_phone_number import clean_phone_number
 
-def process_csv_files(botox_file_path=None, preenchimento_file_path=None):
+def process_csv_files(botox_file_path=None, preenchimento_file_path=None, instagram_file_path=None):
     df_list = []
 
     try:
@@ -32,6 +32,17 @@ def process_csv_files(botox_file_path=None, preenchimento_file_path=None):
                         df_list.append(df_preenchimento)
             except Exception as e:
                 logging.error(f"Error reading preenchimento file: {e}")
+            
+        if instagram_file_path:
+            try:
+                # Open the file to ensure it's properly flushed
+                with open(instagram_file_path, 'r') as f:
+                    df_instagram = pd.read_csv(f)
+                    if not df_instagram.empty:
+                        df_instagram['filename'] = 'instagram'
+                        df_list.append(df_instagram)
+            except Exception as e:
+                logging.error(f"Error reading instagram file: {e}")
 
         if not df_list:
             return pd.DataFrame()

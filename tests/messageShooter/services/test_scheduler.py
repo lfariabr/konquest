@@ -2,28 +2,48 @@ from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 from unittest.mock import patch, MagicMock
 from datetime import datetime
-
-from core.models.user import kUser
-from core.models.contact import Contact
-from core.models.message import Message
-from core.models.userphone import UserPhone
-
-from messageShooter.models.campaign import Campaign
-from messageShooter.models.target_list import TargetList
-from messageShooter.services.scheduler import CampaignScheduler
-from messageShooter.models.campaign import (
-    FREQUENCY_ONCE,
-    FREQUENCY_DAILY,
-    FREQUENCY_WEEKLY,
-    FREQUENCY_MONTHLY,
-    STATUS_ACTIVE,
-    STATUS_COMPLETED
-)
-
-from messageShooter.models.queue import Queue
 import logging
+import unittest
 
+# Set up console logging for tests
 logger = logging.getLogger(__name__)
+console_handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+# Mock FileHandler before importing CampaignScheduler
+with patch('logging.FileHandler') as mock_file_handler:
+    mock_file_handler.return_value = console_handler
+    from core.models.user import kUser
+    from core.models.contact import Contact
+    from core.models.message import Message
+    from core.models.userphone import UserPhone
+    from messageShooter.models.campaign import Campaign
+    from messageShooter.models.target_list import TargetList
+    from messageShooter.services.scheduler import CampaignScheduler
+    from messageShooter.models.campaign import (
+        FREQUENCY_ONCE,
+        FREQUENCY_DAILY,
+        FREQUENCY_WEEKLY,
+        FREQUENCY_MONTHLY,
+        STATUS_ACTIVE,
+        STATUS_COMPLETED
+    )
+    from messageShooter.models.queue import Queue
+
+# Mock logging setup for tests
+logger = logging.getLogger(__name__)
+console_handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+# Mock the file handler setup in scheduler.py
+@patch('logging.FileHandler')
+def setUpModule(mock_file_handler):
+    # This will run once before all tests
+    mock_file_handler.side_effect = lambda x: console_handler
 
 class TestCampaignScheduler(TransactionTestCase):
     """Test cases for CampaignScheduler using SQLite3"""
