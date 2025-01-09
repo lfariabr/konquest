@@ -25,7 +25,7 @@ CONTACTS_START = 121
 CONTACTS_END = 300
 
 # messageShooter/resolvers/get_contacts.py
-CONTACTS_TO_LOAD = 700 
+CONTACTS_TO_LOAD = 700
 CONTACTS_TO_LOAD_APT = 3000
 
 INSTALLED_APPS = [
@@ -196,9 +196,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '[{asctime}] {levelname} {name} {message}',
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'celery': {
+            'format': '{levelname} {asctime} {task_id} {task_name} {message}',
+            'style': '{',
         },
     },
     'handlers': {
@@ -206,38 +209,52 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'formatter': 'verbose',
+        },
+        'celery_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
+            'formatter': 'celery',
+        },
+        'scheduler_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'scheduler.log'),
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'django_file'],
             'level': 'INFO',
-            'propagate': False,
-        },
-        'messageShooter': {  
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'core': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'apiCrm': {
-            'handlers': ['console'],
-            'level': 'DEBUG',  # Set to DEBUG to see all logs
             'propagate': True,
         },
         'celery': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+            'handlers': ['console', 'celery_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'messageShooter': {  
+            'handlers': ['console', 'scheduler_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'core': {
+            'handlers': ['console', 'django_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'apiCrm': {
+            'handlers': ['console', 'celery_file'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    }
 }
 
 # Redis Configuration
@@ -249,16 +266,6 @@ REDIS_DB = '0'
 REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
 CELERY_RESULT_BACKEND = REDIS_URL
-
-# # Redis Configuration
-# REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
-# REDIS_PORT = os.environ.get('REDIS_PORT', '6380')
-# REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
-# REDIS_DB = '0'
-
-# REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
-# CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
-# CELERY_RESULT_BACKEND = REDIS_URL
 
 # Celery Configuration
 CELERY_TIMEZONE = 'America/Sao_Paulo'
@@ -299,3 +306,13 @@ CACHES = {
         }
     }
 }
+
+# # Redis Configuration
+# REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+# REDIS_PORT = os.environ.get('REDIS_PORT', '6380')
+# REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+# REDIS_DB = '0'
+
+# REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
+# CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
+# CELERY_RESULT_BACKEND = REDIS_URL

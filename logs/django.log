@@ -1,0 +1,1064 @@
+INFO 2025-01-09 18:41:05,528 autoreload 75196 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:41:31,548 autoreload 75196 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 18:41:32,446 autoreload 75856 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:41:39,046 basehttp 75856 6173044736 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42767
+INFO 2025-01-09 18:41:39,046 basehttp 75856 6173044736 - Broken pipe from ('127.0.0.1', 50181)
+INFO 2025-01-09 18:41:39,557 basehttp 75856 6189871104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42767
+INFO 2025-01-09 18:41:54,658 target_list_resolver 75856 6173618176 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:41:58,550 target_list_resolver 75856 6173618176 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 18:41:58,550 get_contacts 75856 6173618176 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:41:58,961 get_contacts 75856 6173618176 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:41:59,371 get_contacts 75856 6173618176 Found 19 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:41:59,791 target_list_resolver 75856 6173618176 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:41:59,792 target_list_resolver 75856 6173618176 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 18:41:59,792 get_counter 75856 6173618176 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 18:41:59,793 get_counter 75856 6173618176 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 18:42:00,188 get_counter 75856 6173618176 Found 19 phones with messages
+INFO 2025-01-09 18:42:00,188 get_counter 75856 6173618176 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 18:42:00,188 get_counter 75856 6173618176 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 18:42:00,189 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:42:00,599 get_message 75856 6173618176 Found message id=92 for Instagram
+INFO 2025-01-09 18:42:02,441 target_list_resolver 75856 6173618176 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:42:02,851 target_list_resolver 75856 6173618176 Processing campaign 'Preenchimento Campaign' (ID: 4)
+INFO 2025-01-09 18:42:06,844 target_list_resolver 75856 6173618176 Cleaned up: Deleted 0 queue entries and 48 target lists
+INFO 2025-01-09 18:42:06,845 get_contacts 75856 6173618176 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:42:07,194 get_contacts 75856 6173618176 Found 48 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:42:07,548 get_contacts 75856 6173618176 Found 48 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:42:07,909 target_list_resolver 75856 6173618176 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:42:07,910 target_list_resolver 75856 6173618176 Found 48 contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:42:07,910 get_counter 75856 6173618176 Fetching counters for 48 phones with tag Preenchimento
+INFO 2025-01-09 18:42:07,910 get_counter 75856 6173618176 Sample phones: ['11983916703', '11964446225', '11968720677', '17991955965', '11964297315']
+INFO 2025-01-09 18:42:08,258 get_counter 75856 6173618176 Found 48 phones with messages
+INFO 2025-01-09 18:42:08,258 get_counter 75856 6173618176 Sample results: [{'contact__phone': '11914882533', 'counter': 2}, {'contact__phone': '11916275396', 'counter': 2}, {'contact__phone': '11934666672', 'counter': 2}, {'contact__phone': '11944986630', 'counter': 3}, {'contact__phone': '11945288619', 'counter': 2}]
+INFO 2025-01-09 18:42:08,259 get_counter 75856 6173618176 Sample final results: {'11983916703': 3, '11964446225': 3, '11968720677': 3, '17991955965': 3, '11964297315': 3}
+INFO 2025-01-09 18:42:08,259 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Preenchimento, counter=2
+INFO 2025-01-09 18:42:08,593 get_message 75856 6173618176 Found message id=12 for Preenchimento
+INFO 2025-01-09 18:42:08,594 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Preenchimento, counter=3
+INFO 2025-01-09 18:42:08,995 get_message 75856 6173618176 Found message id=62 for Preenchimento
+INFO 2025-01-09 18:42:11,042 target_list_resolver 75856 6173618176 Campaign processing complete. Created: 48, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:42:11,378 target_list_resolver 75856 6173618176 Processing campaign 'Botox Campaign' (ID: 3)
+INFO 2025-01-09 18:42:18,725 target_list_resolver 75856 6173618176 Cleaned up: Deleted 0 queue entries and 782 target lists
+INFO 2025-01-09 18:42:18,726 get_contacts 75856 6173618176 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 18:42:19,132 get_contacts 75856 6173618176 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:42:19,500 get_contacts 75856 6173618176 Found 700 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:42:20,266 target_list_resolver 75856 6173618176 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:42:20,266 target_list_resolver 75856 6173618176 Found 784 contacts with tag 'Botox'
+INFO 2025-01-09 18:42:20,266 get_counter 75856 6173618176 Fetching counters for 784 phones with tag Botox
+INFO 2025-01-09 18:42:20,266 get_counter 75856 6173618176 Sample phones: ['19997549239', '24992438533', '11966331150', '6185166752', '22999776147']
+INFO 2025-01-09 18:42:20,639 get_counter 75856 6173618176 Found 784 phones with messages
+INFO 2025-01-09 18:42:20,639 get_counter 75856 6173618176 Sample results: [{'contact__phone': '1170123385', 'counter': 3}, {'contact__phone': '11910061755', 'counter': 3}, {'contact__phone': '11910185550', 'counter': 2}, {'contact__phone': '11910414135', 'counter': 1}, {'contact__phone': '11910729298', 'counter': 3}]
+INFO 2025-01-09 18:42:20,651 get_counter 75856 6173618176 Sample final results: {'19997549239': 3, '24992438533': 1, '11966331150': 1, '6185166752': 2, '22999776147': 3}
+INFO 2025-01-09 18:42:20,651 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Botox, counter=1
+INFO 2025-01-09 18:42:21,081 get_message 75856 6173618176 Found message id=8 for Botox
+INFO 2025-01-09 18:42:21,081 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Botox, counter=2
+INFO 2025-01-09 18:42:21,417 get_message 75856 6173618176 Found message id=9 for Botox
+INFO 2025-01-09 18:42:21,417 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Botox, counter=3
+INFO 2025-01-09 18:42:21,794 get_message 75856 6173618176 Found message id=61 for Botox
+INFO 2025-01-09 18:42:21,795 get_message 75856 6173618176 Getting message for type=Whatsapp, tag=Botox, counter=5
+INFO 2025-01-09 18:42:22,130 get_message 75856 6173618176 No message found for counter=5
+WARNING 2025-01-09 18:42:22,131 get_message 75856 6173618176 No message found for Botox (counter=5)
+INFO 2025-01-09 18:42:24,969 target_list_resolver 75856 6173618176 Campaign processing complete. Created: 782, Skipped: 2, Errors: 0
+INFO 2025-01-09 18:42:24,974 basehttp 75856 6173618176 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:42:26,530 basehttp 75856 6173618176 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 45144
+INFO 2025-01-09 18:42:27,028 basehttp 75856 6173618176 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-09 18:43:53,569 autoreload 75856 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 18:43:54,510 autoreload 76855 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:44:03,788 target_list_resolver 76855 6201126912 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:44:07,331 target_list_resolver 76855 6201126912 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 18:44:07,331 get_contacts 76855 6201126912 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:44:07,693 get_contacts 76855 6201126912 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:44:08,049 get_contacts 76855 6201126912 Found 2 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:44:08,402 target_list_resolver 76855 6201126912 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:44:08,403 target_list_resolver 76855 6201126912 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 18:44:08,403 get_counter 76855 6201126912 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 18:44:08,403 get_counter 76855 6201126912 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 18:44:08,806 get_counter 76855 6201126912 Found 19 phones with messages
+INFO 2025-01-09 18:44:08,807 get_counter 76855 6201126912 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 18:44:08,807 get_counter 76855 6201126912 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 18:44:08,807 get_message 76855 6201126912 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:44:09,191 get_message 76855 6201126912 Found message id=92 for Instagram
+INFO 2025-01-09 18:44:11,059 target_list_resolver 76855 6201126912 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:44:11,468 target_list_resolver 76855 6201126912 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 18:44:17,408 target_list_resolver 76855 6201126912 Cleaned up: Deleted 1 queue entries and 476 target lists
+INFO 2025-01-09 18:44:17,816 get_contacts 76855 6201126912 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 18:44:18,162 get_contacts 76855 6201126912 ReschedulePL - Total appointments in PLÁSTICA: 8048
+INFO 2025-01-09 18:44:20,944 get_contacts 76855 6201126912 ReschedulePL - Appointments with status ['Falta', 'Cancelado']: 3918
+INFO 2025-01-09 18:44:21,324 get_contacts 76855 6201126912 ReschedulePL - Appointments with matching procedures: 3596
+INFO 2025-01-09 18:44:25,010 get_contacts 76855 6201126912 ReschedulePL - Found 2 appointments
+INFO 2025-01-09 18:44:26,401 get_appointment_to_contact 76855 6201126912 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:44:26,402 target_list_resolver 76855 6201126912 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:44:26,402 target_list_resolver 76855 6201126912 Found 2 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 18:44:26,752 get_counter 76855 6201126912 Found 0 phones with messages
+INFO 2025-01-09 18:44:26,752 get_counter 76855 6201126912 Sample final results: {'11981095740': 0, '11963378469': 0}
+INFO 2025-01-09 18:44:26,752 get_message 76855 6201126912 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 18:44:27,089 get_message 76855 6201126912 Found message id=79 for ReschedulePL
+INFO 2025-01-09 18:44:28,936 target_list_resolver 76855 6201126912 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:44:29,286 target_list_resolver 76855 6201126912 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 18:44:33,484 target_list_resolver 76855 6201126912 Cleaned up: Deleted 1 queue entries and 118 target lists
+INFO 2025-01-09 18:44:39,899 autoreload 77139 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:44:44,171 basehttp 77139 6205763584 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:44:44,184 basehttp 77139 6205763584 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-09 18:44:49,868 basehttp 77139 6205763584 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:44:51,402 basehttp 77139 6205763584 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42767
+INFO 2025-01-09 18:44:51,818 basehttp 77139 6205763584 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-09 18:44:57,037 target_list_resolver 77139 6205763584 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:45:00,557 target_list_resolver 77139 6205763584 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 18:45:00,559 get_contacts 77139 6205763584 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:45:01,011 get_contacts 77139 6205763584 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:45:01,369 get_contacts 77139 6205763584 Found 2 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:45:01,780 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:01,781 target_list_resolver 77139 6205763584 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 18:45:01,781 get_counter 77139 6205763584 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 18:45:01,781 get_counter 77139 6205763584 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 18:45:02,127 get_counter 77139 6205763584 Found 19 phones with messages
+INFO 2025-01-09 18:45:02,127 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 18:45:02,127 get_counter 77139 6205763584 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 18:45:02,128 get_message 77139 6205763584 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:45:02,462 get_message 77139 6205763584 Found message id=92 for Instagram
+INFO 2025-01-09 18:45:04,235 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:45:04,571 target_list_resolver 77139 6205763584 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 18:45:07,941 target_list_resolver 77139 6205763584 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:45:08,279 get_contacts 77139 6205763584 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 18:45:08,710 get_contacts 77139 6205763584 ReschedulePL - Total appointments in PLÁSTICA: 8048
+INFO 2025-01-09 18:45:09,060 get_contacts 77139 6205763584 ReschedulePL - Appointments with status ['Falta', 'Cancelado']: 3918
+INFO 2025-01-09 18:45:09,403 get_contacts 77139 6205763584 ReschedulePL - Appointments with matching procedures: 3596
+INFO 2025-01-09 18:45:12,368 get_contacts 77139 6205763584 ReschedulePL - Found 2 appointments
+INFO 2025-01-09 18:45:13,933 get_appointment_to_contact 77139 6205763584 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:45:13,935 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:13,936 target_list_resolver 77139 6205763584 Found 2 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 18:45:14,285 get_counter 77139 6205763584 Found 0 phones with messages
+INFO 2025-01-09 18:45:14,285 get_counter 77139 6205763584 Sample final results: {'11981095740': 0, '11963378469': 0}
+INFO 2025-01-09 18:45:14,286 get_message 77139 6205763584 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 18:45:14,625 get_message 77139 6205763584 Found message id=79 for ReschedulePL
+INFO 2025-01-09 18:45:16,384 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:45:16,802 target_list_resolver 77139 6205763584 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 18:45:17,472 get_contacts 77139 6205763584 Processing contacts with tag ReminderPL
+INFO 2025-01-09 18:45:17,824 get_contacts 77139 6205763584 Total appointments in PL: 8048
+INFO 2025-01-09 18:45:18,234 get_contacts 77139 6205763584 Appointments with desired status: 1006
+INFO 2025-01-09 18:45:18,575 get_contacts 77139 6205763584 Appointments with matching procedures: 6720
+INFO 2025-01-09 18:45:19,382 get_contacts 77139 6205763584 ReminderPL - Found 2 appointments
+INFO 2025-01-09 18:45:20,729 get_appointment_to_contact 77139 6205763584 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:45:20,732 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:20,732 target_list_resolver 77139 6205763584 Found 2 contacts with tag 'ReminderPL'
+INFO 2025-01-09 18:45:21,075 get_counter 77139 6205763584 Found 1 phones with messages
+INFO 2025-01-09 18:45:21,075 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11987682020', 'counter': 1}]
+INFO 2025-01-09 18:45:21,076 get_counter 77139 6205763584 Sample final results: {'11987682020': 1}
+INFO 2025-01-09 18:45:21,076 get_message 77139 6205763584 Getting message for type=Appointment, tag=ReminderPL, counter=1
+INFO 2025-01-09 18:45:21,408 get_message 77139 6205763584 Found message id=88 for ReminderPL
+INFO 2025-01-09 18:45:23,101 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:45:23,444 target_list_resolver 77139 6205763584 Processing campaign 'NPS' (ID: 7)
+INFO 2025-01-09 18:45:27,552 target_list_resolver 77139 6205763584 Cleaned up: Deleted 1 queue entries and 113 target lists
+INFO 2025-01-09 18:45:27,962 get_contacts 77139 6205763584 Processing contacts with tag NPS
+INFO 2025-01-09 18:45:28,372 get_contacts 77139 6205763584 Total appointments in last 10 days: 4974
+INFO 2025-01-09 18:45:28,741 get_contacts 77139 6205763584 Appointments after store filter: 4050
+INFO 2025-01-09 18:45:29,112 get_contacts 77139 6205763584 Appointments after procedure exclusion: 3050
+INFO 2025-01-09 18:45:29,483 get_contacts 77139 6205763584 Appointments after status filter: 762
+INFO 2025-01-09 18:45:30,104 get_contacts 77139 6205763584 NPS - Found 2 unique appointments
+INFO 2025-01-09 18:45:31,452 get_appointment_to_contact 77139 6205763584 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:45:31,455 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:31,455 target_list_resolver 77139 6205763584 Found 2 contacts with tag 'NPS'
+INFO 2025-01-09 18:45:31,805 get_counter 77139 6205763584 Found 2 phones with messages
+INFO 2025-01-09 18:45:31,805 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11956088282', 'counter': 1}, {'contact__phone': '11975019410', 'counter': 1}]
+INFO 2025-01-09 18:45:31,805 get_counter 77139 6205763584 Sample final results: {'11975019410': 1, '11956088282': 1}
+INFO 2025-01-09 18:45:31,805 get_message 77139 6205763584 Getting message for type=Appointment, tag=NPS, counter=1
+INFO 2025-01-09 18:45:32,138 get_message 77139 6205763584 No message found for counter=1
+WARNING 2025-01-09 18:45:32,138 get_message 77139 6205763584 No message found for NPS (counter=1)
+INFO 2025-01-09 18:45:32,472 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 0, Skipped: 2, Errors: 0
+INFO 2025-01-09 18:45:32,808 target_list_resolver 77139 6205763584 Processing campaign 'Reschedule' (ID: 6)
+INFO 2025-01-09 18:45:42,317 target_list_resolver 77139 6205763584 Cleaned up: Deleted 1 queue entries and 1680 target lists
+INFO 2025-01-09 18:45:42,653 get_contacts 77139 6205763584 Processing contacts with tag Reschedule
+INFO 2025-01-09 18:45:46,675 get_contacts 77139 6205763584 Reschedule - Found 2 appointments
+INFO 2025-01-09 18:45:48,341 get_appointment_to_contact 77139 6205763584 Processed 2 appointments: Created 2, Updated 0
+INFO 2025-01-09 18:45:48,343 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:48,343 target_list_resolver 77139 6205763584 Found 2 contacts with tag 'Reschedule'
+INFO 2025-01-09 18:45:48,749 get_counter 77139 6205763584 Found 0 phones with messages
+INFO 2025-01-09 18:45:48,750 get_counter 77139 6205763584 Sample final results: {'21975688550': 0, '11993810520': 0}
+INFO 2025-01-09 18:45:48,750 get_message 77139 6205763584 Getting message for type=Appointment, tag=Reschedule, counter=0
+INFO 2025-01-09 18:45:49,085 get_message 77139 6205763584 Found message id=65 for Reschedule
+INFO 2025-01-09 18:45:51,001 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:45:51,414 target_list_resolver 77139 6205763584 Processing campaign 'Reminder' (ID: 5)
+INFO 2025-01-09 18:45:55,201 target_list_resolver 77139 6205763584 Cleaned up: Deleted 1 queue entries and 34 target lists
+INFO 2025-01-09 18:45:55,613 get_contacts 77139 6205763584 Processing contacts with tag Reminder
+INFO 2025-01-09 18:45:56,022 targetListAdmin 77139 6222589952 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:45:56,386 targetListAdmin 77139 6222589952 TargetListAdmin queryset count: 855
+INFO 2025-01-09 18:45:56,722 targetListAdmin 77139 6222589952 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:45:56,864 get_contacts 77139 6205763584 Reminder - Found 2 appointments
+INFO 2025-01-09 18:45:57,060 targetListAdmin 77139 6222589952 TargetListAdmin queryset count: 855
+INFO 2025-01-09 18:45:57,061 targetListAdmin 77139 6222589952 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:45:57,398 targetListAdmin 77139 6222589952 TargetListAdmin queryset count: 855
+INFO 2025-01-09 18:45:57,399 targetListAdmin 77139 6222589952 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:45:57,737 targetListAdmin 77139 6222589952 TargetListAdmin queryset count: 855
+INFO 2025-01-09 18:45:58,221 get_appointment_to_contact 77139 6205763584 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:45:58,239 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:45:58,239 target_list_resolver 77139 6205763584 Found 2 contacts with tag 'Reminder'
+INFO 2025-01-09 18:45:58,582 get_counter 77139 6205763584 Found 1 phones with messages
+INFO 2025-01-09 18:45:58,584 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11991388383', 'counter': 2}]
+INFO 2025-01-09 18:45:58,584 get_counter 77139 6205763584 Sample final results: {'11991388383': 2}
+INFO 2025-01-09 18:45:58,584 get_message 77139 6205763584 Getting message for type=Appointment, tag=Reminder, counter=2
+INFO 2025-01-09 18:45:58,917 get_message 77139 6205763584 Found message id=73 for Reminder
+INFO 2025-01-09 18:46:00,570 basehttp 77139 6222589952 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 78714
+INFO 2025-01-09 18:46:00,614 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:46:00,948 target_list_resolver 77139 6205763584 Processing campaign 'Preenchimento Campaign' (ID: 4)
+INFO 2025-01-09 18:46:04,704 target_list_resolver 77139 6205763584 Cleaned up: Deleted 0 queue entries and 48 target lists
+INFO 2025-01-09 18:46:04,705 get_contacts 77139 6205763584 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:46:05,055 get_contacts 77139 6205763584 Found 48 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:46:05,408 get_contacts 77139 6205763584 Found 2 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:46:05,766 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:46:05,766 target_list_resolver 77139 6205763584 Found 33 contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:46:05,767 get_counter 77139 6205763584 Fetching counters for 33 phones with tag Preenchimento
+INFO 2025-01-09 18:46:05,767 get_counter 77139 6205763584 Sample phones: ['8694867534', '11952218537', '9291584714', '11984306729', '4197310628']
+INFO 2025-01-09 18:46:06,676 get_counter 77139 6205763584 Found 33 phones with messages
+INFO 2025-01-09 18:46:06,676 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11914882533', 'counter': 2}, {'contact__phone': '11916275396', 'counter': 2}, {'contact__phone': '11934666672', 'counter': 2}, {'contact__phone': '11945288619', 'counter': 2}, {'contact__phone': '11945659945', 'counter': 2}]
+INFO 2025-01-09 18:46:06,676 get_counter 77139 6205763584 Sample final results: {'8694867534': 2, '11952218537': 2, '9291584714': 2, '11984306729': 2, '4197310628': 2}
+INFO 2025-01-09 18:46:06,676 get_message 77139 6205763584 Getting message for type=Whatsapp, tag=Preenchimento, counter=2
+INFO 2025-01-09 18:46:07,011 get_message 77139 6205763584 Found message id=12 for Preenchimento
+INFO 2025-01-09 18:46:08,748 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 33, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:46:09,082 target_list_resolver 77139 6205763584 Processing campaign 'Botox Campaign' (ID: 3)
+INFO 2025-01-09 18:46:15,581 target_list_resolver 77139 6205763584 Cleaned up: Deleted 0 queue entries and 782 target lists
+INFO 2025-01-09 18:46:15,581 get_contacts 77139 6205763584 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 18:46:15,990 get_contacts 77139 6205763584 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:46:16,391 get_contacts 77139 6205763584 Found 2 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:46:16,821 target_list_resolver 77139 6205763584 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:46:16,821 target_list_resolver 77139 6205763584 Found 46 contacts with tag 'Botox'
+INFO 2025-01-09 18:46:16,821 get_counter 77139 6205763584 Fetching counters for 46 phones with tag Botox
+INFO 2025-01-09 18:46:16,822 get_counter 77139 6205763584 Sample phones: ['11994781051', '21972901795', '21968164523', '15997495571', '19989039292']
+INFO 2025-01-09 18:46:17,219 get_counter 77139 6205763584 Found 46 phones with messages
+INFO 2025-01-09 18:46:17,219 get_counter 77139 6205763584 Sample results: [{'contact__phone': '11930151365', 'counter': 2}, {'contact__phone': '11954920568', 'counter': 2}, {'contact__phone': '11960403390', 'counter': 2}, {'contact__phone': '11964092808', 'counter': 2}, {'contact__phone': '11964523012', 'counter': 2}]
+INFO 2025-01-09 18:46:17,220 get_counter 77139 6205763584 Sample final results: {'11994781051': 2, '21972901795': 2, '21968164523': 2, '15997495571': 2, '19989039292': 2}
+INFO 2025-01-09 18:46:17,220 get_message 77139 6205763584 Getting message for type=Whatsapp, tag=Botox, counter=2
+INFO 2025-01-09 18:46:17,628 get_message 77139 6205763584 Found message id=9 for Botox
+INFO 2025-01-09 18:46:19,505 target_list_resolver 77139 6205763584 Campaign processing complete. Created: 46, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:46:19,509 basehttp 77139 6205763584 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:46:23,235 basehttp 77139 6205763584 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 48718
+INFO 2025-01-09 18:46:37,903 targetListAdmin 77139 6205190144 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:46:38,312 targetListAdmin 77139 6205190144 TargetListAdmin queryset count: 106
+INFO 2025-01-09 18:46:38,650 targetListAdmin 77139 6205190144 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:46:38,986 targetListAdmin 77139 6205190144 TargetListAdmin queryset count: 106
+INFO 2025-01-09 18:46:38,987 targetListAdmin 77139 6205190144 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:46:39,335 targetListAdmin 77139 6205190144 TargetListAdmin queryset count: 106
+INFO 2025-01-09 18:46:39,336 targetListAdmin 77139 6205190144 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:46:39,680 targetListAdmin 77139 6205190144 TargetListAdmin queryset count: 106
+INFO 2025-01-09 18:46:41,824 basehttp 77139 6205190144 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 78301
+INFO 2025-01-09 18:46:45,506 basehttp 77139 6222589952 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42767
+INFO 2025-01-09 18:47:25,320 autoreload 77139 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 18:47:26,438 autoreload 77841 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:49:04,050 autoreload 77841 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contacts.py changed, reloading.
+INFO 2025-01-09 18:49:05,174 autoreload 78108 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:49:07,579 autoreload 78108 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contacts.py changed, reloading.
+INFO 2025-01-09 18:49:08,263 autoreload 78192 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:49:28,055 get_contacts 78231 8572943040 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 18:49:30,683 get_contacts 78231 8572943040 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:49:31,829 get_contacts 78231 8572943040 Found 1068 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:50:12,465 target_list_resolver 78192 6135099392 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:50:16,226 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 18:50:16,226 get_contacts 78192 6135099392 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:50:16,579 get_contacts 78192 6135099392 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:50:16,941 get_contacts 78192 6135099392 Found 19 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:50:17,299 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:17,299 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'Instagram'
+INFO 2025-01-09 18:50:17,300 get_counter 78192 6135099392 Fetching counters for 2 phones with tag Instagram
+INFO 2025-01-09 18:50:17,300 get_counter 78192 6135099392 Sample phones: ['11954244855', '8994377554']
+INFO 2025-01-09 18:50:17,760 get_counter 78192 6135099392 Found 2 phones with messages
+INFO 2025-01-09 18:50:17,760 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11954244855', 'counter': 1}, {'contact__phone': '8994377554', 'counter': 1}]
+INFO 2025-01-09 18:50:17,761 get_counter 78192 6135099392 Sample final results: {'11954244855': 1, '8994377554': 1}
+INFO 2025-01-09 18:50:17,761 get_message 78192 6135099392 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:50:18,170 get_message 78192 6135099392 Found message id=92 for Instagram
+INFO 2025-01-09 18:50:20,217 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:50:20,556 target_list_resolver 78192 6135099392 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 18:50:24,037 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:50:24,376 get_contacts 78192 6135099392 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 18:50:24,377 get_contacts 78192 6135099392 Using cached contacts for ReschedulePL
+INFO 2025-01-09 18:50:24,378 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:24,378 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 18:50:24,828 get_counter 78192 6135099392 Found 0 phones with messages
+INFO 2025-01-09 18:50:24,828 get_counter 78192 6135099392 Sample final results: {'11981095740': 0, '11963378469': 0}
+INFO 2025-01-09 18:50:24,829 get_message 78192 6135099392 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 18:50:25,236 get_message 78192 6135099392 Found message id=79 for ReschedulePL
+INFO 2025-01-09 18:50:27,180 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:50:27,592 target_list_resolver 78192 6135099392 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 18:50:31,279 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:50:31,688 get_contacts 78192 6135099392 Processing contacts with tag ReminderPL
+INFO 2025-01-09 18:50:31,691 get_contacts 78192 6135099392 Using cached contacts for ReminderPL
+INFO 2025-01-09 18:50:31,691 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:31,691 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'ReminderPL'
+INFO 2025-01-09 18:50:32,098 get_counter 78192 6135099392 Found 1 phones with messages
+INFO 2025-01-09 18:50:32,098 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11987682020', 'counter': 1}]
+INFO 2025-01-09 18:50:32,099 get_counter 78192 6135099392 Sample final results: {'11987682020': 1}
+INFO 2025-01-09 18:50:32,099 get_message 78192 6135099392 Getting message for type=Appointment, tag=ReminderPL, counter=1
+INFO 2025-01-09 18:50:32,442 get_message 78192 6135099392 Found message id=88 for ReminderPL
+INFO 2025-01-09 18:50:34,246 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:50:34,658 target_list_resolver 78192 6135099392 Processing campaign 'NPS' (ID: 7)
+INFO 2025-01-09 18:50:35,404 get_contacts 78192 6135099392 Processing contacts with tag NPS
+INFO 2025-01-09 18:50:36,910 get_contacts 78192 6135099392 Total appointments in last 10 days: 4976
+INFO 2025-01-09 18:50:37,288 get_contacts 78192 6135099392 Appointments after store filter: 4052
+INFO 2025-01-09 18:50:37,668 get_contacts 78192 6135099392 Appointments after procedure exclusion: 3052
+INFO 2025-01-09 18:50:38,054 get_contacts 78192 6135099392 Appointments after status filter: 762
+INFO 2025-01-09 18:50:40,173 get_contacts 78192 6135099392 NPS - Found 2 unique appointments
+INFO 2025-01-09 18:50:41,824 get_appointment_to_contact 78192 6135099392 Processed 2 appointments: Created 0, Updated 2
+INFO 2025-01-09 18:50:41,828 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:41,828 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'NPS'
+INFO 2025-01-09 18:50:42,235 get_counter 78192 6135099392 Found 2 phones with messages
+INFO 2025-01-09 18:50:42,236 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11956088282', 'counter': 1}, {'contact__phone': '11975019410', 'counter': 1}]
+INFO 2025-01-09 18:50:42,236 get_counter 78192 6135099392 Sample final results: {'11975019410': 1, '11956088282': 1}
+INFO 2025-01-09 18:50:42,236 get_message 78192 6135099392 Getting message for type=Appointment, tag=NPS, counter=1
+INFO 2025-01-09 18:50:42,645 get_message 78192 6135099392 No message found for counter=1
+WARNING 2025-01-09 18:50:42,646 get_message 78192 6135099392 No message found for NPS (counter=1)
+INFO 2025-01-09 18:50:42,983 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 0, Skipped: 2, Errors: 0
+INFO 2025-01-09 18:50:43,361 target_list_resolver 78192 6135099392 Processing campaign 'Reschedule' (ID: 6)
+INFO 2025-01-09 18:50:47,149 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:50:47,560 get_contacts 78192 6135099392 Processing contacts with tag Reschedule
+INFO 2025-01-09 18:50:47,562 get_contacts 78192 6135099392 Using cached contacts for Reschedule
+INFO 2025-01-09 18:50:47,562 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:47,562 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'Reschedule'
+INFO 2025-01-09 18:50:47,912 get_counter 78192 6135099392 Found 0 phones with messages
+INFO 2025-01-09 18:50:47,912 get_counter 78192 6135099392 Sample final results: {'21975688550': 0, '11993810520': 0}
+INFO 2025-01-09 18:50:47,912 get_message 78192 6135099392 Getting message for type=Appointment, tag=Reschedule, counter=0
+INFO 2025-01-09 18:50:48,277 get_message 78192 6135099392 Found message id=65 for Reschedule
+INFO 2025-01-09 18:50:50,118 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:50:50,529 target_list_resolver 78192 6135099392 Processing campaign 'Reminder' (ID: 5)
+INFO 2025-01-09 18:50:54,349 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:50:54,727 get_contacts 78192 6135099392 Processing contacts with tag Reminder
+INFO 2025-01-09 18:50:54,729 get_contacts 78192 6135099392 Using cached contacts for Reminder
+INFO 2025-01-09 18:50:54,729 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:50:54,729 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'Reminder'
+INFO 2025-01-09 18:50:55,137 get_counter 78192 6135099392 Found 1 phones with messages
+INFO 2025-01-09 18:50:55,138 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11991388383', 'counter': 2}]
+INFO 2025-01-09 18:50:55,138 get_counter 78192 6135099392 Sample final results: {'11991388383': 2}
+INFO 2025-01-09 18:50:55,138 get_message 78192 6135099392 Getting message for type=Appointment, tag=Reminder, counter=2
+INFO 2025-01-09 18:50:55,474 get_message 78192 6135099392 Found message id=73 for Reminder
+INFO 2025-01-09 18:50:57,287 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:50:57,698 target_list_resolver 78192 6135099392 Processing campaign 'Preenchimento Campaign' (ID: 4)
+INFO 2025-01-09 18:51:01,589 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 33 target lists
+INFO 2025-01-09 18:51:01,592 get_contacts 78192 6135099392 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:51:01,997 get_contacts 78192 6135099392 Found 48 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:51:02,409 get_contacts 78192 6135099392 Found 48 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:51:02,762 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:51:02,763 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:51:02,763 get_counter 78192 6135099392 Fetching counters for 2 phones with tag Preenchimento
+INFO 2025-01-09 18:51:02,763 get_counter 78192 6135099392 Sample phones: ['8694867534', '11952218537']
+INFO 2025-01-09 18:51:03,113 get_counter 78192 6135099392 Found 2 phones with messages
+INFO 2025-01-09 18:51:03,114 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11952218537', 'counter': 2}, {'contact__phone': '8694867534', 'counter': 2}]
+INFO 2025-01-09 18:51:03,114 get_counter 78192 6135099392 Sample final results: {'8694867534': 2, '11952218537': 2}
+INFO 2025-01-09 18:51:03,114 get_message 78192 6135099392 Getting message for type=Whatsapp, tag=Preenchimento, counter=2
+INFO 2025-01-09 18:51:03,534 get_message 78192 6135099392 Found message id=12 for Preenchimento
+INFO 2025-01-09 18:51:05,479 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:51:05,816 target_list_resolver 78192 6135099392 Processing campaign 'Botox Campaign' (ID: 3)
+INFO 2025-01-09 18:51:09,370 target_list_resolver 78192 6135099392 Cleaned up: Deleted 0 queue entries and 46 target lists
+INFO 2025-01-09 18:51:09,371 get_contacts 78192 6135099392 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 18:51:09,781 get_contacts 78192 6135099392 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:51:10,165 get_contacts 78192 6135099392 Found 1068 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:51:10,603 target_list_resolver 78192 6135099392 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:51:10,604 target_list_resolver 78192 6135099392 Found 2 contacts with tag 'Botox'
+INFO 2025-01-09 18:51:10,604 get_counter 78192 6135099392 Fetching counters for 2 phones with tag Botox
+INFO 2025-01-09 18:51:10,604 get_counter 78192 6135099392 Sample phones: ['11994781051', '21972901795']
+INFO 2025-01-09 18:51:10,956 get_counter 78192 6135099392 Found 2 phones with messages
+INFO 2025-01-09 18:51:10,956 get_counter 78192 6135099392 Sample results: [{'contact__phone': '11994781051', 'counter': 2}, {'contact__phone': '21972901795', 'counter': 2}]
+INFO 2025-01-09 18:51:10,956 get_counter 78192 6135099392 Sample final results: {'11994781051': 2, '21972901795': 2}
+INFO 2025-01-09 18:51:10,957 get_message 78192 6135099392 Getting message for type=Whatsapp, tag=Botox, counter=2
+INFO 2025-01-09 18:51:11,293 get_message 78192 6135099392 Found message id=9 for Botox
+INFO 2025-01-09 18:51:13,057 target_list_resolver 78192 6135099392 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:51:13,058 basehttp 78192 6135099392 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:51:17,093 basehttp 78192 6135099392 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 48718
+INFO 2025-01-09 18:51:17,530 basehttp 78192 6135099392 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-09 18:51:18,182 targetListAdmin 78192 6135099392 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:51:18,517 targetListAdmin 78192 6135099392 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:51:18,857 targetListAdmin 78192 6135099392 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:51:19,201 targetListAdmin 78192 6135099392 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:51:19,202 targetListAdmin 78192 6135099392 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:51:19,541 targetListAdmin 78192 6135099392 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:51:19,542 targetListAdmin 78192 6135099392 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:51:19,880 targetListAdmin 78192 6135099392 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:51:22,482 basehttp 78192 6135099392 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 50247
+INFO 2025-01-09 18:51:28,693 autoreload 78192 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 18:51:29,853 autoreload 78464 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:52:27,438 targetListAdmin 78464 6191296512 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:52:27,810 targetListAdmin 78464 6191296512 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:52:28,221 targetListAdmin 78464 6191296512 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:52:28,631 targetListAdmin 78464 6191296512 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:52:28,632 targetListAdmin 78464 6191296512 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:52:28,969 targetListAdmin 78464 6191296512 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:52:28,970 targetListAdmin 78464 6191296512 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:52:29,309 targetListAdmin 78464 6191296512 TargetListAdmin queryset count: 14
+INFO 2025-01-09 18:52:31,222 basehttp 78464 6191296512 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 50247
+INFO 2025-01-09 18:55:10,057 target_list_resolver 79137 8572943040 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:55:13,804 target_list_resolver 79137 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:55:13,804 get_contacts 79137 8572943040 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:55:14,586 get_contacts 79137 8572943040 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:55:14,960 get_contacts 79137 8572943040 Found 19 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:55:15,693 target_list_resolver 79137 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:55:15,693 target_list_resolver 79137 8572943040 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 18:55:15,693 get_counter 79137 8572943040 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 18:55:15,693 get_counter 79137 8572943040 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 18:55:17,184 get_counter 79137 8572943040 Found 19 phones with messages
+INFO 2025-01-09 18:55:17,185 get_counter 79137 8572943040 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 18:55:17,185 get_counter 79137 8572943040 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 18:55:17,185 get_message 79137 8572943040 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:55:17,594 get_message 79137 8572943040 Found message id=92 for Instagram
+INFO 2025-01-09 18:55:19,499 target_list_resolver 79137 8572943040 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:55:19,851 target_list_resolver 79137 8572943040 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 18:55:23,634 target_list_resolver 79137 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:55:24,044 get_contacts 79137 8572943040 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 18:55:24,084 get_contacts 79137 8572943040 Using cached contacts for ReschedulePL
+INFO 2025-01-09 18:55:24,084 target_list_resolver 79137 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:55:24,084 target_list_resolver 79137 8572943040 Found 2 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 18:55:24,443 get_counter 79137 8572943040 Found 0 phones with messages
+INFO 2025-01-09 18:55:24,444 get_counter 79137 8572943040 Sample final results: {'11981095740': 0, '11963378469': 0}
+INFO 2025-01-09 18:55:24,444 get_message 79137 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 18:55:24,798 get_message 79137 8572943040 Found message id=79 for ReschedulePL
+INFO 2025-01-09 18:55:26,663 target_list_resolver 79137 8572943040 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:55:27,117 target_list_resolver 79137 8572943040 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 18:55:30,748 target_list_resolver 79137 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:55:31,213 get_contacts 79137 8572943040 Processing contacts with tag ReminderPL
+INFO 2025-01-09 18:55:31,215 get_contacts 79137 8572943040 Using cached contacts for ReminderPL
+INFO 2025-01-09 18:55:31,216 target_list_resolver 79137 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:55:31,216 target_list_resolver 79137 8572943040 Found 2 contacts with tag 'ReminderPL'
+INFO 2025-01-09 18:55:31,577 get_counter 79137 8572943040 Found 1 phones with messages
+INFO 2025-01-09 18:55:31,577 get_counter 79137 8572943040 Sample results: [{'contact__phone': '11987682020', 'counter': 1}]
+INFO 2025-01-09 18:55:31,577 get_counter 79137 8572943040 Sample final results: {'11987682020': 1}
+INFO 2025-01-09 18:55:31,577 get_message 79137 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=1
+INFO 2025-01-09 18:55:32,035 get_message 79137 8572943040 Found message id=88 for ReminderPL
+INFO 2025-01-09 18:55:33,918 target_list_resolver 79137 8572943040 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:55:34,284 target_list_resolver 79137 8572943040 Processing campaign 'NPS' (ID: 7)
+INFO 2025-01-09 18:55:35,105 get_contacts 79137 8572943040 Processing contacts with tag NPS
+INFO 2025-01-09 18:55:35,108 get_contacts 79137 8572943040 Using cached contacts for NPS
+INFO 2025-01-09 18:55:35,108 target_list_resolver 79137 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:55:35,108 target_list_resolver 79137 8572943040 Found 2 contacts with tag 'NPS'
+INFO 2025-01-09 18:55:35,480 get_counter 79137 8572943040 Found 2 phones with messages
+INFO 2025-01-09 18:55:35,480 get_counter 79137 8572943040 Sample results: [{'contact__phone': '11956088282', 'counter': 1}, {'contact__phone': '11975019410', 'counter': 1}]
+INFO 2025-01-09 18:55:35,480 get_counter 79137 8572943040 Sample final results: {'11975019410': 1, '11956088282': 1}
+INFO 2025-01-09 18:55:35,480 get_message 79137 8572943040 Getting message for type=Appointment, tag=NPS, counter=1
+INFO 2025-01-09 18:55:35,835 get_message 79137 8572943040 No message found for counter=1
+WARNING 2025-01-09 18:55:35,835 get_message 79137 8572943040 No message found for NPS (counter=1)
+INFO 2025-01-09 18:55:36,195 target_list_resolver 79137 8572943040 Campaign processing complete. Created: 0, Skipped: 2, Errors: 0
+INFO 2025-01-09 18:55:36,538 target_list_resolver 79137 8572943040 Processing campaign 'Reschedule' (ID: 6)
+INFO 2025-01-09 18:55:40,227 target_list_resolver 79137 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:55:40,588 get_contacts 79137 8572943040 Processing contacts with tag Reschedule
+INFO 2025-01-09 18:55:40,590 get_contacts 79137 8572943040 Using cached contacts for Reschedule
+INFO 2025-01-09 18:55:40,590 target_list_resolver 79137 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:55:40,590 target_list_resolver 79137 8572943040 Found 2 contacts with tag 'Reschedule'
+INFO 2025-01-09 18:55:41,043 get_counter 79137 8572943040 Found 0 phones with messages
+INFO 2025-01-09 18:55:41,043 get_counter 79137 8572943040 Sample final results: {'21975688550': 0, '11993810520': 0}
+INFO 2025-01-09 18:55:41,043 get_message 79137 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=0
+INFO 2025-01-09 18:55:41,393 get_message 79137 8572943040 Found message id=65 for Reschedule
+INFO 2025-01-09 18:55:43,165 target_list_resolver 79137 8572943040 Campaign processing complete. Created: 2, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:55:43,524 target_list_resolver 79137 8572943040 Processing campaign 'Reminder' (ID: 5)
+INFO 2025-01-09 18:55:44,472 autoreload 81041 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 18:55:57,085 target_list_resolver 81069 8572943040 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 18:56:00,854 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 18:56:00,855 get_contacts 81069 8572943040 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 18:56:01,319 get_contacts 81069 8572943040 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:56:01,732 get_contacts 81069 8572943040 Found 19 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 18:56:02,142 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:56:02,142 target_list_resolver 81069 8572943040 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 18:56:02,143 get_counter 81069 8572943040 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 18:56:02,143 get_counter 81069 8572943040 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 18:56:02,547 get_counter 81069 8572943040 Found 19 phones with messages
+INFO 2025-01-09 18:56:02,548 get_counter 81069 8572943040 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 18:56:02,548 get_counter 81069 8572943040 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 18:56:02,549 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 18:56:02,957 get_message 81069 8572943040 Found message id=92 for Instagram
+INFO 2025-01-09 18:56:04,853 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:56:05,208 target_list_resolver 81069 8572943040 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 18:56:08,999 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:56:09,410 get_contacts 81069 8572943040 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 18:56:09,818 get_contacts 81069 8572943040 ReschedulePL - Total appointments in PLÁSTICA: 8048
+INFO 2025-01-09 18:56:11,252 get_contacts 81069 8572943040 ReschedulePL - Appointments with status ['Falta', 'Cancelado']: 3918
+INFO 2025-01-09 18:56:11,619 get_contacts 81069 8572943040 ReschedulePL - Appointments with matching procedures: 3596
+INFO 2025-01-09 18:56:14,974 get_contacts 81069 8572943040 ReschedulePL - Found 1542 appointments
+INFO 2025-01-09 18:56:19,034 get_appointment_to_contact 81069 8572943040 Processed 1542 appointments: Created 0, Updated 1542
+INFO 2025-01-09 18:56:19,064 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:56:19,064 target_list_resolver 81069 8572943040 Found 1542 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 18:56:20,986 get_counter 81069 8572943040 Found 1255 phones with messages
+INFO 2025-01-09 18:56:20,986 get_counter 81069 8572943040 Sample results: [{'contact__phone': '1141875445', 'counter': 1}, {'contact__phone': '1143804509', 'counter': 3}, {'contact__phone': '1145086033', 'counter': 3}, {'contact__phone': '1148986124', 'counter': 3}, {'contact__phone': '1170550020', 'counter': 3}]
+INFO 2025-01-09 18:56:21,033 get_counter 81069 8572943040 Sample final results: {'11981095740': 0, '11963378469': 0, '11983352033': 0, '11997446905': 0, '11910582565': 0}
+INFO 2025-01-09 18:56:21,033 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 18:56:21,390 get_message 81069 8572943040 Found message id=79 for ReschedulePL
+INFO 2025-01-09 18:56:21,390 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=1
+INFO 2025-01-09 18:56:21,728 get_message 81069 8572943040 Found message id=80 for ReschedulePL
+INFO 2025-01-09 18:56:21,728 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=2
+INFO 2025-01-09 18:56:22,066 get_message 81069 8572943040 Found message id=81 for ReschedulePL
+INFO 2025-01-09 18:56:22,066 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=3
+INFO 2025-01-09 18:56:22,406 get_message 81069 8572943040 No message found for counter=3
+WARNING 2025-01-09 18:56:22,407 get_message 81069 8572943040 No message found for ReschedulePL (counter=3)
+INFO 2025-01-09 18:56:22,407 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=4
+INFO 2025-01-09 18:56:22,746 get_message 81069 8572943040 No message found for counter=4
+WARNING 2025-01-09 18:56:22,746 get_message 81069 8572943040 No message found for ReschedulePL (counter=4)
+INFO 2025-01-09 18:56:22,746 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=5
+INFO 2025-01-09 18:56:23,084 get_message 81069 8572943040 No message found for counter=5
+WARNING 2025-01-09 18:56:23,085 get_message 81069 8572943040 No message found for ReschedulePL (counter=5)
+INFO 2025-01-09 18:56:23,085 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=6
+INFO 2025-01-09 18:56:23,422 get_message 81069 8572943040 No message found for counter=6
+WARNING 2025-01-09 18:56:23,423 get_message 81069 8572943040 No message found for ReschedulePL (counter=6)
+INFO 2025-01-09 18:56:26,714 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 488, Skipped: 1054, Errors: 0
+INFO 2025-01-09 18:56:27,124 target_list_resolver 81069 8572943040 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 18:56:30,707 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:56:31,046 get_contacts 81069 8572943040 Processing contacts with tag ReminderPL
+INFO 2025-01-09 18:56:31,383 get_contacts 81069 8572943040 Total appointments in PL: 8048
+INFO 2025-01-09 18:56:31,754 get_contacts 81069 8572943040 Appointments with desired status: 1006
+INFO 2025-01-09 18:56:32,101 get_contacts 81069 8572943040 Appointments with matching procedures: 6720
+INFO 2025-01-09 18:56:33,330 get_contacts 81069 8572943040 ReminderPL - Found 256 appointments
+INFO 2025-01-09 18:56:35,699 get_appointment_to_contact 81069 8572943040 Processed 256 appointments: Created 16, Updated 240
+INFO 2025-01-09 18:56:35,704 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:56:35,705 target_list_resolver 81069 8572943040 Found 256 contacts with tag 'ReminderPL'
+INFO 2025-01-09 18:56:36,136 get_counter 81069 8572943040 Found 21 phones with messages
+INFO 2025-01-09 18:56:36,136 get_counter 81069 8572943040 Sample results: [{'contact__phone': '11912523807', 'counter': 2}, {'contact__phone': '11941721400', 'counter': 1}, {'contact__phone': '11942887611', 'counter': 1}, {'contact__phone': '11942934202', 'counter': 2}, {'contact__phone': '11951308570', 'counter': 1}]
+INFO 2025-01-09 18:56:36,137 get_counter 81069 8572943040 Sample final results: {'11948304891': 0, '11952311925': 0, '11952353705': 0, '11967899303': 0, '11985995872': 0}
+INFO 2025-01-09 18:56:36,137 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=0
+INFO 2025-01-09 18:56:36,474 get_message 81069 8572943040 Found message id=87 for ReminderPL
+INFO 2025-01-09 18:56:36,474 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=1
+INFO 2025-01-09 18:56:36,813 get_message 81069 8572943040 Found message id=88 for ReminderPL
+INFO 2025-01-09 18:56:36,813 get_message 81069 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=2
+INFO 2025-01-09 18:56:37,159 get_message 81069 8572943040 Found message id=89 for ReminderPL
+INFO 2025-01-09 18:56:38,926 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 256, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:56:39,264 target_list_resolver 81069 8572943040 Processing campaign 'NPS' (ID: 7)
+INFO 2025-01-09 18:56:39,940 get_contacts 81069 8572943040 Processing contacts with tag NPS
+INFO 2025-01-09 18:56:40,334 get_contacts 81069 8572943040 Total appointments in last 10 days: 4976
+INFO 2025-01-09 18:56:40,744 get_contacts 81069 8572943040 Appointments after store filter: 4052
+INFO 2025-01-09 18:56:41,154 get_contacts 81069 8572943040 Appointments after procedure exclusion: 3052
+INFO 2025-01-09 18:56:41,526 get_contacts 81069 8572943040 Appointments after status filter: 760
+INFO 2025-01-09 18:56:42,411 get_contacts 81069 8572943040 NPS - Found 311 unique appointments
+INFO 2025-01-09 18:56:43,973 get_appointment_to_contact 81069 8572943040 Processed 311 appointments: Created 0, Updated 311
+INFO 2025-01-09 18:56:43,979 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:56:43,979 target_list_resolver 81069 8572943040 Found 311 contacts with tag 'NPS'
+INFO 2025-01-09 18:56:44,397 get_counter 81069 8572943040 Found 203 phones with messages
+INFO 2025-01-09 18:56:44,397 get_counter 81069 8572943040 Sample results: [{'contact__phone': '1143825843', 'counter': 1}, {'contact__phone': '11910804307', 'counter': 1}, {'contact__phone': '11910876320', 'counter': 1}, {'contact__phone': '11914212326', 'counter': 1}, {'contact__phone': '11916781651', 'counter': 1}]
+INFO 2025-01-09 18:56:44,398 get_counter 81069 8572943040 Sample final results: {'4391913671': 1, '43996212156': 1, '11954255494': 1, '21999752610': 2, '11962479743': 2}
+INFO 2025-01-09 18:56:44,398 get_message 81069 8572943040 Getting message for type=Appointment, tag=NPS, counter=0
+INFO 2025-01-09 18:56:44,744 get_message 81069 8572943040 Found message id=71 for NPS
+INFO 2025-01-09 18:56:44,744 get_message 81069 8572943040 Getting message for type=Appointment, tag=NPS, counter=1
+INFO 2025-01-09 18:56:45,080 get_message 81069 8572943040 No message found for counter=1
+WARNING 2025-01-09 18:56:45,080 get_message 81069 8572943040 No message found for NPS (counter=1)
+INFO 2025-01-09 18:56:45,080 get_message 81069 8572943040 Getting message for type=Appointment, tag=NPS, counter=2
+INFO 2025-01-09 18:56:45,419 get_message 81069 8572943040 No message found for counter=2
+WARNING 2025-01-09 18:56:45,419 get_message 81069 8572943040 No message found for NPS (counter=2)
+INFO 2025-01-09 18:56:45,419 get_message 81069 8572943040 Getting message for type=Appointment, tag=NPS, counter=3
+INFO 2025-01-09 18:56:45,757 get_message 81069 8572943040 No message found for counter=3
+WARNING 2025-01-09 18:56:45,757 get_message 81069 8572943040 No message found for NPS (counter=3)
+INFO 2025-01-09 18:56:45,757 get_message 81069 8572943040 Getting message for type=Appointment, tag=NPS, counter=4
+INFO 2025-01-09 18:56:46,101 get_message 81069 8572943040 No message found for counter=4
+WARNING 2025-01-09 18:56:46,101 get_message 81069 8572943040 No message found for NPS (counter=4)
+INFO 2025-01-09 18:56:47,827 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 108, Skipped: 203, Errors: 0
+INFO 2025-01-09 18:56:48,166 target_list_resolver 81069 8572943040 Processing campaign 'Reschedule' (ID: 6)
+INFO 2025-01-09 18:56:51,547 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:56:51,885 get_contacts 81069 8572943040 Processing contacts with tag Reschedule
+INFO 2025-01-09 18:57:00,366 get_contacts 81069 8572943040 Reschedule - Found 3000 appointments
+INFO 2025-01-09 18:57:04,932 get_appointment_to_contact 81069 8572943040 Processed 3000 appointments: Created 8, Updated 2992
+INFO 2025-01-09 18:57:05,058 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:57:05,058 target_list_resolver 81069 8572943040 Found 3000 contacts with tag 'Reschedule'
+INFO 2025-01-09 18:57:07,740 get_counter 81069 8572943040 Found 2564 phones with messages
+INFO 2025-01-09 18:57:07,741 get_counter 81069 8572943040 Sample results: [{'contact__phone': '11932377336', 'counter': 1}, {'contact__phone': '21991411767', 'counter': 3}, {'contact__phone': '4398094344', 'counter': 3}, {'contact__phone': '11913739506', 'counter': 3}, {'contact__phone': '11940335227', 'counter': 3}]
+INFO 2025-01-09 18:57:07,849 get_counter 81069 8572943040 Sample final results: {'11985599526': 0, '11989741863': 0, '11985955044': 0, '11989980861': 0, '12997169032': 0}
+INFO 2025-01-09 18:57:07,849 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=0
+INFO 2025-01-09 18:57:08,188 get_message 81069 8572943040 Found message id=65 for Reschedule
+INFO 2025-01-09 18:57:08,189 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=1
+INFO 2025-01-09 18:57:08,597 get_message 81069 8572943040 Found message id=67 for Reschedule
+INFO 2025-01-09 18:57:08,597 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=2
+INFO 2025-01-09 18:57:09,007 get_message 81069 8572943040 Found message id=66 for Reschedule
+INFO 2025-01-09 18:57:09,007 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=3
+INFO 2025-01-09 18:57:09,519 get_message 81069 8572943040 No message found for counter=3
+WARNING 2025-01-09 18:57:09,519 get_message 81069 8572943040 No message found for Reschedule (counter=3)
+INFO 2025-01-09 18:57:09,520 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=4
+INFO 2025-01-09 18:57:09,928 get_message 81069 8572943040 No message found for counter=4
+WARNING 2025-01-09 18:57:09,928 get_message 81069 8572943040 No message found for Reschedule (counter=4)
+INFO 2025-01-09 18:57:09,929 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=5
+INFO 2025-01-09 18:57:10,338 get_message 81069 8572943040 No message found for counter=5
+WARNING 2025-01-09 18:57:10,339 get_message 81069 8572943040 No message found for Reschedule (counter=5)
+INFO 2025-01-09 18:57:10,339 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=6
+INFO 2025-01-09 18:57:10,747 get_message 81069 8572943040 No message found for counter=6
+WARNING 2025-01-09 18:57:10,747 get_message 81069 8572943040 No message found for Reschedule (counter=6)
+INFO 2025-01-09 18:57:10,747 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=7
+INFO 2025-01-09 18:57:11,157 get_message 81069 8572943040 No message found for counter=7
+WARNING 2025-01-09 18:57:11,157 get_message 81069 8572943040 No message found for Reschedule (counter=7)
+INFO 2025-01-09 18:57:11,157 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=8
+INFO 2025-01-09 18:57:11,566 get_message 81069 8572943040 No message found for counter=8
+WARNING 2025-01-09 18:57:11,566 get_message 81069 8572943040 No message found for Reschedule (counter=8)
+INFO 2025-01-09 18:57:16,100 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 1643, Skipped: 1357, Errors: 0
+INFO 2025-01-09 18:57:16,455 target_list_resolver 81069 8572943040 Processing campaign 'Reminder' (ID: 5)
+INFO 2025-01-09 18:57:20,128 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:57:20,467 get_contacts 81069 8572943040 Processing contacts with tag Reminder
+INFO 2025-01-09 18:57:22,166 get_contacts 81069 8572943040 Reminder - Found 62 appointments
+INFO 2025-01-09 18:57:23,957 get_appointment_to_contact 81069 8572943040 Processed 62 appointments: Created 2, Updated 60
+INFO 2025-01-09 18:57:23,958 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:57:23,958 target_list_resolver 81069 8572943040 Found 62 contacts with tag 'Reminder'
+INFO 2025-01-09 18:57:24,314 get_counter 81069 8572943040 Found 18 phones with messages
+INFO 2025-01-09 18:57:24,314 get_counter 81069 8572943040 Sample results: [{'contact__phone': '11913561951', 'counter': 2}, {'contact__phone': '11941208143', 'counter': 2}, {'contact__phone': '11947197503', 'counter': 2}, {'contact__phone': '11948471103', 'counter': 3}, {'contact__phone': '11952959316', 'counter': 2}]
+INFO 2025-01-09 18:57:24,314 get_counter 81069 8572943040 Sample final results: {'11947774257': 0, '11991388383': 2, '11948471103': 3, '11993639999': 2, '11968390814': 2}
+INFO 2025-01-09 18:57:24,315 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reminder, counter=0
+INFO 2025-01-09 18:57:24,675 get_message 81069 8572943040 Found message id=76 for Reminder
+INFO 2025-01-09 18:57:24,675 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reminder, counter=2
+INFO 2025-01-09 18:57:25,084 get_message 81069 8572943040 Found message id=73 for Reminder
+INFO 2025-01-09 18:57:25,084 get_message 81069 8572943040 Getting message for type=Appointment, tag=Reminder, counter=3
+INFO 2025-01-09 18:57:25,419 get_message 81069 8572943040 No message found for counter=3
+WARNING 2025-01-09 18:57:25,420 get_message 81069 8572943040 No message found for Reminder (counter=3)
+INFO 2025-01-09 18:57:27,234 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 52, Skipped: 10, Errors: 0
+INFO 2025-01-09 18:57:27,645 target_list_resolver 81069 8572943040 Processing campaign 'Preenchimento Campaign' (ID: 4)
+INFO 2025-01-09 18:57:31,463 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:57:31,464 get_contacts 81069 8572943040 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:57:31,843 get_contacts 81069 8572943040 Found 48 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:57:32,199 get_contacts 81069 8572943040 Found 48 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 18:57:32,579 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:57:32,579 target_list_resolver 81069 8572943040 Found 48 contacts with tag 'Preenchimento'
+INFO 2025-01-09 18:57:32,579 get_counter 81069 8572943040 Fetching counters for 48 phones with tag Preenchimento
+INFO 2025-01-09 18:57:32,579 get_counter 81069 8572943040 Sample phones: ['11958613114', '11998580836', '11997705592', '11989438269', '12934854115']
+INFO 2025-01-09 18:57:32,929 get_counter 81069 8572943040 Found 48 phones with messages
+INFO 2025-01-09 18:57:32,929 get_counter 81069 8572943040 Sample results: [{'contact__phone': '11914882533', 'counter': 2}, {'contact__phone': '11916275396', 'counter': 2}, {'contact__phone': '11934666672', 'counter': 2}, {'contact__phone': '11944986630', 'counter': 3}, {'contact__phone': '11945288619', 'counter': 2}]
+INFO 2025-01-09 18:57:32,930 get_counter 81069 8572943040 Sample final results: {'11958613114': 2, '11998580836': 2, '11997705592': 2, '11989438269': 2, '12934854115': 2}
+INFO 2025-01-09 18:57:32,930 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Preenchimento, counter=2
+INFO 2025-01-09 18:57:33,276 get_message 81069 8572943040 Found message id=12 for Preenchimento
+INFO 2025-01-09 18:57:33,276 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Preenchimento, counter=3
+INFO 2025-01-09 18:57:33,686 get_message 81069 8572943040 Found message id=62 for Preenchimento
+INFO 2025-01-09 18:57:35,436 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 48, Skipped: 0, Errors: 0
+INFO 2025-01-09 18:57:35,779 target_list_resolver 81069 8572943040 Processing campaign 'Botox Campaign' (ID: 3)
+INFO 2025-01-09 18:57:39,226 target_list_resolver 81069 8572943040 Cleaned up: Deleted 0 queue entries and 2 target lists
+INFO 2025-01-09 18:57:39,226 get_contacts 81069 8572943040 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 18:57:39,600 get_contacts 81069 8572943040 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:57:40,047 get_contacts 81069 8572943040 Found 1068 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 18:57:40,867 target_list_resolver 81069 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 18:57:40,867 target_list_resolver 81069 8572943040 Found 700 contacts with tag 'Botox'
+INFO 2025-01-09 18:57:40,868 get_counter 81069 8572943040 Fetching counters for 700 phones with tag Botox
+INFO 2025-01-09 18:57:40,868 get_counter 81069 8572943040 Sample phones: ['11993846417', '11994781051', '11984509063', '8491753871', '13988836426']
+INFO 2025-01-09 18:57:41,232 get_counter 81069 8572943040 Found 700 phones with messages
+INFO 2025-01-09 18:57:41,232 get_counter 81069 8572943040 Sample results: [{'contact__phone': '1170123385', 'counter': 3}, {'contact__phone': '11910061755', 'counter': 3}, {'contact__phone': '11910185550', 'counter': 2}, {'contact__phone': '11910414135', 'counter': 1}, {'contact__phone': '11910729298', 'counter': 3}]
+INFO 2025-01-09 18:57:41,237 get_counter 81069 8572943040 Sample final results: {'11993846417': 2, '11994781051': 2, '11984509063': 2, '8491753871': 2, '13988836426': 2}
+INFO 2025-01-09 18:57:41,237 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=1
+INFO 2025-01-09 18:57:41,572 get_message 81069 8572943040 Found message id=8 for Botox
+INFO 2025-01-09 18:57:41,573 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=2
+INFO 2025-01-09 18:57:41,912 get_message 81069 8572943040 Found message id=9 for Botox
+INFO 2025-01-09 18:57:41,913 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=3
+INFO 2025-01-09 18:57:42,254 get_message 81069 8572943040 Found message id=61 for Botox
+INFO 2025-01-09 18:57:42,254 get_message 81069 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=5
+INFO 2025-01-09 18:57:42,592 get_message 81069 8572943040 No message found for counter=5
+WARNING 2025-01-09 18:57:42,592 get_message 81069 8572943040 No message found for Botox (counter=5)
+INFO 2025-01-09 18:57:44,795 target_list_resolver 81069 8572943040 Campaign processing complete. Created: 698, Skipped: 2, Errors: 0
+INFO 2025-01-09 18:57:51,919 basehttp 81041 6205796352 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:57:51,932 basehttp 81041 6205796352 "GET /admin/login/?next=/admin/messageShooter/targetlist/ HTTP/1.1" 200 5844
+INFO 2025-01-09 18:57:59,086 basehttp 81041 6205796352 "POST /admin/login/?next=/admin/messageShooter/targetlist/ HTTP/1.1" 302 0
+INFO 2025-01-09 18:57:59,494 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:57:59,835 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 18:58:00,198 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:58:00,617 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 18:58:00,620 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:58:01,027 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 18:58:01,028 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 18:58:01,367 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 18:58:03,695 basehttp 81041 6205796352 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 78801
+INFO 2025-01-09 18:58:04,216 basehttp 81041 6205796352 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-09 18:58:43,118 queueAdmin 81041 6205796352 Queue list view performance: 5 queries in 1.95s
+INFO 2025-01-09 18:58:43,140 basehttp 81041 6205796352 "GET /admin/messageShooter/queue/ HTTP/1.1" 200 41355
+INFO 2025-01-09 19:06:31,794 scheduler 83978 8572943040 Starting campaign processing
+INFO 2025-01-09 19:06:34,676 target_list_resolver 83978 8572943040 Found 8 active campaigns
+INFO 2025-01-09 19:06:34,677 scheduler 83978 8572943040 No target lists were created
+INFO 2025-01-09 19:07:51,106 target_list_resolver 83978 8572943040 Processing campaign 'Instagram' (ID: 10)
+INFO 2025-01-09 19:07:54,830 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 19 target lists
+INFO 2025-01-09 19:07:54,830 get_contacts 83978 8572943040 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-01-09 19:07:55,580 get_contacts 83978 8572943040 Found 19 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 19:07:55,984 get_contacts 83978 8572943040 Found 19 unique contacts from the last 30 days with tag 'Instagram'
+INFO 2025-01-09 19:07:56,803 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:07:56,804 target_list_resolver 83978 8572943040 Found 19 contacts with tag 'Instagram'
+INFO 2025-01-09 19:07:56,804 get_counter 83978 8572943040 Fetching counters for 19 phones with tag Instagram
+INFO 2025-01-09 19:07:56,805 get_counter 83978 8572943040 Sample phones: ['8994377554', '11954244855', '11967990650', '11971695326', '11986095664']
+INFO 2025-01-09 19:07:58,011 get_counter 83978 8572943040 Found 19 phones with messages
+INFO 2025-01-09 19:07:58,011 get_counter 83978 8572943040 Sample results: [{'contact__phone': '11916473226', 'counter': 1}, {'contact__phone': '11933042927', 'counter': 1}, {'contact__phone': '11939627285', 'counter': 1}, {'contact__phone': '11949457712', 'counter': 1}, {'contact__phone': '11954244855', 'counter': 1}]
+INFO 2025-01-09 19:07:58,011 get_counter 83978 8572943040 Sample final results: {'8994377554': 1, '11954244855': 1, '11967990650': 1, '11971695326': 1, '11986095664': 1}
+INFO 2025-01-09 19:07:58,011 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Instagram, counter=1
+INFO 2025-01-09 19:07:58,348 get_message 83978 8572943040 Found message id=92 for Instagram
+INFO 2025-01-09 19:08:00,284 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 19, Skipped: 0, Errors: 0
+INFO 2025-01-09 19:08:00,695 target_list_resolver 83978 8572943040 Processing campaign 'Reschedule Plástica' (ID: 9)
+INFO 2025-01-09 19:08:07,349 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 488 target lists
+INFO 2025-01-09 19:08:07,686 get_contacts 83978 8572943040 Processing contacts with tag ReschedulePL
+INFO 2025-01-09 19:08:07,752 get_contacts 83978 8572943040 Using cached contacts for ReschedulePL
+INFO 2025-01-09 19:08:07,752 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:08:07,752 target_list_resolver 83978 8572943040 Found 1542 contacts with tag 'ReschedulePL'
+INFO 2025-01-09 19:08:08,332 get_counter 83978 8572943040 Found 1255 phones with messages
+INFO 2025-01-09 19:08:08,333 get_counter 83978 8572943040 Sample results: [{'contact__phone': '1141875445', 'counter': 1}, {'contact__phone': '1143804509', 'counter': 3}, {'contact__phone': '1145086033', 'counter': 3}, {'contact__phone': '1148986124', 'counter': 3}, {'contact__phone': '1170550020', 'counter': 3}]
+INFO 2025-01-09 19:08:08,357 get_counter 83978 8572943040 Sample final results: {'11981095740': 0, '11963378469': 0, '11983352033': 0, '11997446905': 0, '11910582565': 0}
+INFO 2025-01-09 19:08:08,357 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=0
+INFO 2025-01-09 19:08:08,715 get_message 83978 8572943040 Found message id=79 for ReschedulePL
+INFO 2025-01-09 19:08:08,715 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=1
+INFO 2025-01-09 19:08:09,054 get_message 83978 8572943040 Found message id=80 for ReschedulePL
+INFO 2025-01-09 19:08:09,054 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=2
+INFO 2025-01-09 19:08:09,397 get_message 83978 8572943040 Found message id=81 for ReschedulePL
+INFO 2025-01-09 19:08:09,397 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=3
+INFO 2025-01-09 19:08:09,811 get_message 83978 8572943040 No message found for counter=3
+WARNING 2025-01-09 19:08:09,812 get_message 83978 8572943040 No message found for ReschedulePL (counter=3)
+INFO 2025-01-09 19:08:09,812 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=4
+INFO 2025-01-09 19:08:10,145 get_message 83978 8572943040 No message found for counter=4
+WARNING 2025-01-09 19:08:10,146 get_message 83978 8572943040 No message found for ReschedulePL (counter=4)
+INFO 2025-01-09 19:08:10,146 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=5
+INFO 2025-01-09 19:08:10,524 get_message 83978 8572943040 No message found for counter=5
+WARNING 2025-01-09 19:08:10,524 get_message 83978 8572943040 No message found for ReschedulePL (counter=5)
+INFO 2025-01-09 19:08:10,524 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReschedulePL, counter=6
+INFO 2025-01-09 19:08:10,934 get_message 83978 8572943040 No message found for counter=6
+WARNING 2025-01-09 19:08:10,934 get_message 83978 8572943040 No message found for ReschedulePL (counter=6)
+INFO 2025-01-09 19:08:14,177 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 488, Skipped: 1054, Errors: 0
+INFO 2025-01-09 19:08:14,621 target_list_resolver 83978 8572943040 Processing campaign 'Reminder Plástica' (ID: 8)
+INFO 2025-01-09 19:08:19,741 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 256 target lists
+INFO 2025-01-09 19:08:20,150 get_contacts 83978 8572943040 Processing contacts with tag ReminderPL
+INFO 2025-01-09 19:08:20,152 get_contacts 83978 8572943040 Using cached contacts for ReminderPL
+INFO 2025-01-09 19:08:20,152 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:08:20,152 target_list_resolver 83978 8572943040 Found 256 contacts with tag 'ReminderPL'
+INFO 2025-01-09 19:08:20,508 get_counter 83978 8572943040 Found 21 phones with messages
+INFO 2025-01-09 19:08:20,508 get_counter 83978 8572943040 Sample results: [{'contact__phone': '11912523807', 'counter': 2}, {'contact__phone': '11941721400', 'counter': 1}, {'contact__phone': '11942887611', 'counter': 1}, {'contact__phone': '11942934202', 'counter': 2}, {'contact__phone': '11951308570', 'counter': 1}]
+INFO 2025-01-09 19:08:20,509 get_counter 83978 8572943040 Sample final results: {'11948304891': 0, '11952311925': 0, '11952353705': 0, '11967899303': 0, '11985995872': 0}
+INFO 2025-01-09 19:08:20,509 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=0
+INFO 2025-01-09 19:08:20,866 get_message 83978 8572943040 Found message id=87 for ReminderPL
+INFO 2025-01-09 19:08:20,867 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=1
+INFO 2025-01-09 19:08:21,203 get_message 83978 8572943040 Found message id=88 for ReminderPL
+INFO 2025-01-09 19:08:21,203 get_message 83978 8572943040 Getting message for type=Appointment, tag=ReminderPL, counter=2
+INFO 2025-01-09 19:08:21,583 get_message 83978 8572943040 Found message id=89 for ReminderPL
+INFO 2025-01-09 19:08:23,779 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 256, Skipped: 0, Errors: 0
+INFO 2025-01-09 19:08:24,115 target_list_resolver 83978 8572943040 Processing campaign 'NPS' (ID: 7)
+INFO 2025-01-09 19:08:28,342 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 108 target lists
+INFO 2025-01-09 19:08:28,752 get_contacts 83978 8572943040 Processing contacts with tag NPS
+INFO 2025-01-09 19:08:30,593 get_contacts 83978 8572943040 Total appointments in last 10 days: 4968
+INFO 2025-01-09 19:08:31,008 get_contacts 83978 8572943040 Appointments after store filter: 4046
+INFO 2025-01-09 19:08:31,380 get_contacts 83978 8572943040 Appointments after procedure exclusion: 3050
+INFO 2025-01-09 19:08:31,752 get_contacts 83978 8572943040 Appointments after status filter: 734
+INFO 2025-01-09 19:08:33,312 get_contacts 83978 8572943040 NPS - Found 300 unique appointments
+INFO 2025-01-09 19:08:34,889 get_appointment_to_contact 83978 8572943040 Processed 300 appointments: Created 0, Updated 300
+INFO 2025-01-09 19:08:34,895 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:08:34,896 target_list_resolver 83978 8572943040 Found 300 contacts with tag 'NPS'
+INFO 2025-01-09 19:08:35,274 get_counter 83978 8572943040 Found 192 phones with messages
+INFO 2025-01-09 19:08:35,274 get_counter 83978 8572943040 Sample results: [{'contact__phone': '1143825843', 'counter': 1}, {'contact__phone': '11910804307', 'counter': 1}, {'contact__phone': '11910876320', 'counter': 1}, {'contact__phone': '11914212326', 'counter': 1}, {'contact__phone': '11916781651', 'counter': 1}]
+INFO 2025-01-09 19:08:35,276 get_counter 83978 8572943040 Sample final results: {'11988040334': 1, '11956088282': 1, '11962557082': 1, '11978261086': 1, '11986884842': 1}
+INFO 2025-01-09 19:08:35,276 get_message 83978 8572943040 Getting message for type=Appointment, tag=NPS, counter=0
+INFO 2025-01-09 19:08:35,611 get_message 83978 8572943040 Found message id=71 for NPS
+INFO 2025-01-09 19:08:35,611 get_message 83978 8572943040 Getting message for type=Appointment, tag=NPS, counter=1
+INFO 2025-01-09 19:08:35,947 get_message 83978 8572943040 No message found for counter=1
+WARNING 2025-01-09 19:08:35,947 get_message 83978 8572943040 No message found for NPS (counter=1)
+INFO 2025-01-09 19:08:35,947 get_message 83978 8572943040 Getting message for type=Appointment, tag=NPS, counter=2
+INFO 2025-01-09 19:08:36,283 get_message 83978 8572943040 No message found for counter=2
+WARNING 2025-01-09 19:08:36,283 get_message 83978 8572943040 No message found for NPS (counter=2)
+INFO 2025-01-09 19:08:36,283 get_message 83978 8572943040 Getting message for type=Appointment, tag=NPS, counter=3
+INFO 2025-01-09 19:08:36,619 get_message 83978 8572943040 No message found for counter=3
+WARNING 2025-01-09 19:08:36,619 get_message 83978 8572943040 No message found for NPS (counter=3)
+INFO 2025-01-09 19:08:36,619 get_message 83978 8572943040 Getting message for type=Appointment, tag=NPS, counter=4
+INFO 2025-01-09 19:08:36,955 get_message 83978 8572943040 No message found for counter=4
+WARNING 2025-01-09 19:08:36,956 get_message 83978 8572943040 No message found for NPS (counter=4)
+INFO 2025-01-09 19:08:38,671 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 108, Skipped: 192, Errors: 0
+INFO 2025-01-09 19:08:39,097 target_list_resolver 83978 8572943040 Processing campaign 'Reschedule' (ID: 6)
+INFO 2025-01-09 19:08:49,339 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 1643 target lists
+INFO 2025-01-09 19:08:49,747 get_contacts 83978 8572943040 Processing contacts with tag Reschedule
+INFO 2025-01-09 19:08:49,791 get_contacts 83978 8572943040 Using cached contacts for Reschedule
+INFO 2025-01-09 19:08:49,791 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:08:49,791 target_list_resolver 83978 8572943040 Found 3000 contacts with tag 'Reschedule'
+INFO 2025-01-09 19:08:50,366 get_counter 83978 8572943040 Found 2564 phones with messages
+INFO 2025-01-09 19:08:50,366 get_counter 83978 8572943040 Sample results: [{'contact__phone': '11932377336', 'counter': 1}, {'contact__phone': '21991411767', 'counter': 3}, {'contact__phone': '4398094344', 'counter': 3}, {'contact__phone': '11913739506', 'counter': 3}, {'contact__phone': '11940335227', 'counter': 3}]
+INFO 2025-01-09 19:08:50,471 get_counter 83978 8572943040 Sample final results: {'11985599526': 0, '11989741863': 0, '11985955044': 0, '11989980861': 0, '12997169032': 0}
+INFO 2025-01-09 19:08:50,472 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=0
+INFO 2025-01-09 19:08:50,806 get_message 83978 8572943040 Found message id=65 for Reschedule
+INFO 2025-01-09 19:08:50,807 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=1
+INFO 2025-01-09 19:08:51,143 get_message 83978 8572943040 Found message id=67 for Reschedule
+INFO 2025-01-09 19:08:51,144 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=2
+INFO 2025-01-09 19:08:51,479 get_message 83978 8572943040 Found message id=66 for Reschedule
+INFO 2025-01-09 19:08:51,479 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=3
+INFO 2025-01-09 19:08:51,894 get_message 83978 8572943040 No message found for counter=3
+WARNING 2025-01-09 19:08:51,894 get_message 83978 8572943040 No message found for Reschedule (counter=3)
+INFO 2025-01-09 19:08:51,895 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=4
+INFO 2025-01-09 19:08:52,304 get_message 83978 8572943040 No message found for counter=4
+WARNING 2025-01-09 19:08:52,304 get_message 83978 8572943040 No message found for Reschedule (counter=4)
+INFO 2025-01-09 19:08:52,305 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=5
+INFO 2025-01-09 19:08:52,642 get_message 83978 8572943040 No message found for counter=5
+WARNING 2025-01-09 19:08:52,642 get_message 83978 8572943040 No message found for Reschedule (counter=5)
+INFO 2025-01-09 19:08:52,642 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=6
+INFO 2025-01-09 19:08:53,020 get_message 83978 8572943040 No message found for counter=6
+WARNING 2025-01-09 19:08:53,020 get_message 83978 8572943040 No message found for Reschedule (counter=6)
+INFO 2025-01-09 19:08:53,020 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=7
+INFO 2025-01-09 19:08:53,357 get_message 83978 8572943040 No message found for counter=7
+WARNING 2025-01-09 19:08:53,358 get_message 83978 8572943040 No message found for Reschedule (counter=7)
+INFO 2025-01-09 19:08:53,358 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reschedule, counter=8
+INFO 2025-01-09 19:08:53,722 get_message 83978 8572943040 No message found for counter=8
+WARNING 2025-01-09 19:08:53,723 get_message 83978 8572943040 No message found for Reschedule (counter=8)
+INFO 2025-01-09 19:09:03,570 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 1643, Skipped: 1357, Errors: 0
+INFO 2025-01-09 19:09:03,978 target_list_resolver 83978 8572943040 Processing campaign 'Reminder' (ID: 5)
+INFO 2025-01-09 19:09:07,520 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 52 target lists
+INFO 2025-01-09 19:09:07,856 get_contacts 83978 8572943040 Processing contacts with tag Reminder
+INFO 2025-01-09 19:09:07,863 get_contacts 83978 8572943040 Using cached contacts for Reminder
+INFO 2025-01-09 19:09:07,863 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:09:07,863 target_list_resolver 83978 8572943040 Found 62 contacts with tag 'Reminder'
+INFO 2025-01-09 19:09:08,210 get_counter 83978 8572943040 Found 18 phones with messages
+INFO 2025-01-09 19:09:08,210 get_counter 83978 8572943040 Sample results: [{'contact__phone': '11913561951', 'counter': 2}, {'contact__phone': '11941208143', 'counter': 2}, {'contact__phone': '11947197503', 'counter': 2}, {'contact__phone': '11948471103', 'counter': 3}, {'contact__phone': '11952959316', 'counter': 2}]
+INFO 2025-01-09 19:09:08,210 get_counter 83978 8572943040 Sample final results: {'11947774257': 0, '11991388383': 2, '11948471103': 3, '11993639999': 2, '11968390814': 2}
+INFO 2025-01-09 19:09:08,210 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reminder, counter=0
+INFO 2025-01-09 19:09:08,545 get_message 83978 8572943040 Found message id=76 for Reminder
+INFO 2025-01-09 19:09:08,546 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reminder, counter=2
+INFO 2025-01-09 19:09:08,881 get_message 83978 8572943040 Found message id=73 for Reminder
+INFO 2025-01-09 19:09:08,882 get_message 83978 8572943040 Getting message for type=Appointment, tag=Reminder, counter=3
+INFO 2025-01-09 19:09:09,217 get_message 83978 8572943040 No message found for counter=3
+WARNING 2025-01-09 19:09:09,218 get_message 83978 8572943040 No message found for Reminder (counter=3)
+INFO 2025-01-09 19:09:10,912 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 52, Skipped: 10, Errors: 0
+INFO 2025-01-09 19:09:11,250 target_list_resolver 83978 8572943040 Processing campaign 'Preenchimento Campaign' (ID: 4)
+INFO 2025-01-09 19:09:12,102 queueAdmin 81041 6205796352 Queue list view performance: 5 queries in 1.72s
+INFO 2025-01-09 19:09:12,117 basehttp 81041 6205796352 "GET /admin/messageShooter/queue/ HTTP/1.1" 200 41355
+INFO 2025-01-09 19:09:12,688 basehttp 81041 6205796352 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-09 19:09:14,963 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 48 target lists
+INFO 2025-01-09 19:09:14,963 get_contacts 83978 8572943040 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-09 19:09:15,314 get_contacts 83978 8572943040 Found 48 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 19:09:15,679 get_contacts 83978 8572943040 Found 48 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-09 19:09:16,039 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:09:16,039 target_list_resolver 83978 8572943040 Found 48 contacts with tag 'Preenchimento'
+INFO 2025-01-09 19:09:16,040 get_counter 83978 8572943040 Fetching counters for 48 phones with tag Preenchimento
+INFO 2025-01-09 19:09:16,040 get_counter 83978 8572943040 Sample phones: ['11958613114', '11998580836', '11997705592', '11989438269', '12934854115']
+INFO 2025-01-09 19:09:16,390 get_counter 83978 8572943040 Found 48 phones with messages
+INFO 2025-01-09 19:09:16,391 get_counter 83978 8572943040 Sample results: [{'contact__phone': '11914882533', 'counter': 2}, {'contact__phone': '11916275396', 'counter': 2}, {'contact__phone': '11934666672', 'counter': 2}, {'contact__phone': '11944986630', 'counter': 3}, {'contact__phone': '11945288619', 'counter': 2}]
+INFO 2025-01-09 19:09:16,391 get_counter 83978 8572943040 Sample final results: {'11958613114': 2, '11998580836': 2, '11997705592': 2, '11989438269': 2, '12934854115': 2}
+INFO 2025-01-09 19:09:16,391 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Preenchimento, counter=2
+INFO 2025-01-09 19:09:16,726 get_message 83978 8572943040 Found message id=12 for Preenchimento
+INFO 2025-01-09 19:09:16,727 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Preenchimento, counter=3
+INFO 2025-01-09 19:09:16,809 basehttp 81041 6205796352 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42767
+INFO 2025-01-09 19:09:17,085 get_message 83978 8572943040 Found message id=62 for Preenchimento
+INFO 2025-01-09 19:09:18,808 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 48, Skipped: 0, Errors: 0
+INFO 2025-01-09 19:09:19,146 target_list_resolver 83978 8572943040 Processing campaign 'Botox Campaign' (ID: 3)
+INFO 2025-01-09 19:09:25,177 target_list_resolver 83978 8572943040 Cleaned up: Deleted 0 queue entries and 698 target lists
+INFO 2025-01-09 19:09:25,177 get_contacts 83978 8572943040 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-09 19:09:25,588 get_contacts 83978 8572943040 Found 1068 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 19:09:26,007 get_contacts 83978 8572943040 Found 1068 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-09 19:09:26,835 target_list_resolver 83978 8572943040 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-09 19:09:26,835 target_list_resolver 83978 8572943040 Found 700 contacts with tag 'Botox'
+INFO 2025-01-09 19:09:26,836 get_counter 83978 8572943040 Fetching counters for 700 phones with tag Botox
+INFO 2025-01-09 19:09:26,836 get_counter 83978 8572943040 Sample phones: ['11993846417', '11994781051', '11984509063', '8491753871', '13988836426']
+INFO 2025-01-09 19:09:27,226 get_counter 83978 8572943040 Found 700 phones with messages
+INFO 2025-01-09 19:09:27,226 get_counter 83978 8572943040 Sample results: [{'contact__phone': '1170123385', 'counter': 3}, {'contact__phone': '11910061755', 'counter': 3}, {'contact__phone': '11910185550', 'counter': 2}, {'contact__phone': '11910414135', 'counter': 1}, {'contact__phone': '11910729298', 'counter': 3}]
+INFO 2025-01-09 19:09:27,235 get_counter 83978 8572943040 Sample final results: {'11993846417': 2, '11994781051': 2, '11984509063': 2, '8491753871': 2, '13988836426': 2}
+INFO 2025-01-09 19:09:27,235 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=1
+INFO 2025-01-09 19:09:27,635 get_message 83978 8572943040 Found message id=8 for Botox
+INFO 2025-01-09 19:09:27,635 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=2
+INFO 2025-01-09 19:09:28,044 get_message 83978 8572943040 Found message id=9 for Botox
+INFO 2025-01-09 19:09:28,044 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=3
+INFO 2025-01-09 19:09:28,398 get_message 83978 8572943040 Found message id=61 for Botox
+INFO 2025-01-09 19:09:28,398 get_message 83978 8572943040 Getting message for type=Whatsapp, tag=Botox, counter=5
+INFO 2025-01-09 19:09:28,759 get_message 83978 8572943040 No message found for counter=5
+WARNING 2025-01-09 19:09:28,759 get_message 83978 8572943040 No message found for Botox (counter=5)
+INFO 2025-01-09 19:09:32,139 target_list_resolver 83978 8572943040 Campaign processing complete. Created: 698, Skipped: 2, Errors: 0
+INFO 2025-01-09 19:09:32,146 scheduler 83978 8572943040 Starting campaign processing
+INFO 2025-01-09 19:09:32,481 target_list_resolver 83978 8572943040 Found 8 active campaigns
+INFO 2025-01-09 19:09:32,482 scheduler 83978 8572943040 No target lists were created
+INFO 2025-01-09 19:09:37,552 queueAdmin 81041 6205796352 Queue list view performance: 5 queries in 1.83s
+INFO 2025-01-09 19:09:37,558 basehttp 81041 6205796352 "GET /admin/messageShooter/queue/ HTTP/1.1" 200 41355
+INFO 2025-01-09 19:11:17,998 tasks 83978 8572943040 Starting to process scheduled campaigns @ 2025-01-09 19:11:17
+INFO 2025-01-09 19:11:17,998 scheduler 83978 8572943040 Starting campaign processing
+INFO 2025-01-09 19:11:18,346 target_list_resolver 83978 8572943040 Found 8 active campaigns
+INFO 2025-01-09 19:11:18,347 scheduler 83978 8572943040 No target lists were created
+INFO 2025-01-09 19:12:21,800 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:22,157 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:22,537 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:22,892 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:22,893 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:23,233 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:23,234 targetListAdmin 81041 6205796352 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:23,663 targetListAdmin 81041 6205796352 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:26,563 basehttp 81041 6205796352 "GET /admin/messageShooter/targetlist/ HTTP/1.1" 200 78801
+INFO 2025-01-09 19:12:39,331 targetListAdmin 81041 6205222912 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:39,698 targetListAdmin 81041 6205222912 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:40,037 targetListAdmin 81041 6205222912 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:40,458 targetListAdmin 81041 6205222912 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:40,460 targetListAdmin 81041 6205222912 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:40,867 targetListAdmin 81041 6205222912 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:40,868 targetListAdmin 81041 6205222912 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:41,207 targetListAdmin 81041 6205222912 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:43,360 basehttp 81041 6205222912 "GET /admin/messageShooter/targetlist/?&contact_tag=ReminderPL HTTP/1.1" 200 83128
+INFO 2025-01-09 19:12:54,943 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:55,307 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:55,691 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:56,029 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:56,029 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:56,364 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:56,365 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:56,401 targetListAdmin 81041 6222622720 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:56,701 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:56,739 targetListAdmin 81041 6222622720 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:57,077 targetListAdmin 81041 6222622720 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:57,416 targetListAdmin 81041 6222622720 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:57,418 targetListAdmin 81041 6222622720 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:57,419 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:57,753 targetListAdmin 81041 6222622720 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:57,754 targetListAdmin 81041 6222622720 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:57,757 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:57,758 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:12:58,090 targetListAdmin 81041 6222622720 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:12:58,094 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:13:00,019 get_message 81041 6204649472 Getting message for type=Appointment, tag=ReminderPL, counter=0
+INFO 2025-01-09 19:13:00,381 get_message 81041 6204649472 Found message id=87 for ReminderPL
+INFO 2025-01-09 19:13:00,385 basehttp 81041 6222622720 "GET /admin/messageShooter/targetlist/?p=6 HTTP/1.1" 200 80805
+INFO 2025-01-09 19:13:01,076 targetListAdmin 81041 6204649472 Queue created for campaign Reminder Plástica:
+- Campaign: Reminder Plástica
+- Contact Tag: ReminderPL
+- Total Target Lists: 1
+- Initial Message: 87 (counter=0)
+INFO 2025-01-09 19:13:01,449 targetListAdmin 81041 6204649472 Queue processing completed in 3.35s: 1 successes, 0 errors
+INFO 2025-01-09 19:13:01,451 basehttp 81041 6204649472 "POST /admin/messageShooter/targetlist/?&contact_tag=ReminderPL HTTP/1.1" 302 0
+INFO 2025-01-09 19:13:01,859 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:13:02,268 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:13:02,607 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:13:02,707 basehttp 81041 6222622720 "GET /apiCrm/graphql/ HTTP/1.1" 200 2611
+INFO 2025-01-09 19:13:02,921 basehttp 81041 6222622720 "POST /apiCrm/graphql/ HTTP/1.1" 200 28821
+INFO 2025-01-09 19:13:02,945 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:13:02,946 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:13:03,282 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:13:03,283 targetListAdmin 81041 6204649472 Starting get_queryset in TargetListAdmin
+INFO 2025-01-09 19:13:03,617 targetListAdmin 81041 6204649472 TargetListAdmin queryset count: 3312
+INFO 2025-01-09 19:13:05,960 basehttp 81041 6204649472 "GET /admin/messageShooter/targetlist/?&contact_tag=ReminderPL HTTP/1.1" 200 84202
+INFO 2025-01-09 19:13:43,274 resolve_all_data 81041 6204649472 Starting data import for period: 2024-12-01 to 2025-01-09 (extended to 2025-01-20)
+INFO 2025-01-09 19:13:43,274 fetch_all_data 81041 6204649472 Fetching data for dates: 2024-12-01 to 2025-01-09
+INFO 2025-01-09 19:13:53,359 tasks 85150 8572943040 Starting CRM tables cleanup
+INFO 2025-01-09 19:13:56,646 tasks 85150 8572943040 Successfully truncated apiCrm_billcharge
+INFO 2025-01-09 19:13:57,003 tasks 85150 8572943040 Successfully truncated apiCrm_appointment
+WARNING 2025-01-09 19:13:58,350 tasks 85150 8572943040 Could not truncate apiCrm_lead: deadlock detected
+DETAIL:  Process 657292 waits for AccessExclusiveLock on relation 29161 of database 5; blocked by process 661422.
+Process 661422 waits for AccessShareLock on relation 29169 of database 5; blocked by process 657292.
+HINT:  See server log for query details.
+
+ERROR 2025-01-09 19:13:59,025 tasks 85150 8572943040 Error during cleanup: current transaction is aborted, commands ignored until end of transaction block
+
+ERROR 2025-01-09 19:13:59,026 tasks 85150 8572943040 Failed to clean CRM tables: current transaction is aborted, commands ignored until end of transaction block
+Traceback (most recent call last):
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 103, in _execute
+    return self.cursor.execute(sql)
+psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/luisfaria/Desktop/sEngineer/konquest/apiCrm/tasks.py", line 66, in cleanup_crm_tables
+    cursor.execute("""
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/db/backends/utils.py", line 103, in _execute
+    return self.cursor.execute(sql)
+django.db.utils.InternalError: current transaction is aborted, commands ignored until end of transaction block
+
+INFO 2025-01-09 19:14:07,779 basehttp 81041 6272528384 "GET /admin/apiCrm/billcharge/ HTTP/1.1" 200 133542
+INFO 2025-01-09 19:14:09,075 basehttp 81041 6255702016 "GET /admin/apiCrm/appointment/ HTTP/1.1" 200 147586
+INFO 2025-01-09 19:14:11,173 basehttp 81041 6238875648 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 118992
+INFO 2025-01-09 19:21:26,248 autoreload 81041 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 19:21:27,820 autoreload 86601 8572943040 Watching for file changes with StatReloader
+INFO 2025-01-09 19:26:50,661 autoreload 86601 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 19:26:51,800 autoreload 88839 8572943040 Watching for file changes with StatReloader
+WARNING 2025-01-09 19:26:53,730 log 88842 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-09 19:26:53,730 log 88842 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-09 19:26:53,731 log 88842 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-09 19:26:53,750 log 88842 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-09 19:26:53,751 log 88842 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-09 19:26:53,751 log 88842 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-09 19:26:53,785 log 88842 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-09 19:26:53,785 log 88842 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-09 19:26:53,786 log 88842 8572943040 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-09 19:26:53,798 admin 88842 8572943040 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-09 19:26:53,802 admin 88842 8572943040 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-09 19:26:53,807 admin 88842 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-09 19:26:53,811 admin 88842 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-09 19:26:55,394 contact 88842 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-09 19:26:55,395 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,396 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,397 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,398 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,398 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,401 contact 88842 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-09 19:26:55,401 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,403 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,404 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,406 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,407 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,409 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,409 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,410 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,410 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,412 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,412 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,413 contact 88842 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-09 19:26:55,414 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,417 contact 88842 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-09 19:26:55,417 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,422 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,424 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,426 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,427 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,429 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,429 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,433 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,434 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,434 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,435 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,437 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,438 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,439 contact 88842 8572943040 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-09 19:26:55,439 contact 88842 8572943040 No matching appointment found for contact 1
+INFO 2025-01-09 19:26:55,486 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,488 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,498 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,499 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,504 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,507 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,508 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,508 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,512 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,513 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,517 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,518 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,521 contact 88842 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,522 contact 88842 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-09 19:26:55,528 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,529 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,534 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,535 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,535 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,535 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,540 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,541 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,545 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,546 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,546 contact 88842 8572943040 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-09 19:26:55,547 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,553 contact 88842 8572943040 Checking lead status for contact 5 (123)
+INFO 2025-01-09 19:26:55,554 contact 88842 8572943040 No matching lead found for contact 5
+INFO 2025-01-09 19:26:55,557 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,558 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,561 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,561 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,561 contact 88842 8572943040 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-09 19:26:55,562 contact 88842 8572943040 No matching lead found for contact 2
+INFO 2025-01-09 19:26:55,562 contact 88842 8572943040 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-09 19:26:55,563 contact 88842 8572943040 No matching lead found for contact 3
+INFO 2025-01-09 19:26:55,563 contact 88842 8572943040 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-09 19:26:55,563 contact 88842 8572943040 No matching lead found for contact 4
+INFO 2025-01-09 19:26:55,571 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,572 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,573 contact 88842 8572943040 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-09 19:26:55,573 contact 88842 8572943040 No matching lead found for contact 2
+INFO 2025-01-09 19:26:55,575 contact 88842 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-09 19:26:55,576 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,576 contact 88842 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-09 19:26:55,577 contact 88842 8572943040 No matching lead found for contact 1
+INFO 2025-01-09 19:26:55,591 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,592 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,594 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,595 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,596 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,596 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,597 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,597 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,597 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,598 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,598 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,598 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,601 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,601 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,603 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,604 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,604 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,605 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,608 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,608 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:26:55,610 contact 88842 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-09 19:26:55,610 contact 88842 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-09 19:27:02,285 autoreload 88839 8572943040 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-09 19:27:03,289 autoreload 88994 8572943040 Watching for file changes with StatReloader

@@ -86,32 +86,6 @@ class MessageAdmin(admin.ModelAdmin):
 
 admin.site.register(Message, MessageAdmin)
 
-# class MessageLogsAdmin(admin.ModelAdmin):
-#     list_display = ('get_message_text', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag', 'get_phone_number')
-#     search_fields = ('message__title', 'user__name', 'user_phone__phone_number', 'contact__name', 'relationship_tag')
-#     list_filter = ('sent_at', 'user_phone', 'contact', 'relationship_tag')
-#     ordering = ['-sent_at']
-#     list_per_page = 20
-
-#     def get_contact_phone_number(self, obj): 
-#         return obj.contact.phone if obj.contact else '-'
-#     get_contact_phone_number.short_description = 'Contact Phone'
-
-#     def get_message_text(self, obj):
-#         return obj.message.text
-#     get_message_text.short_description = 'Message'
-
-#     def get_phone_number(self, obj):
-#         # return obj.phone_number
-#         return obj.user_phone.phone_number if obj.user_phone else '-'
-
-#     get_phone_number.short_description = 'Phone Number'
-
-#     def get_queryset(self, request):
-#         queryset = super().get_queryset(request)
-#         return queryset.select_related('message', 'user', 'user_phone', 'contact')
-# admin.site.register(MessageLogs, MessageLogsAdmin)
-
 class MessageLogsAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'sent_at', 'get_contact_phone_number', 'relationship_tag')
     search_fields = ('contact__phone', 'relationship_tag')

@@ -34,37 +34,72 @@ from messageShooter.utils.is_appointment_es import (
     reminder_undesired_status_pl
 )
 from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact, convert_appointments_to_contacts_bulk
+from datetime import datetime, timedelta
+from typing import List
+from django.db.models import Min
+from django.db.models.query import QuerySet
 
 
 from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
 logger = logging.getLogger(__name__)
 
-def get_contact_whatsapp(contact_type, contact_tag):
+def get_contact_whatsapp(contact_type: str, contact_tag: str) -> QuerySet:
     """
     Get WhatsApp contacts based on tag, ordered by creation date (FIFO).
     If a contact exists with a different tag, it will be included and its tag
     will be updated when creating the target list.
-    Returns only unique contacts by phone number, taking the earliest created contact.
-    """
-    if contact_type != "Whatsapp":
-        return []
+    
+    Args:
+        contact_type (str): Type of contact (must be "Whatsapp")
+        contact_tag (str): Tag to filter contacts
         
+    Returns:
+        QuerySet: Unique contacts by phone number from the last 30 days, 
+                 taking the earliest created contact
+    """
+    logger.info(f"Fetching WhatsApp contacts with tag '{contact_tag}'")
+    
+    if contact_type != "Whatsapp":
+        logger.warning(f"Invalid contact type: {contact_type}. Expected 'Whatsapp'")
+        return []
+    
+    # Calculate date 30 days ago with timezone awareness
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    
+    # Get base queryset with all filters
     contacts = Contact.objects.filter(
         source__iexact="Whatsapp",
         relationship_tag=contact_tag,
-        # status__in=['landing page', 'active', None],
         is_lead=False,
         is_appointment=False,
-    ).order_by('-created_at')[:CONTACTS_TO_LOAD]  
-            
-            # Option 1:     :CONTACTS_TO_LOAD 
-            # Option 2:     CONTACTS_START:CONTACTS_END
+        created_at__gte=thirty_days_ago
+    )
+
+    logger.info(
+        f"Found {contacts.count()} total contacts from the last 30 days "
+        f"with tag '{contact_tag}'"
+    )
     
-    count = contacts.count()
-    logger.info(f"Found {count} contacts with tag {contact_tag}")
+    # Remove duplicates by keeping earliest contact per phone number
+    unique_contacts = contacts.values('phone').annotate(
+        min_created_at=Min('created_at')
+    ).order_by('-min_created_at')
     
-    return contacts 
-    #TODO think about how to remove duplicates
+    # Get the actual Contact objects with proper limit
+    unique_contact_ids = contacts.filter(
+        created_at__in=[item['min_created_at'] for item in unique_contacts]
+    ).values_list('id', flat=True)
+    
+    final_contacts = contacts.filter(
+        id__in=unique_contact_ids
+    ).order_by('-created_at')[:CONTACTS_TO_LOAD]
+    
+    logger.info(
+        f"Found {len(unique_contacts)} unique contacts from the last 30 days "
+        f"with tag '{contact_tag}'"
+    )
+    
+    return final_contacts
     
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """

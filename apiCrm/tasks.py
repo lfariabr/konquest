@@ -176,7 +176,7 @@ def fetch_all_data():
     
     try:
         today = datetime.now().date()
-        start_date = (today - timedelta(days=100)).strftime('%Y-%m-%d')
+        start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
         end_date = today.strftime('%Y-%m-%d')
         extended_end_date = (today + timedelta(days=30)).strftime('%Y-%m-%d')
 

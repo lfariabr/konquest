@@ -28,7 +28,7 @@ db.sqlite3
 htmlcov/
 
 # Logs
-*.log
+# *.log
 # *.logs
 
 migrations/

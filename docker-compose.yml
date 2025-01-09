@@ -44,16 +44,16 @@ services:
         echo 'Waiting for Redis...' &&
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
+        mkdir -p /app/logs &&
         python manage.py migrate &&
         python manage.py collectstatic --noinput &&
-        gunicorn konquist.wsgi:application --bind=0.0.0.0:8001 --workers=4 --threads=4 --timeout=600 --keep-alive=65 --max-requests=2000 --max-requests-jitter=200 --worker-tmp-dir=/dev/shm --worker-class=gthread --log-level=debug --access-logfile=- --error-logfile=- --capture-output --enable-stdio-inheritance"
+        gunicorn konquist.wsgi:application --bind=0.0.0.0:8001 --workers=4 --threads=4 --timeout=600 --keep-alive=65 --max-requests=2000 --max-requests-jitter=200 --worker-tmp-dir=/dev/shm --worker-class=gthread --log-level=debug --access-logfile=/app/logs/gunicorn-access.log --error-logfile=/app/logs/gunicorn-error.log --capture-output --enable-stdio-inheritance"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
-      - logs_volume:/app/apiSocialHub/logs
-
+      - logs_volume:/app/logs
     tmpfs:
       - /tmp
     ports:
@@ -95,17 +95,19 @@ services:
         echo 'Waiting for Redis...' &&
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
+        mkdir -p /app/logs &&
         celery -A konquist worker -l INFO
         --loglevel=DEBUG 
         --concurrency=4 
         -Q default,campaign_queue 
         --max-tasks-per-child=500 
-        --max-memory-per-child=512000"
+        --max-memory-per-child=512000
+        --logfile=/app/logs/celery.log"
     volumes:
       - .:/app
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
-      - logs_volume:/app/apiSocialHub/logs
+      - logs_volume:/app/logs
     tmpfs:
       - /tmp
     environment:
@@ -140,12 +142,13 @@ services:
         echo 'Waiting for Redis...' &&
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
+        mkdir -p /app/logs &&
         rm -f celerybeat.pid &&
         cd /app &&
-        celery -A konquist beat -l INFO --loglevel=DEBUG"
+        celery -A konquist beat -l INFO --loglevel=DEBUG --logfile=/app/logs/celerybeat.log"
     volumes:
       - .:/app
-      - logs_volume:/app/apiSocialHub/logs
+      - logs_volume:/app/logs
     environment:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=konquist.settings
@@ -241,6 +244,11 @@ volumes:
   static_volume:
   media_volume:
   logs_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/logs
   nginx_logs:
   certbot_www:
   certbot_conf:

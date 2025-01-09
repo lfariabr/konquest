@@ -270,7 +270,7 @@ def test_target_list_to_queue_conversion(setup_test_data):
 def test_duplicate_contact_handling(setup_test_data):
     """Test that only one target list is created per phone number, using the earliest contact"""
     user = setup_test_data['user']
-    
+
     # Clean up any existing contacts with the Botox tag
     Contact.objects.filter(relationship_tag="Botox").delete()
 
@@ -338,19 +338,16 @@ def test_duplicate_contact_handling(setup_test_data):
     from messageShooter.resolvers.target_list_resolver import create_target_list
     created, skipped, errors = create_target_list(campaign.id, force_run=True)
 
-    # Verify target lists were created for all contacts
+    # Verify only one target list was created (deduplication working)
     target_lists = TargetList.objects.filter(campaign=campaign)
-    assert target_lists.count() == 3, "Should create target lists for all contacts"
+    assert target_lists.count() == 1, "Should create only one target list for duplicate phone numbers"
     
-    # Verify all target lists have the same message counter since it's the same phone
-    counters = set(tl.message.counter for tl in target_lists)
-    assert len(counters) == 1, "All target lists should have the same counter for the same phone number"
-    assert list(counters)[0] == 0, "Counter should be 0 for first message"
+    # Verify the earliest contact was used
+    target_list = target_lists.first()
+    assert target_list.contact == contact1, "Should use the earliest contact for the target list"
     
-    # Verify all target lists have the correct phone number
-    phones = set(tl.contact_phone for tl in target_lists)
-    assert len(phones) == 1, "All target lists should have the same phone number"
-    assert list(phones)[0] == phone, f"Phone number should be {phone}"
+    # Verify the contact's creation date
+    assert target_list.contact.created_at == contact1.created_at, "Should use the contact with earliest creation date"
 
 @pytest.mark.django_db
 def test_invalid_phone_number_handling(setup_test_data):

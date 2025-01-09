@@ -14,12 +14,18 @@ from operator import attrgetter
 
 logger = logging.getLogger(__name__)
 
-log_path = os.path.join('/app', 'logs', 'scheduler.log')
-file_handler = logging.FileHandler(log_path)
+# Try Docker path first, fallback to local development path
+if os.path.exists('/app'):
+    log_dir = '/app/logs'
+else:
+    # Use local development path
+    log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'logs')
 
-# Create a logging format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-file_handler.setFormatter(formatter)
+# Create logs directory if it doesn't exist
+os.makedirs(log_dir, exist_ok=True)
+
+# Setup file handler
+file_handler = logging.FileHandler(os.path.join(log_dir, 'scheduler.log'))
 
 # Add the file handler to the logger
 logger.addHandler(file_handler)
