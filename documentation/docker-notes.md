@@ -27,8 +27,7 @@
 ## Docker useful commands
 
 ### View all active tasks
-docker exec -it k_celery_worker celery -A konquist inspect active
-
+docker exec -it k_celery_beat celery -A konquist purge -f
 ### View scheduled tasks
 docker exec -it k_celery_worker celery -A konquist inspect scheduled
 
@@ -82,7 +81,7 @@ PeriodicTask.objects.filter(task='apiCrm.cleanup_crm_tables').update(crontab=cle
 
 # 3. Update fetch_all_data to 12:05 (0:05 PM)
 fetch_crontab = CrontabSchedule.objects.get_or_create(
-    minute='05', hour='12', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
+    minute='05', hour='00', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
 )[0]
 PeriodicTask.objects.filter(task='apiCrm.fetch_all_data').update(crontab=fetch_crontab)
 
@@ -105,6 +104,7 @@ queue_crontab = CrontabSchedule.objects.get_or_create(
 PeriodicTask.objects.filter(task='queue.process_queues').update(crontab=queue_crontab)
 
 # Verify the changes
+docker exec -it konquest_django python manage.py shell
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 print("\nUpdated schedule:")
 for task in PeriodicTask.objects.all():
