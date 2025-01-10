@@ -200,7 +200,7 @@ LOGGING = {
             'style': '{',
         },
         'celery': {
-            'format': '{levelname} {asctime} {task_id} {task_name} {message}',
+            'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
     },

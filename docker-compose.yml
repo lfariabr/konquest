@@ -137,18 +137,23 @@ services:
     build: .
     container_name: k_celery_beat
     restart: unless-stopped
+    user: root
     command: >
       bash -c "
         echo 'Waiting for Redis...' &&
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
         mkdir -p /app/logs &&
-        rm -f celerybeat.pid &&
+        mkdir -p /app/celerybeat &&
+        chown -R root:root /app/celerybeat &&
+        chmod -R 777 /app/celerybeat &&
+        rm -f /app/celerybeat/celerybeat.pid &&
         cd /app &&
-        celery -A konquist beat -l INFO --loglevel=DEBUG --logfile=/app/logs/celerybeat.log"
+        celery -A konquist beat -l INFO --loglevel=DEBUG --logfile=/app/logs/celerybeat.log --schedule=/app/celerybeat/celerybeat-schedule"
     volumes:
       - .:/app
       - logs_volume:/app/logs
+      - celerybeat_volume:/app/celerybeat
     environment:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=konquist.settings
@@ -249,7 +254,7 @@ volumes:
       type: none
       o: bind
       device: ${PWD}/logs
+  celerybeat_volume:
   nginx_logs:
   certbot_www:
   certbot_conf:
-  celerybeat_data:

@@ -61,51 +61,32 @@ celery -A konquist beat -l INFO
 
 
 docker exec -it konquest_django python manage.py shell
-from django_celery_beat.models import PeriodicTask, CrontabSchedule
-print("\nUpdated schedule:")
+
+# Function to calculate the next runtime
+
+from django_celery_beat.models import PeriodicTask
+from datetime import datetime, timedelta
+from celery.schedules import crontab
+
+def get_next_runtime(cron_schedule, current_time):
+    cron = crontab(
+        minute=cron_schedule.minute,
+        hour=cron_schedule.hour,
+        day_of_week=cron_schedule.day_of_week,
+        day_of_month=cron_schedule.day_of_month,
+        month_of_year=cron_schedule.month_of_year,
+    )
+    remaining = cron.remaining_estimate(current_time)
+    return remaining
+    
+current_time = datetime.utcnow()
+
 for task in PeriodicTask.objects.all():
-    print(f"Name: {task.name}, Task: {task.task}, Schedule: {task.crontab if task.crontab else task.interval}")
-
-# UPDATES TO THE SCHEDULE AND TASKS:
-
-from django_celery_beat.models import PeriodicTask, CrontabSchedule
-
-# 1. Delete celery.backend_cleanup
-PeriodicTask.objects.filter(task='celery.backend_cleanup').delete()
-
-# 2. Update cleanup_crm_tables to 19:30 (7:30 PM)
-cleanup_crontab = CrontabSchedule.objects.get_or_create(
-    minute='30', hour='19', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
-)[0]
-PeriodicTask.objects.filter(task='apiCrm.cleanup_crm_tables').update(crontab=cleanup_crontab)
-
-# 3. Update fetch_all_data to 12:05 (0:05 PM)
-fetch_crontab = CrontabSchedule.objects.get_or_create(
-    minute='05', hour='00', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
-)[0]
-PeriodicTask.objects.filter(task='apiCrm.fetch_all_data').update(crontab=fetch_crontab)
-
-# 4. Update check_contacts_in_crm to 02:00 AM
-check_crontab = CrontabSchedule.objects.get_or_create(
-    minute='0', hour='2', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
-)[0]
-PeriodicTask.objects.filter(task='apiCrm.check_contacts_in_crm').update(crontab=check_crontab)
-
-# 5. Update process_scheduled_campaigns to 05:00 AM
-campaign_crontab = CrontabSchedule.objects.get_or_create(
-    minute='0', hour='5', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
-)[0]
-PeriodicTask.objects.filter(task='apiCrm.process_scheduled_campaigns').update(crontab=campaign_crontab)
-
-# 6. Update process_queues to 07:30 AM
-queue_crontab = CrontabSchedule.objects.get_or_create(
-    minute='30', hour='7', day_of_week='*', day_of_month='*', month_of_year='*', timezone='America/Sao_Paulo'
-)[0]
-PeriodicTask.objects.filter(task='queue.process_queues').update(crontab=queue_crontab)
-
-# Verify the changes
-docker exec -it konquest_django python manage.py shell
-from django_celery_beat.models import PeriodicTask, CrontabSchedule
-print("\nUpdated schedule:")
-for task in PeriodicTask.objects.all():
-    print(f"Name: {task.name}, Task: {task.task}, Schedule: {task.crontab if task.crontab else task.interval}")
+    if task.crontab:
+        cron = task.crontab
+        remaining_time = get_next_runtime(cron, current_time)
+        remaining_hours = int(remaining_time.total_seconds() // 3600)
+        remaining_minutes = int((remaining_time.total_seconds() % 3600) // 60)
+        print(f"Name: {task.name}, Task: {task.task}, Next Runtime: {remaining_hours} hours and {remaining_minutes} minutes from now")
+    else:
+        print(f"Name: {task.name}, Task: {task.task}, Schedule: Interval or Not Set")
