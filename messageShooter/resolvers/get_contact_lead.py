@@ -1,0 +1,72 @@
+from django.utils import timezone
+from django.core.cache import cache
+from core.models import contact
+from apiCrm.models.lead import Lead
+from datetime import timedelta
+import logging
+from messageShooter.utils.lead_ncc_rules import lead_stores_ncc, lead_status_ncc
+
+logger = logging.getLogger(__name__)
+
+def get_contact_lead(contact_type, contact_tag):
+    """
+    Get lead based on specific relationship tag rules
+    - Args: 
+        contact_tag (str, optional): Tag to filter leads ('Preenchimento', 'Botox')
+    - Returns: Lead instance
+    """
+    logger = logging.getLogger(__name__)
+    logger.info(f"Processing contacts with tag {contact_tag}")
+
+    if contact_type != "Lead":
+        logger.error("Invalid contact type")
+        return []
+
+    now = timezone.now()
+    ten_days_ago = now - timedelta(days=10)
+
+    logger.info(f'Total leads: {Lead.objects.count()}')
+    # Check leads by store
+    store_leads = Lead.objects.filter(store__in=lead_stores_ncc)
+    logger.info(f'Leads in JARDINS store: {store_leads.count()}')
+    # Check leads by status
+    status_leads = store_leads.filter(status__in=lead_status_ncc)
+    logger.info(f'Leads with NCC status: {status_leads.count()}')
+
+    # try to get from cache first for all types
+    cache_key = f"lead_{contact_tag}"
+    cached_contacts = cache.get(cache_key)
+    if cached_contacts is not None:
+        logger.info(f"Using cached contacts for {contact_tag}")
+        return cached_contacts
+
+    # Base query with common filters
+    base_query = Lead.objects.filter(
+        status__in=lead_status_ncc, 
+        store__in=lead_stores_ncc
+    )
+    
+    leads = []
+
+    try:
+        if contact_tag == "Não Conseguiu Entrar Em Contato":
+            ten_days_ago = now - timedelta(days=10)
+
+            leads = base_query.filter(          # GTE = greater than or equal to
+                created_at__lte=ten_days_ago,  # LTE = less than or equal to: created BEFORE OR ON ten_days_ago
+                store__in=lead_stores_ncc,
+                status__in=lead_status_ncc,
+            ).order_by('-created_at')
+
+            leads = list(leads)
+            logger.info(f"Found {len(leads)} leads for {contact_tag}")
+
+    except Exception as e:
+        logger.error(f"Error getting leads for {contact_tag}: {str(e)}")
+        return []
+
+    # Set cache for 5 minutes
+    cache.set(cache_key, leads, 300)
+
+    print(leads)
+    return leads

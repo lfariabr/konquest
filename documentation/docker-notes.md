@@ -90,3 +90,8 @@ for task in PeriodicTask.objects.all():
         print(f"Name: {task.name}, Task: {task.task}, Next Runtime: {remaining_hours} hours and {remaining_minutes} minutes from now")
     else:
         print(f"Name: {task.name}, Task: {task.task}, Schedule: Interval or Not Set")
+
+
+# Simple way:
+from konquist.celery import app
+app.conf.beat_schedule

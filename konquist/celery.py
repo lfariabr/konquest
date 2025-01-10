@@ -127,16 +127,16 @@ app.conf.beat_schedule = {
         'options': {'expires': 270000}  
     },
 
-    # 'process_scheduled_campaigns': {
-    #     'task': 'apiCrm.process_scheduled_campaigns',
-    #     'schedule': crontab(hour=5, minute=00),  # 7:00 AM
-    #     'options': {'expires': 1800} 
-    # },
+    'process_scheduled_campaigns': {
+        'task': 'apiCrm.process_scheduled_campaigns',
+        'schedule': crontab(hour=5, minute=30),  # 7:00 AM
+        'options': {'expires': 1800} 
+    },
 
-    # 'process_queues': {
-    #     'task': 'queue.process_queues',
-    #     'schedule': crontab(hour=8, minute=0),  # 8:00 AM
-    #     'options': {'expires': 270000}
-    # }
+    'process_queues': {
+        'task': 'queue.process_queues',
+        'schedule': crontab(hour=7, minute=15),  # 8:00 AM
+        'options': {'expires': 270000}
+    }
 }
 

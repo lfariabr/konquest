@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
                 'localhost']
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'postgresql' 
+DATABASE_ENGINE = 'sqlite3' 
 CONTACTS_START = 121
 CONTACTS_END = 300
 
