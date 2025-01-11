@@ -1,3 +1,11 @@
+# Previous version:
+#  python manage.py shell -c "from messageShooter.resolvers.get_contact_lead import get_contact_lead; print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato'))"
+# New test to be done:
+# python manage.py shell -c "from django.contrib.auth import get_user_model; from messageShooter.resolvers.get_contact_lead import get_contact_lead; user = get_user_model().objects.first(); print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato', user=user))"
+
+# New fixing the 'user' call:
+# python manage.py shell -c "from core.models.user import kUser; from messageShooter.resolvers.get_contact_lead import get_contact_lead; user = kUser.objects.first(); print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato', user=user))"
+
 from django.utils import timezone
 from django.core.cache import cache
 from core.models import contact
@@ -5,25 +13,30 @@ from apiCrm.models.lead import Lead
 from datetime import timedelta
 import logging
 from messageShooter.utils.lead_ncc_rules import lead_stores_ncc, lead_status_ncc
+from messageShooter.resolvers.get_lead_to_contact import convert_lead_to_contact_bulk
+from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
+
 
 logger = logging.getLogger(__name__)
 
-def get_contact_lead(contact_type, contact_tag):
+def get_contact_lead(contact_type, contact_tag, user=None):
     """
     Get lead based on specific relationship tag rules
     - Args: 
-        contact_tag (str, optional): Tag to filter leads ('Preenchimento', 'Botox')
-    - Returns: Lead instance
+        contact_type (str): Type of contact ('Lead')
+        contact_tag (str): Tag to filter leads ('Preenchimento', 'Botox')
+        user (User, optional): User associated with the leads/contacts
+    - Returns: List[Contact]
     """
     logger = logging.getLogger(__name__)
-    logger.info(f"Processing contacts with tag {contact_tag}")
+    logger.info(f"Processing contacts wiceth tag {contact_tag}")
 
     if contact_type != "Lead":
         logger.error("Invalid contact type")
         return []
 
     now = timezone.now()
-    ten_days_ago = now - timedelta(days=10)
+    ten_days_ago = now - timedelta (days=10)
 
     logger.info(f'Total leads: {Lead.objects.count()}')
     # Check leads by store
@@ -49,24 +62,38 @@ def get_contact_lead(contact_type, contact_tag):
     leads = []
 
     try:
-        if contact_tag == "Não Conseguiu Entrar Em Contato":
+        if contact_tag == "NCC":
             ten_days_ago = now - timedelta(days=10)
 
             leads = base_query.filter(          # GTE = greater than or equal to
                 created_at__lte=ten_days_ago,  # LTE = less than or equal to: created BEFORE OR ON ten_days_ago
                 store__in=lead_stores_ncc,
                 status__in=lead_status_ncc,
-            ).order_by('-created_at')
+            ).order_by('-created_at')[:CONTACTS_START]
 
             leads = list(leads)
             logger.info(f"Found {len(leads)} leads for {contact_tag}")
+        
+        else:
+            logger.warning(f"Unknown contact tag: {contact_tag}")
+            return []
+        
+        # Convert all leads to contacts using bulk operation
+        contacts = convert_lead_to_contact_bulk(leads, contact_tag, user)
+
+        # Caching results
+        cache_timeout = 300 if contact_tag == "NCC" else 3600
+        cache.set(cache_key, contacts, timeout=cache_timeout)
+
+        return contacts
 
     except Exception as e:
         logger.error(f"Error getting leads for {contact_tag}: {str(e)}")
         return []
 
-    # Set cache for 5 minutes
-    cache.set(cache_key, leads, 300)
+    # # Set cache for 5 minutes
+    # cache.set(cache_key, leads, 300)
 
-    print(leads)
-    return leads
+    # print(leads[:2])
+    # # return leads
+

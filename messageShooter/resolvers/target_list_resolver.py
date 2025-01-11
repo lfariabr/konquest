@@ -4,6 +4,7 @@ from messageShooter.models.campaign import Campaign, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
 from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment, bulk_get_counter_whatsapp, bulk_get_counter_appointment
+from messageShooter.resolvers.get_contact_lead import get_contact_lead
 from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
 from core.models.message import Message
@@ -57,11 +58,21 @@ def create_target_list(campaign_id, force_run=False):
                 logger.info(f"Target list already exists for one-time campaign '{campaign.name}'")
                 return 0, 0, 0
 
-        # Get all contacts
+        # Contact Type Validation
+        ###########################
+
         if campaign.contact_type == "Whatsapp":
             contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
-        else:
+        
+        elif campaign.contact_type == "Appointment":
             contacts = get_contact_appointment(campaign.contact_type, campaign.contact_tag, user=campaign.user)
+            
+        elif campaign.contact_type == "Lead":
+            contacts = get_contact_lead(campaign.contact_type, campaign.contact_tag, user=campaign.user)
+            
+        else:
+            logger.error(f"Invalid contact type '{campaign.contact_type}' for campaign '{campaign.name}'")
+            return 0, 0, 0
             
         if contacts and len(contacts) > 0:
             logger.info(f"First contact type: {type(contacts[0])}")
@@ -76,9 +87,17 @@ def create_target_list(campaign_id, force_run=False):
         phones = [contact.phone for contact in contacts if contact.phone and contact.phone.isdigit()]
         if campaign.contact_type == "Whatsapp":
             counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
-        else:
+        
+        elif campaign.contact_type == "Appointment":
             counters = bulk_get_counter_appointment(phones, campaign.contact_tag)
+
+        elif campaign.contact_type == "Lead":
+            counters = bulk_get_counter_whatsapp(phones, campaign.contact_tag)
             
+        else:
+            logger.error(f"Invalid contact type '{campaign.contact_type}' for campaign '{campaign.name}'")
+            return 0, 0, 0            
+
         # Pre-load all possible messages
         unique_counters = set(counters.values())
         messages = {

@@ -285,7 +285,7 @@ class QueueProcessor:
             self.logger.error(error_msg)
             return False, error_msg
 
-    async def process_queues_async(self, pending_queues=None, max_concurrent: int = 3, batch_size: int = 50):
+    async def process_queues_async(self, pending_queues=None, max_concurrent: int = 10, batch_size: int = 50):
         """Process multiple queues concurrently and independently"""
         try:
             # Get pending queues if not provided

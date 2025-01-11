@@ -1,8 +1,10 @@
-# Konquista Backlog
+python manage.py shell -c "from django.core.cache import cache; cache.clear()"
 
+# Konquista Backlog
 ## High Priority Features
 
 ### 1. Customer Experience Enhancement
+- [ ] Integrate NCC message Jardins
 - [ ] Integrate NPS message 2 follow up (Google My Business)
 - [ ] Implement pre and post-treatment messaging flows
 - [ ] Add auto-scheduling via WhatsApp

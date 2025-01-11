@@ -2,18 +2,8 @@
 - Create / Navigate to directory for Konquest
     mkdir -p /var/www/konquest
     cd /var/www/konquest
-
-- Clone your Repository / Navigate into the cloned directory
     git clone https://github.com/lfariabr/konquest.git
     cd konquest
-
-- Check if we have the necessary files
-    ls -la
-
-- Run docker-compose
-    docker-compose build
-    docker-compose up -d
-    cd /var/www/konquest
 
 - check running containers
     docker logs -f k_celery_beat
@@ -23,10 +13,14 @@
 - droplet
     ssh root@209.38.90.25
     cd /var/www/konquest
+    docker-compose build
+    docker-compose up -d
 
 ## Docker useful commands
 
 ### View all active tasks
+docker exec k_celery_worker celery -A konquist inspect active
+
 docker exec -it k_celery_beat celery -A konquist purge -f
 ### View scheduled tasks
 docker exec -it k_celery_worker celery -A konquist inspect scheduled
@@ -95,3 +89,19 @@ for task in PeriodicTask.objects.all():
 # Simple way:
 from konquist.celery import app
 app.conf.beat_schedule
+
+
+# When a task is running nonstop in restart: 
+docker stop k_celery_beat
+
+# Stop the worker
+docker stop k_celery_worker
+
+# Start the worker
+docker start k_celery_worker
+
+# Purge all pending tasks
+docker exec k_celery_worker celery -A konquist purge -f
+
+# Restart the beat
+docker start k_celery_beat

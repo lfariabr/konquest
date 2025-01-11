@@ -1,0 +1,597 @@
+WARNING 2025-01-11 01:01:55,824 log 51214 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:01:55,824 log 51214 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:01:55,825 log 51214 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:01:55,844 log 51214 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:01:55,844 log 51214 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:01:55,845 log 51214 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:01:55,882 log 51214 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 01:01:55,887 log 51214 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 01:01:55,888 log 51214 8572943040 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-11 01:01:55,901 admin 51214 8572943040 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-11 01:01:55,904 admin 51214 8572943040 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-11 01:01:55,909 admin 51214 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 01:01:55,913 admin 51214 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 01:01:57,488 contact 51214 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-11 01:01:57,489 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,490 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,491 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,491 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,491 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,493 contact 51214 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 01:01:57,494 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,496 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,497 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,499 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,499 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,501 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,501 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,501 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,502 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,503 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,504 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,505 contact 51214 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 01:01:57,505 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,507 contact 51214 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-11 01:01:57,507 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,509 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,509 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,511 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,512 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,514 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,514 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,516 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,516 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,517 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,517 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,519 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,519 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,520 contact 51214 8572943040 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-11 01:01:57,520 contact 51214 8572943040 No matching appointment found for contact 1
+INFO 2025-01-11 01:01:57,522 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,523 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,524 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,525 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,526 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,527 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,527 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,528 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,529 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,530 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,531 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,531 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,533 contact 51214 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,534 contact 51214 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:01:57,536 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,537 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,539 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,540 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,540 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,540 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,543 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,543 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,545 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,546 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,546 contact 51214 8572943040 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-11 01:01:57,546 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,548 contact 51214 8572943040 Checking lead status for contact 5 (123)
+INFO 2025-01-11 01:01:57,549 contact 51214 8572943040 No matching lead found for contact 5
+INFO 2025-01-11 01:01:57,551 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,552 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,554 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,554 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,555 contact 51214 8572943040 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-11 01:01:57,555 contact 51214 8572943040 No matching lead found for contact 2
+INFO 2025-01-11 01:01:57,555 contact 51214 8572943040 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-11 01:01:57,556 contact 51214 8572943040 No matching lead found for contact 3
+INFO 2025-01-11 01:01:57,556 contact 51214 8572943040 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-11 01:01:57,556 contact 51214 8572943040 No matching lead found for contact 4
+INFO 2025-01-11 01:01:57,562 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,563 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,563 contact 51214 8572943040 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-11 01:01:57,563 contact 51214 8572943040 No matching lead found for contact 2
+INFO 2025-01-11 01:01:57,565 contact 51214 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-11 01:01:57,565 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,566 contact 51214 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-11 01:01:57,566 contact 51214 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:01:57,577 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,578 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,579 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,580 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,580 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,580 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,580 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,581 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,581 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,582 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,582 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,582 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,584 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,584 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,586 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,586 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,586 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,587 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,588 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,589 contact 51214 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:01:57,591 contact 51214 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:01:57,591 contact 51214 8572943040 Found matching lead: 1 for contact 1
+WARNING 2025-01-11 01:21:17,406 log 63590 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:21:17,406 log 63590 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:21:17,407 log 63590 8572943040 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 01:21:17,428 log 63590 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:21:17,428 log 63590 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:21:17,428 log 63590 8572943040 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 01:21:17,457 log 63590 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 01:21:17,457 log 63590 8572943040 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 01:21:17,458 log 63590 8572943040 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-11 01:21:17,470 admin 63590 8572943040 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-11 01:21:17,473 admin 63590 8572943040 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-11 01:21:17,479 admin 63590 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 01:21:17,483 admin 63590 8572943040 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 01:21:19,495 contact 63590 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-11 01:21:19,496 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,500 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,501 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,501 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,502 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,503 contact 63590 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 01:21:19,504 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,506 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,506 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,508 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,508 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,510 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,511 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,511 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,511 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,513 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,513 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,514 contact 63590 8572943040 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 01:21:19,514 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,517 contact 63590 8572943040 Checking lead status for contact 1 (123)
+INFO 2025-01-11 01:21:19,517 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,519 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,519 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,521 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,521 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,525 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,525 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,527 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,528 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,528 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,529 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,530 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,531 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,531 contact 63590 8572943040 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-11 01:21:19,532 contact 63590 8572943040 No matching appointment found for contact 1
+INFO 2025-01-11 01:21:19,533 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,534 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,535 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,536 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,537 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,537 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,538 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,538 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,540 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,540 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,542 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,543 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,544 contact 63590 8572943040 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,544 contact 63590 8572943040 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 01:21:19,547 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,548 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,550 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,550 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,551 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,551 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,553 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,554 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,556 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,556 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,556 contact 63590 8572943040 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-11 01:21:19,557 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,560 contact 63590 8572943040 Checking lead status for contact 5 (123)
+INFO 2025-01-11 01:21:19,560 contact 63590 8572943040 No matching lead found for contact 5
+INFO 2025-01-11 01:21:19,562 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,563 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,565 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,566 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,566 contact 63590 8572943040 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-11 01:21:19,567 contact 63590 8572943040 No matching lead found for contact 2
+INFO 2025-01-11 01:21:19,567 contact 63590 8572943040 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-11 01:21:19,567 contact 63590 8572943040 No matching lead found for contact 3
+INFO 2025-01-11 01:21:19,568 contact 63590 8572943040 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-11 01:21:19,568 contact 63590 8572943040 No matching lead found for contact 4
+INFO 2025-01-11 01:21:19,574 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,574 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,575 contact 63590 8572943040 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-11 01:21:19,575 contact 63590 8572943040 No matching lead found for contact 2
+INFO 2025-01-11 01:21:19,577 contact 63590 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-11 01:21:19,577 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,577 contact 63590 8572943040 Checking lead status for contact 1 ()
+INFO 2025-01-11 01:21:19,578 contact 63590 8572943040 No matching lead found for contact 1
+INFO 2025-01-11 01:21:19,589 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,589 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,591 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,592 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,592 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,592 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,592 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,593 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,593 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,593 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,594 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,594 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,595 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,596 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,597 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,598 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,598 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,599 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,600 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,601 contact 63590 8572943040 Found matching lead: 1 for contact 1
+INFO 2025-01-11 01:21:19,602 contact 63590 8572943040 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 01:21:19,603 contact 63590 8572943040 Found matching lead: 1 for contact 1
+WARNING 2025-01-11 19:17:33,914 log 3478 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 19:17:33,914 log 3478 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 19:17:33,914 log 3478 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 19:17:33,945 log 3478 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 19:17:33,946 log 3478 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 19:17:33,946 log 3478 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 19:17:33,982 log 3478 8378006208 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 19:17:33,983 log 3478 8378006208 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 19:17:33,983 log 3478 8378006208 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-11 19:17:33,995 admin 3478 8378006208 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-11 19:17:33,998 admin 3478 8378006208 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-11 19:17:34,004 admin 3478 8378006208 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 19:17:34,007 admin 3478 8378006208 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 19:17:35,518 contact 3478 8378006208 Checking lead status for contact 1 (123)
+INFO 2025-01-11 19:17:35,519 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,520 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,521 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,521 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,522 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,524 contact 3478 8378006208 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 19:17:35,525 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,527 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,527 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,529 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,529 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,531 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,531 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,531 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,532 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,533 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,534 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,534 contact 3478 8378006208 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 19:17:35,535 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,537 contact 3478 8378006208 Checking lead status for contact 1 (123)
+INFO 2025-01-11 19:17:35,537 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,539 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,539 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,540 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,541 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,542 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,543 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,545 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,546 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,546 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,546 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,548 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,548 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,549 contact 3478 8378006208 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-11 19:17:35,549 contact 3478 8378006208 No matching appointment found for contact 1
+INFO 2025-01-11 19:17:35,550 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,551 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,552 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,553 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,555 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,557 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,558 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,558 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,561 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,562 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,564 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,564 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,566 contact 3478 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,566 contact 3478 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 19:17:35,569 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,570 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,572 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,573 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,573 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,574 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,576 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,577 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,579 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,579 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,580 contact 3478 8378006208 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-11 19:17:35,580 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,583 contact 3478 8378006208 Checking lead status for contact 5 (123)
+INFO 2025-01-11 19:17:35,583 contact 3478 8378006208 No matching lead found for contact 5
+INFO 2025-01-11 19:17:35,586 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,586 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,588 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,589 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,589 contact 3478 8378006208 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-11 19:17:35,590 contact 3478 8378006208 No matching lead found for contact 2
+INFO 2025-01-11 19:17:35,590 contact 3478 8378006208 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-11 19:17:35,591 contact 3478 8378006208 No matching lead found for contact 3
+INFO 2025-01-11 19:17:35,591 contact 3478 8378006208 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-11 19:17:35,591 contact 3478 8378006208 No matching lead found for contact 4
+INFO 2025-01-11 19:17:35,598 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,598 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,599 contact 3478 8378006208 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-11 19:17:35,599 contact 3478 8378006208 No matching lead found for contact 2
+INFO 2025-01-11 19:17:35,601 contact 3478 8378006208 Checking lead status for contact 1 ()
+INFO 2025-01-11 19:17:35,602 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,602 contact 3478 8378006208 Checking lead status for contact 1 ()
+INFO 2025-01-11 19:17:35,603 contact 3478 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 19:17:35,613 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,613 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,615 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,615 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,616 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,616 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,616 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,617 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,617 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,617 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,617 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,618 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,620 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,620 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,621 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,622 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,622 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,622 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,624 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,624 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:35,625 contact 3478 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 19:17:35,626 contact 3478 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 19:17:45,471 autoreload 3522 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:17:47,476 basehttp 3522 6171815936 "GET / HTTP/1.1" 200 3422
+WARNING 2025-01-11 19:17:48,364 basehttp 3522 6171815936 "GET /static/sounds/hover.mp3 HTTP/1.1" 404 1975
+INFO 2025-01-11 19:17:48,675 basehttp 3522 6188642304 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:17:48,683 basehttp 3522 6188642304 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 5792
+INFO 2025-01-11 19:17:48,702 basehttp 3522 6188642304 "GET /static/admin/js/tailwind-3.4.5.js HTTP/1.1" 200 366531
+INFO 2025-01-11 19:17:48,709 basehttp 3522 6188642304 "GET /static/admin/tinymce/tinymce.min.js HTTP/1.1" 200 415158
+INFO 2025-01-11 19:17:52,574 basehttp 3522 6188642304 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:17:52,622 basehttp 3522 6188642304 "GET /admin/ HTTP/1.1" 200 39662
+INFO 2025-01-11 19:17:52,696 basehttp 3522 6188642304 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 157192
+INFO 2025-01-11 19:18:38,449 basehttp 3522 6188642304 "GET /admin/core/contact/ HTTP/1.1" 200 448767
+INFO 2025-01-11 19:18:38,478 basehttp 3522 6188642304 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 287630
+INFO 2025-01-11 19:18:38,479 basehttp 3522 6171815936 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-01-11 19:18:38,529 basehttp 3522 6205468672 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:18:52,159 basehttp 3522 6205468672 "GET /admin/dataWrestler/messageanalytics/ HTTP/1.1" 200 44650
+INFO 2025-01-11 19:18:53,234 basehttp 3522 6205468672 "GET /admin/dataWrestler/contactanalytics/ HTTP/1.1" 200 136632
+INFO 2025-01-11 19:18:54,539 basehttp 3522 6205468672 "GET /admin/dataWrestler/contactanalyticsformedia/ HTTP/1.1" 200 33517
+INFO 2025-01-11 19:18:55,461 basehttp 3522 6205468672 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42686
+INFO 2025-01-11 19:18:58,992 basehttp 3522 6205468672 "GET /admin/core/contact/ HTTP/1.1" 200 448767
+INFO 2025-01-11 19:24:18,957 autoreload 5391 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:24:48,302 basehttp 5391 6127087616 "GET /admin/core/contact/ HTTP/1.1" 200 465275
+INFO 2025-01-11 19:24:48,459 basehttp 5391 6127087616 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:25:41,752 autoreload 6428 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:25:45,256 basehttp 6428 6163623936 "GET /admin/core/contact/ HTTP/1.1" 200 465275
+INFO 2025-01-11 19:26:58,702 autoreload 6428 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-11 19:26:59,736 autoreload 7433 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:27:12,423 autoreload 7433 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-11 19:27:13,313 autoreload 7615 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:27:26,989 autoreload 7721 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:28:11,580 autoreload 7954 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:28:14,013 basehttp 7954 6132740096 "GET /admin/core/contact/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:28:14,025 basehttp 7954 6132740096 "GET /admin/login/?next=/admin/core/contact/ HTTP/1.1" 200 5818
+INFO 2025-01-11 19:28:19,859 basehttp 7954 6132740096 "POST /admin/login/?next=/admin/core/contact/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:28:20,227 basehttp 7954 6132740096 "GET /admin/core/contact/ HTTP/1.1" 200 465484
+INFO 2025-01-11 19:28:20,261 basehttp 7954 6132740096 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:29:45,618 basehttp 7954 6132740096 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 117678
+INFO 2025-01-11 19:35:30,517 autoreload 9690 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:35:33,036 basehttp 9690 6163099648 "GET /admin/core/contact/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:35:33,049 basehttp 9690 6163099648 "GET /admin/login/?next=/admin/core/contact/ HTTP/1.1" 200 5818
+INFO 2025-01-11 19:35:36,298 basehttp 9690 6163099648 "POST /admin/login/?next=/admin/core/contact/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:35:36,482 basehttp 9690 6163099648 "GET /admin/core/contact/ HTTP/1.1" 200 465740
+INFO 2025-01-11 19:35:36,511 basehttp 9690 6163099648 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:36:00,152 basehttp 9690 6163099648 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 117678
+INFO 2025-01-11 19:36:42,724 autoreload 10042 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:36:44,266 basehttp 10042 6196752384 "GET /admin/apiCrm/lead/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:36:44,278 basehttp 10042 6196752384 "GET /admin/login/?next=/admin/apiCrm/lead/ HTTP/1.1" 200 5816
+INFO 2025-01-11 19:36:47,129 basehttp 10042 6196752384 "POST /admin/login/?next=/admin/apiCrm/lead/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:36:47,223 basehttp 10042 6196752384 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 117678
+INFO 2025-01-11 19:36:47,246 basehttp 10042 6196752384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:36:58,956 basehttp 10042 6196752384 "GET /admin/core/contact/ HTTP/1.1" 200 465712
+INFO 2025-01-11 19:41:52,049 autoreload 10042 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-11 19:41:53,054 autoreload 10554 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:42:45,246 basehttp 10554 6162542592 "GET /admin/core/message/ HTTP/1.1" 200 55192
+INFO 2025-01-11 19:42:45,355 basehttp 10554 6162542592 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:43:06,496 basehttp 10554 6162542592 "GET /admin/core/message/add/ HTTP/1.1" 200 36708
+INFO 2025-01-11 19:43:06,516 basehttp 10554 6162542592 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-01-11 19:43:06,520 basehttp 10554 6162542592 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-01-11 19:43:47,908 basehttp 10554 6162542592 "GET /admin/core/message/ HTTP/1.1" 200 55192
+INFO 2025-01-11 19:44:11,388 basehttp 10554 6162542592 "POST /admin/core/message/add/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:44:11,404 basehttp 10554 6162542592 "GET /admin/core/message/ HTTP/1.1" 200 57339
+INFO 2025-01-11 19:44:45,548 basehttp 10554 6162542592 "GET /admin/core/userphone/ HTTP/1.1" 200 49864
+INFO 2025-01-11 19:45:34,462 autoreload 10554 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_userphone.py changed, reloading.
+INFO 2025-01-11 19:45:35,591 autoreload 11495 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:46:43,405 autoreload 11495 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_userphone.py changed, reloading.
+INFO 2025-01-11 19:46:44,345 autoreload 14084 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:46:50,821 basehttp 14084 6190592000 "GET /admin/core/userphone/add/ HTTP/1.1" 200 32089
+INFO 2025-01-11 19:47:11,745 basehttp 14084 6190592000 "POST /admin/core/userphone/add/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:47:11,772 basehttp 14084 6190592000 "GET /admin/core/userphone/ HTTP/1.1" 200 51744
+INFO 2025-01-11 19:49:04,534 autoreload 14084 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:49:05,381 autoreload 15060 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:49:23,151 autoreload 15060 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:49:24,025 autoreload 15315 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:49:39,695 autoreload 15315 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:49:40,616 autoreload 15629 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:49:41,903 autoreload 15629 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:49:42,444 autoreload 15664 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:50:17,827 autoreload 15664 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:50:18,797 autoreload 16087 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:50:57,266 autoreload 16087 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:50:58,492 autoreload 16478 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:54:07,702 autoreload 16478 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/target_list_resolver.py changed, reloading.
+INFO 2025-01-11 19:54:08,779 autoreload 17602 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:54:20,505 basehttp 17602 6157070336 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42686
+INFO 2025-01-11 19:54:20,615 basehttp 17602 6157070336 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:54:22,631 basehttp 17602 6157070336 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 49851
+INFO 2025-01-11 19:55:23,639 autoreload 17602 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/models/campaign.py changed, reloading.
+INFO 2025-01-11 19:55:24,564 autoreload 17855 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:55:47,544 autoreload 17855 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/models/campaign.py changed, reloading.
+INFO 2025-01-11 19:55:48,340 autoreload 17969 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:55:55,689 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 50277
+INFO 2025-01-11 19:56:22,147 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/load-messages/?tag=NCC HTTP/1.1" 200 120
+INFO 2025-01-11 19:56:32,762 basehttp 17969 6134575104 "POST /admin/messageShooter/campaign/add/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:56:32,785 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 44560
+INFO 2025-01-11 19:56:35,368 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/58/change/ HTTP/1.1" 200 54097
+INFO 2025-01-11 19:56:40,242 basehttp 17969 6134575104 "POST /admin/messageShooter/campaign/58/change/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:56:40,259 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 44562
+INFO 2025-01-11 19:56:44,662 basehttp 17969 6134575104 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:56:44,677 basehttp 17969 6134575104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 44507
+INFO 2025-01-11 19:57:23,290 basehttp 17969 6134575104 "GET /admin/core/contact/ HTTP/1.1" 200 465712
+INFO 2025-01-11 19:58:16,984 autoreload 17969 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_lead_to_contact.py changed, reloading.
+INFO 2025-01-11 19:58:17,840 autoreload 18473 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:58:51,148 autoreload 18473 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/utils/lead_ncc_rules.py changed, reloading.
+INFO 2025-01-11 19:58:52,121 autoreload 18709 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:58:57,517 autoreload 18709 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-11 19:58:58,399 autoreload 18768 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:59:09,228 basehttp 18768 6191280128 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43570
+INFO 2025-01-11 19:59:18,533 autoreload 18922 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 19:59:20,069 basehttp 18922 6167064576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:59:20,080 basehttp 18922 6167064576 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-11 19:59:22,895 basehttp 18922 6167064576 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:59:22,918 basehttp 18922 6167064576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43570
+INFO 2025-01-11 19:59:22,944 basehttp 18922 6167064576 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 19:59:26,114 basehttp 18922 6167064576 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 19:59:26,131 basehttp 18922 6167064576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 44507
+INFO 2025-01-11 20:01:01,192 autoreload 18922 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_lead.py changed, reloading.
+INFO 2025-01-11 20:01:02,075 autoreload 19345 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 20:01:13,629 autoreload 19345 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_lead_to_contact.py changed, reloading.
+INFO 2025-01-11 20:01:14,609 autoreload 19524 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 20:01:25,255 autoreload 19592 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 20:01:39,941 autoreload 19592 8378006208 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/utils/lead_ncc_rules.py changed, reloading.
+INFO 2025-01-11 20:01:40,859 autoreload 19725 8378006208 Watching for file changes with StatReloader
+INFO 2025-01-11 20:01:44,973 basehttp 19725 6201880576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 20:01:44,986 basehttp 19725 6201880576 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-11 20:01:47,724 basehttp 19725 6201880576 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 20:01:47,746 basehttp 19725 6201880576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43570
+INFO 2025-01-11 20:01:47,772 basehttp 19725 6201880576 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-11 20:01:51,806 basehttp 19725 6201880576 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-11 20:01:51,819 basehttp 19725 6201880576 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 44507
+INFO 2025-01-11 20:02:32,283 basehttp 19725 6201880576 "GET /admin/core/contact/ HTTP/1.1" 200 465731
+WARNING 2025-01-11 20:03:58,048 log 20239 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 20:03:58,048 log 20239 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 20:03:58,049 log 20239 8378006208 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-11 20:03:58,069 log 20239 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 20:03:58,069 log 20239 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 20:03:58,069 log 20239 8378006208 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-11 20:03:58,098 log 20239 8378006208 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 20:03:58,099 log 20239 8378006208 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-11 20:03:58,099 log 20239 8378006208 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-11 20:03:58,111 admin 20239 8378006208 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-11 20:03:58,114 admin 20239 8378006208 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-11 20:03:58,119 admin 20239 8378006208 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 20:03:58,123 admin 20239 8378006208 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-11 20:03:59,634 contact 20239 8378006208 Checking lead status for contact 1 (123)
+INFO 2025-01-11 20:03:59,635 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,636 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,637 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,637 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,638 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,639 contact 20239 8378006208 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 20:03:59,640 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,642 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,643 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,644 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,645 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,646 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,646 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,647 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,647 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,648 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,649 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,650 contact 20239 8378006208 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-11 20:03:59,650 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,652 contact 20239 8378006208 Checking lead status for contact 1 (123)
+INFO 2025-01-11 20:03:59,653 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,654 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,655 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,656 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,656 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,658 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,659 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,661 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,662 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,662 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,662 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,664 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,664 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,664 contact 20239 8378006208 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-11 20:03:59,665 contact 20239 8378006208 No matching appointment found for contact 1
+INFO 2025-01-11 20:03:59,666 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,667 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,669 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,669 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,671 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,671 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,672 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,672 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,674 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,674 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,676 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,677 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,678 contact 20239 8378006208 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,679 contact 20239 8378006208 Found matching appointment: 1 for contact 1
+INFO 2025-01-11 20:03:59,681 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,682 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,684 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,685 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,685 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,685 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,687 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,688 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,690 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,690 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,691 contact 20239 8378006208 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-11 20:03:59,691 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,694 contact 20239 8378006208 Checking lead status for contact 5 (123)
+INFO 2025-01-11 20:03:59,694 contact 20239 8378006208 No matching lead found for contact 5
+INFO 2025-01-11 20:03:59,696 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,697 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,699 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,700 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,700 contact 20239 8378006208 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-11 20:03:59,701 contact 20239 8378006208 No matching lead found for contact 2
+INFO 2025-01-11 20:03:59,701 contact 20239 8378006208 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-11 20:03:59,701 contact 20239 8378006208 No matching lead found for contact 3
+INFO 2025-01-11 20:03:59,701 contact 20239 8378006208 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-11 20:03:59,702 contact 20239 8378006208 No matching lead found for contact 4
+INFO 2025-01-11 20:03:59,708 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,708 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,709 contact 20239 8378006208 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-11 20:03:59,709 contact 20239 8378006208 No matching lead found for contact 2
+INFO 2025-01-11 20:03:59,711 contact 20239 8378006208 Checking lead status for contact 1 ()
+INFO 2025-01-11 20:03:59,711 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,712 contact 20239 8378006208 Checking lead status for contact 1 ()
+INFO 2025-01-11 20:03:59,712 contact 20239 8378006208 No matching lead found for contact 1
+INFO 2025-01-11 20:03:59,722 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,723 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,725 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,725 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,726 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,726 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,726 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,727 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,727 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,727 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,728 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,728 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,729 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,730 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,731 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,732 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,732 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,733 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,735 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,735 contact 20239 8378006208 Found matching lead: 1 for contact 1
+INFO 2025-01-11 20:03:59,736 contact 20239 8378006208 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-11 20:03:59,737 contact 20239 8378006208 Found matching lead: 1 for contact 1

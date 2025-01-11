@@ -11,11 +11,15 @@ from django.db import transaction
 # Contact Types
 CONTACT_TYPE_WHATSAPP = "Whatsapp"
 CONTACT_TYPE_APPOINTMENT = "Appointment" #Lead, # BillCharge
+CONTACT_TYPE_LEAD = "Lead"
+CONTACT_TYPE_BILLCHARGE = "BillCharge"
 #TODO adding Leads so we're able to create Queues for interacting with them / Bill charge for follow up activity
 
 CONTACT_TYPES = [
     CONTACT_TYPE_WHATSAPP,
     CONTACT_TYPE_APPOINTMENT,
+    CONTACT_TYPE_LEAD,
+    CONTACT_TYPE_BILLCHARGE
 ]
 
 # Contact Tags by Type
@@ -26,6 +30,8 @@ CONTACT_TAGS = {
                                 "Reminder", "Reschedule", "NPS", "Google My Business", 
                                 # Plástica
                                 "ReschedulePL", "ReminderPL"],
+    CONTACT_TYPE_LEAD: ["NCC", "Verifique seu Blip"],
+    # CONTACT_TYPE_BILLCHARGE: ["NCC", "Verifique seu Blip"],
 } # "Lead": ["NCC", "Verifique seu Blip"], "BillCharge": ["NCC", "Verifique seu Blip"],
 
 # Campaign Status

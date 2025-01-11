@@ -19,6 +19,14 @@ def get_userphone(contact_tag):
         print(f"Error getting userphone for tag {contact_tag}: {str(e)}")
         return None, None
 
+def get_userphone_ncc(contact_tag, store):
+    """
+    Develop same rationale as get_userphone_nps
+    Have a dictionary of store / attendant / token and possibly the check on message logs to see 
+    if contact_phone already received message on the past from an existing userphone to do the match.
+    """
+    pass
+
 def get_userphone_nps(contact_tag, store):
     """
     Get userphone token based on contact tag and store of appointment
