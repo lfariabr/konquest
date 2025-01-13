@@ -1,186 +1,573 @@
-INFO 2025-01-13 03:01:46,378 target_list_resolver 83145 6204354560 Processing campaign 'Instagram' (ID: 10)
-INFO 2025-01-13 03:01:50,291 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 87 target lists
-INFO 2025-01-13 03:01:50,291 get_contacts 83145 6204354560 Fetching WhatsApp contacts with tag 'Instagram'
-INFO 2025-01-13 03:01:50,641 get_contacts 83145 6204354560 Found 87 total contacts from the last 30 days with tag 'Instagram'
-INFO 2025-01-13 03:01:51,001 get_contacts 83145 6204354560 Found 87 unique contacts from the last 30 days with tag 'Instagram'
-INFO 2025-01-13 03:01:51,411 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:01:51,411 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'Instagram'
-INFO 2025-01-13 03:01:51,411 get_counter 83145 6204354560 Fetching counters for 5 phones with tag Instagram
-INFO 2025-01-13 03:01:51,411 get_counter 83145 6204354560 Sample phones: ['11945261326', '11956797500', '11995298009', '11943956957', '11940413455']
-INFO 2025-01-13 03:01:51,818 get_counter 83145 6204354560 Found 0 phones with messages
-INFO 2025-01-13 03:01:51,819 get_counter 83145 6204354560 Sample final results: {'11945261326': 0, '11956797500': 0, '11995298009': 0, '11943956957': 0, '11940413455': 0}
-INFO 2025-01-13 03:01:51,819 get_message 83145 6204354560 Getting message for type=Whatsapp, tag=Instagram, counter=0
-INFO 2025-01-13 03:01:52,156 get_message 83145 6204354560 Found message id=91 for Instagram
-INFO 2025-01-13 03:01:53,837 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:01:54,176 target_list_resolver 83145 6204354560 Processing campaign 'Reschedule Plástica' (ID: 9)
-INFO 2025-01-13 03:01:59,667 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 333 target lists
-INFO 2025-01-13 03:02:00,011 get_contacts 83145 6204354560 Processing contacts with tag ReschedulePL
-INFO 2025-01-13 03:02:00,353 get_contacts 83145 6204354560 ReschedulePL - Total appointments in PLÁSTICA: 1262
-INFO 2025-01-13 03:02:00,727 get_contacts 83145 6204354560 ReschedulePL - Appointments with status ['Falta', 'Cancelado']: 522
-INFO 2025-01-13 03:02:01,136 get_contacts 83145 6204354560 ReschedulePL - Appointments with matching procedures: 491
-INFO 2025-01-13 03:02:02,384 get_contacts 83145 6204354560 ReschedulePL - Found 5 appointments
-INFO 2025-01-13 03:02:03,903 get_appointment_to_contact 83145 6204354560 Processed 5 appointments: Created 0, Updated 5
-INFO 2025-01-13 03:02:03,906 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:03,906 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'ReschedulePL'
-INFO 2025-01-13 03:02:04,312 get_counter 83145 6204354560 Found 0 phones with messages
-INFO 2025-01-13 03:02:04,312 get_counter 83145 6204354560 Sample final results: {'11978599229': 0, '12982123001': 0, '11965698640': 0, '11942887611': 0, '11963880430': 0}
-INFO 2025-01-13 03:02:04,312 get_message 83145 6204354560 Getting message for type=Appointment, tag=ReschedulePL, counter=0
-INFO 2025-01-13 03:02:04,721 get_message 83145 6204354560 Found message id=79 for ReschedulePL
-INFO 2025-01-13 03:02:06,553 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:02:06,891 target_list_resolver 83145 6204354560 Processing campaign 'Reminder Plástica' (ID: 8)
-INFO 2025-01-13 03:02:10,929 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 178 target lists
-INFO 2025-01-13 03:02:11,264 get_contacts 83145 6204354560 Processing contacts with tag ReminderPL
-INFO 2025-01-13 03:02:11,684 get_contacts 83145 6204354560 Total appointments in PL: 1262
-INFO 2025-01-13 03:02:12,021 get_contacts 83145 6204354560 Appointments with desired status: 486
-INFO 2025-01-13 03:02:12,359 get_contacts 83145 6204354560 Appointments with matching procedures: 1155
-INFO 2025-01-13 03:02:13,099 get_contacts 83145 6204354560 ReminderPL - Found 5 appointments
-INFO 2025-01-13 03:02:14,654 get_appointment_to_contact 83145 6204354560 Processed 5 appointments: Created 0, Updated 5
-INFO 2025-01-13 03:02:14,656 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:14,657 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'ReminderPL'
-INFO 2025-01-13 03:02:15,013 get_counter 83145 6204354560 Found 5 phones with messages
-INFO 2025-01-13 03:02:15,014 get_counter 83145 6204354560 Sample results: [{'contact__phone': '11947244792', 'counter': 1}, {'contact__phone': '11967120758', 'counter': 1}, {'contact__phone': '11968651611', 'counter': 1}, {'contact__phone': '11982524530', 'counter': 1}, {'contact__phone': '17996086693', 'counter': 1}]
-INFO 2025-01-13 03:02:15,015 get_counter 83145 6204354560 Sample final results: {'11947244792': 1, '11982524530': 1, '11967120758': 1, '17996086693': 1, '11968651611': 1}
-INFO 2025-01-13 03:02:15,015 get_message 83145 6204354560 Getting message for type=Appointment, tag=ReminderPL, counter=1
-INFO 2025-01-13 03:02:15,375 get_message 83145 6204354560 Found message id=88 for ReminderPL
-INFO 2025-01-13 03:02:17,141 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:02:17,521 target_list_resolver 83145 6204354560 Processing campaign 'NPS' (ID: 7)
-INFO 2025-01-13 03:02:21,401 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 82 target lists
-INFO 2025-01-13 03:02:21,739 get_contacts 83145 6204354560 Processing contacts with tag NPS
-INFO 2025-01-13 03:02:22,083 get_contacts 83145 6204354560 Total appointments in last 10 days: 1018
-INFO 2025-01-13 03:02:22,436 get_contacts 83145 6204354560 Appointments after store filter: 887
-INFO 2025-01-13 03:02:22,781 get_contacts 83145 6204354560 Appointments after procedure exclusion: 612
-INFO 2025-01-13 03:02:23,128 get_contacts 83145 6204354560 Appointments after status filter: 273
-INFO 2025-01-13 03:02:23,588 get_contacts 83145 6204354560 NPS - Found 5 unique appointments
-INFO 2025-01-13 03:02:25,201 get_appointment_to_contact 83145 6204354560 Processed 5 appointments: Created 0, Updated 5
-INFO 2025-01-13 03:02:25,203 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:25,204 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'NPS'
-INFO 2025-01-13 03:02:25,560 get_counter 83145 6204354560 Found 2 phones with messages
-INFO 2025-01-13 03:02:25,561 get_counter 83145 6204354560 Sample results: [{'contact__phone': '11974053519', 'counter': 2}, {'contact__phone': '19991333590', 'counter': 1}]
-INFO 2025-01-13 03:02:25,561 get_counter 83145 6204354560 Sample final results: {'15997553211': 0, '11974053519': 2, '21981328365': 0, '21993121441': 0, '19991333590': 1}
-INFO 2025-01-13 03:02:25,561 get_message 83145 6204354560 Getting message for type=Appointment, tag=NPS, counter=0
-INFO 2025-01-13 03:02:25,919 get_message 83145 6204354560 Found message id=71 for NPS
-INFO 2025-01-13 03:02:25,920 get_message 83145 6204354560 Getting message for type=Appointment, tag=NPS, counter=1
-INFO 2025-01-13 03:02:26,257 get_message 83145 6204354560 No message found for counter=1
-WARNING 2025-01-13 03:02:26,260 get_message 83145 6204354560 No message found for NPS (counter=1)
-INFO 2025-01-13 03:02:26,261 get_message 83145 6204354560 Getting message for type=Appointment, tag=NPS, counter=2
-INFO 2025-01-13 03:02:26,597 get_message 83145 6204354560 No message found for counter=2
-WARNING 2025-01-13 03:02:26,598 get_message 83145 6204354560 No message found for NPS (counter=2)
-INFO 2025-01-13 03:02:28,376 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 3, Skipped: 2, Errors: 0
-INFO 2025-01-13 03:02:28,793 target_list_resolver 83145 6204354560 Processing campaign 'Reschedule' (ID: 6)
-INFO 2025-01-13 03:02:38,464 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 1682 target lists
-INFO 2025-01-13 03:02:38,800 get_contacts 83145 6204354560 Processing contacts with tag Reschedule
-INFO 2025-01-13 03:02:40,427 get_contacts 83145 6204354560 Reschedule - Found 5 appointments
-INFO 2025-01-13 03:02:41,892 get_appointment_to_contact 83145 6204354560 Processed 5 appointments: Created 0, Updated 5
-INFO 2025-01-13 03:02:41,895 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:41,895 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'Reschedule'
-INFO 2025-01-13 03:02:42,251 get_counter 83145 6204354560 Found 5 phones with messages
-INFO 2025-01-13 03:02:42,252 get_counter 83145 6204354560 Sample results: [{'contact__phone': '11916403891', 'counter': 1}, {'contact__phone': '11947365478', 'counter': 1}, {'contact__phone': '11977287931', 'counter': 1}, {'contact__phone': '15998112716', 'counter': 1}, {'contact__phone': '21995245209', 'counter': 1}]
-INFO 2025-01-13 03:02:42,252 get_counter 83145 6204354560 Sample final results: {'11916403891': 1, '21995245209': 1, '11947365478': 1, '15998112716': 1, '11977287931': 1}
-INFO 2025-01-13 03:02:42,252 get_message 83145 6204354560 Getting message for type=Appointment, tag=Reschedule, counter=1
-INFO 2025-01-13 03:02:42,588 get_message 83145 6204354560 Found message id=67 for Reschedule
-INFO 2025-01-13 03:02:44,292 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:02:44,629 target_list_resolver 83145 6204354560 Processing campaign 'Preenchimento Campaign' (ID: 4)
-INFO 2025-01-13 03:02:48,376 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 122 target lists
-INFO 2025-01-13 03:02:48,377 get_contacts 83145 6204354560 Fetching WhatsApp contacts with tag 'Preenchimento'
-INFO 2025-01-13 03:02:48,725 get_contacts 83145 6204354560 Found 122 total contacts from the last 30 days with tag 'Preenchimento'
-INFO 2025-01-13 03:02:49,172 get_contacts 83145 6204354560 Found 122 unique contacts from the last 30 days with tag 'Preenchimento'
-INFO 2025-01-13 03:02:49,522 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:49,522 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'Preenchimento'
-INFO 2025-01-13 03:02:49,522 get_counter 83145 6204354560 Fetching counters for 5 phones with tag Preenchimento
-INFO 2025-01-13 03:02:49,522 get_counter 83145 6204354560 Sample phones: ['13996845989', '12991960192', '7792038656', '11947380480', '7788141203']
-INFO 2025-01-13 03:02:49,878 get_counter 83145 6204354560 Found 0 phones with messages
-INFO 2025-01-13 03:02:49,879 get_counter 83145 6204354560 Sample final results: {'13996845989': 0, '12991960192': 0, '7792038656': 0, '11947380480': 0, '7788141203': 0}
-INFO 2025-01-13 03:02:49,879 get_message 83145 6204354560 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
-INFO 2025-01-13 03:02:50,218 get_message 83145 6204354560 Found message id=10 for Preenchimento
-INFO 2025-01-13 03:02:51,915 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:02:52,253 target_list_resolver 83145 6204354560 Processing campaign 'Botox Campaign' (ID: 3)
-INFO 2025-01-13 03:02:57,865 target_list_resolver 83145 6204354560 Cleaned up: Deleted 1 queue entries and 700 target lists
-INFO 2025-01-13 03:02:57,866 get_contacts 83145 6204354560 Fetching WhatsApp contacts with tag 'Botox'
-INFO 2025-01-13 03:02:58,276 get_contacts 83145 6204354560 Found 1272 total contacts from the last 30 days with tag 'Botox'
-INFO 2025-01-13 03:02:58,718 get_contacts 83145 6204354560 Found 1272 unique contacts from the last 30 days with tag 'Botox'
-INFO 2025-01-13 03:02:59,075 target_list_resolver 83145 6204354560 First contact type: <class 'core.models.contact.Contact'>
-INFO 2025-01-13 03:02:59,075 target_list_resolver 83145 6204354560 Found 5 contacts with tag 'Botox'
-INFO 2025-01-13 03:02:59,076 get_counter 83145 6204354560 Fetching counters for 5 phones with tag Botox
-INFO 2025-01-13 03:02:59,076 get_counter 83145 6204354560 Sample phones: ['13997098519', '11987165871', '11981742198', '4396504253', '11976949501']
-INFO 2025-01-13 03:02:59,434 get_counter 83145 6204354560 Found 0 phones with messages
-INFO 2025-01-13 03:02:59,434 get_counter 83145 6204354560 Sample final results: {'13997098519': 0, '11987165871': 0, '11981742198': 0, '4396504253': 0, '11976949501': 0}
-INFO 2025-01-13 03:02:59,435 get_message 83145 6204354560 Getting message for type=Whatsapp, tag=Botox, counter=0
-INFO 2025-01-13 03:02:59,813 get_message 83145 6204354560 Found message id=7 for Botox
-INFO 2025-01-13 03:03:01,656 target_list_resolver 83145 6204354560 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
-INFO 2025-01-13 03:03:15,100 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:15,480 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:15,891 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:16,240 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:16,240 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:16,588 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:16,589 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:17,016 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:28,588 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:28,998 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:29,409 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:29,816 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:29,817 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:30,227 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:30,228 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:30,574 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:31,352 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:31,762 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:31,763 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:32,172 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:35,039 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:35,447 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:35,858 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:36,268 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:36,269 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:36,616 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:36,616 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:36,964 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:37,662 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:38,011 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:38,012 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:38,418 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 34
-INFO 2025-01-13 03:03:44,665 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:45,012 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 0
-INFO 2025-01-13 03:03:45,382 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:45,730 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 0
-INFO 2025-01-13 03:03:45,731 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:46,097 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 0
-INFO 2025-01-13 03:03:46,097 targetListAdmin 83145 6204354560 Starting get_queryset in TargetListAdmin
-INFO 2025-01-13 03:03:46,446 targetListAdmin 83145 6204354560 TargetListAdmin queryset count: 0
-INFO 2025-01-13 13:28:24,151 queueAdmin 6124 6189412352 Queue list view performance: 5 queries in 3.13s
-INFO 2025-01-13 13:28:24,163 get_contacts 6124 6189412352 Fetching WhatsApp contacts with tag 'Botox'
-INFO 2025-01-13 13:28:25,258 get_contacts 6124 6189412352 Found 1263 total contacts from the last 30 days with tag 'Botox'
-INFO 2025-01-13 13:28:25,973 get_contacts 6124 6189412352 Found 1263 unique contacts from the last 30 days with tag 'Botox'
-INFO 2025-01-13 13:28:27,268 get_contacts 6124 6189412352 Fetching WhatsApp contacts with tag 'Preenchimento'
-INFO 2025-01-13 13:28:27,723 get_contacts 6124 6189412352 Found 106 total contacts from the last 30 days with tag 'Preenchimento'
-INFO 2025-01-13 13:28:28,138 get_contacts 6124 6189412352 Found 106 unique contacts from the last 30 days with tag 'Preenchimento'
-INFO 2025-01-13 13:28:28,931 target_list 6124 6189412352 Getting appointments for user lfariabr@gmail.com
-INFO 2025-01-13 13:28:28,931 get_contacts 6124 6189412352 Processing contacts with tag Reschedule
-INFO 2025-01-13 13:28:31,655 get_contacts 6124 6189412352 Reschedule - Found 2445 appointments
-INFO 2025-01-13 13:28:36,577 get_appointment_to_contact 6124 6189412352 Processed 2445 appointments: Created 5, Updated 2440
-INFO 2025-01-13 13:28:37,003 target_list 6124 6189412352 Getting appointments for user lfariabr@gmail.com
-INFO 2025-01-13 13:28:37,003 get_contacts 6124 6189412352 Processing contacts with tag NPS
-INFO 2025-01-13 13:28:37,348 get_contacts 6124 6189412352 Total appointments in last 10 days: 617
-INFO 2025-01-13 13:28:37,759 get_contacts 6124 6189412352 Appointments after store filter: 477
-INFO 2025-01-13 13:28:38,106 get_contacts 6124 6189412352 Appointments after procedure exclusion: 344
-INFO 2025-01-13 13:28:38,477 get_contacts 6124 6189412352 Appointments after status filter: 27
-INFO 2025-01-13 13:28:38,891 get_contacts 6124 6189412352 NPS - Found 24 unique appointments
-INFO 2025-01-13 13:28:40,453 get_appointment_to_contact 6124 6189412352 Processed 24 appointments: Created 0, Updated 24
-INFO 2025-01-13 13:28:40,795 target_list 6124 6189412352 Getting appointments for user lfariabr@gmail.com
-INFO 2025-01-13 13:28:40,796 get_contacts 6124 6189412352 Processing contacts with tag ReminderPL
-INFO 2025-01-13 13:28:41,134 get_contacts 6124 6189412352 Total appointments in PL: 1262
-INFO 2025-01-13 13:28:41,473 get_contacts 6124 6189412352 Appointments with desired status: 486
-INFO 2025-01-13 13:28:41,856 get_contacts 6124 6189412352 Appointments with matching procedures: 1155
-INFO 2025-01-13 13:28:42,987 get_contacts 6124 6189412352 ReminderPL - Found 137 appointments
-INFO 2025-01-13 13:28:44,450 get_appointment_to_contact 6124 6189412352 Processed 137 appointments: Created 0, Updated 137
-INFO 2025-01-13 13:28:44,826 target_list 6124 6189412352 Getting appointments for user lfariabr@gmail.com
-INFO 2025-01-13 13:28:44,826 get_contacts 6124 6189412352 Processing contacts with tag ReschedulePL
-INFO 2025-01-13 13:28:45,164 get_contacts 6124 6189412352 ReschedulePL - Total appointments in PLÁSTICA: 1262
-INFO 2025-01-13 13:28:45,541 get_contacts 6124 6189412352 ReschedulePL - Appointments with status ['Falta', 'Cancelado']: 522
-INFO 2025-01-13 13:28:45,881 get_contacts 6124 6189412352 ReschedulePL - Appointments with matching procedures: 491
-INFO 2025-01-13 13:28:46,354 get_contacts 6124 6189412352 ReschedulePL - Found 421 appointments
-INFO 2025-01-13 13:28:48,307 get_appointment_to_contact 6124 6189412352 Processed 421 appointments: Created 13, Updated 408
-INFO 2025-01-13 13:28:48,333 get_contacts 6124 6189412352 Fetching WhatsApp contacts with tag 'Instagram'
-INFO 2025-01-13 13:28:48,684 get_contacts 6124 6189412352 Found 85 total contacts from the last 30 days with tag 'Instagram'
-INFO 2025-01-13 13:28:49,132 get_contacts 6124 6189412352 Found 85 unique contacts from the last 30 days with tag 'Instagram'
-INFO 2025-01-13 13:29:13,939 queueAdmin 6124 6189412352 Queue list view performance: 5 queries in 3.00s
+ERROR 2025-01-13 13:47:33,639 signals 8300 8681044672 Error updating target list counter: 'NoneType' object has no attribute 'id'
+ERROR 2025-01-13 13:47:33,644 signals 8300 8681044672 Error updating target list counter: 'NoneType' object has no attribute 'id'
+ERROR 2025-01-13 13:47:33,646 signals 8300 8681044672 Error updating target list counter: 'NoneType' object has no attribute 'id'
+ERROR 2025-01-13 13:47:33,648 signals 8300 8681044672 Error updating target list counter: 'NoneType' object has no attribute 'id'
+INFO 2025-01-13 13:47:34,032 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,032 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,032 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,033 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,033 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,033 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,034 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,035 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,035 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,035 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,035 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,035 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,035 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,035 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,035 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,036 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,037 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,037 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,037 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,038 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,038 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,038 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,038 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,038 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,039 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,039 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,039 scheduler 8300 8681044672 Successfully queued 1 campaigns
+INFO 2025-01-13 13:47:34,040 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,040 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,040 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,049 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,049 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,050 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,050 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 2)
+INFO 2025-01-13 13:47:34,051 target_list_resolver 8300 8681044672 Cleaned up: Deleted 0 queue entries and 1 target lists
+INFO 2025-01-13 13:47:34,051 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,051 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,052 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,052 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,052 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,052 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,053 get_counter 8300 8681044672 Sample phones: ['11963546223']
+INFO 2025-01-13 13:47:34,053 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,053 get_counter 8300 8681044672 Sample final results: {'11963546223': 0}
+INFO 2025-01-13 13:47:34,053 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,053 get_message 8300 8681044672 Found message id=2 for Botox
+INFO 2025-01-13 13:47:34,054 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,055 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,055 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,055 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,056 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,056 get_message 8300 8681044672 Found message id=2 for Botox
+INFO 2025-01-13 13:47:34,056 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,056 scheduler 8300 8681044672 - Message ID: 2
+INFO 2025-01-13 13:47:34,056 scheduler 8300 8681044672 - Userphone: 11988446711
+INFO 2025-01-13 13:47:34,056 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,057 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,057 scheduler 8300 8681044672 Successfully queued 1 campaigns
+ERROR 2025-01-13 13:47:34,058 queue_processor 8300 8681044672 ❌ Error in batch queue processing: database table is locked: messageShooter_queue
+INFO 2025-01-13 13:47:34,061 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,061 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,061 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,062 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,062 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,062 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,063 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,064 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,064 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,064 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,064 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,064 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,064 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,064 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,064 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,065 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,065 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,066 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,066 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,067 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,067 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,067 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,067 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,067 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,067 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,068 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,068 scheduler 8300 8681044672 Successfully queued 1 campaigns
+INFO 2025-01-13 13:47:34,070 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,070 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,070 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,070 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,071 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,071 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,072 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,073 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,073 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,073 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,073 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,073 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,073 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,073 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,074 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,074 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,075 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,075 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,075 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,076 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,076 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,076 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,076 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,076 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,076 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,077 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,077 scheduler 8300 8681044672 Successfully queued 1 campaigns
+INFO 2025-01-13 13:47:34,079 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,079 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,079 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,080 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,080 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,081 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,081 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,082 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,082 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,082 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,082 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,082 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,082 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,082 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,083 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,084 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,084 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,084 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,084 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,085 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,086 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,086 scheduler 8300 8681044672 Successfully queued 1 campaigns
+ERROR 2025-01-13 13:47:34,087 queue_processor 8300 8681044672 ❌ Error in batch queue processing: database table is locked: messageShooter_queue
+INFO 2025-01-13 13:47:34,089 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,089 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,090 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2025-01-13 13:47:34,090 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,090 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,091 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,091 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,092 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,092 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,092 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,092 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,093 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,093 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,093 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,093 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,094 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,094 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,095 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign 2' (ID: 2)
+INFO 2025-01-13 13:47:34,095 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,095 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,096 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,096 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,096 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,096 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,096 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,097 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,097 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,097 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,097 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,098 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,098 target_list_resolver 8300 8681044672 Campaign Test Campaign 2: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,098 scheduler 8300 8681044672 Processing 2 target lists for queue creation
+INFO 2025-01-13 13:47:34,099 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,100 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,100 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,100 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,100 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,100 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,100 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,101 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,101 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign 2 with tag Botox
+INFO 2025-01-13 13:47:34,102 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,102 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,102 scheduler 8300 8681044672 Creating queue for campaign Test Campaign 2 with tag Botox
+INFO 2025-01-13 13:47:34,102 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,103 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,103 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,103 scheduler 8300 8681044672 Successfully created queue 2 for campaign Test Campaign 2
+INFO 2025-01-13 13:47:34,103 scheduler 8300 8681044672 Successfully queued 2 campaigns
+ERROR 2025-01-13 13:47:34,104 queue_processor 8300 8681044672 ❌ Error in batch queue processing: database table is locked: messageShooter_queue
+INFO 2025-01-13 13:47:34,106 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,106 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,107 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,107 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,107 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,107 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,108 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,109 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,109 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,109 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,109 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2025-01-13 13:47:34,109 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,109 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2025-01-13 13:47:34,109 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,110 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,110 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,111 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,111 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,111 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,112 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,112 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,112 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Botox
+INFO 2025-01-13 13:47:34,112 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,112 scheduler 8300 8681044672 - Userphone: 11988446710
+INFO 2025-01-13 13:47:34,112 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,113 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,113 scheduler 8300 8681044672 Successfully queued 1 campaigns
+INFO 2025-01-13 13:47:34,116 get_message 8300 8681044672 Getting appointment message: status=Agendado, days_interval=1
+INFO 2025-01-13 13:47:34,116 get_message 8300 8681044672 Found message id=1 for Reminder
+INFO 2025-01-13 13:47:34,116 get_message 8300 8681044672 Getting appointment message: status=Agendado, days_interval=0
+INFO 2025-01-13 13:47:34,116 get_message 8300 8681044672 Found message id=2 for Reminder
+INFO 2025-01-13 13:47:34,116 get_message 8300 8681044672 Getting appointment message: status=Agendado, days_interval=5
+WARNING 2025-01-13 13:47:34,116 get_message 8300 8681044672 Invalid combination for Reminder: status=Agendado, days=5
+INFO 2025-01-13 13:47:34,118 get_message 8300 8681044672 Getting appointment message: status=Falta, days_interval=-3
+INFO 2025-01-13 13:47:34,118 get_message 8300 8681044672 Using default counter=0 for tag: Falta
+INFO 2025-01-13 13:47:34,119 get_message 8300 8681044672 Found message id=3 for Falta
+INFO 2025-01-13 13:47:34,119 get_message 8300 8681044672 Getting appointment message: status=Falta, days_interval=-10
+INFO 2025-01-13 13:47:34,119 get_message 8300 8681044672 Using default counter=0 for tag: Falta
+INFO 2025-01-13 13:47:34,119 get_message 8300 8681044672 Found message id=3 for Falta
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Getting appointment message: status=Cancelado, days_interval=3
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Using default counter=0 for tag: Cancelado
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Found message id=4 for Cancelado
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Getting appointment message: status=Cancelado, days_interval=10
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Using default counter=0 for tag: Cancelado
+INFO 2025-01-13 13:47:34,122 get_message 8300 8681044672 Found message id=4 for Cancelado
+INFO 2025-01-13 13:47:34,125 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,125 get_counter 8300 8681044672 Sample final results: {'11999990000': 0, '11999990001': 0, '11999990002': 0, '11999990003': 0, '11999990004': 0}
+INFO 2025-01-13 13:47:34,125 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,125 get_counter 8300 8681044672 Sample final results: {'11999990000': 0, '11999990001': 0, '11999990002': 0, '11999990003': 0, '11999990004': 0}
+INFO 2025-01-13 13:47:34,126 get_counter 8300 8681044672 Found 1 phones with messages
+INFO 2025-01-13 13:47:34,126 get_counter 8300 8681044672 Sample results: [{'contact__phone': '11999990000', 'counter': 1}]
+INFO 2025-01-13 13:47:34,126 get_counter 8300 8681044672 Sample final results: {'11999990000': 1}
+INFO 2025-01-13 13:47:34,128 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,132 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 0, Updated 1
+INFO 2025-01-13 13:47:34,134 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,135 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 0, Updated 1
+INFO 2025-01-13 13:47:34,137 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,138 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,140 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,141 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 0, Updated 1
+INFO 2025-01-13 13:47:34,144 get_appointment_to_contact 8300 8681044672 Processed 1 appointments: Created 1, Updated 0
+INFO 2025-01-13 13:47:34,329 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,329 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,330 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,330 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,331 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,331 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,331 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,331 get_counter 8300 8681044672 Sample phones: ['5511888888888']
+INFO 2025-01-13 13:47:34,331 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,331 get_counter 8300 8681044672 Sample final results: {'5511888888888': 0}
+INFO 2025-01-13 13:47:34,331 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,331 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,332 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,334 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,334 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,335 targetListAdmin 8300 8681044672 Queue created for campaign Test Campaign:
+- Campaign: Test Campaign
+- Contact Tag: Botox
+- Total Target Lists: 1
+- Initial Message: 1 (counter=0)
+INFO 2025-01-13 13:47:34,335 targetListAdmin 8300 8681044672 Queue processing completed in 0.00s: 1 successes, 0 errors
+INFO 2025-01-13 13:47:34,337 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=1
+INFO 2025-01-13 13:47:34,337 get_message 8300 8681044672 Found message id=2 for Botox
+INFO 2025-01-13 13:47:34,338 targetListAdmin 8300 8681044672 Queue created for campaign Test Campaign:
+- Campaign: Test Campaign
+- Contact Tag: Botox
+- Total Target Lists: 1
+- Initial Message: 2 (counter=1)
+INFO 2025-01-13 13:47:34,338 targetListAdmin 8300 8681044672 Queue processing completed in 0.00s: 1 successes, 0 errors
+INFO 2025-01-13 13:47:34,525 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,525 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,526 targetListAdmin 8300 8681044672 Queue created for campaign Test Campaign:
+- Campaign: Test Campaign
+- Contact Tag: Botox
+- Total Target Lists: 2
+- Initial Message: 1 (counter=0)
+INFO 2025-01-13 13:47:34,526 targetListAdmin 8300 8681044672 Queue processing completed in 0.00s: 1 successes, 0 errors
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Preenchimento Campaign' (ID: 2)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=2 for Preenchimento
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Preenchimento Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Botox Campaign' (ID: 1)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Botox Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Preenchimento Campaign' (ID: 2)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=2 for Preenchimento
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Preenchimento Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Preenchimento Campaign' (ID: 2)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=2 for Preenchimento
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Preenchimento Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Botox Campaign' (ID: 1)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Botox Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-07 08:00:00,000 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2024-01-08 07:00:00,000 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 2 active campaigns
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Preenchimento Campaign' (ID: 2)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=2 for Preenchimento
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Preenchimento Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Processing campaign 'Botox Campaign' (ID: 1)
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample phones: ['11963546222']
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2024-01-08 08:00:00,000 get_counter 8300 8681044672 Sample final results: {'11963546222': 0}
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2024-01-08 08:00:00,000 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2024-01-08 08:00:00,000 target_list_resolver 8300 8681044672 Campaign Botox Campaign: created=1, skipped=0, errors=0
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2024-01-08 08:00:00,000 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,725 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 3)
+INFO 2025-01-13 13:47:34,725 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,726 get_contacts 8300 8681044672 Found 3 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,726 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,727 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,727 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,727 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,727 get_counter 8300 8681044672 Sample phones: ['11999999999']
+INFO 2025-01-13 13:47:34,727 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,727 get_counter 8300 8681044672 Sample final results: {'11999999999': 0}
+INFO 2025-01-13 13:47:34,727 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,728 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,728 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,734 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 3)
+INFO 2025-01-13 13:47:34,735 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,735 get_contacts 8300 8681044672 Found 3 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,736 get_contacts 8300 8681044672 Found 3 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,736 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,736 target_list_resolver 8300 8681044672 Found 3 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,736 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,737 get_counter 8300 8681044672 Sample phones: ['11999999999']
+INFO 2025-01-13 13:47:34,737 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,737 get_counter 8300 8681044672 Sample final results: {'11999999999': 0}
+INFO 2025-01-13 13:47:34,737 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,737 get_message 8300 8681044672 Found message id=1 for Botox
+INFO 2025-01-13 13:47:34,738 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 2, Errors: 0
+INFO 2025-01-13 13:47:34,744 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 3)
+INFO 2025-01-13 13:47:34,744 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,744 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,745 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,745 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,746 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,746 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,746 get_counter 8300 8681044672 Sample phones: ['11999999999']
+INFO 2025-01-13 13:47:34,746 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,746 get_counter 8300 8681044672 Sample final results: {'11999999999': 0}
+INFO 2025-01-13 13:47:34,746 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,746 get_message 8300 8681044672 No message found for counter=0
+WARNING 2025-01-13 13:47:34,746 get_message 8300 8681044672 No message found for Botox (counter=0)
+INFO 2025-01-13 13:47:34,747 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 0, Skipped: 1, Errors: 0
+INFO 2025-01-13 13:47:34,752 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 3)
+INFO 2025-01-13 13:47:34,752 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,753 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,753 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,754 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,754 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,754 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Botox
+INFO 2025-01-13 13:47:34,754 get_counter 8300 8681044672 Sample phones: ['11999999999']
+INFO 2025-01-13 13:47:34,754 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,754 get_counter 8300 8681044672 Sample final results: {'11999999999': 0}
+INFO 2025-01-13 13:47:34,754 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,754 get_message 8300 8681044672 Found message id=3 for Botox
+INFO 2025-01-13 13:47:34,755 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,762 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 3)
+INFO 2025-01-13 13:47:34,762 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,762 get_contacts 8300 8681044672 Found 5 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,763 get_contacts 8300 8681044672 Found 5 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-01-13 13:47:34,764 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,764 target_list_resolver 8300 8681044672 Found 5 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,764 get_counter 8300 8681044672 Fetching counters for 5 phones with tag Botox
+INFO 2025-01-13 13:47:34,764 get_counter 8300 8681044672 Sample phones: ['11999999994', '11999999993', '11999999992', '11999999991', '11999999990']
+INFO 2025-01-13 13:47:34,764 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,764 get_counter 8300 8681044672 Sample final results: {'11999999994': 0, '11999999993': 0, '11999999992': 0, '11999999991': 0, '11999999990': 0}
+INFO 2025-01-13 13:47:34,764 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Botox, counter=0
+INFO 2025-01-13 13:47:34,764 get_message 8300 8681044672 Found message id=3 for Botox
+INFO 2025-01-13 13:47:34,765 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 5, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,774 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,774 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,774 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Botox'
+INFO 2025-01-13 13:47:34,775 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,784 queue_processor 8300 6188920832 Attempt 1 of 3
+INFO 2025-01-13 13:47:34,786 queue_processor 8300 6172094464 Attempt 1 of 3
+WARNING 2025-01-13 13:47:34,786 queue_processor 8300 6172094464 Attempt 1 failed with retryable error: Test connection error. Retrying...
+INFO 2025-01-13 13:47:34,786 queue_processor 8300 6172094464 Attempt 2 of 3
+INFO 2025-01-13 13:47:34,787 queue_processor 8300 6172094464 Attempt 1 of 3
+INFO 2025-01-13 13:47:34,828 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,828 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,828 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,828 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,828 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,829 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,829 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,830 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,830 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,830 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,830 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,831 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,831 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,832 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,832 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,833 run_scheduler 8300 8681044672 Starting scheduler
+INFO 2025-01-13 13:47:34,833 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,833 target_list_resolver 8300 8681044672 Found 0 active campaigns
+INFO 2025-01-13 13:47:34,833 scheduler 8300 8681044672 No target lists were created
+INFO 2025-01-13 13:47:34,837 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,837 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,837 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 1)
+INFO 2025-01-13 13:47:34,837 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,838 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,838 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,839 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,839 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,839 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2025-01-13 13:47:34,839 get_counter 8300 8681044672 Sample phones: ['1234567890']
+INFO 2025-01-13 13:47:34,840 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,840 get_counter 8300 8681044672 Sample final results: {'1234567890': 0}
+INFO 2025-01-13 13:47:34,840 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,840 get_message 8300 8681044672 Found message id=1 for Preenchimento
+INFO 2025-01-13 13:47:34,841 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,841 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,842 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,842 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,843 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,843 get_message 8300 8681044672 Found message id=1 for Preenchimento
+INFO 2025-01-13 13:47:34,843 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,843 scheduler 8300 8681044672 - Message ID: 1
+INFO 2025-01-13 13:47:34,843 scheduler 8300 8681044672 - Userphone: 1234567890
+INFO 2025-01-13 13:47:34,843 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,844 scheduler 8300 8681044672 Successfully created queue 1 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,844 scheduler 8300 8681044672 Successfully queued 1 campaigns
+INFO 2025-01-13 13:47:34,866 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,867 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,867 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,868 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,868 get_message 8300 8681044672 Found message id=6 for Preenchimento
+INFO 2025-01-13 13:47:34,868 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,868 scheduler 8300 8681044672 - Message ID: 6
+INFO 2025-01-13 13:47:34,868 scheduler 8300 8681044672 - Userphone: 1234567890
+INFO 2025-01-13 13:47:34,868 scheduler 8300 8681044672 - Target Lists Count: 1
+ERROR 2025-01-13 13:47:34,868 scheduler 8300 8681044672 Error processing campaign <MagicMock name='mock.campaign_id' id='4693076112'> with tag Preenchimento: Mock object has no attribute '_state'
+INFO 2025-01-13 13:47:34,868 scheduler 8300 8681044672 Successfully queued 0 campaigns
+WARNING 2025-01-13 13:47:34,868 scheduler 8300 8681044672 Failed to process 1 campaigns
+INFO 2025-01-13 13:47:34,888 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,888 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,888 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,889 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,889 get_message 8300 8681044672 Found message id=11 for Preenchimento
+INFO 2025-01-13 13:47:34,890 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,890 scheduler 8300 8681044672 - Message ID: 11
+INFO 2025-01-13 13:47:34,890 scheduler 8300 8681044672 - Userphone: 1234567890
+INFO 2025-01-13 13:47:34,890 scheduler 8300 8681044672 - Target Lists Count: 1
+ERROR 2025-01-13 13:47:34,890 scheduler 8300 8681044672 Error processing campaign <MagicMock name='mock.campaign_id' id='4841121552'> with tag Preenchimento: Mock object has no attribute '_state'
+INFO 2025-01-13 13:47:34,890 scheduler 8300 8681044672 Successfully queued 0 campaigns
+WARNING 2025-01-13 13:47:34,890 scheduler 8300 8681044672 Failed to process 1 campaigns
+INFO 2025-01-13 13:47:34,909 scheduler 8300 8681044672 Starting campaign processing
+INFO 2025-01-13 13:47:34,910 target_list_resolver 8300 8681044672 Found 1 active campaigns
+INFO 2025-01-13 13:47:34,910 target_list_resolver 8300 8681044672 Processing campaign 'Test Campaign' (ID: 4)
+INFO 2025-01-13 13:47:34,910 get_contacts 8300 8681044672 Fetching WhatsApp contacts with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,911 get_contacts 8300 8681044672 Found 1 total contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,912 get_contacts 8300 8681044672 Found 1 unique contacts from the last 30 days with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,912 target_list_resolver 8300 8681044672 First contact type: <class 'core.models.contact.Contact'>
+INFO 2025-01-13 13:47:34,912 target_list_resolver 8300 8681044672 Found 1 contacts with tag 'Preenchimento'
+INFO 2025-01-13 13:47:34,912 get_counter 8300 8681044672 Fetching counters for 1 phones with tag Preenchimento
+INFO 2025-01-13 13:47:34,912 get_counter 8300 8681044672 Sample phones: ['1234567890']
+INFO 2025-01-13 13:47:34,913 get_counter 8300 8681044672 Found 0 phones with messages
+INFO 2025-01-13 13:47:34,913 get_counter 8300 8681044672 Sample final results: {'1234567890': 0}
+INFO 2025-01-13 13:47:34,913 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,913 get_message 8300 8681044672 Found message id=16 for Preenchimento
+INFO 2025-01-13 13:47:34,914 target_list_resolver 8300 8681044672 Campaign processing complete. Created: 1, Skipped: 0, Errors: 0
+INFO 2025-01-13 13:47:34,914 target_list_resolver 8300 8681044672 Campaign Test Campaign: created=1, skipped=0, errors=0
+INFO 2025-01-13 13:47:34,914 scheduler 8300 8681044672 Processing 1 target lists for queue creation
+INFO 2025-01-13 13:47:34,914 scheduler 8300 8681044672 Processing target lists for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,915 get_message 8300 8681044672 Getting message for type=Whatsapp, tag=Preenchimento, counter=0
+INFO 2025-01-13 13:47:34,916 get_message 8300 8681044672 Found message id=16 for Preenchimento
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 Creating queue for campaign Test Campaign with tag Preenchimento
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 - Message ID: 16
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 - Userphone: 1234567890
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 - Target Lists Count: 1
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 Successfully created queue 2 for campaign Test Campaign
+INFO 2025-01-13 13:47:34,916 scheduler 8300 8681044672 Successfully queued 1 campaigns

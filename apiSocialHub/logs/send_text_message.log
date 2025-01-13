@@ -310,3 +310,51 @@
 }
 2025-01-12 19:32:15,142 - INFO - ...
 2025-01-12 19:32:15,142 - ERROR - Exception occurred: Connection error
+2025-01-13 13:45:16,438 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:45:16,439 - INFO - ...
+2025-01-13 13:45:16,439 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-13 13:45:16,440 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:45:16,440 - INFO - ...
+2025-01-13 13:45:16,441 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-13 13:45:16,442 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:45:16,442 - INFO - ...
+2025-01-13 13:45:16,442 - ERROR - Exception occurred: Connection error
+2025-01-13 13:47:35,003 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:47:35,003 - INFO - ...
+2025-01-13 13:47:35,003 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-13 13:47:35,004 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:47:35,004 - INFO - ...
+2025-01-13 13:47:35,004 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-13 13:47:35,004 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-13 13:47:35,004 - INFO - ...
+2025-01-13 13:47:35,004 - ERROR - Exception occurred: Connection error
