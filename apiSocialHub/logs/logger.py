@@ -29,11 +29,10 @@ def configure_logger(logger_name, log_file, log_level=logging.INFO):
 
 # Defining root directory/log files
 root_directory = os.path.dirname(os.path.abspath(__file__))
-root_directory = os.path.dirname(root_directory)
 
 # Configuring loggers
-send_file_message_log_path = os.path.join(root_directory, 'logs', 'send_file_message.log')
-send_text_message_log_path = os.path.join(root_directory, 'logs', 'send_text_message.log')
+send_file_message_log_path = os.path.join(root_directory, 'send_file_message.log')
+send_text_message_log_path = os.path.join(root_directory, 'send_text_message.log')
 
 send_file_logger = configure_logger('send_file_message', send_file_message_log_path)
 send_text_logger = configure_logger('send_text_message', send_text_message_log_path)

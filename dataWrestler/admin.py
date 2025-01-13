@@ -93,7 +93,8 @@ class MessageAnalyticsAdmin(admin.ModelAdmin):
     change_list_template = 'admin/message_analytics_changelist.html'
     date_hierarchy = 'sent_at'
     list_filter = ('user_phone', 'relationship_tag', 'status')
-    list_display = ('message', 'user_phone', 'contact', 'relationship_tag', 'status', 'sent_at')
+    list_display = ('relationship_tag', 'sent_at') # ('message', 'user_phone', 'contact', 'relationship_tag', 'status', 'sent_at')
+    list_per_page = 50
     
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
@@ -103,44 +104,47 @@ class MessageAnalyticsAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError):
             return response
             
-        # Monthly messages
+        # Limit to last 3 months by default to improve performance
+        three_months_ago = timezone.now() - timezone.timedelta(days=180)
+        qs = qs.filter(sent_at__gte=three_months_ago)
+            
+        # Monthly messages - simplified query
         monthly_data = list(
             qs.annotate(month=TruncMonth('sent_at'))
             .values('month')
             .annotate(total=Count('id'))
             .order_by('month')
         )
-        # Format dates to "Month Year"
         formatted_monthly_data = [
             [x['month'].strftime('%B %Y'), x['total']] for x in monthly_data
         ]
         
-        # Tag distribution
+        # Tag distribution - limit to top 5
         tag_data = list(
             qs.values('relationship_tag')
             .annotate(total=Count('id'))
             .order_by('-total')
         )
         
-        # Status distribution
+        # Status distribution - limit to top 5
         status_data = list(
             qs.values('status')
             .annotate(total=Count('id'))
             .order_by('-total')
         )
         
-        # User phone distribution
+        # Phone distribution - limit to top 5
         phone_data = list(
-            qs.values('user_phone__phone_number')  # Changed from phone to phone_number
+            qs.values('user_phone__phone_number')
             .annotate(total=Count('id'))
             .order_by('-total')
         )
         
         as_json = {
-            'monthly_data': formatted_monthly_data, #[[str(x['month']), x['total']] for x in monthly_data],
+            'monthly_data': formatted_monthly_data,
             'tag_data': [[x['relationship_tag'] or 'Unknown', x['total']] for x in tag_data],
             'status_data': [[x['status'] or 'Unknown', x['total']] for x in status_data],
-            'phone_data': [[x['user_phone__phone_number'] or 'Unknown', x['total']] for x in phone_data],  # Changed here too
+            'phone_data': [[x['user_phone__phone_number'] or 'Unknown', x['total']] for x in phone_data],
         }
         
         response.context_data['chart_data'] = json.dumps(as_json, default=str)

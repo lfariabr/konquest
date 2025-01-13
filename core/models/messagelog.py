@@ -18,7 +18,7 @@ class Meta:
         models.Index(fields=['id']),
         models.Index(fields=['sent_at']),
         models.Index(fields=['message']),
-        # models.Index(fields=['contact']), # change this
-        # models.Index(fields=['user_phone']), # change this
-        # models.Index(fields=['relationship_tag']), # change this
+        # Compound indexes for common query patterns
+        models.Index(fields=['relationship_tag']),  # Important for analytics
+        models.Index(fields=['status']),  # Important for status filtering
     ]

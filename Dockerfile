@@ -36,13 +36,16 @@ ENV DJANGO_SETTINGS_MODULE=konquist.settings
 ENV PYTHONPATH=/app
 
 # Create a non-root user and install dependencies
-RUN useradd -m -s /bin/bash appuser && \
+RUN useradd -m -s /bin/bash -G root appuser && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     libpq-dev \
     netcat-traditional \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /app/apiSocialHub/logs && \
+    chown -R root:root /app && \
+    chmod -R 775 /app
 
 WORKDIR /app
 
@@ -54,20 +57,10 @@ COPY --from=builder /app/requirements.txt .
 RUN pip install --no-cache-dir /wheels/*
 
 # Create necessary directories
-RUN mkdir -p /app/staticfiles /app/media /app/logs /app/apiSocialHub/logs && \
-    chmod -R 777 /app/apiSocialHub/logs
-
-# Change ownership of the app directory to appuser
-RUN chown -R appuser:appuser /app
+RUN mkdir -p /app/staticfiles /app/media /app/logs 
 
 # Copy project
 COPY . .
-
-# Create necessary directories
-RUN mkdir -p /app/staticfiles /app/media /app/logs
-
-# Change ownership of the app directory to appuser
-RUN chown -R appuser:appuser /app
 
 # Switch to non-root user
 USER appuser

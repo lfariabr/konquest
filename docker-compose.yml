@@ -49,11 +49,12 @@ services:
         python manage.py collectstatic --noinput &&
         gunicorn konquist.wsgi:application --bind=0.0.0.0:8001 --workers=4 --threads=4 --timeout=600 --keep-alive=65 --max-requests=2000 --max-requests-jitter=200 --worker-tmp-dir=/dev/shm --worker-class=gthread --log-level=debug --access-logfile=/app/logs/gunicorn-access.log --error-logfile=/app/logs/gunicorn-error.log --capture-output --enable-stdio-inheritance"
     volumes:
-      - .:/app
+      - .:/app:delegated
       - static_volume:/app/staticfiles
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
       - logs_volume:/app/logs
+      - ${PWD}/apiSocialHub/logs:/app/apiSocialHub/logs:rw
     tmpfs:
       - /tmp
     ports:
@@ -104,7 +105,7 @@ services:
         --max-memory-per-child=512000
         --logfile=/app/logs/celery.log"
     volumes:
-      - .:/app
+      - .:/app:delegated
       - media_volume:/app/core/media
       - /dev/shm:/dev/shm
       - logs_volume:/app/logs
@@ -151,7 +152,7 @@ services:
         cd /app &&
         celery -A konquist beat -l INFO --loglevel=DEBUG --logfile=/app/logs/celerybeat.log --schedule=/app/celerybeat/celerybeat-schedule"
     volumes:
-      - .:/app
+      - .:/app:delegated
       - logs_volume:/app/logs
       - celerybeat_volume:/app/celerybeat
     environment:
