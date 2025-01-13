@@ -174,3 +174,245 @@
 }
 2025-01-11 20:04:01,094 - INFO - Preparing to send file...
 2025-01-11 20:04:01,094 - ERROR - File not found: dummy_path
+2025-01-12 19:14:30,525 - INFO - isfile: True
+2025-01-12 19:14:30,525 - INFO - access: True
+2025-01-12 19:14:30,526 - INFO - getsize: 273109
+2025-01-12 19:14:30,526 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936704",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:14:30,526 - INFO - Preparing to send file...
+2025-01-12 19:14:33,757 - INFO - Message with file sent successfully to 9999936704. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:14:48,773 - INFO - isfile: True
+2025-01-12 19:14:48,773 - INFO - access: True
+2025-01-12 19:14:48,773 - INFO - getsize: 273109
+2025-01-12 19:14:48,773 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936703",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:14:48,773 - INFO - Preparing to send file...
+2025-01-12 19:14:51,924 - INFO - Message with file sent successfully to 9999936703. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:15:06,940 - INFO - isfile: True
+2025-01-12 19:15:06,940 - INFO - access: True
+2025-01-12 19:15:06,940 - INFO - getsize: 273109
+2025-01-12 19:15:06,940 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936702",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:15:06,940 - INFO - Preparing to send file...
+2025-01-12 19:15:09,503 - INFO - Message with file sent successfully to 9999936702. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:15:24,537 - INFO - isfile: True
+2025-01-12 19:15:24,537 - INFO - access: True
+2025-01-12 19:15:24,537 - INFO - getsize: 273109
+2025-01-12 19:15:24,538 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936701",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:15:24,538 - INFO - Preparing to send file...
+2025-01-12 19:15:27,731 - INFO - Message with file sent successfully to 9999936701. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:15:42,755 - INFO - isfile: True
+2025-01-12 19:15:42,755 - INFO - access: True
+2025-01-12 19:15:42,755 - INFO - getsize: 273109
+2025-01-12 19:15:42,755 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936700",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:15:42,755 - INFO - Preparing to send file...
+2025-01-12 19:15:45,760 - INFO - Message with file sent successfully to 9999936700. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:12,940 - INFO - isfile: True
+2025-01-12 19:24:12,940 - INFO - access: True
+2025-01-12 19:24:12,940 - INFO - getsize: 273109
+2025-01-12 19:24:12,940 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936704",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:24:12,940 - INFO - Preparing to send file...
+2025-01-12 19:24:15,416 - INFO - Message with file sent successfully to 9999936704. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:30,445 - INFO - isfile: True
+2025-01-12 19:24:30,445 - INFO - access: True
+2025-01-12 19:24:30,445 - INFO - getsize: 273109
+2025-01-12 19:24:30,445 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936703",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:24:30,445 - INFO - Preparing to send file...
+2025-01-12 19:24:33,527 - INFO - Message with file sent successfully to 9999936703. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:48,547 - INFO - isfile: True
+2025-01-12 19:24:48,548 - INFO - access: True
+2025-01-12 19:24:48,548 - INFO - getsize: 273109
+2025-01-12 19:24:48,548 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936702",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:24:48,548 - INFO - Preparing to send file...
+2025-01-12 19:24:51,989 - INFO - Message with file sent successfully to 9999936702. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:25:07,011 - INFO - isfile: True
+2025-01-12 19:25:07,011 - INFO - access: True
+2025-01-12 19:25:07,011 - INFO - getsize: 273109
+2025-01-12 19:25:07,012 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936701",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:25:07,012 - INFO - Preparing to send file...
+2025-01-12 19:25:10,082 - INFO - Message with file sent successfully to 9999936701. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:25:25,094 - INFO - isfile: True
+2025-01-12 19:25:25,094 - INFO - access: True
+2025-01-12 19:25:25,094 - INFO - getsize: 273109
+2025-01-12 19:25:25,094 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936700",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:25:25,095 - INFO - Preparing to send file...
+2025-01-12 19:25:27,593 - INFO - Message with file sent successfully to 9999936700. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:30:04,446 - INFO - isfile: False
+2025-01-12 19:30:04,447 - INFO - access: False
+2025-01-12 19:30:04,447 - INFO - getsize: N/A
+2025-01-12 19:30:04,447 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,447 - INFO - Preparing to send file...
+2025-01-12 19:30:04,447 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:30:04,450 - INFO - isfile: False
+2025-01-12 19:30:04,450 - INFO - access: False
+2025-01-12 19:30:04,450 - INFO - getsize: N/A
+2025-01-12 19:30:04,450 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,450 - INFO - Preparing to send file...
+2025-01-12 19:30:04,450 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-12 19:30:04,452 - INFO - isfile: False
+2025-01-12 19:30:04,452 - INFO - access: False
+2025-01-12 19:30:04,452 - INFO - getsize: N/A
+2025-01-12 19:30:04,452 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,452 - INFO - Preparing to send file...
+2025-01-12 19:30:04,453 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-12 19:30:04,453 - INFO - isfile: False
+2025-01-12 19:30:04,453 - INFO - access: False
+2025-01-12 19:30:04,453 - INFO - getsize: N/A
+2025-01-12 19:30:04,454 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,454 - INFO - Preparing to send file...
+2025-01-12 19:30:04,454 - ERROR - File not found: dummy_path
+2025-01-12 19:30:53,560 - INFO - isfile: False
+2025-01-12 19:30:53,561 - INFO - access: False
+2025-01-12 19:30:53,561 - INFO - getsize: N/A
+2025-01-12 19:30:53,561 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,561 - INFO - Preparing to send file...
+2025-01-12 19:30:53,562 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:30:53,564 - INFO - isfile: False
+2025-01-12 19:30:53,564 - INFO - access: False
+2025-01-12 19:30:53,564 - INFO - getsize: N/A
+2025-01-12 19:30:53,564 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,564 - INFO - Preparing to send file...
+2025-01-12 19:30:53,564 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-12 19:30:53,566 - INFO - isfile: False
+2025-01-12 19:30:53,566 - INFO - access: False
+2025-01-12 19:30:53,566 - INFO - getsize: N/A
+2025-01-12 19:30:53,566 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,566 - INFO - Preparing to send file...
+2025-01-12 19:30:53,566 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-12 19:30:53,567 - INFO - isfile: False
+2025-01-12 19:30:53,567 - INFO - access: False
+2025-01-12 19:30:53,567 - INFO - getsize: N/A
+2025-01-12 19:30:53,567 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,567 - INFO - Preparing to send file...
+2025-01-12 19:30:53,567 - ERROR - File not found: dummy_path
+2025-01-12 19:32:15,131 - INFO - isfile: False
+2025-01-12 19:32:15,132 - INFO - access: False
+2025-01-12 19:32:15,132 - INFO - getsize: N/A
+2025-01-12 19:32:15,132 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,132 - INFO - Preparing to send file...
+2025-01-12 19:32:15,132 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:32:15,134 - INFO - isfile: False
+2025-01-12 19:32:15,134 - INFO - access: False
+2025-01-12 19:32:15,134 - INFO - getsize: N/A
+2025-01-12 19:32:15,134 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,134 - INFO - Preparing to send file...
+2025-01-12 19:32:15,134 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-12 19:32:15,137 - INFO - isfile: False
+2025-01-12 19:32:15,137 - INFO - access: False
+2025-01-12 19:32:15,138 - INFO - getsize: N/A
+2025-01-12 19:32:15,138 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,138 - INFO - Preparing to send file...
+2025-01-12 19:32:15,138 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-12 19:32:15,139 - INFO - isfile: False
+2025-01-12 19:32:15,139 - INFO - access: False
+2025-01-12 19:32:15,139 - INFO - getsize: N/A
+2025-01-12 19:32:15,139 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,139 - INFO - Preparing to send file...
+2025-01-12 19:32:15,139 - ERROR - File not found: dummy_path

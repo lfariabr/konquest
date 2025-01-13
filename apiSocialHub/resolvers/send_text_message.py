@@ -6,6 +6,7 @@ import logging
 from ..logs.logger import send_text_logger
 
 api_url = "https://apinew.socialhub.pro/api/sendMessage"
+logger = logging.getLogger(__name__)
 
 def send_text_message(phone, message, token_socialhub, file_path=None):
     phone = str(phone)
@@ -16,6 +17,8 @@ def send_text_message(phone, message, token_socialhub, file_path=None):
         "message": message,
         "preview_url": True
     }
+    logger.info(f"Payload: {json.dumps(request_data, indent=2)}")
+    logger.info("...")
 
     headers = {
         "Content-Type": "application/json",

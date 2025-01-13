@@ -14,6 +14,7 @@ def convert_lead_to_contact_bulk(leads, contact_tag, user=None):
     Bulk convert lead to konquista contact
     """
     if not user or not leads:
+        logger.error("Invalid user or leads provided")
         return []
         
     # Get all phone numbers from leads
@@ -39,6 +40,7 @@ def convert_lead_to_contact_bulk(leads, contact_tag, user=None):
             contact.lead_status = lead.status
             contact.lead_id = lead.id_crm
             contact.is_lead = True
+            contact.source = 'Lead'
             contacts_to_update.append(contact)
         else:
             # Create new contact
@@ -51,6 +53,7 @@ def convert_lead_to_contact_bulk(leads, contact_tag, user=None):
                 lead_status=lead.status,
                 relationship_tag=contact_tag,
                 is_lead=True,
+                source='Lead',  # Mark the source as Lead
                 lead_last_checked=timezone.now(),
                 lead_check_count=0,
                 lead_created_at=lead.created_at
@@ -62,7 +65,7 @@ def convert_lead_to_contact_bulk(leads, contact_tag, user=None):
             Contact.objects.bulk_create(contacts_to_create)
 
         if contacts_to_update:
-            Contact.objects.bulk_update(contacts_to_update, fields=['lead_status', 'lead_id', 'is_lead'])
+            Contact.objects.bulk_update(contacts_to_update, fields=['lead_status', 'lead_id', 'is_lead', 'source'])
 
     logger.info(f"Processed {len(leads)} leads and created {len(contacts_to_create)} contacts.")
     

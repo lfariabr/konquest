@@ -26,7 +26,9 @@ from django.core.cache import cache
 class TargetList(models.Model):
     CONTACT_TYPE_CHOICES = [
         ('Whatsapp', 'Whatsapp'),
-        ('Appointment', 'Appointment')
+        ('Appointment', 'Appointment'),
+        ('Lead', 'Lead'),
+        # ('BillCharge', 'BillCharge')
     ]
 
     # Contact information
@@ -39,8 +41,8 @@ class TargetList(models.Model):
         choices=CONTACT_TYPE_CHOICES,
         validators=[
             validators.RegexValidator(
-                regex='^(Whatsapp|Appointment)$',
-                message='Contact type must be either Whatsapp or Appointment',
+                regex='^(Whatsapp|Appointment|Lead)$', # BillCharge
+                message='Contact type must be either Whatsapp, Appointment or Lead',
                 code='invalid_contact_type'
             )
         ]
@@ -71,7 +73,7 @@ class TargetList(models.Model):
         super().clean()
         if self.contact_type not in dict(self.CONTACT_TYPE_CHOICES):
             raise ValidationError({
-                'contact_type': 'Contact type must be either Whatsapp or Appointment'
+                'contact_type': 'Contact type must be either Whatsapp, Appointment, or Lead'
             })
 
     @classmethod
@@ -113,6 +115,7 @@ class TargetList(models.Model):
         based on contact_type. Results are cached to prevent repeated API/DB calls.
         """
         from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+        from messageShooter.resolvers.get_contact_lead import get_contact_lead
         import logging
         from django.core.cache import cache
         
@@ -143,6 +146,17 @@ class TargetList(models.Model):
                 # Cache for 5 minutes since appointments change more frequently
                 cache.set(cache_key, contacts, timeout=300)
                 return contacts
+        
+        elif self.contact_type == 'Lead':
+            # Get user from userphone
+            if self.userphone and self.userphone.user:
+                user = self.userphone.user
+                logger.info(f"Getting leads for user {user.email}")
+                contacts = get_contact_lead(self.contact_type, self.contact_tag, user=user)
+                # Cache for 5 minutes since leads change more frequently
+                cache.set(cache_key, contacts, timeout=300)
+                return contacts
+
             else:
                 logger.error(f"Missing user for appointment processing in target list {self.id}")
                 return []

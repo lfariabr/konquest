@@ -11,6 +11,7 @@ from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, pro
 from celery import shared_task
 import logging
 from django.core.cache import cache
+from apiSocialHub.resolvers.send_text_message import send_text_message
 
 
 token = config('TOKEN')
@@ -35,7 +36,7 @@ def cleanup_crm_tables():
     Uses PostgreSQL-specific syntax for cleanup while maintaining referential integrity.
     """
     logger.info("Starting CRM tables cleanup")
-    
+
     try:
         with connection.cursor() as cursor:
             # Check if tables exist first
@@ -109,8 +110,7 @@ def check_contacts_in_crm():
     
     try:
         # Get most recent contacts
-        # contacts = Contact.objects.all().order_by('-id')[:3000]
-        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-id')[:50000]
+        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-created_at')[:2000]
 
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts

@@ -94,3 +94,219 @@
 }
 2025-01-11 20:04:01,096 - INFO - ...
 2025-01-11 20:04:01,096 - ERROR - Exception occurred: Connection error
+2025-01-12 19:12:22,619 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938717",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Doralice!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:12:22,620 - INFO - ...
+2025-01-12 19:12:23,811 - INFO - Text message sent to 9999938717. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:12:38,835 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938733",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Simone!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:12:38,835 - INFO - ...
+2025-01-12 19:12:40,092 - INFO - Text message sent to 9999938733. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:12:55,112 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938738",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Ero!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:12:55,112 - INFO - ...
+2025-01-12 19:12:56,384 - INFO - Text message sent to 9999938738. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:13:11,406 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938764",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Joh!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:13:11,406 - INFO - ...
+2025-01-12 19:13:12,787 - INFO - Text message sent to 9999938764. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:13:27,811 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938783",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Manuel!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:13:27,812 - INFO - ...
+2025-01-12 19:13:28,937 - INFO - Text message sent to 9999938783. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:12,940 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938717",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Doralice!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:24:12,940 - INFO - ...
+2025-01-12 19:24:14,019 - INFO - Text message sent to 9999938717. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:29,047 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938733",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Simone!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:24:29,047 - INFO - ...
+2025-01-12 19:24:30,207 - INFO - Text message sent to 9999938733. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:24:45,229 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938738",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Ero!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:24:45,230 - INFO - ...
+2025-01-12 19:24:46,326 - INFO - Text message sent to 9999938738. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:25:01,337 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938764",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Joh!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:25:01,338 - INFO - ...
+2025-01-12 19:25:02,470 - INFO - Text message sent to 9999938764. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:25:17,489 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938783",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Manuel!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:25:17,490 - INFO - ...
+2025-01-12 19:25:18,619 - INFO - Text message sent to 9999938783. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:27:19,834 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936704",
+  "message": "Hello 1 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:27:19,834 - INFO - ...
+2025-01-12 19:27:21,015 - INFO - Text message sent to 9999936704. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:27:36,049 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936703",
+  "message": "Hello 1 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:27:36,049 - INFO - ...
+2025-01-12 19:27:37,233 - INFO - Text message sent to 9999936703. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:27:52,261 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936702",
+  "message": "Hello 1 message Botox",
+  "preview_url": true
+}
+2025-01-12 19:27:52,261 - INFO - ...
+2025-01-12 19:27:53,327 - INFO - Text message sent to 9999936702. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:28:33,808 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938717",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Doralice!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:28:33,808 - INFO - ...
+2025-01-12 19:28:34,913 - INFO - Text message sent to 9999938717. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:28:49,946 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938733",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Simone!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:28:49,946 - INFO - ...
+2025-01-12 19:28:51,055 - INFO - Text message sent to 9999938733. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:29:06,086 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938738",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Ero!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:29:06,086 - INFO - ...
+2025-01-12 19:29:07,166 - INFO - Text message sent to 9999938738. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:29:22,184 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938764",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Joh!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:29:22,184 - INFO - ...
+2025-01-12 19:29:23,265 - INFO - Text message sent to 9999938764. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:29:38,293 - INFO - Payload: {
+  "api_token": "wYoA3RN0u0dNvdj7m5dA2SrZYxhRZZsX",
+  "phone": "9999938783",
+  "message": "*Pr\u00f3-Corpo Est\u00e9tica*\r\nOl\u00e1, Manuel!\r\nReativamos o seu presente conosco. Escolha:\r\n1) Uma sess\u00e3o de MASSAGEM MODELADORA ou\r\n2) Uma sess\u00e3o de PEELING DE DIAMANTE \r\n\r\nTotalmente gratuita!\u00a0\ud83d\udc86\u200d\u2640\ufe0f\u2728\r\n\r\nQue tal dar esse passo e se cuidar com a gente?  \ud83d\udc96\r\nMas corre para agendar, pois sua cortesia expira em 7 dias.",
+  "preview_url": true
+}
+2025-01-12 19:29:38,294 - INFO - ...
+2025-01-12 19:29:39,533 - INFO - Text message sent to 9999938783. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-12 19:30:04,455 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,456 - INFO - ...
+2025-01-12 19:30:04,456 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-12 19:30:04,457 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,457 - INFO - ...
+2025-01-12 19:30:04,457 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-12 19:30:04,457 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:04,457 - INFO - ...
+2025-01-12 19:30:04,458 - ERROR - Exception occurred: Connection error
+2025-01-12 19:30:53,568 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,569 - INFO - ...
+2025-01-12 19:30:53,569 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-12 19:30:53,570 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,570 - INFO - ...
+2025-01-12 19:30:53,570 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-12 19:30:53,571 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:30:53,571 - INFO - ...
+2025-01-12 19:30:53,571 - ERROR - Exception occurred: Connection error
+2025-01-12 19:32:15,140 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,140 - INFO - ...
+2025-01-12 19:32:15,140 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-12 19:32:15,141 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,141 - INFO - ...
+2025-01-12 19:32:15,141 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-12 19:32:15,142 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-12 19:32:15,142 - INFO - ...
+2025-01-12 19:32:15,142 - ERROR - Exception occurred: Connection error

@@ -136,6 +136,11 @@ class TargetListAdmin(admin.ModelAdmin):
                         count = calculate_interval(obj.contact.appointment_created_at)
                     else:
                         count = 0
+            
+            elif obj.contact_type == 'Lead':
+                if obj.contact_tag in ["NCC"]:
+                    count = get_counter_whatsapp(obj.contact.phone, obj.contact_tag)
+
                 else:
                     count = 0
                     

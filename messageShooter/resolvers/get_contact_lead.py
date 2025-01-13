@@ -31,7 +31,7 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     logger = logging.getLogger(__name__)
     logger.info(f"Processing contacts wiceth tag {contact_tag}")
 
-    if contact_type != "Lead":
+    if contact_type != "Lead" or not user:
         logger.error("Invalid contact type")
         return []
 
@@ -90,10 +90,3 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     except Exception as e:
         logger.error(f"Error getting leads for {contact_tag}: {str(e)}")
         return []
-
-    # # Set cache for 5 minutes
-    # cache.set(cache_key, leads, 300)
-
-    # print(leads[:2])
-    # # return leads
-

@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
 DATABASE_ENGINE = 'postgresql' 
-CONTACTS_START = 5
+CONTACTS_START = 50
 CONTACTS_END = 100
 
 # messageShooter/resolvers/get_contacts.py
@@ -250,6 +250,16 @@ LOGGING = {
             'propagate': True,
         },
         'apiCrm': {
+            'handlers': ['console', 'celery_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'apiSocialHub': {
+            'handlers': ['console', 'celery_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'dataWrestler': {
             'handlers': ['console', 'celery_file'],
             'level': 'INFO',
             'propagate': True,

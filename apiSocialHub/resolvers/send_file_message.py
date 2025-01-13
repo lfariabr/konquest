@@ -9,6 +9,7 @@ from django.conf import settings
 # API URL
 api_url = "https://apinew.socialhub.pro/api/sendMessage"
 TIMEOUT_SECONDS = 60  # Timeout for API requests
+logger = logging.getLogger(__name__)
 
 def send_file_message(phone, message, token_socialhub, file_path):
     send_file_logger.info(f"isfile: {os.path.isfile(file_path)}")
@@ -34,6 +35,8 @@ def send_file_message(phone, message, token_socialhub, file_path):
         "message": message,
         "preview_url": True, 
     }
+    logger.info(f"Payload: {json.dumps(request_data, indent=2)}")
+    logger.info("...")
 
     send_file_logger.info(f"Payload: {json.dumps(request_data, indent=2)}")
     send_file_logger.info("Preparing to send file...")

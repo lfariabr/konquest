@@ -110,33 +110,33 @@ app.conf.beat_schedule = {
 
     'cleaner_crm_tables': {
         'task': 'apiCrm.cleanup_crm_tables',
-        'schedule': crontab(hour=0, minute=5),  # 5:30 AM
+        'schedule': crontab(hour=19, minute=0),
         'options': {'expires': 3600}  # Task expires after 1 hour
     },
 
     # Daily data pipeline sequence
     'fetch_all_data': {
         'task': 'apiCrm.fetch_all_data',
-        'schedule': crontab(hour=0, minute=10),  # 5:30 AM
-        'options': {'expires': 3600}  # Task expires after 1 hour
+        'schedule': crontab(hour=0, minute=10),
+        'options': {'expires': 3600}
     },
 
     'check_contacts_in_crm': {
         'task': 'apiCrm.check_contacts_in_crm',
-        'schedule': crontab(hour=4, minute=00),  # 6:00 AM
-        'options': {'expires': 270000}  
+        'schedule': crontab(hour=1, minute=00),
+        'options': {'expires': 7200}  
     },
 
     'process_scheduled_campaigns': {
         'task': 'apiCrm.process_scheduled_campaigns',
-        'schedule': crontab(hour=5, minute=30),  # 7:00 AM
+        'schedule': crontab(hour=3, minute=00), 
         'options': {'expires': 1800} 
     },
 
     'process_queues': {
         'task': 'queue.process_queues',
-        'schedule': crontab(hour=7, minute=15),  # 8:00 AM
-        'options': {'expires': 270000}
+        'schedule': crontab(hour=7, minute=15),
+        'options': {'expires': 7200}
     }
 }
 
