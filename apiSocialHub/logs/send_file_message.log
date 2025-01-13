@@ -504,3 +504,47 @@
 }
 2025-01-13 13:47:35,001 - INFO - Preparing to send file...
 2025-01-13 13:47:35,001 - ERROR - File not found: dummy_path
+2025-01-13 18:31:43,838 - INFO - isfile: False
+2025-01-13 18:31:43,838 - INFO - access: False
+2025-01-13 18:31:43,838 - INFO - getsize: N/A
+2025-01-13 18:31:43,838 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-13 18:31:43,838 - INFO - Preparing to send file...
+2025-01-13 18:31:43,838 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-13 18:31:43,841 - INFO - isfile: False
+2025-01-13 18:31:43,841 - INFO - access: False
+2025-01-13 18:31:43,841 - INFO - getsize: N/A
+2025-01-13 18:31:43,841 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-13 18:31:43,841 - INFO - Preparing to send file...
+2025-01-13 18:31:43,841 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-13 18:31:43,844 - INFO - isfile: False
+2025-01-13 18:31:43,844 - INFO - access: False
+2025-01-13 18:31:43,844 - INFO - getsize: N/A
+2025-01-13 18:31:43,844 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-13 18:31:43,844 - INFO - Preparing to send file...
+2025-01-13 18:31:43,844 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-13 18:31:43,845 - INFO - isfile: False
+2025-01-13 18:31:43,845 - INFO - access: False
+2025-01-13 18:31:43,845 - INFO - getsize: N/A
+2025-01-13 18:31:43,845 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-13 18:31:43,845 - INFO - Preparing to send file...
+2025-01-13 18:31:43,845 - ERROR - File not found: dummy_path

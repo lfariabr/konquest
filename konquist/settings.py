@@ -21,10 +21,9 @@ ALLOWED_HOSTS = ['127.0.0.1',
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
 DATABASE_ENGINE = 'postgresql' 
-CONTACTS_START = 50
-CONTACTS_END = 100
 
-# messageShooter/resolvers/get_contacts.py
+# messageShooter/resolvers/get_contacts.py and get_contact_lead.py
+CONTACTS_NCC = 50
 CONTACTS_TO_LOAD = 700
 CONTACTS_TO_LOAD_APT = 3000
 

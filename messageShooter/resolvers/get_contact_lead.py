@@ -14,7 +14,7 @@ from datetime import timedelta
 import logging
 from messageShooter.utils.lead_ncc_rules import lead_stores_ncc, lead_status_ncc
 from messageShooter.resolvers.get_lead_to_contact import convert_lead_to_contact_bulk
-from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
+from konquist.settings import CONTACTS_NCC
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     Get lead based on specific relationship tag rules
     - Args: 
         contact_type (str): Type of contact ('Lead')
-        contact_tag (str): Tag to filter leads ('Preenchimento', 'Botox')
+        contact_tag (str): Tag to filter leads ('NCC') or Não Atendido #FUTURE
         user (User, optional): User associated with the leads/contacts
     - Returns: List[Contact]
     """
@@ -41,16 +41,16 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     logger.info(f'Total leads: {Lead.objects.count()}')
     # Check leads by store
     store_leads = Lead.objects.filter(store__in=lead_stores_ncc)
-    logger.info(f'Leads in JARDINS store: {store_leads.count()}')
+    logger.info(f'Leads in {lead_stores_ncc} store: {store_leads.count()}')
     # Check leads by status
     status_leads = store_leads.filter(status__in=lead_status_ncc)
-    logger.info(f'Leads with NCC status: {status_leads.count()}')
+    logger.info(f'Leads with status {lead_status_ncc}: {status_leads.count()}')
 
     # try to get from cache first for all types
-    cache_key = f"lead_{contact_tag}"
+    cache_key = f"lead_{contact_tag}_{now.hour}"
     cached_contacts = cache.get(cache_key)
     if cached_contacts is not None:
-        logger.info(f"Using cached contacts for {contact_tag}")
+        logger.info(f"Using cached contacts for {contact_tag} at {now.hour}")
         return cached_contacts
 
     # Base query with common filters
@@ -65,14 +65,34 @@ def get_contact_lead(contact_type, contact_tag, user=None):
         if contact_tag == "NCC":
             ten_days_ago = now - timedelta(days=10)
 
-            leads = base_query.filter(          # GTE = greater than or equal to
-                created_at__lte=ten_days_ago,  # LTE = less than or equal to: created BEFORE OR ON ten_days_ago
+            # Get total eligible leads first
+            total_leads = base_query.filter(
+                created_at__lte=ten_days_ago,
                 store__in=lead_stores_ncc,
                 status__in=lead_status_ncc,
-            ).order_by('-created_at')[:CONTACTS_START]
+            ).order_by('-created_at')
+
+            # Defining time slots:
+            morning_start = 8
+            afternoon_start = 15
+
+            if morning_start <= now.hour < afternoon_start:
+                # Morning batch (first 50 contacts)
+                leads = total_leads[:CONTACTS_NCC]
+                logger.info(f"Processing morning batch: leads 1-{CONTACTS_NCC}")
+
+            elif now.hour >= afternoon_start:
+                # Afternoon batch (last 50 contacts)
+                leads = total_leads[CONTACTS_NCC:CONTACTS_NCC*2]
+                logger.info(f"Processing afternoon batch: leads {CONTACTS_NCC+1}-{CONTACTS_NCC*2}")
+            
+            else:
+                logger.info("Outside of the defined time slots")
+                return []
 
             leads = list(leads)
-            logger.info(f"Found {len(leads)} leads for {contact_tag}")
+            total_count = total_leads.count()
+            logger.info(f"Found {len(leads)} leads for {contact_tag} out of {total_count} total leads")
         
         else:
             logger.warning(f"Unknown contact tag: {contact_tag}")
