@@ -40,7 +40,7 @@ from django.db.models import Min
 from django.db.models.query import QuerySet
 
 
-from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_START, CONTACTS_END, CONTACTS_TO_LOAD_APT
+from konquist.settings import CONTACTS_TO_LOAD, CONTACTS_TO_LOAD_APT
 logger = logging.getLogger(__name__)
 
 def get_contact_whatsapp(contact_type: str, contact_tag: str) -> QuerySet:

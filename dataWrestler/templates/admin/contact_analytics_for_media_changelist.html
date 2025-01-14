@@ -73,6 +73,36 @@
                 </tfoot>
             </table>
         </div>
+
+                <!-- Instagram Analytics Table -->
+                <div class="analytics-section">
+                    <div class="header-with-button">
+                        <h2>Instagram Analytics</h2>
+                        <button onclick="downloadCSV('instagram-table', 'instagram_analytics')" class="download-button">Download CSV</button>
+                    </div>
+                    <table id="instagram-table" class="analytics-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Contacts</th>
+                                <th>Total Leads</th>
+                                <th>Total Appointments</th>
+                                <th>Total Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td id="instagram-total-contacts">0</td>
+                                <td id="instagram-total-leads">0</td>
+                                <td id="instagram-total-appointments">0</td>
+                                <td id="instagram-total-revenue">R$ 0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
     </div>
 
     <style>
@@ -187,6 +217,10 @@
                 preenchimento_data: window.analyticsData.preenchimento_data.filter(row => {
                     const [day, rowMonth, rowYear] = row.date.split('/');
                     return rowMonth === month && rowYear === year;
+                }),
+                instagram_data: window.analyticsData.instagram_data.filter(row => {
+                    const [day, rowMonth, rowYear] = row.date.split('/');
+                    return rowMonth === month && rowYear === year;
                 })
             };
 
@@ -201,6 +235,7 @@
         function populateAllTables(data) {
             populateTable(data.botox_data, 'botox-table');
             populateTable(data.preenchimento_data, 'preenchimento-table');
+            populateTable(data.instagram_data, 'instagram-table');
         }
 
         function populateTable(data, tableId) {

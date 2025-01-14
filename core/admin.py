@@ -145,7 +145,7 @@ class ContactAdmin(admin.ModelAdmin):
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments', 'check_bill_charges'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
-    list_per_page = 200
+    list_per_page = 500
 
     def formatted_bill_charge_amount(self, obj):
         if obj.bill_charge_total_amount:

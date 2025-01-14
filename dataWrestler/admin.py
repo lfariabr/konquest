@@ -172,7 +172,7 @@ class ContactAnalyticsForMediaAdmin(admin.ModelAdmin):
                 total_contacts=Count('id'),
                 total_leads=Count('id', filter=Q(is_lead=True)),
                 total_appointments=Count('id', filter=Q(is_appointment=True)),
-                total_revenue=Sum('bill_charge_total_history', default=0)
+                total_revenue=(Sum('bill_charge_total_amount', default=0))/100
             )
             .order_by('-created_at__date')  # Most recent first
         )
@@ -185,7 +185,19 @@ class ContactAnalyticsForMediaAdmin(admin.ModelAdmin):
                 total_contacts=Count('id'),
                 total_leads=Count('id', filter=Q(is_lead=True)),
                 total_appointments=Count('id', filter=Q(is_appointment=True)),
-                total_revenue=Sum('bill_charge_total_history', default=0)
+                total_revenue=(Sum('bill_charge_total_amount', default=0))/100
+            )
+            .order_by('-created_at__date')  # Most recent first
+        )
+
+        instagram_data = list(
+            qs.filter(relationship_tag='Instagram')
+            .values('created_at__date')
+            .annotate(
+                total_contacts=Count('id'),
+                total_leads=Count('id', filter=Q(is_lead=True)),
+                total_appointments=Count('id', filter=Q(is_appointment=True)),
+                total_revenue=Sum('bill_charge_total_amount', default=0)
             )
             .order_by('-created_at__date')  # Most recent first
         )
@@ -207,6 +219,7 @@ class ContactAnalyticsForMediaAdmin(admin.ModelAdmin):
         as_json = {
             'botox_data': format_data(botox_data),
             'preenchimento_data': format_data(preenchimento_data),
+            'instagram_data': format_data(instagram_data),
         }
         
         response.context_data['analytics_data'] = json.dumps(as_json, default=str)
