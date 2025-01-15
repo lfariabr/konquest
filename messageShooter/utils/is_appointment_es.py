@@ -23,7 +23,9 @@ reminder_undesired_status_es = ['Atendido',
                                 'Cancelado',
                                 'Reagendado']
 
-stores_include_es = ['JARDINS'] # store for store in stores
+reminder_stores_include_es = ['JARDINS'] # store for store in stores
+reminder_stores_include_ipiranga = ['IPIRANGA']
+reminder_stores_include_santo_amaro = ['SANTO AMARO']
 
 store_include_pl = ['PLÁSTICA']
 

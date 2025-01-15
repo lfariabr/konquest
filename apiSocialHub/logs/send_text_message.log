@@ -1,0 +1,224 @@
+2025-01-14 22:58:14,289 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 22:58:14,289 - INFO - ...
+2025-01-14 22:58:14,289 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 22:58:14,290 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 22:58:14,290 - INFO - ...
+2025-01-14 22:58:14,290 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 22:58:14,290 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 22:58:14,290 - INFO - ...
+2025-01-14 22:58:14,290 - ERROR - Exception occurred: Connection error
+2025-01-14 23:19:03,936 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:03,936 - INFO - ...
+2025-01-14 23:19:03,936 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 23:19:03,937 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:03,937 - INFO - ...
+2025-01-14 23:19:03,937 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 23:19:03,938 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:03,938 - INFO - ...
+2025-01-14 23:19:03,938 - ERROR - Exception occurred: Connection error
+2025-01-14 23:19:20,313 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:20,313 - INFO - ...
+2025-01-14 23:19:20,313 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 23:19:20,315 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:20,315 - INFO - ...
+2025-01-14 23:19:20,315 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 23:19:20,316 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:19:20,316 - INFO - ...
+2025-01-14 23:19:20,316 - ERROR - Exception occurred: Connection error
+2025-01-14 23:21:45,453 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:21:45,453 - INFO - ...
+2025-01-14 23:21:45,453 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 23:21:45,454 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:21:45,454 - INFO - ...
+2025-01-14 23:21:45,454 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 23:21:45,455 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:21:45,455 - INFO - ...
+2025-01-14 23:21:45,455 - ERROR - Exception occurred: Connection error
+2025-01-14 23:22:58,836 - INFO - Payload: {
+  "api_token": "MOOygXTIL373eLY4YTgbJvyjvW6fswp6",
+  "phone": "9999936679",
+  "message": "Hello 0 message Preenchimento",
+  "preview_url": true
+}
+2025-01-14 23:22:58,836 - INFO - ...
+2025-01-14 23:22:58,837 - INFO - Payload: {
+  "api_token": "688gNxW8Ygqn2Zrb7k9Vy1BYBN9mtf5b",
+  "phone": "9999962984",
+  "message": "Oi Rosangela, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na Pr\u00f3-Corpo [store] no dia 09/01/2025!\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha avalia\u00e7\u00e3o\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:22:58,837 - INFO - ...
+2025-01-14 23:22:58,838 - INFO - Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:22:58,838 - INFO - ...
+2025-01-14 23:23:00,944 - ERROR - Fail to send text message to 9999962653. Code: 400, Resposta: {"success":false,"message":"invalid api_token!"}
+2025-01-14 23:23:00,951 - INFO - Text message sent to 9999936679. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:23:00,951 - INFO - Text message sent to 9999962984. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:23:15,988 - INFO - Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:23:15,988 - INFO - ...
+2025-01-14 23:23:15,989 - INFO - Payload: {
+  "api_token": "688gNxW8Ygqn2Zrb7k9Vy1BYBN9mtf5b",
+  "phone": "9999962905",
+  "message": "Oi Agatha, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na Pr\u00f3-Corpo [store] no dia 09/01/2025!\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha avalia\u00e7\u00e3o\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:23:15,989 - INFO - ...
+2025-01-14 23:23:15,990 - INFO - Payload: {
+  "api_token": "MOOygXTIL373eLY4YTgbJvyjvW6fswp6",
+  "phone": "9999936678",
+  "message": "Hello 0 message Preenchimento",
+  "preview_url": true
+}
+2025-01-14 23:23:15,990 - INFO - ...
+2025-01-14 23:23:17,104 - ERROR - Fail to send text message to 9999962638. Code: 400, Resposta: {"success":false,"message":"invalid api_token!"}
+2025-01-14 23:23:17,108 - INFO - Text message sent to 9999936678. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:23:17,128 - INFO - Text message sent to 9999962905. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:27:26,463 - INFO - Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:27:26,463 - INFO - ...
+2025-01-14 23:27:28,550 - ERROR - Fail to send text message to 9999962653. Code: 400, Resposta: {"success":false,"message":"invalid api_token!"}
+2025-01-14 23:27:43,581 - INFO - Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:27:43,581 - INFO - ...
+2025-01-14 23:27:45,753 - ERROR - Fail to send text message to 9999962638. Code: 400, Resposta: {"success":false,"message":"invalid api_token!"}
+2025-01-14 23:31:34,798 - INFO - Payload: {
+  "api_token": "B2TwOhCJSwO8VWYmEtoL1o7MX2PqPz1p",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:31:34,798 - INFO - ...
+2025-01-14 23:31:37,216 - INFO - Text message sent to 9999962653. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:31:52,240 - INFO - Payload: {
+  "api_token": "B2TwOhCJSwO8VWYmEtoL1o7MX2PqPz1p",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+2025-01-14 23:31:52,240 - INFO - ...
+2025-01-14 23:31:53,339 - INFO - Text message sent to 9999962638. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-14 23:39:31,330 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:31,330 - INFO - ...
+2025-01-14 23:39:31,330 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 23:39:31,331 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:31,331 - INFO - ...
+2025-01-14 23:39:31,331 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 23:39:31,332 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:31,332 - INFO - ...
+2025-01-14 23:39:31,332 - ERROR - Exception occurred: Connection error
+2025-01-14 23:39:48,650 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:48,650 - INFO - ...
+2025-01-14 23:39:48,650 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-14 23:39:48,651 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:48,651 - INFO - ...
+2025-01-14 23:39:48,651 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-14 23:39:48,652 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-14 23:39:48,652 - INFO - ...
+2025-01-14 23:39:48,652 - ERROR - Exception occurred: Connection error

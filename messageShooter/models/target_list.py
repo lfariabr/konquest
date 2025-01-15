@@ -114,7 +114,8 @@ class TargetList(models.Model):
         Get contacts associated with this target list using the appropriate resolver
         based on contact_type. Results are cached to prevent repeated API/DB calls.
         """
-        from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+        from messageShooter.resolvers.get_contact_appointment import get_contact_appointment
+        from messageShooter.resolvers.get_contact_whatsapp import get_contact_whatsapp
         from messageShooter.resolvers.get_contact_lead import get_contact_lead
         import logging
         from django.core.cache import cache

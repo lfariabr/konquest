@@ -1,7 +1,9 @@
 # if contact_type = whatsapp, counter = Count sent messages to number to specific tag
 # if contact_type = appointment, counter = DaysToAppoitment (positive or negative in case of NPS)
 
-from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
+from messageShooter.resolvers.get_contact_lead import get_contact_lead
+from messageShooter.resolvers.get_contact_whatsapp import get_contact_whatsapp
+from messageShooter.resolvers.get_contact_appointment import get_contact_appointment
 from core.models.messagelog import MessageLogs
 from apiCrm.models.appointment import Appointment
 from django.utils import timezone

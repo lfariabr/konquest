@@ -1,15 +1,22 @@
+import logging
 from django.utils import timezone
+
+from core.models.contact import Contact
+from core.models.message import Message
 from apiCrm.models.appointment import Appointment
 from messageShooter.models.campaign import Campaign, FREQUENCY_ONCE
 from messageShooter.models.target_list import TargetList
-from messageShooter.resolvers.get_contacts import get_contact_whatsapp, get_contact_appointment
-from messageShooter.resolvers.get_counter import get_counter_whatsapp, get_counter_appointment, bulk_get_counter_whatsapp, bulk_get_counter_appointment
+
 from messageShooter.resolvers.get_contact_lead import get_contact_lead
+from messageShooter.resolvers.get_contact_whatsapp import get_contact_whatsapp
+from messageShooter.resolvers.get_contact_appointment import get_contact_appointment
 from messageShooter.resolvers.get_message import get_message
 from messageShooter.resolvers.get_userphone import get_userphone
-from core.models.message import Message
-from core.models.contact import Contact
-import logging
+from messageShooter.resolvers.get_counter import (get_counter_whatsapp,
+                                                    get_counter_appointment,
+                                                    bulk_get_counter_whatsapp,
+                                                    bulk_get_counter_appointment)
+
 
 logger = logging.getLogger(__name__)
 

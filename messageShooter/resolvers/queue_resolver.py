@@ -1,12 +1,13 @@
+import logging
+from django.db import transaction
 from django.utils import timezone
 from django.core.cache import cache
+
+from core.models.contact import Contact
+from core.models.messagelog import MessageLogs
 from messageShooter.models.queue import Queue
 from apiSocialHub.resolvers.send_text_message import send_text_message
 from apiSocialHub.resolvers.send_file_message import send_file_message
-from core.models.messagelog import MessageLogs
-from core.models.contact import Contact
-import logging
-from django.db import transaction
 
 logger = logging.getLogger(__name__)
 

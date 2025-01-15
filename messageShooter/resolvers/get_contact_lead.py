@@ -6,15 +6,17 @@
 # New fixing the 'user' call:
 # python manage.py shell -c "from core.models.user import kUser; from messageShooter.resolvers.get_contact_lead import get_contact_lead; user = kUser.objects.first(); print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato', user=user))"
 
+import logging
+from datetime import timedelta
 from django.utils import timezone
 from django.core.cache import cache
+
 from core.models import contact
 from apiCrm.models.lead import Lead
-from datetime import timedelta
-import logging
+
 from messageShooter.utils.lead_ncc_rules import lead_stores_ncc, lead_status_ncc
-from messageShooter.resolvers.get_lead_to_contact import convert_lead_to_contact_bulk
-from konquist.settings import CONTACTS_NCC
+from messageShooter.resolvers.contactConversor_lead import convert_lead_to_contact_bulk
+from konquist.settings import CONTACTS_TO_LOAD_LEAD
 
 
 logger = logging.getLogger(__name__)
@@ -78,13 +80,13 @@ def get_contact_lead(contact_type, contact_tag, user=None):
 
             if morning_start <= now.hour < afternoon_start:
                 # Morning batch (first 50 contacts)
-                leads = total_leads[:CONTACTS_NCC]
-                logger.info(f"Processing morning batch: leads 1-{CONTACTS_NCC}")
+                leads = total_leads[:CONTACTS_TO_LOAD_LEAD]
+                logger.info(f"Processing morning batch: leads 1-{CONTACTS_TO_LOAD_LEAD}")
 
             elif now.hour >= afternoon_start:
                 # Afternoon batch (last 50 contacts)
-                leads = total_leads[CONTACTS_NCC:CONTACTS_NCC*2]
-                logger.info(f"Processing afternoon batch: leads {CONTACTS_NCC+1}-{CONTACTS_NCC*2}")
+                leads = total_leads[CONTACTS_TO_LOAD_LEAD:CONTACTS_TO_LOAD_LEAD*2]
+                logger.info(f"Processing afternoon batch: leads {CONTACTS_TO_LOAD_LEAD+1}-{CONTACTS_TO_LOAD_LEAD*2}")
             
             else:
                 logger.info("Outside of the defined time slots")

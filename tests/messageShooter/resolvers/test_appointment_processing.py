@@ -2,7 +2,7 @@ import pytest
 from django.utils import timezone
 from datetime import timedelta
 from messageShooter.resolvers.get_counter import bulk_get_counter_appointment
-from messageShooter.resolvers.get_appointment_to_contact import convert_appointment_to_contact
+from messageShooter.resolvers.contactConversor_apt import convert_appointment_to_contact
 from messageShooter.resolvers.get_message import get_message_for_interval
 from core.models.message import Message
 from core.models.contact import Contact

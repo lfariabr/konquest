@@ -1,7 +1,7 @@
 # get userphone based contact_tag
+import logging
 from core.models.userphone import UserPhone
 from messageShooter.utils.nps_token_dic import store_dict_info
-import logging
 
 logger = logging.getLogger(__name__)
 

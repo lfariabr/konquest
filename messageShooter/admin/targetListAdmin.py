@@ -128,9 +128,9 @@ class TargetListAdmin(admin.ModelAdmin):
                     count = 0
                     
             elif obj.contact_type == 'Appointment':
-                if obj.contact_tag in ["NPS", "Reschedule"]:
+                if obj.contact_tag in ["NPS", "Reschedule", "ReschedulePL"]:
                     count = get_counter_whatsapp(obj.contact.phone, obj.contact_tag)
-                elif obj.contact_tag == "Reminder":
+                elif obj.contact_tag in ["Reminder", "ReminderPL"]:
                     from messageShooter.resolvers.get_days_interval import calculate_interval
                     if obj.contact.appointment_created_at:
                         count = calculate_interval(obj.contact.appointment_created_at)

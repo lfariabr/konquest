@@ -1,0 +1,492 @@
+INFO 2025-01-14 22:58:11,185 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 22:58:11,185 Import completed in 0.00 seconds
+INFO 2025-01-14 22:58:11,224 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 22:58:11,224 Import completed in 0.00 seconds
+INFO 2025-01-14 22:58:11,226 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 22:58:11,226 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 22:58:11,228 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 22:58:11,228 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 22:58:11,292 Starting CRM tables cleanup
+INFO 2025-01-14 22:58:11,293 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 22:58:11,293 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 22:58:11,293 Successfully truncated apiCrm_lead
+INFO 2025-01-14 22:58:11,293 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4630180000'>
+INFO 2025-01-14 22:58:14,241 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 22:58:14,241 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 22:58:14,245 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 22:58:14,246 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 22:58:14,250 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 22:58:14,254 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 22:58:14,281 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,281 ...
+INFO 2025-01-14 22:58:14,283 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,283 ...
+INFO 2025-01-14 22:58:14,286 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,286 ...
+INFO 2025-01-14 22:58:14,288 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,288 ...
+INFO 2025-01-14 22:58:14,289 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,289 ...
+INFO 2025-01-14 22:58:14,289 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,290 ...
+INFO 2025-01-14 22:58:14,290 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 22:58:14,290 ...
+INFO 2025-01-14 23:19:00,678 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:19:00,678 Import completed in 0.00 seconds
+INFO 2025-01-14 23:19:00,681 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:19:00,681 Import completed in 0.00 seconds
+INFO 2025-01-14 23:19:00,683 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:19:00,683 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 23:19:00,685 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:19:00,685 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 23:19:00,746 Starting CRM tables cleanup
+INFO 2025-01-14 23:19:00,747 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 23:19:00,747 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 23:19:00,747 Successfully truncated apiCrm_lead
+INFO 2025-01-14 23:19:00,747 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4863898432'>
+INFO 2025-01-14 23:19:03,887 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:03,888 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 23:19:03,892 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:03,892 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 23:19:03,897 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:03,902 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 23:19:03,929 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,929 ...
+INFO 2025-01-14 23:19:03,932 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,932 ...
+INFO 2025-01-14 23:19:03,934 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,934 ...
+INFO 2025-01-14 23:19:03,935 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,935 ...
+INFO 2025-01-14 23:19:03,936 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,936 ...
+INFO 2025-01-14 23:19:03,937 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,937 ...
+INFO 2025-01-14 23:19:03,938 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:03,938 ...
+INFO 2025-01-14 23:19:17,128 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:19:17,128 Import completed in 0.00 seconds
+INFO 2025-01-14 23:19:17,131 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:19:17,132 Import completed in 0.00 seconds
+INFO 2025-01-14 23:19:17,134 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:19:17,134 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 23:19:17,136 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:19:17,136 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 23:19:17,195 Starting CRM tables cleanup
+INFO 2025-01-14 23:19:17,196 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 23:19:17,196 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 23:19:17,196 Successfully truncated apiCrm_lead
+INFO 2025-01-14 23:19:17,196 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4616147808'>
+INFO 2025-01-14 23:19:20,233 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:20,234 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 23:19:20,238 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:20,238 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 23:19:20,242 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:19:20,247 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 23:19:20,305 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,305 ...
+INFO 2025-01-14 23:19:20,307 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,308 ...
+INFO 2025-01-14 23:19:20,310 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,310 ...
+INFO 2025-01-14 23:19:20,311 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,312 ...
+INFO 2025-01-14 23:19:20,313 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,313 ...
+INFO 2025-01-14 23:19:20,315 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,315 ...
+INFO 2025-01-14 23:19:20,316 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:19:20,316 ...
+INFO 2025-01-14 23:21:42,353 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:21:42,353 Import completed in 0.00 seconds
+INFO 2025-01-14 23:21:42,394 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:21:42,394 Import completed in 0.00 seconds
+INFO 2025-01-14 23:21:42,397 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:21:42,397 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 23:21:42,399 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:21:42,399 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 23:21:42,478 Starting CRM tables cleanup
+INFO 2025-01-14 23:21:42,479 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 23:21:42,479 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 23:21:42,479 Successfully truncated apiCrm_lead
+INFO 2025-01-14 23:21:42,479 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4522040848'>
+INFO 2025-01-14 23:21:45,404 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:21:45,404 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 23:21:45,408 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:21:45,408 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 23:21:45,413 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:21:45,417 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 23:21:45,445 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,445 ...
+INFO 2025-01-14 23:21:45,447 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,448 ...
+INFO 2025-01-14 23:21:45,451 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,451 ...
+INFO 2025-01-14 23:21:45,452 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,452 ...
+INFO 2025-01-14 23:21:45,453 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,453 ...
+INFO 2025-01-14 23:21:45,454 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,454 ...
+INFO 2025-01-14 23:21:45,455 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:21:45,455 ...
+INFO 2025-01-14 23:22:58,836 Payload: {
+  "api_token": "MOOygXTIL373eLY4YTgbJvyjvW6fswp6",
+  "phone": "9999936679",
+  "message": "Hello 0 message Preenchimento",
+  "preview_url": true
+}
+INFO 2025-01-14 23:22:58,836 ...
+INFO 2025-01-14 23:22:58,836 Payload: {
+  "api_token": "688gNxW8Ygqn2Zrb7k9Vy1BYBN9mtf5b",
+  "phone": "9999962984",
+  "message": "Oi Rosangela, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na Pr\u00f3-Corpo [store] no dia 09/01/2025!\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha avalia\u00e7\u00e3o\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:22:58,836 Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936704",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+INFO 2025-01-14 23:22:58,836 ...
+INFO 2025-01-14 23:22:58,837 ...
+INFO 2025-01-14 23:22:58,837 Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:22:58,838 ...
+INFO 2025-01-14 23:23:15,987 Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:23:15,988 ...
+INFO 2025-01-14 23:23:15,989 Payload: {
+  "api_token": "688gNxW8Ygqn2Zrb7k9Vy1BYBN9mtf5b",
+  "phone": "9999962905",
+  "message": "Oi Agatha, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na Pr\u00f3-Corpo [store] no dia 09/01/2025!\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha avalia\u00e7\u00e3o\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:23:15,989 ...
+INFO 2025-01-14 23:23:15,989 Payload: {
+  "api_token": "MOOygXTIL373eLY4YTgbJvyjvW6fswp6",
+  "phone": "9999936678",
+  "message": "Hello 0 message Preenchimento",
+  "preview_url": true
+}
+INFO 2025-01-14 23:23:15,989 ...
+INFO 2025-01-14 23:23:17,458 Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "9999936703",
+  "message": "Hello 0 message Botox",
+  "preview_url": true
+}
+INFO 2025-01-14 23:23:17,458 ...
+INFO 2025-01-14 23:27:26,463 Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:27:26,463 ...
+INFO 2025-01-14 23:27:43,580 Payload: {
+  "api_token": "11999999999",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:27:43,580 ...
+INFO 2025-01-14 23:31:34,798 Payload: {
+  "api_token": "B2TwOhCJSwO8VWYmEtoL1o7MX2PqPz1p",
+  "phone": "9999962653",
+  "message": "Oi Nilda, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:31:34,798 ...
+INFO 2025-01-14 23:31:52,240 Payload: {
+  "api_token": "B2TwOhCJSwO8VWYmEtoL1o7MX2PqPz1p",
+  "phone": "9999962638",
+  "message": "Oi Gra\u00e7a, que pena que voc\u00ea n\u00e3o p\u00f4de comparecer na sua consulta no Mais Cirurgia Pl\u00e1stica no dia 09/01/2025!\r\n\r\nN\u00f3s preparamos uma experi\u00eancia \u00fanica para voc\u00ea, com o objetivo de iniciar uma jornada para a sua transforma\u00e7\u00e3o!\r\nAcredito que essa visita vai ser o nosso primeiro passo!\r\n\r\nDiz pra mim, qual op\u00e7\u00e3o voc\u00ea prefere?\r\n1- Reagendar minha consulta\r\n2- Me chame outro dia",
+  "preview_url": true
+}
+INFO 2025-01-14 23:31:52,240 ...
+INFO 2025-01-14 23:39:28,092 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:39:28,092 Import completed in 0.00 seconds
+INFO 2025-01-14 23:39:28,131 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:39:28,131 Import completed in 0.00 seconds
+INFO 2025-01-14 23:39:28,134 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:39:28,134 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 23:39:28,136 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:39:28,136 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 23:39:28,192 Starting CRM tables cleanup
+INFO 2025-01-14 23:39:28,193 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 23:39:28,193 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 23:39:28,193 Successfully truncated apiCrm_lead
+INFO 2025-01-14 23:39:28,193 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4490201600'>
+INFO 2025-01-14 23:39:31,254 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:31,254 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 23:39:31,276 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:31,279 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 23:39:31,289 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:31,294 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 23:39:31,322 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,322 ...
+INFO 2025-01-14 23:39:31,325 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,325 ...
+INFO 2025-01-14 23:39:31,328 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,328 ...
+INFO 2025-01-14 23:39:31,329 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,329 ...
+INFO 2025-01-14 23:39:31,330 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,330 ...
+INFO 2025-01-14 23:39:31,331 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,331 ...
+INFO 2025-01-14 23:39:31,332 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:31,332 ...
+INFO 2025-01-14 23:39:45,391 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:39:45,391 Import completed in 0.00 seconds
+INFO 2025-01-14 23:39:45,430 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-14 23:39:45,430 Import completed in 0.00 seconds
+INFO 2025-01-14 23:39:45,433 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:39:45,433 Error in resolve_all_data: Invalid date format
+INFO 2025-01-14 23:39:45,435 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-14 23:39:45,435 Error in resolve_all_data: Invalid data format
+INFO 2025-01-14 23:39:45,546 Starting CRM tables cleanup
+INFO 2025-01-14 23:39:45,547 Successfully truncated apiCrm_billcharge
+INFO 2025-01-14 23:39:45,547 Successfully truncated apiCrm_appointment
+INFO 2025-01-14 23:39:45,547 Successfully truncated apiCrm_lead
+INFO 2025-01-14 23:39:45,547 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4425096480'>
+INFO 2025-01-14 23:39:48,601 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:48,602 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-14 23:39:48,605 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:48,606 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-14 23:39:48,610 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-14 23:39:48,615 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-14 23:39:48,642 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,642 ...
+INFO 2025-01-14 23:39:48,644 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,644 ...
+INFO 2025-01-14 23:39:48,647 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,647 ...
+INFO 2025-01-14 23:39:48,648 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,648 ...
+INFO 2025-01-14 23:39:48,650 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,650 ...
+INFO 2025-01-14 23:39:48,651 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,651 ...
+INFO 2025-01-14 23:39:48,652 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-14 23:39:48,652 ...
