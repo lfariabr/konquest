@@ -20,12 +20,12 @@ ALLOWED_HOSTS = ['127.0.0.1',
                 'localhost']
 
 # DATABASE: sqlite3 (dev) OR postgresql (prod)
-DATABASE_ENGINE = 'sqlite3' 
+DATABASE_ENGINE = 'postgresql' 
 
 # messageShooter/resolvers/get_contacts.py and get_contact_lead.py
-CONTACTS_TO_LOAD_LEAD = 5 # 50
-CONTACTS_TO_LOAD_APT = 5 # 3000
-CONTACTS_TO_LOAD_WPP = 5 # 700
+CONTACTS_TO_LOAD_LEAD = 50 # 50
+CONTACTS_TO_LOAD_APT = 3000 # 3000
+CONTACTS_TO_LOAD_WPP = 700 # 700
 
 INSTALLED_APPS = [
     'django_daisy',
