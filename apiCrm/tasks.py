@@ -35,7 +35,7 @@ def cleanup_crm_tables():
     Daily task to clean up CRM-related tables with proper dependency handling.
     Uses PostgreSQL-specific syntax for cleanup while maintaining referential integrity.
     """
-    logger.info("Starting CRM tables cleanup")
+    logger.info("🤖 TASK: Starting CRM tables cleanup")
 
     try:
         with connection.cursor() as cursor:
@@ -84,83 +84,6 @@ def cleanup_crm_tables():
         raise
 
 @shared_task(
-    name='apiCrm.check_contacts_in_crm',
-    autoretry_for=(Exception,),
-    retry_kwargs={'max_retries': 3},
-    retry_backoff=True,
-    soft_time_limit=270000 # 45 minutes
-)
-def check_contacts_in_crm():
-    """
-    Task to check if contacts exist in CRM tables.
-    Processes contacts and tracks progress.
-    
-    Returns:
-        dict: Statistics about the check operation
-    """
-    logger.info("Starting contact check in CRM")
-    stats = {
-        'total_contacts': 0,
-        'leads_found': 0,
-        'appointments_found': 0,
-        'billcharges_found': 0,
-        'errors': 0,
-        'start_time': timezone.now()
-    }
-    
-    try:
-        # Get most recent contacts
-        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-created_at')[:2000]
-
-        total_contacts = len(contacts)
-        stats['total_contacts'] = total_contacts
-        
-        for idx, contact in enumerate(contacts, 1):
-            progress = (idx / total_contacts) * 100
-            logger.info(f"Processing contact {idx}/{total_contacts} ({progress:.1f}%) - {contact.phone}")
-            
-            try:
-                with transaction.atomic():
-                    # Check if contact exists as lead and update tracking
-                    lead = contact.check_if_lead_exists()
-                    if lead:
-                        stats['leads_found'] += 1
-                    
-                    # Check if contact exists as appointment and update tracking
-                    appointment = contact.check_if_appointment_exists()
-                    if appointment:
-                        stats['appointments_found'] += 1
-                    
-                    # Check if contact exists as billcharge and update tracking
-                    billcharge = contact.check_if_bill_charges_exists()
-                    if billcharge:
-                        stats['billcharges_found'] += 1
-
-            except Exception as e:
-                stats['errors'] += 1
-                logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
-                continue
-        
-        # Calculate final statistics
-        stats['end_time'] = timezone.now()
-        duration = (stats['end_time'] - stats['start_time']).total_seconds()
-        
-        logger.info(
-            "Contact check completed:\n"
-            f"- Processed: {stats['total_contacts']} contacts\n"
-            f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments, {stats['billcharges_found']} billcharges\n"
-            f"- Errors: {stats['errors']}\n"
-            f"- Duration: {duration:.2f} seconds"
-        )
-        
-        return stats
-        
-    except Exception as e:
-        logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
-        raise
-
-
-@shared_task(
     name='apiCrm.fetch_all_data',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
@@ -169,6 +92,8 @@ def check_contacts_in_crm():
     rate_limit='1/h'
 )
 def fetch_all_data():
+    logger.info("🤖 TASK: Starting to fetch all data from CRM @ Pró-Corpo."
+    )
     lock_id = "fetch_all_data_lock"
     # Try to acquire lock
     if not cache.add(lock_id, "true", timeout=3600):  # 1 hour timeout
@@ -217,108 +142,160 @@ def fetch_all_data():
         cache.delete(lock_id)
 
 @shared_task(
-    name='apiCrm.process_scheduled_campaigns',
-    autoretry_for=(Exception,),
-    retry_kwargs={'max_retries': 3},
-    retry_backoff=True,
-    soft_time_limit=3600
-)
-def process_scheduled_campaigns():
-    """
-    Periodic task to process campaigns that are scheduled to run.
-    This task is scheduled to run every minute to check for campaigns
-    that need to be processed.
-    """
-    from messageShooter.services.scheduler import CampaignScheduler
-    from messageShooter.services.queue_processor import QueueProcessor
-    
-    logger.info(f"Starting to process scheduled campaigns @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    campaign_scheduler = CampaignScheduler()
-    campaign_scheduler.process_campaigns()
-    
-    # logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    # queue_processor = QueueProcessor()
-    # queue_processor.process_queue()
-
-@shared_task(
-    name='queue.process_queues',
-    autoretry_for=(Exception,),
-    retry_kwargs={'max_retries': 3},
-    retry_backoff=True,
-    soft_time_limit=3600
-)
-def process_available_queues():
-    from messageShooter.services.queue_processor import QueueProcessor
-    logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    queue_processor = QueueProcessor()
-    queue_processor.process_queue()
-
-@shared_task(
     name='apiCrm.test_redis',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
-    soft_time_limit=27000 # 45 minutes
+    soft_time_limit=300  # 5 minutes is more than enough for a test
 )
 def test_redis():
-    """Test task to verify Redis connection and Celery worker."""
-    logger.info('\n' + '🔄 REDIS CONNECTION TEST '.center(80, '='))
-    logger.info('📅 Started at: %s', timezone.now().strftime('%Y-%m-%d %H:%M:%S'))
+    """
+    Test task to verify Redis connection and Celery worker functionality.
+    Returns True if Redis is working, raises Exception otherwise.
+    """
     try:
-        logger.info('🔌 Attempting to connect to Redis...')
-        # Test Redis cache with multiple operations to keep connection warm
-        logger.info('📝 Setting celery_test key...')
+        # Test basic set/get operations
         cache.set('celery_test', 'Redis connection working!')
+        cache.set('celery_heartbeat', timezone.now().isoformat())
         
-        logger.info('⏱️ Setting celery_heartbeat key...')
-        current_time = timezone.now().isoformat()
-        cache.set('celery_heartbeat', current_time)
-        
-        logger.info('🔢 Setting celery_counter key...')
+        # Test counter increment
         current_counter = cache.get('celery_counter', 0)
-        new_counter = current_counter + 1
-        cache.set('celery_counter', new_counter)
+        cache.set('celery_counter', current_counter + 1)
         
-        # Read values back to ensure connection is working both ways
-        logger.info('📖 Reading back values...')
-        result = cache.get('celery_test')
-        heartbeat = cache.get('celery_heartbeat')
-        counter = cache.get('celery_counter')
+        # Test bulk operations
+        test_data = {'test1': 1, 'test2': 2, 'test3': 3}
+        cache.set_many(test_data, timeout=60)
         
-        logger.info('\n' + ' TEST RESULTS '.center(80, '▰'))
-        logger.info('✅ Redis test result: %s', result)
-        logger.info('🕐 Redis heartbeat: %s', heartbeat)
-        logger.info('🔢 Redis counter: %d', counter)
-        logger.info(''.center(80, '▰') + '\n')
-        
-        # Force connection to stay alive with a small pipeline
-        logger.info('🔄 Testing pipeline operations...')
-        cache.set_many({
-            'test1': 1,
-            'test2': 2,
-            'test3': 3
-        }, timeout=60)
-        
-        logger.info('✨ Test completed successfully!')
-        logger.info('📅 Completed at: %s', timezone.now().strftime('%Y-%m-%d %H:%M:%S'))
-        logger.info(''.center(80, '=') + '\n')
+        # Log minimal but useful information
+        logger.info('Redis Test ✅ | Counter: %d | Heartbeat: %s', 
+                   current_counter + 1, 
+                   timezone.now().strftime('%Y-%m-%d %H:%M:%S'))
+        # Print a blank line space
+        logger.info('')
         return True
 
     except Exception as e:
-        logger.error('\n' + ' ❌ REDIS ERROR '.center(80, '!'))
-        logger.error('❌ Redis test failed with error: %s', str(e))
-        logger.error('❌ Error type: %s', type(e).__name__)
-        # Try to reconnect immediately
+        logger.error('Redis Test ❌ | Error: %s | Type: %s', str(e), type(e).__name__)
         try:
-            logger.info('🔄 Attempting to reconnect to Redis...')
             cache.close()
             cache.set('celery_reconnect', timezone.now().isoformat())
-            logger.info('✅ Redis reconnection successful')
+            logger.info('Redis reconnection successful ✅')
         except Exception as re:
-            logger.error('❌ Redis reconnection failed with error: %s', str(re))
-            logger.error('❌ Reconnection error type: %s', type(re).__name__)
-        logger.error(''.center(80, '!') + '\n')
+            logger.error('Redis reconnection failed ❌ | Error: %s', str(re))
+        raise
 
+# @shared_task(
+#     name='apiCrm.check_contacts_in_crm',
+#     autoretry_for=(Exception,),
+#     retry_kwargs={'max_retries': 3},
+#     retry_backoff=True,
+#     soft_time_limit=270000 # 45 minutes
+# )
+# def check_contacts_in_crm():
+#     """
+#     Task to check if contacts exist in CRM tables.
+#     Processes contacts and tracks progress.
+    
+#     Returns:
+#         dict: Statistics about the check operation
+#     """
+#     logger.info("Starting contact check in CRM")
+#     stats = {
+#         'total_contacts': 0,
+#         'leads_found': 0,
+#         'appointments_found': 0,
+#         'billcharges_found': 0,
+#         'errors': 0,
+#         'start_time': timezone.now()
+#     }
+    
+#     try:
+#         # Get most recent contacts
+#         contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-created_at')[:2000]
+
+#         total_contacts = len(contacts)
+#         stats['total_contacts'] = total_contacts
+        
+#         for idx, contact in enumerate(contacts, 1):
+#             progress = (idx / total_contacts) * 100
+#             logger.info(f"Processing contact {idx}/{total_contacts} ({progress:.1f}%) - {contact.phone}")
+            
+#             try:
+#                 with transaction.atomic():
+#                     # Check if contact exists as lead and update tracking
+#                     lead = contact.check_if_lead_exists()
+#                     if lead:
+#                         stats['leads_found'] += 1
+                    
+#                     # Check if contact exists as appointment and update tracking
+#                     appointment = contact.check_if_appointment_exists()
+#                     if appointment:
+#                         stats['appointments_found'] += 1
+                    
+#                     # Check if contact exists as billcharge and update tracking
+#                     billcharge = contact.check_if_bill_charges_exists()
+#                     if billcharge:
+#                         stats['billcharges_found'] += 1
+
+#             except Exception as e:
+#                 stats['errors'] += 1
+#                 logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
+#                 continue
+        
+#         # Calculate final statistics
+#         stats['end_time'] = timezone.now()
+#         duration = (stats['end_time'] - stats['start_time']).total_seconds()
+        
+#         logger.info(
+#             "Contact check completed:\n"
+#             f"- Processed: {stats['total_contacts']} contacts\n"
+#             f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments, {stats['billcharges_found']} billcharges\n"
+#             f"- Errors: {stats['errors']}\n"
+#             f"- Duration: {duration:.2f} seconds"
+#         )
+        
+#         return stats
+        
+#     except Exception as e:
+#         logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
+#         raise
+
+# @shared_task(
+#     name='apiCrm.process_scheduled_campaigns',
+#     autoretry_for=(Exception,),
+#     retry_kwargs={'max_retries': 3},
+#     retry_backoff=True,
+#     soft_time_limit=3600
+# )
+# def process_scheduled_campaigns():
+#     """
+#     Periodic task to process campaigns that are scheduled to run.
+#     This task is scheduled to run every minute to check for campaigns
+#     that need to be processed.
+#     """
+#     from messageShooter.services.scheduler import CampaignScheduler
+#     from messageShooter.services.queue_processor import QueueProcessor
+    
+#     logger.info(f"Starting to process scheduled campaigns @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#     campaign_scheduler = CampaignScheduler()
+#     campaign_scheduler.process_campaigns()
+    
+#     # logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#     # queue_processor = QueueProcessor()
+#     # queue_processor.process_queue()
+
+# @shared_task(
+#     name='queue.process_queues',
+#     autoretry_for=(Exception,),
+#     retry_kwargs={'max_retries': 3},
+#     retry_backoff=True,
+#     soft_time_limit=3600
+# )
+# def process_available_queues():
+#     from messageShooter.services.queue_processor import QueueProcessor
+#     logger.info(f"Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#     queue_processor = QueueProcessor()
+#     queue_processor.process_queue()
 
 # If we want to delete data from SQLite:
 #             # Check if tables exist using SQLite syntax

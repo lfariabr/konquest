@@ -73,19 +73,27 @@ app.conf.update(
     redis_socket_keepalive=True,
     redis_retry_on_timeout=True
 )
-app.conf.imports = ['apiCrm.tasks']
+app.conf.imports = [
+    'core.tasks',
+    'messageShooter.tasks',
+]
 
 # Configure timezone to match Django settings
 app.conf.timezone = 'America/Sao_Paulo'
 app.conf.enable_utc = False
 
-# Configure task queues
 app.conf.task_routes = {
-    # 'apiCrm.process_scheduled_campaigns': {'queue': 'campaign_queue'},
+    # apiCRM
     'apiCrm.tasks.test_redis': {'queue': 'default'},
-    # 'apiCrm.fetch_all_data': {'queue': 'default'},
-    # 'apiCrm.check_contacts_in_crm': {'queue': 'default'},
-    # 'queue.process_queues': {'queue': 'default'}  # Updated task name
+    'apiCrm.tasks.cleanup_crm_tables': {'queue': 'default'},
+    'apiCrm.tasks.fetch_all_data': {'queue': 'default'},
+
+    # core
+    'core.tasks.check_contacts_in_crm': {'queue': 'contact_processor'},
+
+    # messageShooter
+    'messageShooter.tasks.process_scheduled_campaigns': {'queue': 'campaign_queue'},
+    'messageShooter.tasks.process_queues': {'queue': 'queue_processor'},
 }
 
 @signals.setup_logging.connect
@@ -107,11 +115,12 @@ app.conf.beat_schedule = {
         'task': 'apiCrm.test_redis',
         'schedule': crontab(minute='*/1')
     },
-
+    
+    # Daily cleanup
     'cleaner_crm_tables': {
         'task': 'apiCrm.cleanup_crm_tables',
         'schedule': crontab(hour=19, minute=0),
-        'options': {'expires': 3600}  # Task expires after 1 hour
+        'options': {'expires': 3600}
     },
 
     # Daily data pipeline sequence
@@ -121,22 +130,24 @@ app.conf.beat_schedule = {
         'options': {'expires': 3600}
     },
 
+    # Daily contact check
     'check_contacts_in_crm': {
-        'task': 'apiCrm.check_contacts_in_crm',
+        'task': 'core.tasks.check_contacts_in_crm',
         'schedule': crontab(hour=1, minute=00),
         'options': {'expires': 7200}  
     },
 
+    # Daily campaign processing
     'process_scheduled_campaigns': {
-        'task': 'apiCrm.process_scheduled_campaigns',
-        'schedule': crontab(hour=3, minute=00), 
+        'task': 'messageShooter.tasks.process_scheduled_campaigns',
+        'schedule': crontab(hour=5, minute=5), 
         'options': {'expires': 1800} 
     },
 
+    # Daily queue processing
     'process_queues': {
-        'task': 'queue.process_queues',
+        'task': 'messageShooter.tasks.process_queues',
         'schedule': crontab(hour=7, minute=15),
         'options': {'expires': 7200}
     }
 }
-

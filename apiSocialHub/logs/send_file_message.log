@@ -284,3 +284,91 @@
 }
 2025-01-14 23:39:48,648 - INFO - Preparing to send file...
 2025-01-14 23:39:48,648 - ERROR - File not found: dummy_path
+2025-01-16 10:50:23,146 - INFO - isfile: False
+2025-01-16 10:50:23,146 - INFO - access: False
+2025-01-16 10:50:23,146 - INFO - getsize: N/A
+2025-01-16 10:50:23,146 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 10:50:23,146 - INFO - Preparing to send file...
+2025-01-16 10:50:23,147 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-16 10:50:23,150 - INFO - isfile: False
+2025-01-16 10:50:23,150 - INFO - access: False
+2025-01-16 10:50:23,150 - INFO - getsize: N/A
+2025-01-16 10:50:23,151 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 10:50:23,151 - INFO - Preparing to send file...
+2025-01-16 10:50:23,152 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-16 10:50:23,154 - INFO - isfile: False
+2025-01-16 10:50:23,154 - INFO - access: False
+2025-01-16 10:50:23,154 - INFO - getsize: N/A
+2025-01-16 10:50:23,154 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 10:50:23,154 - INFO - Preparing to send file...
+2025-01-16 10:50:23,155 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-16 10:50:23,156 - INFO - isfile: False
+2025-01-16 10:50:23,156 - INFO - access: False
+2025-01-16 10:50:23,156 - INFO - getsize: N/A
+2025-01-16 10:50:23,156 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 10:50:23,156 - INFO - Preparing to send file...
+2025-01-16 10:50:23,156 - ERROR - File not found: dummy_path
+2025-01-16 21:28:17,763 - INFO - isfile: False
+2025-01-16 21:28:17,764 - INFO - access: False
+2025-01-16 21:28:17,764 - INFO - getsize: N/A
+2025-01-16 21:28:17,764 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 21:28:17,764 - INFO - Preparing to send file...
+2025-01-16 21:28:17,764 - INFO - Message with file sent successfully to 1234567890. Response: {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-01-16 21:28:17,766 - INFO - isfile: False
+2025-01-16 21:28:17,766 - INFO - access: False
+2025-01-16 21:28:17,766 - INFO - getsize: N/A
+2025-01-16 21:28:17,766 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 21:28:17,766 - INFO - Preparing to send file...
+2025-01-16 21:28:17,766 - ERROR - Failed to send message with file to 1234567890. Status: 400, Response: Bad Request
+2025-01-16 21:28:17,769 - INFO - isfile: False
+2025-01-16 21:28:17,769 - INFO - access: False
+2025-01-16 21:28:17,769 - INFO - getsize: N/A
+2025-01-16 21:28:17,769 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 21:28:17,770 - INFO - Preparing to send file...
+2025-01-16 21:28:17,770 - ERROR - RequestException: RequestException - Timeout occurred
+2025-01-16 21:28:17,771 - INFO - isfile: False
+2025-01-16 21:28:17,771 - INFO - access: False
+2025-01-16 21:28:17,771 - INFO - getsize: N/A
+2025-01-16 21:28:17,771 - INFO - Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+2025-01-16 21:28:17,771 - INFO - Preparing to send file...
+2025-01-16 21:28:17,771 - ERROR - File not found: dummy_path
