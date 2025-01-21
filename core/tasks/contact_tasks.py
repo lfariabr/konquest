@@ -1,27 +1,23 @@
 from celery import shared_task
 from django.db import transaction
+from django.db.models import Q
+from django.utils import timezone
 import logging
+
 from core.models.contact import Contact
 
 logger = logging.getLogger(__name__)
 
 @shared_task(
     name='core.tasks.check_contacts_in_crm',
-    autoretry_for=(Exception,),
-    retry_kwargs={'max_retries': 3},
-    retry_backoff=True,
-    soft_time_limit=270000  # 45 minutes
+    bind=True,
+    max_retries=3,
+    default_retry_delay=5,
+    acks_late=True,
+    track_started=True
 )
-def check_contacts_in_crm():
-    """
-    Task to check if contacts exist in CRM tables.
-    Processes contacts and tracks progress.
-    
-    Returns:
-        dict: Statistics about the check operation
-    """
-    logger.info("🤖 TASK: Starting contact check in CRM")
-    
+def check_contacts_in_crm(self):
+    logger.info("Starting contact check in CRM")
     stats = {
         'total_contacts': 0,
         'leads_found': 0,

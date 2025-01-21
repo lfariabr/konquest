@@ -101,14 +101,18 @@ def setup_celery_logging(**kwargs):
     print('\033[92m\n🚀 Celery worker is up and running!\033[0m\n')
 
 @task_success.connect
-def task_success_handler(**kwargs):
+def task_success_handler(sender=None, task_id=None, result=None, **kwargs):
     """Log successful task completion"""
-    pass
+    logger.info('Task succeeded: %s[%s] -> %s', sender.name, task_id, result)
 
 @task_failure.connect
-def task_failure_handler(**kwargs):
+def task_failure_handler(sender=None, task_id=None, exception=None, einfo=None, **kwargs):
     """Log task failures"""
-    pass
+    logger.error('Task failed: %s[%s] - %s: %s',
+                sender.name,
+                task_id,
+                type(exception).__name__,
+                str(exception))
 
 app.conf.beat_schedule = {
     'test_redis_connection': {

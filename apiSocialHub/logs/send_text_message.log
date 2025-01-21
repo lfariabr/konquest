@@ -270,3 +270,123 @@
 }
 2025-01-16 21:28:17,774 - INFO - ...
 2025-01-16 21:28:17,774 - ERROR - Exception occurred: Connection error
+2025-01-20 23:09:20,260 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:20,261 - INFO - ...
+2025-01-20 23:09:20,261 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-20 23:09:20,262 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:20,262 - INFO - ...
+2025-01-20 23:09:20,262 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-20 23:09:20,263 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:20,263 - INFO - ...
+2025-01-20 23:09:20,263 - ERROR - Exception occurred: Connection error
+2025-01-20 23:09:45,824 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:45,825 - INFO - ...
+2025-01-20 23:09:45,825 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-20 23:09:45,826 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:45,826 - INFO - ...
+2025-01-20 23:09:45,826 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-20 23:09:45,826 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:09:45,826 - INFO - ...
+2025-01-20 23:09:45,826 - ERROR - Exception occurred: Connection error
+2025-01-20 23:12:02,318 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:12:02,318 - INFO - ...
+2025-01-20 23:12:02,318 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-20 23:12:02,320 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:12:02,320 - INFO - ...
+2025-01-20 23:12:02,320 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-20 23:12:02,320 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:12:02,320 - INFO - ...
+2025-01-20 23:12:02,320 - ERROR - Exception occurred: Connection error
+2025-01-20 23:14:37,490 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:14:37,490 - INFO - ...
+2025-01-20 23:14:37,491 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-20 23:14:37,492 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:14:37,492 - INFO - ...
+2025-01-20 23:14:37,492 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-20 23:14:37,493 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:14:37,493 - INFO - ...
+2025-01-20 23:14:37,493 - ERROR - Exception occurred: Connection error
+2025-01-20 23:15:20,283 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:15:20,283 - INFO - ...
+2025-01-20 23:15:20,283 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-01-20 23:15:20,284 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:15:20,284 - INFO - ...
+2025-01-20 23:15:20,284 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-01-20 23:15:20,285 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-01-20 23:15:20,285 - INFO - ...
+2025-01-20 23:15:20,285 - ERROR - Exception occurred: Connection error

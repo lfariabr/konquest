@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # 'debug_toolbar',
 
     # Apps
-    'django_celery_beat',
+    # 'django_celery_beat',
     'apiCrm',
     'core',
     'apiSocialHub',
