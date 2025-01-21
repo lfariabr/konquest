@@ -54,9 +54,9 @@ for task in PeriodicTask.objects.all():
 
 ### Instant run tasks
 docker exec -it k_celery_worker celery -A konquist call apiCrm.cleanup_crm_tables
-docker exec -it k_celery_worker celery -A konquist call apiCrm.process_scheduled_campaigns
 docker exec -it k_celery_worker celery -A konquist call core.tasks.check_contacts_in_crm
-docker exec -it k_celery_worker celery -A konquist call queue.process_queues
+docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.campaign_tasks.process_scheduled_campaigns
+docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_queues
 
 ### Clear the Redis lock
 docker exec -it k_redis redis-cli -p 6380 -a YOUR_REDIS_PASSWORD DEL fetch_all_data_lock

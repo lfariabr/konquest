@@ -7,7 +7,7 @@ from messageShooter.services.queue_processor import QueueProcessor
 logger = logging.getLogger(__name__)
 
 @shared_task(
-    name='messageshooter.tasks.process_scheduled_campaigns',
+    name='messageShooter.tasks.process_scheduled_campaigns',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
@@ -29,7 +29,7 @@ def process_scheduled_campaigns():
     # queue_processor.process_queue()
 
 @shared_task(
-    name='messageshooter.tasks.process_queues',
+    name='messageShooter.tasks.process_queues',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,

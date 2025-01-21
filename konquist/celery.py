@@ -90,6 +90,7 @@ app.conf.task_routes = {
 
     # core
     'core.tasks.check_contacts_in_crm': {'queue': 'contact_processor'},
+    'core.tasks.trigger_contact_check': {'queue': 'contact_processor'},
 
     # messageShooter
     'messageShooter.tasks.process_scheduled_campaigns': {'queue': 'campaign_queue'},
@@ -116,20 +117,20 @@ def task_failure_handler(sender=None, task_id=None, exception=None, einfo=None, 
 
 app.conf.beat_schedule = {
     'test_redis_connection': {
-        'task': 'apiCrm.test_redis',
+        'task': 'apiCrm.tasks.test_redis',
         'schedule': crontab(minute='*/1')
     },
     
     # Daily cleanup
     'cleaner_crm_tables': {
-        'task': 'apiCrm.cleanup_crm_tables',
+        'task': 'apiCrm.tasks.cleanup_crm_tables',
         'schedule': crontab(hour=19, minute=0),
         'options': {'expires': 3600}
     },
 
     # Daily data pipeline sequence
     'fetch_all_data': {
-        'task': 'apiCrm.fetch_all_data',
+        'task': 'apiCrm.tasks.fetch_all_data',
         'schedule': crontab(hour=0, minute=10),
         'options': {'expires': 3600}
     },

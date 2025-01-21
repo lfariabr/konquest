@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils import timezone
 import logging
 from typing import Optional
+from core.models.contact import Contact
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +44,8 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
         if start_id:
             query = query.filter(id__gt=start_id)
             
-        # Get batch of contacts
-        contacts = query.order_by('id')[:batch_size]
+        # Get batch of most recent contacts first
+        contacts = query.order_by('-created_at', '-id')[:batch_size]
         
         if not contacts:
             logger.info("No more contacts to process")
