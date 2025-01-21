@@ -1,10 +1,9 @@
-from celery import shared_task
+from celery import shared_task, chain
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 import logging
-
-from core.models.contact import Contact
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,21 +15,41 @@ logger = logging.getLogger(__name__)
     acks_late=True,
     track_started=True
 )
-def check_contacts_in_crm(self):
-    logger.info("Starting contact check in CRM")
+def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] = None):
+    """
+    Process contacts in batches to check their CRM status.
+    
+    Args:
+        batch_size: Number of contacts to process in this batch
+        start_id: Optional ID to start processing from
+    """
+    logger.info("Starting contact check in CRM batch%s", f" from ID {start_id}" if start_id else "")
+    
     stats = {
         'total_contacts': 0,
         'leads_found': 0,
         'appointments_found': 0,
         'billcharges_found': 0,
         'errors': 0,
-        'start_time': timezone.now()
+        'start_time': timezone.now(),
+        'last_id': None
     }
     
     try:
-        # Get most recent contacts
-        contacts = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True)).order_by('-created_at')[:2000]
-
+        # Build base query
+        query = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True))
+        
+        # Add ID filter if continuing from previous batch
+        if start_id:
+            query = query.filter(id__gt=start_id)
+            
+        # Get batch of contacts
+        contacts = query.order_by('id')[:batch_size]
+        
+        if not contacts:
+            logger.info("No more contacts to process")
+            return stats
+            
         total_contacts = len(contacts)
         stats['total_contacts'] = total_contacts
         
@@ -49,31 +68,41 @@ def check_contacts_in_crm(self):
                     appointment = contact.check_if_appointment_exists()
                     if appointment:
                         stats['appointments_found'] += 1
+                        
+                    # Check bill charges if needed
+                    if contact.needs_bill_charge_check():
+                        if contact.check_if_bill_charge_exists():
+                            stats['billcharges_found'] += 1
+                            
+                stats['last_id'] = contact.id
                     
-                    # Check if contact exists as billcharge and update tracking
-                    billcharge = contact.check_if_bill_charges_exists()
-                    if billcharge:
-                        stats['billcharges_found'] += 1
-
             except Exception as e:
                 stats['errors'] += 1
-                logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
+                logger.error(f"Error processing contact {contact.id}: {str(e)}")
                 continue
-        
-        # Calculate final statistics
-        stats['end_time'] = timezone.now()
-        duration = (stats['end_time'] - stats['start_time']).total_seconds()
-        
-        logger.info(
-            "Contact check completed:\n"
-            f"- Processed: {stats['total_contacts']} contacts\n"
-            f"- Found: {stats['leads_found']} leads, {stats['appointments_found']} appointments, {stats['billcharges_found']} billcharges\n"
-            f"- Errors: {stats['errors']}\n"
-            f"- Duration: {duration:.2f} seconds"
-        )
-        
+                
+        # If we processed the full batch, schedule the next batch
+        if total_contacts == batch_size:
+            logger.info(f"Scheduling next batch starting from ID {stats['last_id']}")
+            check_contacts_in_crm.delay(batch_size=batch_size, start_id=stats['last_id'])
+            
         return stats
-        
+            
     except Exception as e:
-        logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
+        logger.error(f"Batch processing failed: {str(e)}")
+        if stats['last_id']:
+            # Retry this batch
+            self.retry(
+                kwargs={'batch_size': batch_size, 'start_id': start_id},
+                countdown=60
+            )
         raise
+
+@shared_task(name='core.tasks.trigger_contact_check')
+def trigger_contact_check(batch_size: int = 200):
+    """
+    Trigger the initial contact check batch.
+    This is the task that should be scheduled in celery beat.
+    """
+    logger.info("Triggering contact check process")
+    return check_contacts_in_crm.delay(batch_size=batch_size)

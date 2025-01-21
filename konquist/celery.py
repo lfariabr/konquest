@@ -134,10 +134,11 @@ app.conf.beat_schedule = {
         'options': {'expires': 3600}
     },
 
-    # Daily contact check
-    'check_contacts_in_crm': {
-        'task': 'core.tasks.check_contacts_in_crm',
-        'schedule': crontab(hour=1, minute=00),
+    # Daily contact check - using new trigger task
+    'trigger_contact_check': {
+        'task': 'core.tasks.trigger_contact_check',
+        'schedule': crontab(hour=1, minute=0),
+        'kwargs': {'batch_size': 200},
         'options': {'expires': 7200}  
     },
 

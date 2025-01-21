@@ -97,13 +97,7 @@ services:
         while ! nc -z redis 6380; do sleep 1; done &&
         echo 'Redis is up!' &&
         mkdir -p /app/logs &&
-        celery -A konquist worker -l INFO
-        --loglevel=DEBUG 
-        --concurrency=4 
-        -Q default,campaign_queue 
-        --max-tasks-per-child=500 
-        --max-memory-per-child=512000
-        --logfile=/app/logs/celery.log"
+        celery -A konquist worker -l INFO --loglevel=DEBUG --concurrency=4 -Q default,contact_processor,campaign_queue,queue_processor --max-tasks-per-child=500 --max-memory-per-child=512000 --logfile=/app/logs/celery.log"
     volumes:
       - .:/app:delegated
       - media_volume:/app/core/media
