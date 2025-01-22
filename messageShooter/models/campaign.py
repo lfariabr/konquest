@@ -27,8 +27,10 @@ CONTACT_TAGS = {
     CONTACT_TYPE_WHATSAPP: ["Preenchimento", "Botox", "Instagram"],
     CONTACT_TYPE_APPOINTMENT: [
                                 # Pró-Corpo
-                                "Reminder", "Reschedule", "NPS", # "Google My Business", 
-                                "ReminderIpiranga",
+                                "Reminder", "Reschedule", "ReminderIpiranga", "ReminderSantoAmaro",
+                                # "NPS",
+                                # "Google My Business",
+                                
                                 # Plástica
                                 "ReschedulePL", "ReminderPL", "VIP"],
     CONTACT_TYPE_LEAD: ["NCC"] # "Verifique seu Blip"],

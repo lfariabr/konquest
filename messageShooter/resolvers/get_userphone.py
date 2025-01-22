@@ -2,6 +2,7 @@
 import logging
 from core.models.userphone import UserPhone
 from messageShooter.utils.nps_token_dic import store_dict_info
+from messageShooter.utils.vip_token_dic import vip_store_dict_info
 
 logger = logging.getLogger(__name__)
 
@@ -57,4 +58,32 @@ def get_userphone_nps(contact_tag, store):
         
     except Exception as e:
         logger.error(f"Error getting NPS userphone for store {store}: {str(e)}")
+        return None, None
+
+def get_userphone_vip(contact_tag, store):
+    if contact_tag != 'VIP':
+        raise ValueError(f"get_userphone_vip called with invalid tag: {contact_tag}")
+        
+    if not store:
+        logger.error("No store provided for VIP")
+        return None, None
+        
+    try:
+        store_info = vip_store_dict_info.get(store)  # Use .get() instead of calling the dict
+        if not store_info:
+            logger.error(f"Store {store} not found in vip_store_dict_info")
+            return None, None
+        
+        token = store_info.get('token')
+        phone = store_info.get('numero_telefone')
+
+        if not token or not phone:
+            logger.error(f"Token or phone not found for store {store}")
+            return None, None
+
+        logger.info(f"Found VIP token for store {store}")
+        return phone, token
+        
+    except Exception as e:
+        logger.error(f"Error getting VIP userphone for store {store}: {str(e)}")
         return None, None

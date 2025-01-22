@@ -418,6 +418,7 @@ class QueueProcessor:
                                         phone_number=phone,
                                         relationship_tag=target_list.contact_tag
                                     )
+                                    logger.info(f"Found existing UserPhone for NPS store {contact.store}")
                                     return userphone
                                 except UserPhone.DoesNotExist:
                                     # Create new UserPhone if it doesn't exist
@@ -428,6 +429,29 @@ class QueueProcessor:
                                         user=contact.user
                                     )
                                     logger.info(f"Created new UserPhone for NPS store {contact.store}")
+                                    return userphone
+                        
+                        elif target_list.contact_tag == 'VIP':
+                            phone, token = get_userphone_vip(target_list.contact_tag, contact.store)
+                            
+                            if phone and token:
+                                try:
+                                    # Try to get existing UserPhone
+                                    userphone = UserPhone.objects.get(
+                                        phone_number=phone,
+                                        relationship_tag=target_list.contact_tag
+                                    )
+                                    logger.info(f"Found existing UserPhone for VIP store {contact.store}")
+                                    return userphone
+                                except UserPhone.DoesNotExist:
+                                    # Create new UserPhone if it doesn't exist
+                                    userphone = UserPhone.objects.create(
+                                        phone_number=phone,
+                                        phone_token=token,
+                                        relationship_tag=target_list.contact_tag,
+                                        user=contact.user
+                                    )
+                                    logger.info(f"Created new UserPhone for VIP store {contact.store}")
                                     return userphone
                         else:
                             # For non-NPS, use regular get_userphone

@@ -42,10 +42,10 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
         
         # Add ID filter if continuing from previous batch
         if start_id:
-            query = query.filter(id__gt=start_id)
+            query = query.filter(id__lt=start_id)  # Changed from id__gt to id__lt since we're ordering by -id
             
         # Get batch of most recent contacts first
-        contacts = query.order_by('-created_at', '-id')[:batch_size]
+        contacts = query.order_by('-id')[:batch_size]  # Simplified ordering to just -id
         
         if not contacts:
             logger.info("No more contacts to process")
@@ -71,8 +71,8 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
                         stats['appointments_found'] += 1
                         
                     # Check bill charges if needed
-                    if contact.needs_bill_charge_check():
-                        if contact.check_if_bill_charge_exists():
+                    if hasattr(contact, 'needs_bill_charge_check') and hasattr(contact, 'check_if_bill_charge_exists'):
+                        if contact.needs_bill_charge_check() and contact.check_if_bill_charge_exists():
                             stats['billcharges_found'] += 1
                             
                 stats['last_id'] = contact.id
@@ -83,7 +83,7 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
                 continue
                 
         # If we processed the full batch, schedule the next batch
-        if total_contacts == batch_size:
+        if total_contacts == batch_size and stats['last_id']:
             logger.info(f"Scheduling next batch starting from ID {stats['last_id']}")
             check_contacts_in_crm.delay(batch_size=batch_size, start_id=stats['last_id'])
             
@@ -91,8 +91,7 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
             
     except Exception as e:
         logger.error(f"Batch processing failed: {str(e)}")
-        if stats['last_id']:
-            # Retry this batch
+        if start_id:
             self.retry(
                 kwargs={'batch_size': batch_size, 'start_id': start_id},
                 countdown=60
