@@ -13,6 +13,8 @@ import logging
 from django.core.cache import cache
 from apiSocialHub.resolvers.send_text_message import send_text_message
 
+# Import celery app directly
+from konquist.celery import app
 
 token = config('TOKEN')
 logger = logging.getLogger(__name__)
@@ -23,8 +25,8 @@ from apiCrm.models.lead import Lead
 from apiCrm.models.appointment import Appointment
 from apiCrm.models.billcharge import BillCharge
 
-@shared_task(
-    name='apiCrm.cleanup_crm_tables',
+@app.task(
+    name='apiCrm.tasks.cleanup_crm_tables',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
@@ -83,8 +85,8 @@ def cleanup_crm_tables():
         logger.error(f"Failed to clean CRM tables: {str(e)}", exc_info=True)
         raise
 
-@shared_task(
-    name='apiCrm.fetch_all_data',
+@app.task(
+    name='apiCrm.tasks.fetch_all_data',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
@@ -141,8 +143,8 @@ def fetch_all_data():
         # Release lock
         cache.delete(lock_id)
 
-@shared_task(
-    name='apiCrm.test_redis',
+@app.task(
+    name='apiCrm.tasks.test_redis',
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': 3},
     retry_backoff=True,
@@ -184,8 +186,8 @@ def test_redis():
             logger.error('Redis reconnection failed ❌ | Error: %s', str(re))
         raise
 
-# @shared_task(
-#     name='apiCrm.check_contacts_in_crm',
+# @app.task(
+#     name='apiCrm.tasks.check_contacts_in_crm',
 #     autoretry_for=(Exception,),
 #     retry_kwargs={'max_retries': 3},
 #     retry_backoff=True,
@@ -260,8 +262,8 @@ def test_redis():
 #         logger.error(f"Failed to check contacts in CRM: {str(e)}", exc_info=True)
 #         raise
 
-# @shared_task(
-#     name='apiCrm.process_scheduled_campaigns',
+# @app.task(
+#     name='apiCrm.tasks.process_scheduled_campaigns',
 #     autoretry_for=(Exception,),
 #     retry_kwargs={'max_retries': 3},
 #     retry_backoff=True,
@@ -284,7 +286,7 @@ def test_redis():
 #     # queue_processor = QueueProcessor()
 #     # queue_processor.process_queue()
 
-# @shared_task(
+# @app.task(
 #     name='queue.process_queues',
 #     autoretry_for=(Exception,),
 #     retry_kwargs={'max_retries': 3},

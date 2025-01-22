@@ -30,7 +30,7 @@ CONTACT_TAGS = {
                                 "Reminder", "Reschedule", "NPS", # "Google My Business", 
                                 "ReminderIpiranga",
                                 # Plástica
-                                "ReschedulePL", "ReminderPL"],
+                                "ReschedulePL", "ReminderPL", "VIP"],
     CONTACT_TYPE_LEAD: ["NCC"] # "Verifique seu Blip"],
     # CONTACT_TYPE_BILLCHARGE: ["NCC", "Verifique seu Blip"],
 } # "Lead": ["NCC", "Verifique seu Blip"], "BillCharge": ["NCC", "Verifique seu Blip"],

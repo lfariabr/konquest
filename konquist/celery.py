@@ -74,6 +74,7 @@ app.conf.update(
     redis_retry_on_timeout=True
 )
 app.conf.imports = [
+    'apiCrm.tasks',
     'core.tasks',
     'messageShooter.tasks',
 ]

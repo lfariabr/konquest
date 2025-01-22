@@ -25,6 +25,7 @@ docker-compose up -d celery_beat
 - check running containers
     docker logs -f k_celery_beat
     docker logs -f k_celery_worker
+    local: celery -A konquist worker -l INFO -Q default,contact_processor,campaign_queue,queue_processor
     docker logs -f konquest_django
     docker-compose logs -f
 
@@ -38,22 +39,15 @@ docker-compose up -d celery_beat
 
 ### View all active tasks
 docker exec k_celery_worker celery -A konquist inspect active
-
 docker exec -it k_celery_beat celery -A konquist purge -f
+
 ### View scheduled tasks
 docker exec -it k_celery_worker celery -A konquist inspect scheduled
-
-### View registered tasks
 docker exec -it k_celery_worker celery -A konquist inspect registered
 
-### py shell in containers
-docker exec -it konquest_django python manage.py shell
-from django_celery_beat.models import PeriodicTask
-for task in PeriodicTask.objects.all():
-    print(f"Name: {task.name}, Task: {task.task}, Schedule: {task.crontab if task.crontab else task.interval}")
-
 ### Instant run tasks
-docker exec -it k_celery_worker celery -A konquist call apiCrm.cleanup_crm_tables
+docker exec -it k_celery_worker celery -A konquist call apiCrm.tasks.cleanup_crm_tables
+
 docker exec -it k_celery_worker celery -A konquist call core.tasks.check_contacts_in_crm
 docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.campaign_tasks.process_scheduled_campaigns
 docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_queues

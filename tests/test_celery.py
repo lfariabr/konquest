@@ -53,7 +53,7 @@ def test_celery_beat_schedule(mock_celery_app):
     
     # Check specific task configuration
     task_config = beat_schedule['test_redis_connection']
-    assert task_config['task'] == 'apiCrm.test_redis'
+    assert task_config['task'] == 'apiCrm.tasks.test_redis'
     assert 'schedule' in task_config  
 
 def test_task_prerun_handler(mock_logger, mock_connection):

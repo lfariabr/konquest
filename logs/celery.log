@@ -1,0 +1,845 @@
+INFO 2025-01-21 19:02:47,709 Starting data import for period: 2024-10-01 to 2025-01-21 (extended to 2025-01-30)
+INFO 2025-01-21 19:02:47,710 Fetching data for dates: 2024-10-01 to 2025-01-21
+INFO 2025-01-21 19:40:07,119 Fetched: 109874 leads, 148453 appointments, 67795 bill charges
+INFO 2025-01-21 19:40:07,130 Starting to process 109874 leads in batches of 1000
+INFO 2025-01-21 19:40:07,130 Processing leads batch 1-1000 of 109874
+INFO 2025-01-21 19:40:15,253 Batch processed in 8.12s - Saved 1000 leads
+INFO 2025-01-21 19:40:15,254 Processing leads batch 1001-2000 of 109874
+INFO 2025-01-21 19:40:20,123 Batch processed in 4.87s - Saved 1000 leads
+INFO 2025-01-21 19:40:20,125 Processing leads batch 2001-3000 of 109874
+INFO 2025-01-21 19:40:25,881 Batch processed in 5.76s - Saved 1000 leads
+INFO 2025-01-21 19:40:25,882 Processing leads batch 3001-4000 of 109874
+INFO 2025-01-21 19:40:31,703 Batch processed in 5.82s - Saved 1000 leads
+INFO 2025-01-21 19:40:31,704 Processing leads batch 4001-5000 of 109874
+INFO 2025-01-21 19:40:36,572 Batch processed in 4.87s - Saved 1000 leads
+INFO 2025-01-21 19:40:36,573 Processing leads batch 5001-6000 of 109874
+INFO 2025-01-21 19:40:42,117 Batch processed in 5.54s - Saved 1000 leads
+INFO 2025-01-21 19:40:42,119 Processing leads batch 6001-7000 of 109874
+INFO 2025-01-21 19:40:47,587 Batch processed in 5.47s - Saved 1000 leads
+INFO 2025-01-21 19:40:47,588 Processing leads batch 7001-8000 of 109874
+INFO 2025-01-21 19:40:53,047 Batch processed in 5.46s - Saved 1000 leads
+INFO 2025-01-21 19:40:53,048 Processing leads batch 8001-9000 of 109874
+WARNING 2025-01-21 19:40:53,411 2 invalid leads in current batch
+INFO 2025-01-21 19:40:57,844 Batch processed in 4.80s - Saved 998 leads
+INFO 2025-01-21 19:40:57,845 Processing leads batch 9001-10000 of 109874
+INFO 2025-01-21 19:41:03,586 Batch processed in 5.74s - Saved 1000 leads
+INFO 2025-01-21 19:41:03,587 Processing leads batch 10001-11000 of 109874
+WARNING 2025-01-21 19:41:04,538 9 invalid leads in current batch
+INFO 2025-01-21 19:41:09,093 Batch processed in 5.51s - Saved 991 leads
+INFO 2025-01-21 19:41:09,094 Processing leads batch 11001-12000 of 109874
+WARNING 2025-01-21 19:41:09,860 5 invalid leads in current batch
+INFO 2025-01-21 19:41:14,561 Batch processed in 5.47s - Saved 995 leads
+INFO 2025-01-21 19:41:14,562 Processing leads batch 12001-13000 of 109874
+WARNING 2025-01-21 19:41:14,904 10 invalid leads in current batch
+INFO 2025-01-21 19:41:19,324 Batch processed in 4.76s - Saved 990 leads
+INFO 2025-01-21 19:41:19,325 Processing leads batch 13001-14000 of 109874
+WARNING 2025-01-21 19:41:20,366 25 invalid leads in current batch
+INFO 2025-01-21 19:41:25,213 Batch processed in 5.89s - Saved 975 leads
+INFO 2025-01-21 19:41:25,215 Processing leads batch 14001-15000 of 109874
+WARNING 2025-01-21 19:41:25,986 25 invalid leads in current batch
+INFO 2025-01-21 19:41:30,743 Batch processed in 5.53s - Saved 975 leads
+INFO 2025-01-21 19:41:30,743 Processing leads batch 15001-16000 of 109874
+WARNING 2025-01-21 19:41:31,060 24 invalid leads in current batch
+INFO 2025-01-21 19:41:35,765 Batch processed in 5.02s - Saved 976 leads
+INFO 2025-01-21 19:41:35,771 Processing leads batch 16001-17000 of 109874
+WARNING 2025-01-21 19:41:36,563 29 invalid leads in current batch
+INFO 2025-01-21 19:41:41,289 Batch processed in 5.52s - Saved 971 leads
+INFO 2025-01-21 19:41:41,290 Processing leads batch 17001-18000 of 109874
+WARNING 2025-01-21 19:41:42,498 31 invalid leads in current batch
+INFO 2025-01-21 19:41:47,228 Batch processed in 5.94s - Saved 969 leads
+INFO 2025-01-21 19:41:47,229 Processing leads batch 18001-19000 of 109874
+WARNING 2025-01-21 19:41:47,980 22 invalid leads in current batch
+INFO 2025-01-21 19:41:52,589 Batch processed in 5.36s - Saved 978 leads
+INFO 2025-01-21 19:41:52,590 Processing leads batch 19001-20000 of 109874
+WARNING 2025-01-21 19:41:52,909 25 invalid leads in current batch
+INFO 2025-01-21 19:41:57,595 Batch processed in 5.00s - Saved 975 leads
+INFO 2025-01-21 19:41:57,595 Processing leads batch 20001-21000 of 109874
+WARNING 2025-01-21 19:41:58,396 20 invalid leads in current batch
+INFO 2025-01-21 19:42:03,117 Batch processed in 5.52s - Saved 980 leads
+INFO 2025-01-21 19:42:03,117 Processing leads batch 21001-22000 of 109874
+INFO 2025-01-21 19:42:08,835 Batch processed in 5.72s - Saved 1000 leads
+INFO 2025-01-21 19:42:08,836 Processing leads batch 22001-23000 of 109874
+INFO 2025-01-21 19:42:13,756 Batch processed in 4.92s - Saved 1000 leads
+INFO 2025-01-21 19:42:13,756 Processing leads batch 23001-24000 of 109874
+INFO 2025-01-21 19:42:19,383 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:42:19,383 Processing leads batch 24001-25000 of 109874
+INFO 2025-01-21 19:42:24,707 Batch processed in 5.32s - Saved 1000 leads
+INFO 2025-01-21 19:42:24,709 Processing leads batch 25001-26000 of 109874
+INFO 2025-01-21 19:42:29,725 Batch processed in 5.02s - Saved 1000 leads
+INFO 2025-01-21 19:42:29,726 Processing leads batch 26001-27000 of 109874
+INFO 2025-01-21 19:42:35,288 Batch processed in 5.56s - Saved 1000 leads
+INFO 2025-01-21 19:42:35,289 Processing leads batch 27001-28000 of 109874
+INFO 2025-01-21 19:42:40,994 Batch processed in 5.71s - Saved 1000 leads
+INFO 2025-01-21 19:42:40,996 Processing leads batch 28001-29000 of 109874
+INFO 2025-01-21 19:42:46,347 Batch processed in 5.35s - Saved 1000 leads
+INFO 2025-01-21 19:42:46,348 Processing leads batch 29001-30000 of 109874
+INFO 2025-01-21 19:42:51,291 Batch processed in 4.94s - Saved 1000 leads
+INFO 2025-01-21 19:42:51,291 Processing leads batch 30001-31000 of 109874
+INFO 2025-01-21 19:42:56,861 Batch processed in 5.57s - Saved 1000 leads
+INFO 2025-01-21 19:42:56,862 Processing leads batch 31001-32000 of 109874
+INFO 2025-01-21 19:43:02,391 Batch processed in 5.53s - Saved 1000 leads
+INFO 2025-01-21 19:43:02,392 Processing leads batch 32001-33000 of 109874
+INFO 2025-01-21 19:43:07,445 Batch processed in 5.05s - Saved 1000 leads
+INFO 2025-01-21 19:43:07,446 Processing leads batch 33001-34000 of 109874
+INFO 2025-01-21 19:43:13,173 Batch processed in 5.73s - Saved 1000 leads
+INFO 2025-01-21 19:43:13,174 Processing leads batch 34001-35000 of 109874
+INFO 2025-01-21 19:43:19,424 Batch processed in 6.25s - Saved 1000 leads
+INFO 2025-01-21 19:43:19,428 Processing leads batch 35001-36000 of 109874
+INFO 2025-01-21 19:43:25,431 Batch processed in 6.00s - Saved 1000 leads
+INFO 2025-01-21 19:43:25,432 Processing leads batch 36001-37000 of 109874
+INFO 2025-01-21 19:43:30,551 Batch processed in 5.12s - Saved 1000 leads
+INFO 2025-01-21 19:43:30,552 Processing leads batch 37001-38000 of 109874
+INFO 2025-01-21 19:43:36,183 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:43:36,183 Processing leads batch 38001-39000 of 109874
+INFO 2025-01-21 19:43:42,122 Batch processed in 5.94s - Saved 1000 leads
+INFO 2025-01-21 19:43:42,123 Processing leads batch 39001-40000 of 109874
+INFO 2025-01-21 19:43:47,753 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:43:47,754 Processing leads batch 40001-41000 of 109874
+INFO 2025-01-21 19:43:53,386 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:43:53,387 Processing leads batch 41001-42000 of 109874
+INFO 2025-01-21 19:43:58,915 Batch processed in 5.53s - Saved 1000 leads
+INFO 2025-01-21 19:43:58,917 Processing leads batch 42001-43000 of 109874
+INFO 2025-01-21 19:44:04,138 Batch processed in 5.22s - Saved 1000 leads
+INFO 2025-01-21 19:44:04,138 Processing leads batch 43001-44000 of 109874
+INFO 2025-01-21 19:44:09,775 Batch processed in 5.64s - Saved 1000 leads
+INFO 2025-01-21 19:44:09,777 Processing leads batch 44001-45000 of 109874
+INFO 2025-01-21 19:44:14,925 Batch processed in 5.15s - Saved 1000 leads
+INFO 2025-01-21 19:44:14,926 Processing leads batch 45001-46000 of 109874
+INFO 2025-01-21 19:44:20,555 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:44:20,556 Processing leads batch 46001-47000 of 109874
+INFO 2025-01-21 19:44:26,154 Batch processed in 5.60s - Saved 1000 leads
+INFO 2025-01-21 19:44:26,155 Processing leads batch 47001-48000 of 109874
+INFO 2025-01-21 19:44:31,786 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:44:31,788 Processing leads batch 48001-49000 of 109874
+INFO 2025-01-21 19:44:36,884 Batch processed in 5.10s - Saved 1000 leads
+INFO 2025-01-21 19:44:36,885 Processing leads batch 49001-50000 of 109874
+INFO 2025-01-21 19:44:42,645 Batch processed in 5.76s - Saved 1000 leads
+INFO 2025-01-21 19:44:42,647 Processing leads batch 50001-51000 of 109874
+INFO 2025-01-21 19:44:47,754 Batch processed in 5.11s - Saved 1000 leads
+INFO 2025-01-21 19:44:47,755 Processing leads batch 51001-52000 of 109874
+INFO 2025-01-21 19:44:53,489 Batch processed in 5.73s - Saved 1000 leads
+INFO 2025-01-21 19:44:53,490 Processing leads batch 52001-53000 of 109874
+WARNING 2025-01-21 19:44:54,262 1 invalid leads in current batch
+INFO 2025-01-21 19:44:59,122 Batch processed in 5.63s - Saved 999 leads
+INFO 2025-01-21 19:44:59,123 Processing leads batch 53001-54000 of 109874
+WARNING 2025-01-21 19:44:59,454 1 invalid leads in current batch
+INFO 2025-01-21 19:45:04,242 Batch processed in 5.12s - Saved 999 leads
+INFO 2025-01-21 19:45:04,243 Processing leads batch 54001-55000 of 109874
+INFO 2025-01-21 19:45:09,873 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:45:09,874 Processing leads batch 55001-56000 of 109874
+INFO 2025-01-21 19:45:15,543 Batch processed in 5.67s - Saved 1000 leads
+INFO 2025-01-21 19:45:15,544 Processing leads batch 56001-57000 of 109874
+INFO 2025-01-21 19:45:21,138 Batch processed in 5.59s - Saved 1000 leads
+INFO 2025-01-21 19:45:21,139 Processing leads batch 57001-58000 of 109874
+INFO 2025-01-21 19:45:26,258 Batch processed in 5.12s - Saved 1000 leads
+INFO 2025-01-21 19:45:26,259 Processing leads batch 58001-59000 of 109874
+INFO 2025-01-21 19:45:31,993 Batch processed in 5.73s - Saved 1000 leads
+INFO 2025-01-21 19:45:31,993 Processing leads batch 59001-60000 of 109874
+INFO 2025-01-21 19:45:37,146 Batch processed in 5.15s - Saved 1000 leads
+INFO 2025-01-21 19:45:37,148 Processing leads batch 60001-61000 of 109874
+INFO 2025-01-21 19:45:42,540 Batch processed in 5.39s - Saved 1000 leads
+INFO 2025-01-21 19:45:42,542 Processing leads batch 61001-62000 of 109874
+INFO 2025-01-21 19:45:48,070 Batch processed in 5.53s - Saved 1000 leads
+INFO 2025-01-21 19:45:48,071 Processing leads batch 62001-63000 of 109874
+INFO 2025-01-21 19:45:52,986 Batch processed in 4.91s - Saved 1000 leads
+INFO 2025-01-21 19:45:52,986 Processing leads batch 63001-64000 of 109874
+INFO 2025-01-21 19:45:58,614 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:45:58,615 Processing leads batch 64001-65000 of 109874
+INFO 2025-01-21 19:46:05,172 Batch processed in 6.56s - Saved 1000 leads
+INFO 2025-01-21 19:46:05,173 Processing leads batch 65001-66000 of 109874
+INFO 2025-01-21 19:46:09,923 Batch processed in 4.75s - Saved 1000 leads
+INFO 2025-01-21 19:46:09,924 Processing leads batch 66001-67000 of 109874
+INFO 2025-01-21 19:46:16,026 Batch processed in 6.10s - Saved 1000 leads
+INFO 2025-01-21 19:46:16,027 Processing leads batch 67001-68000 of 109874
+INFO 2025-01-21 19:46:21,592 Batch processed in 5.57s - Saved 1000 leads
+INFO 2025-01-21 19:46:21,595 Processing leads batch 68001-69000 of 109874
+INFO 2025-01-21 19:46:26,820 Batch processed in 5.23s - Saved 1000 leads
+INFO 2025-01-21 19:46:26,821 Processing leads batch 69001-70000 of 109874
+INFO 2025-01-21 19:46:32,719 Batch processed in 5.90s - Saved 1000 leads
+INFO 2025-01-21 19:46:32,721 Processing leads batch 70001-71000 of 109874
+INFO 2025-01-21 19:46:38,386 Batch processed in 5.66s - Saved 1000 leads
+INFO 2025-01-21 19:46:38,386 Processing leads batch 71001-72000 of 109874
+INFO 2025-01-21 19:46:43,434 Batch processed in 5.05s - Saved 1000 leads
+INFO 2025-01-21 19:46:43,436 Processing leads batch 72001-73000 of 109874
+INFO 2025-01-21 19:46:49,205 Batch processed in 5.77s - Saved 1000 leads
+INFO 2025-01-21 19:46:49,206 Processing leads batch 73001-74000 of 109874
+INFO 2025-01-21 19:46:54,301 Batch processed in 5.10s - Saved 1000 leads
+INFO 2025-01-21 19:46:54,303 Processing leads batch 74001-75000 of 109874
+INFO 2025-01-21 19:46:59,855 Batch processed in 5.55s - Saved 1000 leads
+INFO 2025-01-21 19:46:59,856 Processing leads batch 75001-76000 of 109874
+INFO 2025-01-21 19:47:05,453 Batch processed in 5.60s - Saved 1000 leads
+INFO 2025-01-21 19:47:05,454 Processing leads batch 76001-77000 of 109874
+INFO 2025-01-21 19:47:10,541 Batch processed in 5.09s - Saved 1000 leads
+INFO 2025-01-21 19:47:10,542 Processing leads batch 77001-78000 of 109874
+INFO 2025-01-21 19:47:16,177 Batch processed in 5.64s - Saved 1000 leads
+INFO 2025-01-21 19:47:16,180 Processing leads batch 78001-79000 of 109874
+INFO 2025-01-21 19:47:21,770 Batch processed in 5.59s - Saved 1000 leads
+INFO 2025-01-21 19:47:21,771 Processing leads batch 79001-80000 of 109874
+INFO 2025-01-21 19:47:26,795 Batch processed in 5.02s - Saved 1000 leads
+INFO 2025-01-21 19:47:26,796 Processing leads batch 80001-81000 of 109874
+INFO 2025-01-21 19:47:32,426 Batch processed in 5.63s - Saved 1000 leads
+INFO 2025-01-21 19:47:32,427 Processing leads batch 81001-82000 of 109874
+INFO 2025-01-21 19:47:37,950 Batch processed in 5.52s - Saved 1000 leads
+INFO 2025-01-21 19:47:37,951 Processing leads batch 82001-83000 of 109874
+INFO 2025-01-21 19:47:43,069 Batch processed in 5.12s - Saved 1000 leads
+INFO 2025-01-21 19:47:43,071 Processing leads batch 83001-84000 of 109874
+INFO 2025-01-21 19:47:48,942 Batch processed in 5.87s - Saved 1000 leads
+INFO 2025-01-21 19:47:48,943 Processing leads batch 84001-85000 of 109874
+INFO 2025-01-21 19:47:54,129 Batch processed in 5.19s - Saved 1000 leads
+INFO 2025-01-21 19:47:54,129 Processing leads batch 85001-86000 of 109874
+INFO 2025-01-21 19:47:59,967 Batch processed in 5.84s - Saved 1000 leads
+INFO 2025-01-21 19:47:59,968 Processing leads batch 86001-87000 of 109874
+INFO 2025-01-21 19:48:05,700 Batch processed in 5.73s - Saved 1000 leads
+INFO 2025-01-21 19:48:05,701 Processing leads batch 87001-88000 of 109874
+INFO 2025-01-21 19:48:10,750 Batch processed in 5.05s - Saved 1000 leads
+INFO 2025-01-21 19:48:10,751 Processing leads batch 88001-89000 of 109874
+INFO 2025-01-21 19:48:16,555 Batch processed in 5.80s - Saved 1000 leads
+INFO 2025-01-21 19:48:16,556 Processing leads batch 89001-90000 of 109874
+INFO 2025-01-21 19:48:21,600 Batch processed in 5.04s - Saved 1000 leads
+INFO 2025-01-21 19:48:21,602 Processing leads batch 90001-91000 of 109874
+INFO 2025-01-21 19:48:27,615 Batch processed in 6.01s - Saved 1000 leads
+INFO 2025-01-21 19:48:27,617 Processing leads batch 91001-92000 of 109874
+INFO 2025-01-21 19:48:33,555 Batch processed in 5.94s - Saved 1000 leads
+INFO 2025-01-21 19:48:33,559 Processing leads batch 92001-93000 of 109874
+INFO 2025-01-21 19:48:38,553 Batch processed in 5.00s - Saved 1000 leads
+INFO 2025-01-21 19:48:38,554 Processing leads batch 93001-94000 of 109874
+INFO 2025-01-21 19:48:44,954 Batch processed in 6.40s - Saved 1000 leads
+INFO 2025-01-21 19:48:44,956 Processing leads batch 94001-95000 of 109874
+INFO 2025-01-21 19:48:50,655 Batch processed in 5.70s - Saved 1000 leads
+INFO 2025-01-21 19:48:50,656 Processing leads batch 95001-96000 of 109874
+INFO 2025-01-21 19:48:55,743 Batch processed in 5.09s - Saved 1000 leads
+INFO 2025-01-21 19:48:55,744 Processing leads batch 96001-97000 of 109874
+INFO 2025-01-21 19:49:01,612 Batch processed in 5.87s - Saved 1000 leads
+INFO 2025-01-21 19:49:01,613 Processing leads batch 97001-98000 of 109874
+INFO 2025-01-21 19:49:06,506 Batch processed in 4.89s - Saved 1000 leads
+INFO 2025-01-21 19:49:06,507 Processing leads batch 98001-99000 of 109874
+INFO 2025-01-21 19:49:12,454 Batch processed in 5.95s - Saved 1000 leads
+INFO 2025-01-21 19:49:12,455 Processing leads batch 99001-100000 of 109874
+INFO 2025-01-21 19:49:18,101 Batch processed in 5.65s - Saved 1000 leads
+INFO 2025-01-21 19:49:18,102 Processing leads batch 100001-101000 of 109874
+WARNING 2025-01-21 19:49:18,452 1 invalid leads in current batch
+INFO 2025-01-21 19:49:23,323 Batch processed in 5.22s - Saved 999 leads
+INFO 2025-01-21 19:49:23,324 Processing leads batch 101001-102000 of 109874
+INFO 2025-01-21 19:49:29,262 Batch processed in 5.94s - Saved 1000 leads
+INFO 2025-01-21 19:49:29,264 Processing leads batch 102001-103000 of 109874
+INFO 2025-01-21 19:49:35,156 Batch processed in 5.89s - Saved 1000 leads
+INFO 2025-01-21 19:49:35,157 Processing leads batch 103001-104000 of 109874
+INFO 2025-01-21 19:49:40,935 Batch processed in 5.78s - Saved 1000 leads
+INFO 2025-01-21 19:49:40,936 Processing leads batch 104001-105000 of 109874
+INFO 2025-01-21 19:49:46,469 Batch processed in 5.53s - Saved 1000 leads
+INFO 2025-01-21 19:49:46,470 Processing leads batch 105001-106000 of 109874
+INFO 2025-01-21 19:49:51,790 Batch processed in 5.32s - Saved 1000 leads
+INFO 2025-01-21 19:49:51,790 Processing leads batch 106001-107000 of 109874
+INFO 2025-01-21 19:49:57,523 Batch processed in 5.73s - Saved 1000 leads
+INFO 2025-01-21 19:49:57,524 Processing leads batch 107001-108000 of 109874
+INFO 2025-01-21 19:50:02,645 Batch processed in 5.12s - Saved 1000 leads
+INFO 2025-01-21 19:50:02,646 Processing leads batch 108001-109000 of 109874
+INFO 2025-01-21 19:50:09,199 Batch processed in 6.55s - Saved 1000 leads
+INFO 2025-01-21 19:50:09,201 Processing leads batch 109001-109874 of 109874
+INFO 2025-01-21 19:50:14,361 Batch processed in 5.16s - Saved 874 leads
+INFO 2025-01-21 19:50:14,361 Finished processing leads - Total time: 5.16s - Processed: 109644/109874
+INFO 2025-01-21 19:50:14,361 Starting to process 148453 appointments in batches of 1000
+INFO 2025-01-21 19:50:14,361 Processing appointments batch 1-1000 of 148453
+INFO 2025-01-21 19:50:19,336 Batch processed in 4.97s - Saved 1000 appointments
+INFO 2025-01-21 19:50:19,337 Processing appointments batch 1001-2000 of 148453
+INFO 2025-01-21 19:50:25,012 Batch processed in 5.67s - Saved 1000 appointments
+INFO 2025-01-21 19:50:25,013 Processing appointments batch 2001-3000 of 148453
+INFO 2025-01-21 19:50:29,774 Batch processed in 4.76s - Saved 1000 appointments
+INFO 2025-01-21 19:50:29,775 Processing appointments batch 3001-4000 of 148453
+INFO 2025-01-21 19:50:34,800 Batch processed in 5.02s - Saved 1000 appointments
+INFO 2025-01-21 19:50:34,801 Processing appointments batch 4001-5000 of 148453
+INFO 2025-01-21 19:50:40,739 Batch processed in 5.94s - Saved 1000 appointments
+INFO 2025-01-21 19:50:40,742 Processing appointments batch 5001-6000 of 148453
+INFO 2025-01-21 19:50:45,863 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:50:45,864 Processing appointments batch 6001-7000 of 148453
+INFO 2025-01-21 19:50:51,422 Batch processed in 5.56s - Saved 1000 appointments
+INFO 2025-01-21 19:50:51,423 Processing appointments batch 7001-8000 of 148453
+INFO 2025-01-21 19:50:56,239 Batch processed in 4.82s - Saved 1000 appointments
+INFO 2025-01-21 19:50:56,240 Processing appointments batch 8001-9000 of 148453
+INFO 2025-01-21 19:51:01,936 Batch processed in 5.70s - Saved 1000 appointments
+INFO 2025-01-21 19:51:01,938 Processing appointments batch 9001-10000 of 148453
+INFO 2025-01-21 19:51:07,062 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:51:07,063 Processing appointments batch 10001-11000 of 148453
+INFO 2025-01-21 19:51:14,123 Batch processed in 7.06s - Saved 1000 appointments
+INFO 2025-01-21 19:51:14,124 Processing appointments batch 11001-12000 of 148453
+INFO 2025-01-21 19:51:20,268 Batch processed in 6.14s - Saved 1000 appointments
+INFO 2025-01-21 19:51:20,270 Processing appointments batch 12001-13000 of 148453
+INFO 2025-01-21 19:51:25,167 Batch processed in 4.90s - Saved 1000 appointments
+INFO 2025-01-21 19:51:25,168 Processing appointments batch 13001-14000 of 148453
+INFO 2025-01-21 19:51:30,940 Batch processed in 5.77s - Saved 1000 appointments
+INFO 2025-01-21 19:51:30,941 Processing appointments batch 14001-15000 of 148453
+INFO 2025-01-21 19:51:36,038 Batch processed in 5.10s - Saved 1000 appointments
+INFO 2025-01-21 19:51:36,039 Processing appointments batch 15001-16000 of 148453
+INFO 2025-01-21 19:51:42,524 Batch processed in 6.48s - Saved 1000 appointments
+INFO 2025-01-21 19:51:42,526 Processing appointments batch 16001-17000 of 148453
+INFO 2025-01-21 19:51:47,470 Batch processed in 4.94s - Saved 1000 appointments
+INFO 2025-01-21 19:51:47,471 Processing appointments batch 17001-18000 of 148453
+INFO 2025-01-21 19:51:52,555 Batch processed in 5.08s - Saved 1000 appointments
+INFO 2025-01-21 19:51:52,557 Processing appointments batch 18001-19000 of 148453
+INFO 2025-01-21 19:51:58,119 Batch processed in 5.56s - Saved 1000 appointments
+INFO 2025-01-21 19:51:58,120 Processing appointments batch 19001-20000 of 148453
+INFO 2025-01-21 19:52:03,646 Batch processed in 5.53s - Saved 1000 appointments
+INFO 2025-01-21 19:52:03,647 Processing appointments batch 20001-21000 of 148453
+INFO 2025-01-21 19:52:10,341 Batch processed in 6.69s - Saved 1000 appointments
+INFO 2025-01-21 19:52:10,342 Processing appointments batch 21001-22000 of 148453
+INFO 2025-01-21 19:52:16,690 Batch processed in 6.35s - Saved 1000 appointments
+INFO 2025-01-21 19:52:16,691 Processing appointments batch 22001-23000 of 148453
+INFO 2025-01-21 19:52:22,220 Batch processed in 5.53s - Saved 1000 appointments
+INFO 2025-01-21 19:52:22,221 Processing appointments batch 23001-24000 of 148453
+INFO 2025-01-21 19:52:27,502 Batch processed in 5.28s - Saved 1000 appointments
+INFO 2025-01-21 19:52:27,503 Processing appointments batch 24001-25000 of 148453
+INFO 2025-01-21 19:52:32,973 Batch processed in 5.47s - Saved 1000 appointments
+INFO 2025-01-21 19:52:32,973 Processing appointments batch 25001-26000 of 148453
+INFO 2025-01-21 19:52:38,913 Batch processed in 5.94s - Saved 1000 appointments
+INFO 2025-01-21 19:52:38,914 Processing appointments batch 26001-27000 of 148453
+INFO 2025-01-21 19:52:43,777 Batch processed in 4.86s - Saved 1000 appointments
+INFO 2025-01-21 19:52:43,778 Processing appointments batch 27001-28000 of 148453
+INFO 2025-01-21 19:52:49,353 Batch processed in 5.58s - Saved 1000 appointments
+INFO 2025-01-21 19:52:49,355 Processing appointments batch 28001-29000 of 148453
+INFO 2025-01-21 19:52:54,374 Batch processed in 5.02s - Saved 1000 appointments
+INFO 2025-01-21 19:52:54,374 Processing appointments batch 29001-30000 of 148453
+INFO 2025-01-21 19:52:59,978 Batch processed in 5.60s - Saved 1000 appointments
+INFO 2025-01-21 19:52:59,981 Processing appointments batch 30001-31000 of 148453
+INFO 2025-01-21 19:53:04,733 Batch processed in 4.75s - Saved 1000 appointments
+INFO 2025-01-21 19:53:04,734 Processing appointments batch 31001-32000 of 148453
+INFO 2025-01-21 19:53:09,620 Batch processed in 4.89s - Saved 1000 appointments
+INFO 2025-01-21 19:53:09,621 Processing appointments batch 32001-33000 of 148453
+INFO 2025-01-21 19:53:15,882 Batch processed in 6.26s - Saved 1000 appointments
+INFO 2025-01-21 19:53:15,883 Processing appointments batch 33001-34000 of 148453
+INFO 2025-01-21 19:53:21,205 Batch processed in 5.32s - Saved 1000 appointments
+INFO 2025-01-21 19:53:21,206 Processing appointments batch 34001-35000 of 148453
+INFO 2025-01-21 19:53:27,076 Batch processed in 5.87s - Saved 1000 appointments
+INFO 2025-01-21 19:53:27,077 Processing appointments batch 35001-36000 of 148453
+INFO 2025-01-21 19:53:31,958 Batch processed in 4.88s - Saved 1000 appointments
+INFO 2025-01-21 19:53:31,960 Processing appointments batch 36001-37000 of 148453
+INFO 2025-01-21 19:53:37,589 Batch processed in 5.63s - Saved 1000 appointments
+INFO 2025-01-21 19:53:37,589 Processing appointments batch 37001-38000 of 148453
+INFO 2025-01-21 19:53:42,951 Batch processed in 5.36s - Saved 1000 appointments
+INFO 2025-01-21 19:53:42,952 Processing appointments batch 38001-39000 of 148453
+INFO 2025-01-21 19:53:47,928 Batch processed in 4.98s - Saved 1000 appointments
+INFO 2025-01-21 19:53:47,929 Processing appointments batch 39001-40000 of 148453
+INFO 2025-01-21 19:53:53,522 Batch processed in 5.59s - Saved 1000 appointments
+INFO 2025-01-21 19:53:53,523 Processing appointments batch 40001-41000 of 148453
+INFO 2025-01-21 19:53:58,476 Batch processed in 4.95s - Saved 1000 appointments
+INFO 2025-01-21 19:53:58,477 Processing appointments batch 41001-42000 of 148453
+INFO 2025-01-21 19:54:04,215 Batch processed in 5.74s - Saved 1000 appointments
+INFO 2025-01-21 19:54:04,216 Processing appointments batch 42001-43000 of 148453
+INFO 2025-01-21 19:54:09,335 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:54:09,335 Processing appointments batch 43001-44000 of 148453
+INFO 2025-01-21 19:54:14,776 Batch processed in 5.44s - Saved 1000 appointments
+INFO 2025-01-21 19:54:14,779 Processing appointments batch 44001-45000 of 148453
+INFO 2025-01-21 19:54:20,393 Batch processed in 5.61s - Saved 1000 appointments
+INFO 2025-01-21 19:54:20,395 Processing appointments batch 45001-46000 of 148453
+INFO 2025-01-21 19:54:25,513 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:54:25,515 Processing appointments batch 46001-47000 of 148453
+INFO 2025-01-21 19:54:31,249 Batch processed in 5.73s - Saved 1000 appointments
+INFO 2025-01-21 19:54:31,249 Processing appointments batch 47001-48000 of 148453
+INFO 2025-01-21 19:54:36,338 Batch processed in 5.09s - Saved 1000 appointments
+INFO 2025-01-21 19:54:36,339 Processing appointments batch 48001-49000 of 148453
+INFO 2025-01-21 19:54:41,816 Batch processed in 5.48s - Saved 1000 appointments
+INFO 2025-01-21 19:54:41,816 Processing appointments batch 49001-50000 of 148453
+INFO 2025-01-21 19:54:46,712 Batch processed in 4.90s - Saved 1000 appointments
+INFO 2025-01-21 19:54:46,714 Processing appointments batch 50001-51000 of 148453
+INFO 2025-01-21 19:54:51,728 Batch processed in 5.01s - Saved 1000 appointments
+INFO 2025-01-21 19:54:51,729 Processing appointments batch 51001-52000 of 148453
+INFO 2025-01-21 19:54:57,603 Batch processed in 5.87s - Saved 1000 appointments
+INFO 2025-01-21 19:54:57,604 Processing appointments batch 52001-53000 of 148453
+INFO 2025-01-21 19:55:03,302 Batch processed in 5.70s - Saved 1000 appointments
+INFO 2025-01-21 19:55:03,303 Processing appointments batch 53001-54000 of 148453
+INFO 2025-01-21 19:55:09,138 Batch processed in 5.84s - Saved 1000 appointments
+INFO 2025-01-21 19:55:09,139 Processing appointments batch 54001-55000 of 148453
+INFO 2025-01-21 19:55:14,107 Batch processed in 4.97s - Saved 1000 appointments
+INFO 2025-01-21 19:55:14,108 Processing appointments batch 55001-56000 of 148453
+INFO 2025-01-21 19:55:19,277 Batch processed in 5.17s - Saved 1000 appointments
+INFO 2025-01-21 19:55:19,279 Processing appointments batch 56001-57000 of 148453
+INFO 2025-01-21 19:55:25,113 Batch processed in 5.83s - Saved 1000 appointments
+INFO 2025-01-21 19:55:25,114 Processing appointments batch 57001-58000 of 148453
+INFO 2025-01-21 19:55:29,932 Batch processed in 4.82s - Saved 1000 appointments
+INFO 2025-01-21 19:55:29,936 Processing appointments batch 58001-59000 of 148453
+INFO 2025-01-21 19:55:35,047 Batch processed in 5.11s - Saved 1000 appointments
+INFO 2025-01-21 19:55:35,048 Processing appointments batch 59001-60000 of 148453
+INFO 2025-01-21 19:55:40,883 Batch processed in 5.84s - Saved 1000 appointments
+INFO 2025-01-21 19:55:40,885 Processing appointments batch 60001-61000 of 148453
+INFO 2025-01-21 19:55:45,798 Batch processed in 4.91s - Saved 1000 appointments
+INFO 2025-01-21 19:55:45,800 Processing appointments batch 61001-62000 of 148453
+INFO 2025-01-21 19:55:51,432 Batch processed in 5.63s - Saved 1000 appointments
+INFO 2025-01-21 19:55:51,433 Processing appointments batch 62001-63000 of 148453
+INFO 2025-01-21 19:55:56,597 Batch processed in 5.16s - Saved 1000 appointments
+INFO 2025-01-21 19:55:56,598 Processing appointments batch 63001-64000 of 148453
+INFO 2025-01-21 19:56:02,221 Batch processed in 5.62s - Saved 1000 appointments
+INFO 2025-01-21 19:56:02,221 Processing appointments batch 64001-65000 of 148453
+INFO 2025-01-21 19:56:07,169 Batch processed in 4.95s - Saved 1000 appointments
+INFO 2025-01-21 19:56:07,170 Processing appointments batch 65001-66000 of 148453
+INFO 2025-01-21 19:56:12,218 Batch processed in 5.05s - Saved 1000 appointments
+INFO 2025-01-21 19:56:12,218 Processing appointments batch 66001-67000 of 148453
+INFO 2025-01-21 19:56:17,953 Batch processed in 5.73s - Saved 1000 appointments
+INFO 2025-01-21 19:56:17,954 Processing appointments batch 67001-68000 of 148453
+INFO 2025-01-21 19:56:23,688 Batch processed in 5.73s - Saved 1000 appointments
+INFO 2025-01-21 19:56:23,688 Processing appointments batch 68001-69000 of 148453
+INFO 2025-01-21 19:56:29,382 Batch processed in 5.69s - Saved 1000 appointments
+INFO 2025-01-21 19:56:29,383 Processing appointments batch 69001-70000 of 148453
+INFO 2025-01-21 19:56:34,443 Batch processed in 5.06s - Saved 1000 appointments
+INFO 2025-01-21 19:56:34,444 Processing appointments batch 70001-71000 of 148453
+INFO 2025-01-21 19:56:39,564 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:56:39,566 Processing appointments batch 71001-72000 of 148453
+INFO 2025-01-21 19:56:45,190 Batch processed in 5.62s - Saved 1000 appointments
+INFO 2025-01-21 19:56:45,190 Processing appointments batch 72001-73000 of 148453
+INFO 2025-01-21 19:56:50,312 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:56:50,314 Processing appointments batch 73001-74000 of 148453
+INFO 2025-01-21 19:56:55,432 Batch processed in 5.12s - Saved 1000 appointments
+INFO 2025-01-21 19:56:55,432 Processing appointments batch 74001-75000 of 148453
+INFO 2025-01-21 19:57:01,608 Batch processed in 6.18s - Saved 1000 appointments
+INFO 2025-01-21 19:57:01,609 Processing appointments batch 75001-76000 of 148453
+INFO 2025-01-21 19:57:07,076 Batch processed in 5.47s - Saved 1000 appointments
+INFO 2025-01-21 19:57:07,077 Processing appointments batch 76001-77000 of 148453
+INFO 2025-01-21 19:57:12,944 Batch processed in 5.87s - Saved 1000 appointments
+INFO 2025-01-21 19:57:12,945 Processing appointments batch 77001-78000 of 148453
+INFO 2025-01-21 19:57:17,862 Batch processed in 4.92s - Saved 1000 appointments
+INFO 2025-01-21 19:57:17,863 Processing appointments batch 78001-79000 of 148453
+INFO 2025-01-21 19:57:22,564 Batch processed in 4.70s - Saved 1000 appointments
+INFO 2025-01-21 19:57:22,567 Processing appointments batch 79001-80000 of 148453
+INFO 2025-01-21 19:57:28,415 Batch processed in 5.85s - Saved 1000 appointments
+INFO 2025-01-21 19:57:28,416 Processing appointments batch 80001-81000 of 148453
+INFO 2025-01-21 19:57:33,096 Batch processed in 4.68s - Saved 1000 appointments
+INFO 2025-01-21 19:57:33,098 Processing appointments batch 81001-82000 of 148453
+INFO 2025-01-21 19:57:38,834 Batch processed in 5.74s - Saved 1000 appointments
+INFO 2025-01-21 19:57:38,836 Processing appointments batch 82001-83000 of 148453
+INFO 2025-01-21 19:57:43,765 Batch processed in 4.93s - Saved 1000 appointments
+INFO 2025-01-21 19:57:43,766 Processing appointments batch 83001-84000 of 148453
+INFO 2025-01-21 19:57:48,613 Batch processed in 4.85s - Saved 1000 appointments
+INFO 2025-01-21 19:57:48,615 Processing appointments batch 84001-85000 of 148453
+INFO 2025-01-21 19:57:54,416 Batch processed in 5.80s - Saved 1000 appointments
+INFO 2025-01-21 19:57:54,417 Processing appointments batch 85001-86000 of 148453
+INFO 2025-01-21 19:57:59,252 Batch processed in 4.83s - Saved 1000 appointments
+INFO 2025-01-21 19:57:59,254 Processing appointments batch 86001-87000 of 148453
+INFO 2025-01-21 19:58:04,042 Batch processed in 4.79s - Saved 1000 appointments
+INFO 2025-01-21 19:58:04,043 Processing appointments batch 87001-88000 of 148453
+INFO 2025-01-21 19:58:10,080 Batch processed in 6.04s - Saved 1000 appointments
+INFO 2025-01-21 19:58:10,082 Processing appointments batch 88001-89000 of 148453
+INFO 2025-01-21 19:58:15,057 Batch processed in 4.97s - Saved 1000 appointments
+INFO 2025-01-21 19:58:15,057 Processing appointments batch 89001-90000 of 148453
+INFO 2025-01-21 19:58:21,606 Batch processed in 6.55s - Saved 1000 appointments
+INFO 2025-01-21 19:58:21,608 Processing appointments batch 90001-91000 of 148453
+INFO 2025-01-21 19:58:27,595 Batch processed in 5.99s - Saved 1000 appointments
+INFO 2025-01-21 19:58:27,596 Processing appointments batch 91001-92000 of 148453
+INFO 2025-01-21 19:58:32,510 Batch processed in 4.91s - Saved 1000 appointments
+INFO 2025-01-21 19:58:32,514 Processing appointments batch 92001-93000 of 148453
+INFO 2025-01-21 19:58:38,350 Batch processed in 5.84s - Saved 1000 appointments
+INFO 2025-01-21 19:58:38,351 Processing appointments batch 93001-94000 of 148453
+INFO 2025-01-21 19:58:43,344 Batch processed in 4.99s - Saved 1000 appointments
+INFO 2025-01-21 19:58:43,345 Processing appointments batch 94001-95000 of 148453
+INFO 2025-01-21 19:58:48,280 Batch processed in 4.94s - Saved 1000 appointments
+INFO 2025-01-21 19:58:48,281 Processing appointments batch 95001-96000 of 148453
+INFO 2025-01-21 19:58:54,079 Batch processed in 5.80s - Saved 1000 appointments
+INFO 2025-01-21 19:58:54,081 Processing appointments batch 96001-97000 of 148453
+INFO 2025-01-21 19:58:59,648 Batch processed in 5.57s - Saved 1000 appointments
+INFO 2025-01-21 19:58:59,649 Processing appointments batch 97001-98000 of 148453
+INFO 2025-01-21 19:59:05,792 Batch processed in 6.14s - Saved 1000 appointments
+INFO 2025-01-21 19:59:05,793 Processing appointments batch 98001-99000 of 148453
+INFO 2025-01-21 19:59:10,604 Batch processed in 4.81s - Saved 1000 appointments
+INFO 2025-01-21 19:59:10,605 Processing appointments batch 99001-100000 of 148453
+INFO 2025-01-21 19:59:15,555 Batch processed in 4.95s - Saved 1000 appointments
+INFO 2025-01-21 19:59:15,557 Processing appointments batch 100001-101000 of 148453
+INFO 2025-01-21 19:59:21,597 Batch processed in 6.04s - Saved 1000 appointments
+INFO 2025-01-21 19:59:21,598 Processing appointments batch 101001-102000 of 148453
+INFO 2025-01-21 19:59:26,314 Batch processed in 4.72s - Saved 1000 appointments
+INFO 2025-01-21 19:59:26,319 Processing appointments batch 102001-103000 of 148453
+INFO 2025-01-21 19:59:31,290 Batch processed in 4.97s - Saved 1000 appointments
+INFO 2025-01-21 19:59:31,291 Processing appointments batch 103001-104000 of 148453
+INFO 2025-01-21 19:59:38,314 Batch processed in 7.02s - Saved 1000 appointments
+INFO 2025-01-21 19:59:38,314 Processing appointments batch 104001-105000 of 148453
+INFO 2025-01-21 19:59:43,721 Batch processed in 5.41s - Saved 1000 appointments
+INFO 2025-01-21 19:59:43,722 Processing appointments batch 105001-106000 of 148453
+INFO 2025-01-21 19:59:49,415 Batch processed in 5.69s - Saved 1000 appointments
+INFO 2025-01-21 19:59:49,416 Processing appointments batch 106001-107000 of 148453
+INFO 2025-01-21 19:59:54,905 Batch processed in 5.49s - Saved 1000 appointments
+INFO 2025-01-21 19:59:54,906 Processing appointments batch 107001-108000 of 148453
+INFO 2025-01-21 20:00:00,372 Batch processed in 5.47s - Saved 1000 appointments
+INFO 2025-01-21 20:00:00,373 Processing appointments batch 108001-109000 of 148453
+INFO 2025-01-21 20:00:06,312 Batch processed in 5.94s - Saved 1000 appointments
+INFO 2025-01-21 20:00:06,313 Processing appointments batch 109001-110000 of 148453
+INFO 2025-01-21 20:00:11,114 Batch processed in 4.80s - Saved 1000 appointments
+INFO 2025-01-21 20:00:11,115 Processing appointments batch 110001-111000 of 148453
+INFO 2025-01-21 20:00:15,976 Batch processed in 4.86s - Saved 1000 appointments
+INFO 2025-01-21 20:00:15,976 Processing appointments batch 111001-112000 of 148453
+INFO 2025-01-21 20:00:24,232 Batch processed in 8.26s - Saved 1000 appointments
+INFO 2025-01-21 20:00:24,233 Processing appointments batch 112001-113000 of 148453
+INFO 2025-01-21 20:00:29,968 Batch processed in 5.74s - Saved 1000 appointments
+INFO 2025-01-21 20:00:29,969 Processing appointments batch 113001-114000 of 148453
+INFO 2025-01-21 20:00:35,083 Batch processed in 5.11s - Saved 1000 appointments
+INFO 2025-01-21 20:00:35,086 Processing appointments batch 114001-115000 of 148453
+INFO 2025-01-21 20:00:40,878 Batch processed in 5.79s - Saved 1000 appointments
+INFO 2025-01-21 20:00:40,879 Processing appointments batch 115001-116000 of 148453
+INFO 2025-01-21 20:00:45,735 Batch processed in 4.86s - Saved 1000 appointments
+INFO 2025-01-21 20:00:45,736 Processing appointments batch 116001-117000 of 148453
+INFO 2025-01-21 20:00:50,652 Batch processed in 4.92s - Saved 1000 appointments
+INFO 2025-01-21 20:00:50,653 Processing appointments batch 117001-118000 of 148453
+INFO 2025-01-21 20:00:56,145 Batch processed in 5.49s - Saved 1000 appointments
+INFO 2025-01-21 20:00:56,147 Processing appointments batch 118001-119000 of 148453
+INFO 2025-01-21 20:01:00,949 Batch processed in 4.80s - Saved 1000 appointments
+INFO 2025-01-21 20:01:00,949 Processing appointments batch 119001-120000 of 148453
+INFO 2025-01-21 20:01:06,611 Batch processed in 5.66s - Saved 1000 appointments
+INFO 2025-01-21 20:01:06,612 Processing appointments batch 120001-121000 of 148453
+INFO 2025-01-21 20:01:11,645 Batch processed in 5.03s - Saved 1000 appointments
+INFO 2025-01-21 20:01:11,646 Processing appointments batch 121001-122000 of 148453
+INFO 2025-01-21 20:01:16,662 Batch processed in 5.02s - Saved 1000 appointments
+INFO 2025-01-21 20:01:16,663 Processing appointments batch 122001-123000 of 148453
+INFO 2025-01-21 20:01:22,348 Batch processed in 5.69s - Saved 1000 appointments
+INFO 2025-01-21 20:01:22,350 Processing appointments batch 123001-124000 of 148453
+INFO 2025-01-21 20:01:27,282 Batch processed in 4.93s - Saved 1000 appointments
+INFO 2025-01-21 20:01:27,284 Processing appointments batch 124001-125000 of 148453
+INFO 2025-01-21 20:01:32,434 Batch processed in 5.15s - Saved 1000 appointments
+INFO 2025-01-21 20:01:32,434 Processing appointments batch 125001-126000 of 148453
+INFO 2025-01-21 20:01:38,065 Batch processed in 5.63s - Saved 1000 appointments
+INFO 2025-01-21 20:01:38,066 Processing appointments batch 126001-127000 of 148453
+INFO 2025-01-21 20:01:42,879 Batch processed in 4.81s - Saved 1000 appointments
+INFO 2025-01-21 20:01:42,880 Processing appointments batch 127001-128000 of 148453
+INFO 2025-01-21 20:01:47,691 Batch processed in 4.81s - Saved 1000 appointments
+INFO 2025-01-21 20:01:47,692 Processing appointments batch 128001-129000 of 148453
+INFO 2025-01-21 20:01:53,416 Batch processed in 5.72s - Saved 1000 appointments
+INFO 2025-01-21 20:01:53,417 Processing appointments batch 129001-130000 of 148453
+INFO 2025-01-21 20:01:58,118 Batch processed in 4.70s - Saved 1000 appointments
+INFO 2025-01-21 20:01:58,119 Processing appointments batch 130001-131000 of 148453
+INFO 2025-01-21 20:02:02,929 Batch processed in 4.81s - Saved 1000 appointments
+INFO 2025-01-21 20:02:02,931 Processing appointments batch 131001-132000 of 148453
+INFO 2025-01-21 20:02:08,700 Batch processed in 5.77s - Saved 1000 appointments
+INFO 2025-01-21 20:02:08,702 Processing appointments batch 132001-133000 of 148453
+INFO 2025-01-21 20:02:13,432 Batch processed in 4.73s - Saved 1000 appointments
+INFO 2025-01-21 20:02:13,433 Processing appointments batch 133001-134000 of 148453
+INFO 2025-01-21 20:02:18,172 Batch processed in 4.74s - Saved 1000 appointments
+INFO 2025-01-21 20:02:18,174 Processing appointments batch 134001-135000 of 148453
+INFO 2025-01-21 20:02:23,570 Batch processed in 5.40s - Saved 1000 appointments
+INFO 2025-01-21 20:02:23,571 Processing appointments batch 135001-136000 of 148453
+INFO 2025-01-21 20:02:28,273 Batch processed in 4.70s - Saved 1000 appointments
+INFO 2025-01-21 20:02:28,274 Processing appointments batch 136001-137000 of 148453
+INFO 2025-01-21 20:02:33,672 Batch processed in 5.40s - Saved 1000 appointments
+INFO 2025-01-21 20:02:33,673 Processing appointments batch 137001-138000 of 148453
+INFO 2025-01-21 20:02:38,376 Batch processed in 4.70s - Saved 1000 appointments
+INFO 2025-01-21 20:02:38,377 Processing appointments batch 138001-139000 of 148453
+INFO 2025-01-21 20:02:43,098 Batch processed in 4.72s - Saved 1000 appointments
+INFO 2025-01-21 20:02:43,100 Processing appointments batch 139001-140000 of 148453
+INFO 2025-01-21 20:02:48,667 Batch processed in 5.57s - Saved 1000 appointments
+INFO 2025-01-21 20:02:48,670 Processing appointments batch 140001-141000 of 148453
+INFO 2025-01-21 20:02:53,379 Batch processed in 4.71s - Saved 1000 appointments
+INFO 2025-01-21 20:02:53,380 Processing appointments batch 141001-142000 of 148453
+INFO 2025-01-21 20:02:58,102 Batch processed in 4.72s - Saved 1000 appointments
+INFO 2025-01-21 20:02:58,103 Processing appointments batch 142001-143000 of 148453
+INFO 2025-01-21 20:03:03,453 Batch processed in 5.35s - Saved 1000 appointments
+INFO 2025-01-21 20:03:03,454 Processing appointments batch 143001-144000 of 148453
+INFO 2025-01-21 20:03:08,176 Batch processed in 4.72s - Saved 1000 appointments
+INFO 2025-01-21 20:03:08,176 Processing appointments batch 144001-145000 of 148453
+INFO 2025-01-21 20:03:12,887 Batch processed in 4.71s - Saved 1000 appointments
+INFO 2025-01-21 20:03:12,889 Processing appointments batch 145001-146000 of 148453
+INFO 2025-01-21 20:03:18,253 Batch processed in 5.36s - Saved 1000 appointments
+INFO 2025-01-21 20:03:18,254 Processing appointments batch 146001-147000 of 148453
+INFO 2025-01-21 20:03:22,960 Batch processed in 4.71s - Saved 1000 appointments
+INFO 2025-01-21 20:03:22,962 Processing appointments batch 147001-148000 of 148453
+INFO 2025-01-21 20:03:27,639 Batch processed in 4.68s - Saved 1000 appointments
+INFO 2025-01-21 20:03:27,640 Processing appointments batch 148001-148453 of 148453
+INFO 2025-01-21 20:03:31,177 Batch processed in 3.54s - Saved 453 appointments
+INFO 2025-01-21 20:03:31,178 Finished processing appointments - Total time: 3.54s - Processed: 148453/148453
+INFO 2025-01-21 20:03:31,179 Starting to process 67795 bill charges in batches of 1000
+INFO 2025-01-21 20:03:31,179 Processing bill charges batch 1-1000 of 67795
+INFO 2025-01-21 20:03:36,036 Batch processed in 4.86s - Saved 1000 bill charges
+INFO 2025-01-21 20:03:36,037 Processing bill charges batch 1001-2000 of 67795
+INFO 2025-01-21 20:03:40,865 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:03:40,866 Processing bill charges batch 2001-3000 of 67795
+WARNING 2025-01-21 20:03:41,879 1 invalid bill charges in current batch
+INFO 2025-01-21 20:03:46,351 Batch processed in 5.48s - Saved 999 bill charges
+INFO 2025-01-21 20:03:46,351 Processing bill charges batch 3001-4000 of 67795
+WARNING 2025-01-21 20:03:46,704 1 invalid bill charges in current batch
+INFO 2025-01-21 20:03:51,151 Batch processed in 4.80s - Saved 999 bill charges
+INFO 2025-01-21 20:03:51,152 Processing bill charges batch 4001-5000 of 67795
+INFO 2025-01-21 20:03:56,566 Batch processed in 5.41s - Saved 1000 bill charges
+INFO 2025-01-21 20:03:56,567 Processing bill charges batch 5001-6000 of 67795
+WARNING 2025-01-21 20:03:56,924 2 invalid bill charges in current batch
+INFO 2025-01-21 20:04:01,417 Batch processed in 4.85s - Saved 998 bill charges
+INFO 2025-01-21 20:04:01,417 Processing bill charges batch 6001-7000 of 67795
+INFO 2025-01-21 20:04:06,224 Batch processed in 4.81s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:06,226 Processing bill charges batch 7001-8000 of 67795
+INFO 2025-01-21 20:04:11,797 Batch processed in 5.57s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:11,797 Processing bill charges batch 8001-9000 of 67795
+WARNING 2025-01-21 20:04:12,152 1 invalid bill charges in current batch
+INFO 2025-01-21 20:04:16,619 Batch processed in 4.82s - Saved 999 bill charges
+INFO 2025-01-21 20:04:16,619 Processing bill charges batch 9001-10000 of 67795
+INFO 2025-01-21 20:04:22,088 Batch processed in 5.47s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:22,089 Processing bill charges batch 10001-11000 of 67795
+INFO 2025-01-21 20:04:26,904 Batch processed in 4.82s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:26,905 Processing bill charges batch 11001-12000 of 67795
+INFO 2025-01-21 20:04:31,736 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:31,737 Processing bill charges batch 12001-13000 of 67795
+WARNING 2025-01-21 20:04:32,940 10 invalid bill charges in current batch
+INFO 2025-01-21 20:04:37,393 Batch processed in 5.66s - Saved 990 bill charges
+INFO 2025-01-21 20:04:37,394 Processing bill charges batch 13001-14000 of 67795
+INFO 2025-01-21 20:04:42,202 Batch processed in 4.81s - Saved 1000 bill charges
+INFO 2025-01-21 20:04:42,203 Processing bill charges batch 14001-15000 of 67795
+WARNING 2025-01-21 20:04:43,247 8 invalid bill charges in current batch
+INFO 2025-01-21 20:04:47,703 Batch processed in 5.50s - Saved 992 bill charges
+INFO 2025-01-21 20:04:47,703 Processing bill charges batch 15001-16000 of 67795
+WARNING 2025-01-21 20:04:48,058 1 invalid bill charges in current batch
+INFO 2025-01-21 20:04:52,538 Batch processed in 4.83s - Saved 999 bill charges
+INFO 2025-01-21 20:04:52,540 Processing bill charges batch 16001-17000 of 67795
+WARNING 2025-01-21 20:04:52,890 2 invalid bill charges in current batch
+INFO 2025-01-21 20:04:57,344 Batch processed in 4.80s - Saved 998 bill charges
+INFO 2025-01-21 20:04:57,345 Processing bill charges batch 17001-18000 of 67795
+INFO 2025-01-21 20:05:02,977 Batch processed in 5.63s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:02,978 Processing bill charges batch 18001-19000 of 67795
+INFO 2025-01-21 20:05:07,790 Batch processed in 4.81s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:07,791 Processing bill charges batch 19001-20000 of 67795
+WARNING 2025-01-21 20:05:08,764 1 invalid bill charges in current batch
+INFO 2025-01-21 20:05:13,235 Batch processed in 5.44s - Saved 999 bill charges
+INFO 2025-01-21 20:05:13,236 Processing bill charges batch 20001-21000 of 67795
+INFO 2025-01-21 20:05:18,052 Batch processed in 4.82s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:18,053 Processing bill charges batch 21001-22000 of 67795
+INFO 2025-01-21 20:05:23,715 Batch processed in 5.66s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:23,717 Processing bill charges batch 22001-23000 of 67795
+WARNING 2025-01-21 20:05:24,070 11 invalid bill charges in current batch
+INFO 2025-01-21 20:05:28,525 Batch processed in 4.81s - Saved 989 bill charges
+INFO 2025-01-21 20:05:28,526 Processing bill charges batch 23001-24000 of 67795
+INFO 2025-01-21 20:05:33,338 Batch processed in 4.81s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:33,340 Processing bill charges batch 24001-25000 of 67795
+INFO 2025-01-21 20:05:39,089 Batch processed in 5.75s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:39,090 Processing bill charges batch 25001-26000 of 67795
+WARNING 2025-01-21 20:05:39,449 1 invalid bill charges in current batch
+INFO 2025-01-21 20:05:43,912 Batch processed in 4.82s - Saved 999 bill charges
+INFO 2025-01-21 20:05:43,913 Processing bill charges batch 26001-27000 of 67795
+WARNING 2025-01-21 20:05:44,264 1 invalid bill charges in current batch
+INFO 2025-01-21 20:05:48,753 Batch processed in 4.84s - Saved 999 bill charges
+INFO 2025-01-21 20:05:48,754 Processing bill charges batch 27001-28000 of 67795
+WARNING 2025-01-21 20:05:49,875 1 invalid bill charges in current batch
+INFO 2025-01-21 20:05:54,345 Batch processed in 5.59s - Saved 999 bill charges
+INFO 2025-01-21 20:05:54,346 Processing bill charges batch 28001-29000 of 67795
+INFO 2025-01-21 20:05:59,178 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:05:59,180 Processing bill charges batch 29001-30000 of 67795
+INFO 2025-01-21 20:06:04,634 Batch processed in 5.45s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:04,635 Processing bill charges batch 30001-31000 of 67795
+INFO 2025-01-21 20:06:09,465 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:09,467 Processing bill charges batch 31001-32000 of 67795
+INFO 2025-01-21 20:06:14,282 Batch processed in 4.82s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:14,283 Processing bill charges batch 32001-33000 of 67795
+WARNING 2025-01-21 20:06:15,495 11 invalid bill charges in current batch
+INFO 2025-01-21 20:06:20,040 Batch processed in 5.76s - Saved 989 bill charges
+INFO 2025-01-21 20:06:20,040 Processing bill charges batch 33001-34000 of 67795
+INFO 2025-01-21 20:06:24,892 Batch processed in 4.85s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:24,893 Processing bill charges batch 34001-35000 of 67795
+INFO 2025-01-21 20:06:30,468 Batch processed in 5.58s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:30,470 Processing bill charges batch 35001-36000 of 67795
+WARNING 2025-01-21 20:06:30,841 10 invalid bill charges in current batch
+INFO 2025-01-21 20:06:35,317 Batch processed in 4.85s - Saved 990 bill charges
+INFO 2025-01-21 20:06:35,318 Processing bill charges batch 36001-37000 of 67795
+INFO 2025-01-21 20:06:40,186 Batch processed in 4.87s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:40,187 Processing bill charges batch 37001-38000 of 67795
+INFO 2025-01-21 20:06:45,818 Batch processed in 5.63s - Saved 1000 bill charges
+INFO 2025-01-21 20:06:45,820 Processing bill charges batch 38001-39000 of 67795
+WARNING 2025-01-21 20:06:46,179 1 invalid bill charges in current batch
+INFO 2025-01-21 20:06:50,670 Batch processed in 4.85s - Saved 999 bill charges
+INFO 2025-01-21 20:06:50,671 Processing bill charges batch 39001-40000 of 67795
+WARNING 2025-01-21 20:06:51,022 1 invalid bill charges in current batch
+INFO 2025-01-21 20:06:56,314 Batch processed in 5.64s - Saved 999 bill charges
+INFO 2025-01-21 20:06:56,315 Processing bill charges batch 40001-41000 of 67795
+WARNING 2025-01-21 20:06:56,677 2 invalid bill charges in current batch
+INFO 2025-01-21 20:07:01,186 Batch processed in 4.87s - Saved 998 bill charges
+INFO 2025-01-21 20:07:01,186 Processing bill charges batch 41001-42000 of 67795
+INFO 2025-01-21 20:07:06,012 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:06,014 Processing bill charges batch 42001-43000 of 67795
+INFO 2025-01-21 20:07:11,714 Batch processed in 5.70s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:11,714 Processing bill charges batch 43001-44000 of 67795
+WARNING 2025-01-21 20:07:12,069 1 invalid bill charges in current batch
+INFO 2025-01-21 20:07:16,530 Batch processed in 4.82s - Saved 999 bill charges
+INFO 2025-01-21 20:07:16,530 Processing bill charges batch 44001-45000 of 67795
+INFO 2025-01-21 20:07:21,358 Batch processed in 4.83s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:21,360 Processing bill charges batch 45001-46000 of 67795
+INFO 2025-01-21 20:07:27,212 Batch processed in 5.85s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:27,213 Processing bill charges batch 46001-47000 of 67795
+WARNING 2025-01-21 20:07:27,569 15 invalid bill charges in current batch
+INFO 2025-01-21 20:07:32,031 Batch processed in 4.82s - Saved 985 bill charges
+INFO 2025-01-21 20:07:32,032 Processing bill charges batch 47001-48000 of 67795
+WARNING 2025-01-21 20:07:33,206 11 invalid bill charges in current batch
+INFO 2025-01-21 20:07:37,653 Batch processed in 5.62s - Saved 989 bill charges
+INFO 2025-01-21 20:07:37,654 Processing bill charges batch 48001-49000 of 67795
+WARNING 2025-01-21 20:07:38,007 3 invalid bill charges in current batch
+INFO 2025-01-21 20:07:42,460 Batch processed in 4.81s - Saved 997 bill charges
+INFO 2025-01-21 20:07:42,461 Processing bill charges batch 49001-50000 of 67795
+INFO 2025-01-21 20:07:47,240 Batch processed in 4.78s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:47,242 Processing bill charges batch 50001-51000 of 67795
+INFO 2025-01-21 20:07:52,877 Batch processed in 5.63s - Saved 1000 bill charges
+INFO 2025-01-21 20:07:52,879 Processing bill charges batch 51001-52000 of 67795
+WARNING 2025-01-21 20:07:53,249 10 invalid bill charges in current batch
+INFO 2025-01-21 20:07:57,729 Batch processed in 4.85s - Saved 990 bill charges
+INFO 2025-01-21 20:07:57,731 Processing bill charges batch 52001-53000 of 67795
+WARNING 2025-01-21 20:07:58,099 1 invalid bill charges in current batch
+INFO 2025-01-21 20:08:02,635 Batch processed in 4.90s - Saved 999 bill charges
+INFO 2025-01-21 20:08:02,636 Processing bill charges batch 53001-54000 of 67795
+INFO 2025-01-21 20:08:08,494 Batch processed in 5.86s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:08,496 Processing bill charges batch 54001-55000 of 67795
+WARNING 2025-01-21 20:08:08,859 10 invalid bill charges in current batch
+INFO 2025-01-21 20:08:19,332 Batch processed in 10.84s - Saved 990 bill charges
+INFO 2025-01-21 20:08:19,333 Processing bill charges batch 55001-56000 of 67795
+INFO 2025-01-21 20:08:25,191 Batch processed in 5.86s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:25,192 Processing bill charges batch 56001-57000 of 67795
+INFO 2025-01-21 20:08:30,036 Batch processed in 4.84s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:30,037 Processing bill charges batch 57001-58000 of 67795
+WARNING 2025-01-21 20:08:30,389 13 invalid bill charges in current batch
+INFO 2025-01-21 20:08:34,863 Batch processed in 4.83s - Saved 987 bill charges
+INFO 2025-01-21 20:08:34,864 Processing bill charges batch 58001-59000 of 67795
+INFO 2025-01-21 20:08:40,454 Batch processed in 5.59s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:40,455 Processing bill charges batch 59001-60000 of 67795
+INFO 2025-01-21 20:08:46,909 Batch processed in 6.45s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:46,910 Processing bill charges batch 60001-61000 of 67795
+WARNING 2025-01-21 20:08:47,313 1 invalid bill charges in current batch
+INFO 2025-01-21 20:08:51,783 Batch processed in 4.87s - Saved 999 bill charges
+INFO 2025-01-21 20:08:51,784 Processing bill charges batch 61001-62000 of 67795
+INFO 2025-01-21 20:08:57,357 Batch processed in 5.57s - Saved 1000 bill charges
+INFO 2025-01-21 20:08:57,358 Processing bill charges batch 62001-63000 of 67795
+INFO 2025-01-21 20:09:02,225 Batch processed in 4.87s - Saved 1000 bill charges
+INFO 2025-01-21 20:09:02,225 Processing bill charges batch 63001-64000 of 67795
+INFO 2025-01-21 20:09:07,712 Batch processed in 5.49s - Saved 1000 bill charges
+INFO 2025-01-21 20:09:07,714 Processing bill charges batch 64001-65000 of 67795
+WARNING 2025-01-21 20:09:08,071 4 invalid bill charges in current batch
+INFO 2025-01-21 20:09:12,560 Batch processed in 4.85s - Saved 996 bill charges
+INFO 2025-01-21 20:09:12,561 Processing bill charges batch 65001-66000 of 67795
+WARNING 2025-01-21 20:09:12,916 4 invalid bill charges in current batch
+INFO 2025-01-21 20:09:17,406 Batch processed in 4.84s - Saved 996 bill charges
+INFO 2025-01-21 20:09:17,407 Processing bill charges batch 66001-67000 of 67795
+WARNING 2025-01-21 20:09:18,875 8 invalid bill charges in current batch
+INFO 2025-01-21 20:09:23,352 Batch processed in 5.94s - Saved 992 bill charges
+INFO 2025-01-21 20:09:23,353 Processing bill charges batch 67001-67795 of 67795
+INFO 2025-01-21 20:09:27,363 Batch processed in 4.01s - Saved 795 bill charges
+INFO 2025-01-21 20:09:27,364 Finished processing bill charges - Total time: 4.01s - Processed: 67648/67795
+INFO 2025-01-21 20:09:27,364 Import completed in 3999.65 seconds
+INFO 2025-01-21 23:06:27,248 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-21 23:06:27,248 Import completed in 0.00 seconds
+INFO 2025-01-21 23:06:27,252 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-21 23:06:27,252 Import completed in 0.00 seconds
+INFO 2025-01-21 23:06:27,254 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-21 23:06:27,254 Error in resolve_all_data: Invalid date format
+INFO 2025-01-21 23:06:27,256 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-21 23:06:27,256 Error in resolve_all_data: Invalid data format
+INFO 2025-01-21 23:06:27,314 🤖 TASK: Starting CRM tables cleanup
+INFO 2025-01-21 23:06:27,315 Successfully truncated apiCrm_billcharge
+INFO 2025-01-21 23:06:27,315 Successfully truncated apiCrm_appointment
+INFO 2025-01-21 23:06:27,315 Successfully truncated apiCrm_lead
+INFO 2025-01-21 23:06:27,316 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4426945568'>
+INFO 2025-01-21 23:06:30,272 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:06:30,272 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-21 23:06:30,276 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:06:30,277 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-21 23:06:30,281 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:06:30,285 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-21 23:06:30,313 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,313 ...
+INFO 2025-01-21 23:06:30,315 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,315 ...
+INFO 2025-01-21 23:06:30,317 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,317 ...
+INFO 2025-01-21 23:06:30,318 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,318 ...
+INFO 2025-01-21 23:06:30,320 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,320 ...
+INFO 2025-01-21 23:06:30,322 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,322 ...
+INFO 2025-01-21 23:06:30,323 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:06:30,323 ...
+INFO 2025-01-21 23:07:02,664 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-21 23:07:02,664 Import completed in 0.00 seconds
+INFO 2025-01-21 23:07:02,668 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-01-21 23:07:02,668 Import completed in 0.00 seconds
+INFO 2025-01-21 23:07:02,670 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-21 23:07:02,670 Error in resolve_all_data: Invalid date format
+INFO 2025-01-21 23:07:02,672 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-01-21 23:07:02,672 Error in resolve_all_data: Invalid data format
+INFO 2025-01-21 23:07:02,731 🤖 TASK: Starting CRM tables cleanup
+INFO 2025-01-21 23:07:02,732 Successfully truncated apiCrm_billcharge
+INFO 2025-01-21 23:07:02,732 Successfully truncated apiCrm_appointment
+INFO 2025-01-21 23:07:02,732 Successfully truncated apiCrm_lead
+INFO 2025-01-21 23:07:02,732 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4425616928'>
+INFO 2025-01-21 23:07:05,806 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:07:05,806 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-01-21 23:07:05,810 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:07:05,810 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-01-21 23:07:05,816 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-01-21 23:07:05,820 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-01-21 23:07:05,847 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,847 ...
+INFO 2025-01-21 23:07:05,849 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,849 ...
+INFO 2025-01-21 23:07:05,853 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,853 ...
+INFO 2025-01-21 23:07:05,854 Payload: {
+  "api_token": "dummy_token",
+  "phone": "1234567890",
+  "message": "Test message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,854 ...
+INFO 2025-01-21 23:07:05,855 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,855 ...
+INFO 2025-01-21 23:07:05,856 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,856 ...
+INFO 2025-01-21 23:07:05,857 Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+INFO 2025-01-21 23:07:05,857 ...

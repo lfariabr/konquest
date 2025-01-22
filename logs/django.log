@@ -1,0 +1,419 @@
+INFO 2025-01-21 19:00:35,372 autoreload 26646 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 19:00:36,737 autoreload 33224 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 19:01:59,730 autoreload 33224 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 19:02:00,544 autoreload 34434 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 20:09:32,011 basehttp 34434 6169833472 - Broken pipe from ('127.0.0.1', 51008)
+INFO 2025-01-21 20:33:14,793 basehttp 34434 6169260032 "GET /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-01-21 20:33:15,649 basehttp 34434 6169260032 "GET /admin/ HTTP/1.1" 200 37340
+INFO 2025-01-21 21:50:39,169 autoreload 34434 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 21:50:40,400 autoreload 39281 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 21:50:54,198 autoreload 39281 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 21:50:55,114 autoreload 39762 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:01:11,699 autoreload 39762 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:01:12,648 autoreload 40152 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:11:31,843 autoreload 40152 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:11:32,794 autoreload 40956 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:12:24,677 basehttp 40956 6128955392 "GET /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:12:25,489 basehttp 40956 6128955392 "GET /admin/ HTTP/1.1" 200 37343
+INFO 2025-01-21 22:12:41,831 basehttp 40956 6128955392 "GET /admin/core/message/ HTTP/1.1" 200 75720
+INFO 2025-01-21 22:12:42,340 basehttp 40956 6128955392 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:12:46,002 basehttp 40956 6145781760 "GET /admin/core/userphone/ HTTP/1.1" 200 58022
+INFO 2025-01-21 22:12:47,678 basehttp 40956 6128955392 "GET /admin/core/message/add/ HTTP/1.1" 200 34477
+INFO 2025-01-21 22:12:47,709 basehttp 40956 6128955392 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:12:47,709 basehttp 40956 6145781760 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:13:21,041 basehttp 40956 6128955392 "GET /admin/core/userphone/add/ HTTP/1.1" 200 29858
+INFO 2025-01-21 22:13:49,401 basehttp 40956 6128955392 "POST /admin/core/userphone/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:13:52,067 basehttp 40956 6128955392 "GET /admin/core/userphone/ HTTP/1.1" 200 59882
+INFO 2025-01-21 22:14:07,117 basehttp 40956 6128955392 "POST /admin/core/message/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:14:10,296 basehttp 40956 6128955392 "GET /admin/core/message/ HTTP/1.1" 200 77955
+INFO 2025-01-21 22:14:15,822 basehttp 40956 6128955392 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 118183
+INFO 2025-01-21 22:14:17,482 basehttp 40956 6145781760 "GET /admin/apiCrm/appointment/ HTTP/1.1" 200 144126
+INFO 2025-01-21 22:14:17,964 basehttp 40956 6162608128 "GET /admin/apiCrm/billcharge/ HTTP/1.1" 200 131506
+INFO 2025-01-21 22:14:18,500 basehttp 40956 6128955392 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42154
+INFO 2025-01-21 22:14:32,530 basehttp 40956 6128381952 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 49354
+INFO 2025-01-21 22:14:59,816 autoreload 40956 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/models/campaign.py changed, reloading.
+INFO 2025-01-21 22:15:00,878 autoreload 41298 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:15:09,916 basehttp 41298 6127333376 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 49449
+INFO 2025-01-21 22:15:10,089 basehttp 41298 6127333376 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-01-21 22:15:21,727 basehttp 41298 6126759936 "GET /admin/messageShooter/campaign/load-messages/?tag=VIP HTTP/1.1" 200 117
+INFO 2025-01-21 22:15:24,843 basehttp 41298 6143586304 "GET /admin/messageShooter/campaign/load-messages/?tag=VIP HTTP/1.1" 200 117
+INFO 2025-01-21 22:15:36,106 basehttp 41298 6127333376 "POST /admin/messageShooter/campaign/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:15:37,766 basehttp 41298 6127333376 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43754
+INFO 2025-01-21 22:15:45,851 basehttp 41298 6127333376 "GET /admin/messageShooter/campaign/13/change/ HTTP/1.1" 200 53230
+INFO 2025-01-21 22:15:56,068 basehttp 41298 6127333376 "POST /admin/messageShooter/campaign/13/change/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:15:57,435 basehttp 41298 6127333376 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43756
+INFO 2025-01-21 22:16:17,326 basehttp 41298 6127333376 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:16:18,697 basehttp 41298 6127333376 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:18:36,049 autoreload 41298 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:18:37,029 autoreload 42448 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:18:44,545 autoreload 42448 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:18:45,321 autoreload 42626 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:19:09,616 basehttp 42626 6123417600 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:19:11,192 basehttp 42626 6123417600 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:19:11,676 basehttp 42626 6123417600 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:20:27,301 autoreload 42626 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:20:28,177 autoreload 43176 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:20:52,069 autoreload 43365 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:21:00,985 basehttp 43365 6205386752 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:21:01,004 basehttp 43365 6205386752 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:21:06,777 basehttp 43365 6205386752 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:21:08,223 basehttp 43365 6205386752 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:21:08,609 basehttp 43365 6205386752 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:21:24,708 basehttp 43365 6205386752 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:21:26,236 basehttp 43365 6205386752 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:27:45,507 autoreload 43365 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:27:46,508 autoreload 43656 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:28:12,646 basehttp 43656 6131331072 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:28:14,112 basehttp 43656 6131331072 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:28:14,555 basehttp 43656 6131331072 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:28:27,077 autoreload 43750 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:28:30,890 basehttp 43750 6156906496 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:28:30,900 basehttp 43750 6156906496 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:28:36,671 basehttp 43750 6156906496 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:28:38,044 basehttp 43750 6156906496 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:28:38,406 basehttp 43750 6156906496 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:28:53,027 basehttp 43750 6156906496 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:28:54,582 basehttp 43750 6156906496 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:35:19,836 basehttp 43750 6156906496 "GET /admin/apiCrm/appointment/ HTTP/1.1" 200 144126
+INFO 2025-01-21 22:35:20,232 basehttp 43750 6156906496 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:42:17,318 autoreload 43750 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:42:18,635 autoreload 44292 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:42:55,960 autoreload 44615 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:42:59,328 basehttp 44615 6202159104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:42:59,342 basehttp 44615 6202159104 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:43:05,084 basehttp 44615 6202159104 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:43:06,630 basehttp 44615 6202159104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:43:07,003 basehttp 44615 6202159104 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:43:30,817 basehttp 44615 6202159104 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:43:32,438 basehttp 44615 6202159104 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:45:13,356 autoreload 44615 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/apiCrm/dicts/stores.py changed, reloading.
+INFO 2025-01-21 22:45:14,331 autoreload 45123 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:45:55,129 autoreload 45239 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:46:03,993 basehttp 45239 6139899904 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:46:04,005 basehttp 45239 6139899904 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 5792
+INFO 2025-01-21 22:46:04,032 basehttp 45239 6156726272 "GET /static/admin/css/tailwind.css HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,033 basehttp 45239 6139899904 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/css/all.min.css HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,033 basehttp 45239 6341865472 "GET /static/admin/css/tom-select.min.css HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,034 basehttp 45239 6325039104 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,035 basehttp 45239 6173552640 "GET /static/admin/js/tailwind-3.4.5.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,035 basehttp 45239 6139899904 "GET /static/admin/js/theme-change.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,035 basehttp 45239 6156726272 "GET /static/admin/js/tom-select.complete.min.js.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,035 basehttp 45239 6358691840 "GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,038 basehttp 45239 6173552640 "GET /static/admin/js/admin/dashboard.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,047 basehttp 45239 6358691840 "GET /static/admin/js/SelectBox.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,047 basehttp 45239 6173552640 "GET /static/admin/tinymce/tinymce.min.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:04,125 basehttp 45239 6173552640 "GET /static/img/favicon.svg HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:09,953 basehttp 45239 6173552640 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:46:10,782 basehttp 45239 6173552640 "GET /admin/ HTTP/1.1" 200 37297
+INFO 2025-01-21 22:46:10,862 basehttp 45239 6139899904 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-solid-900.woff2 HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:10,863 basehttp 45239 6173552640 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-regular-400.woff2 HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:10,865 basehttp 45239 6156726272 "GET /static/img/logo.svg HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,180 basehttp 45239 6139899904 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:46:18,197 basehttp 45239 6156726272 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,198 basehttp 45239 6139899904 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,200 basehttp 45239 6173552640 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,200 basehttp 45239 6156726272 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,201 basehttp 45239 6325039104 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,202 basehttp 45239 6139899904 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,202 basehttp 45239 6341865472 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:18,213 basehttp 45239 6341865472 "GET /static/admin/js/query_filter.js HTTP/1.1" 304 0
+INFO 2025-01-21 22:46:20,767 basehttp 45239 6358691840 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:46:36,357 basehttp 45239 6138753024 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:46:37,862 basehttp 45239 6138753024 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:49:51,341 autoreload 45239 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:49:52,668 autoreload 46424 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:50:09,491 autoreload 46424 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:50:10,286 autoreload 46894 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:50:32,678 autoreload 46960 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:50:36,025 basehttp 46960 6149140480 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:50:36,025 basehttp 46960 6132314112 - Broken pipe from ('127.0.0.1', 62214)
+INFO 2025-01-21 22:50:36,037 basehttp 46960 6149140480 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:50:42,031 basehttp 46960 6132887552 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:50:43,436 basehttp 46960 6132887552 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:50:43,803 basehttp 46960 6132887552 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:50:58,295 basehttp 46960 6132887552 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:50:59,709 basehttp 46960 6132887552 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:51:43,586 autoreload 47126 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:53:06,606 autoreload 47126 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:53:07,596 autoreload 47934 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:53:24,904 basehttp 47934 6128824320 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:53:24,921 basehttp 47934 6128824320 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:53:30,479 basehttp 47934 6128824320 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:53:32,154 basehttp 47934 6128824320 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:53:56,439 basehttp 47934 6128824320 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:53:57,838 basehttp 47934 6128824320 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 22:58:42,438 autoreload 47934 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-01-21 22:58:43,971 autoreload 48574 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:59:01,490 autoreload 49143 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 22:59:05,941 basehttp 49143 6193917952 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:59:05,958 basehttp 49143 6193917952 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 22:59:12,494 basehttp 49143 6193917952 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:59:14,006 basehttp 49143 6193917952 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42764
+INFO 2025-01-21 22:59:14,372 basehttp 49143 6193917952 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 22:59:43,024 basehttp 49143 6193917952 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 22:59:46,637 basehttp 49143 6210744320 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 43701
+INFO 2025-01-21 23:04:28,915 autoreload 50919 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 23:04:36,537 autoreload 50919 8201861824 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-01-21 23:04:37,248 autoreload 51009 8201861824 Watching for file changes with StatReloader
+INFO 2025-01-21 23:04:40,727 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:04:40,741 basehttp 51009 6129463296 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-01-21 23:04:43,326 basehttp 51009 6129463296 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:04:43,352 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41339
+INFO 2025-01-21 23:04:43,382 basehttp 51009 6129463296 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-21 23:04:48,494 basehttp 51009 6129463296 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:04:48,510 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 47988
+INFO 2025-01-21 23:04:51,832 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41339
+INFO 2025-01-21 23:04:52,858 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 48012
+INFO 2025-01-21 23:04:52,878 basehttp 51009 6146289664 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-01-21 23:04:52,879 basehttp 51009 6129463296 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-01-21 23:05:12,099 basehttp 51009 6129463296 "GET /admin/core/userphone/ HTTP/1.1" 200 48562
+INFO 2025-01-21 23:05:14,737 basehttp 51009 6129463296 "GET /admin/core/userphone/add/ HTTP/1.1" 200 29858
+INFO 2025-01-21 23:05:28,939 basehttp 51009 6129463296 "POST /admin/core/userphone/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:05:28,965 basehttp 51009 6129463296 "GET /admin/core/userphone/ HTTP/1.1" 200 50424
+INFO 2025-01-21 23:05:32,891 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41339
+INFO 2025-01-21 23:05:34,053 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 48129
+INFO 2025-01-21 23:05:37,204 basehttp 51009 6129463296 "GET /admin/core/message/ HTTP/1.1" 200 54118
+INFO 2025-01-21 23:05:38,435 basehttp 51009 6129463296 "GET /admin/core/message/add/ HTTP/1.1" 200 34477
+INFO 2025-01-21 23:05:50,653 basehttp 51009 6129463296 "POST /admin/core/message/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:05:50,670 basehttp 51009 6129463296 "GET /admin/core/message/ HTTP/1.1" 200 55947
+INFO 2025-01-21 23:05:52,360 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41339
+INFO 2025-01-21 23:05:53,948 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/add/ HTTP/1.1" 200 48129
+INFO 2025-01-21 23:06:02,018 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/load-messages/?tag=VIP HTTP/1.1" 200 59
+INFO 2025-01-21 23:06:12,995 basehttp 51009 6129463296 "POST /admin/messageShooter/campaign/add/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:06:13,015 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42916
+INFO 2025-01-21 23:06:15,877 basehttp 51009 6129463296 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-01-21 23:06:15,902 basehttp 51009 6129463296 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42863
+WARNING 2025-01-21 23:06:27,323 log 51180 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:06:27,324 log 51180 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:06:27,324 log 51180 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:06:27,343 log 51180 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:06:27,343 log 51180 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:06:27,344 log 51180 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:06:27,373 log 51180 8201861824 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-21 23:06:27,373 log 51180 8201861824 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-21 23:06:27,374 log 51180 8201861824 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-21 23:06:27,385 admin 51180 8201861824 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-21 23:06:27,389 admin 51180 8201861824 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-21 23:06:27,394 admin 51180 8201861824 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-21 23:06:27,398 admin 51180 8201861824 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-21 23:06:28,934 contact 51180 8201861824 Checking lead status for contact 1 (123)
+INFO 2025-01-21 23:06:28,935 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:28,936 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,937 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,937 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,938 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,940 contact 51180 8201861824 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-21 23:06:28,941 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:28,942 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,943 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,945 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,945 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,947 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,947 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,947 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,948 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,949 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,949 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,950 contact 51180 8201861824 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-21 23:06:28,950 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:28,952 contact 51180 8201861824 Checking lead status for contact 1 (123)
+INFO 2025-01-21 23:06:28,952 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:28,954 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,955 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,956 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,957 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,958 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,959 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,961 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,962 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,962 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,962 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,964 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,964 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,965 contact 51180 8201861824 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-21 23:06:28,965 contact 51180 8201861824 No matching appointment found for contact 1
+INFO 2025-01-21 23:06:28,967 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,967 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,968 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,969 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,971 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,971 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,971 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,972 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,974 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,974 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,975 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,976 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,977 contact 51180 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,978 contact 51180 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:06:28,981 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,981 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,983 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,984 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,984 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,984 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,987 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,988 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,990 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,990 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,990 contact 51180 8201861824 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-21 23:06:28,991 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:28,993 contact 51180 8201861824 Checking lead status for contact 5 (123)
+INFO 2025-01-21 23:06:28,993 contact 51180 8201861824 No matching lead found for contact 5
+INFO 2025-01-21 23:06:28,996 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,996 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,998 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:28,999 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:28,999 contact 51180 8201861824 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-21 23:06:28,999 contact 51180 8201861824 No matching lead found for contact 2
+INFO 2025-01-21 23:06:29,000 contact 51180 8201861824 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-21 23:06:29,000 contact 51180 8201861824 No matching lead found for contact 3
+INFO 2025-01-21 23:06:29,000 contact 51180 8201861824 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-21 23:06:29,001 contact 51180 8201861824 No matching lead found for contact 4
+INFO 2025-01-21 23:06:29,006 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,007 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,007 contact 51180 8201861824 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-21 23:06:29,008 contact 51180 8201861824 No matching lead found for contact 2
+INFO 2025-01-21 23:06:29,009 contact 51180 8201861824 Checking lead status for contact 1 ()
+INFO 2025-01-21 23:06:29,010 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:29,010 contact 51180 8201861824 Checking lead status for contact 1 ()
+INFO 2025-01-21 23:06:29,010 contact 51180 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:06:29,022 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,023 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,025 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,026 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,026 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,027 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,027 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,028 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,028 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,028 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,029 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,029 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,031 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,032 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,034 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,034 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,035 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,035 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,037 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,037 contact 51180 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:06:29,039 contact 51180 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:06:29,039 contact 51180 8201861824 Found matching lead: 1 for contact 1
+WARNING 2025-01-21 23:07:02,740 log 51348 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:07:02,740 log 51348 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:07:02,741 log 51348 8201861824 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-01-21 23:07:02,760 log 51348 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:07:02,760 log 51348 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:07:02,761 log 51348 8201861824 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-01-21 23:07:02,789 log 51348 8201861824 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-21 23:07:02,789 log 51348 8201861824 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-01-21 23:07:02,789 log 51348 8201861824 Method Not Allowed: /apiCrm/leads/
+INFO 2025-01-21 23:07:02,802 admin 51348 8201861824 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-01-21 23:07:02,805 admin 51348 8201861824 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-01-21 23:07:02,810 admin 51348 8201861824 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-21 23:07:02,813 admin 51348 8201861824 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-01-21 23:07:04,458 contact 51348 8201861824 Checking lead status for contact 1 (123)
+INFO 2025-01-21 23:07:04,459 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,461 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,461 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,462 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,462 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,464 contact 51348 8201861824 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-21 23:07:04,464 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,467 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,467 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,469 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,470 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,471 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,472 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,472 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,472 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,474 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,474 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,475 contact 51348 8201861824 Checking lead status for contact 1 (11000000000)
+INFO 2025-01-21 23:07:04,475 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,477 contact 51348 8201861824 Checking lead status for contact 1 (123)
+INFO 2025-01-21 23:07:04,477 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,479 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,480 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,481 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,482 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,483 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,483 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,485 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,486 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,486 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,487 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,488 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,489 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,489 contact 51348 8201861824 Checking appointment status for contact 1 (11000000000)
+INFO 2025-01-21 23:07:04,490 contact 51348 8201861824 No matching appointment found for contact 1
+INFO 2025-01-21 23:07:04,491 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,491 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,493 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,493 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,495 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,495 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,496 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,496 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,498 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,498 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,500 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,500 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,501 contact 51348 8201861824 Checking appointment status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,502 contact 51348 8201861824 Found matching appointment: 1 for contact 1
+INFO 2025-01-21 23:07:04,505 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,505 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,507 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,508 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,508 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,509 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,511 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,512 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,514 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,514 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,515 contact 51348 8201861824 Checking lead status for contact 1 (11777777777)
+INFO 2025-01-21 23:07:04,515 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,517 contact 51348 8201861824 Checking lead status for contact 5 (123)
+INFO 2025-01-21 23:07:04,517 contact 51348 8201861824 No matching lead found for contact 5
+INFO 2025-01-21 23:07:04,519 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,520 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,522 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,523 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,523 contact 51348 8201861824 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-01-21 23:07:04,524 contact 51348 8201861824 No matching lead found for contact 2
+INFO 2025-01-21 23:07:04,524 contact 51348 8201861824 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-01-21 23:07:04,524 contact 51348 8201861824 No matching lead found for contact 3
+INFO 2025-01-21 23:07:04,524 contact 51348 8201861824 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-01-21 23:07:04,525 contact 51348 8201861824 No matching lead found for contact 4
+INFO 2025-01-21 23:07:04,530 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,531 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,531 contact 51348 8201861824 Checking lead status for contact 2 (11888888888)
+INFO 2025-01-21 23:07:04,532 contact 51348 8201861824 No matching lead found for contact 2
+INFO 2025-01-21 23:07:04,533 contact 51348 8201861824 Checking lead status for contact 1 ()
+INFO 2025-01-21 23:07:04,534 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,534 contact 51348 8201861824 Checking lead status for contact 1 ()
+INFO 2025-01-21 23:07:04,534 contact 51348 8201861824 No matching lead found for contact 1
+INFO 2025-01-21 23:07:04,545 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,546 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,547 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,547 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,548 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,548 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,548 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,549 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,549 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,549 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,550 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,550 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,552 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,552 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,554 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,554 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,555 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,555 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,557 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,557 contact 51348 8201861824 Found matching lead: 1 for contact 1
+INFO 2025-01-21 23:07:04,559 contact 51348 8201861824 Checking lead status for contact 1 (11987654321)
+INFO 2025-01-21 23:07:04,559 contact 51348 8201861824 Found matching lead: 1 for contact 1

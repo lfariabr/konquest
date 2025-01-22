@@ -37,6 +37,7 @@ from messageShooter.utils.is_appointment_es import (
                                                 reminder_undesired_status_pl
 )
 from konquist.settings import CONTACTS_TO_LOAD_APT
+from django.db.models import Count
 
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """
@@ -62,8 +63,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         logger.info(f"Using cached contacts for {contact_tag}")
         return cached_contacts
 
-    # Base queries with optimized filters
-    base_query = Appointment.objects.filter(procedure_name__in=procedures_es)
+    base_query = Appointment.objects.filter(
+        procedure_name__in=procedures_es)
     
     base_query_nps = Appointment.objects.filter(
         store_name__in=nps_stores_include_es
@@ -72,6 +73,11 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     base_query_pl = Appointment.objects.filter(
         store_name__in=stores_include_pl_reschedule,
         procedure_name__in=procedures_pl
+    )
+
+    base_query_vip = Appointment.objects.filter(
+        store_name__in=stores_include_es_reschedule,
+        status_label__in=nps_desired_status_es
     )
 
     try:
@@ -364,12 +370,104 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             appointments = unique_appointments
             logger.info(f"NPS - Found {len(appointments)} unique appointments")
         
+        elif contact_tag == 'VIP':
+            # 1. Get October appointments
+            month_october_start = datetime(2024, 10, 1)
+            month_october_end = datetime(2024, 10, 31, 23, 59, 59)
+
+            # Debug store filtering
+            logger.info(f"Filtering on these stores: {stores_include_es_reschedule}")
+            
+            # Get distribution of appointments by store
+            store_distribution = base_query_vip.filter(
+                appointment_date__range=(month_october_start, month_october_end),
+                status_label__in=nps_desired_status_es
+            ).values('store_name').annotate(count=Count('id')).order_by('-count')
+            
+            logger.info("Store distribution before filtering:")
+            for store in store_distribution:
+                logger.info(f"  {store['store_name']}: {store['count']} appointments")
+
+            october_appointments = base_query_vip.filter(
+                appointment_date__range=(month_october_start, month_october_end),
+                store_name__in=stores_include_es_reschedule,
+                status_label__in=nps_desired_status_es
+            )
+            
+            october_phones = set(october_appointments.values_list('customer_phone', flat=True))
+            logger.info(f"Found {october_appointments.count()} appointments in October ({len(october_phones)} unique customers)")
+            
+            # 2. Get November onwards appointments
+            month_november_start = datetime(2024, 11, 1)
+            yesterday = now - timedelta(days=1)
+
+            november_onwards_appointments = base_query_vip.filter(
+                appointment_date__range=(month_november_start, yesterday),
+                store_name__in=stores_include_es_reschedule,
+                status_label__in=nps_desired_status_es
+            )
+            
+            november_onwards_phones = set(
+                november_onwards_appointments.values_list('customer_phone', flat=True)
+            )
+            
+            # Calculate retention
+            returning_customers = october_phones.intersection(november_onwards_phones)
+            logger.info(f"Found {november_onwards_appointments.count()} appointments from November onwards ({len(november_onwards_phones)} unique customers)")
+            logger.info(f"Retention analysis: {len(returning_customers)} out of {len(october_phones)} October customers returned in November+")
+
+            # Sample of loyal customers (returned in November+)
+            logger.info("\nSample of 5 loyal customers who returned:")
+            loyal_sample = october_appointments.filter(
+                customer_phone__in=list(returning_customers)
+            ).values('customer_phone', 'store_name', 'appointment_date', 'status_label')[:5]
+            
+            for apt in loyal_sample:
+                # Get their November+ appointment
+                future_apt = november_onwards_appointments.filter(
+                    customer_phone=apt['customer_phone']
+                ).values('appointment_date', 'store_name').first()
+                
+                logger.info(f"  Customer {apt['customer_phone']}:")
+                logger.info(f"    October visit: {apt['store_name']} on {apt['appointment_date']}")
+                logger.info(f"    Returned: {future_apt['store_name']} on {future_apt['appointment_date']}")
+
+            # 3. Filter October appointments to exclude phones that appear in November onwards
+            appointments = october_appointments.exclude(
+                customer_phone__in=november_onwards_phones
+            ).order_by('appointment_date')
+            
+            logger.info(f"After filtering, found {appointments.count()} October appointments without subsequent visits")
+
+            # Sample of VIP targets (didn't return)
+            logger.info("\nSample of 5 VIP target customers who haven't returned:")
+            vip_sample = appointments.values('customer_phone', 'store_name', 'appointment_date', 'status_label')[:5]
+            for apt in vip_sample:
+                logger.info(f"  Customer {apt['customer_phone']}:")
+                logger.info(f"    Last visit: {apt['store_name']} on {apt['appointment_date']}")
+
+            # 4. Handle distinct to avoid duplicates
+            seen_phones = set()
+            unique_appointments = []
+            for apt in appointments:
+                if apt.customer_phone not in seen_phones:
+                    seen_phones.add(apt.customer_phone)
+                    unique_appointments.append(apt)
+                if len(unique_appointments) >= CONTACTS_TO_LOAD_APT:
+                    break
+            
+            appointments = unique_appointments
+            logger.info(f"VIP - Final selection: {len(appointments)} unique appointments")
+            
+
         else:
             logger.warning(f"Unknown contact tag: {contact_tag}")
             return []
         
         # Convert all appointments to contacts using bulk operation
         contacts = convert_appointments_to_contacts_bulk(appointments, contact_tag, user)
+        # contacts = []
+        # print("ok")
         
         # Cache the results
         cache_timeout = 300 if contact_tag == 'NPS' else 3600  # 5 mins for NPS, 1 hour for others

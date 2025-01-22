@@ -7,7 +7,7 @@ stores = {
         'MOOCA',
         'ITAIM',
         'GUARULHOS',
-        'VILA MASCOTE'
+        'VILA MASCOTE',
         'SÃO BERNARDO',
         'SANTO AMARO',
         'IPIRANGA',

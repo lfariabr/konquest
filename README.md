@@ -1,4 +1,5 @@
-# Konquista - Enterprise WhatsApp Marketing Automation
+# Konquista
+Enterprise WhatsApp Marketing Automation
 
 ## Overview
 Konquista is an enterprise-grade WhatsApp marketing automation platform built with Django. It enables businesses to manage and automate customer communications through WhatsApp, integrating with CRM systems for lead management, appointment scheduling, and post-sale engagement.
@@ -90,7 +91,7 @@ pip install -r requirements.txt
 python manage.py runserver
 
 # Start Celery worker
-celery -A konquist worker -l INFO
+celery -A konquist worker -l INFO -Q default,contact_processor,campaign_queue,queue_processor
 
 # Start Celery beat
 celery -A konquist beat -l INFO
@@ -124,7 +125,7 @@ pytest --cov=.
 - [User Guide](./docs/user-guide.md)
 
 ## License
-Proprietary software. All rights reserved.
+Luis Faria, Self-Made Software Engineer @ 2024. All rights reserved.
 
 ## Support
-For support and inquiries, contact support@konquista.com.br
+For support and inquiries, contact lfariabr@gmail.com
