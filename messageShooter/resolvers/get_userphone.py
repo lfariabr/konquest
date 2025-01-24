@@ -62,6 +62,7 @@ def get_userphone_nps(contact_tag, store):
 
 def get_userphone_vip(contact_tag, store):
     if contact_tag != 'VIP':
+        logger.error(f"Invalid contact tag: {contact_tag}")
         raise ValueError(f"get_userphone_vip called with invalid tag: {contact_tag}")
         
     if not store:

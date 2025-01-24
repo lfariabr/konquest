@@ -4,7 +4,9 @@ python manage.py shell -c "from django.core.cache import cache; cache.clear()"
 ## High Priority Features
 
 ### 1. Customer Experience Enhancement
-- [ ] Integrate NCC message Jardins
+- [X] Integrate NCC message Jardins: monday and afternoon
+- [X] Implement VIP client messaging (October at this moment)
+- [X] Implement Instagram Bio campaign messaging
 - [ ] Integrate NPS message 2 follow up (Google My Business)
 - [ ] Implement pre and post-treatment messaging flows
 - [ ] Add auto-scheduling via WhatsApp
@@ -16,21 +18,16 @@ python manage.py shell -c "from django.core.cache import cache; cache.clear()"
 - [ ] Implement PIX payment integration
 - [ ] Create custom flows for finalized budgets
 - [ ] Develop overdue post-sales approach strategy
-- [ ] Integrate contract management system
 
 ### 3. Lead Management
 - [ ] Automated lead activation system
-- [ ] Email integration for multi-channel communication
 - [ ] Custom flows based on lead source (e.g., Facebook Leads Botox)
 - [ ] Referral program integration
-- [ ] Lead scoring and prioritization
 
 ### 4. API & Integration
 - [ ] Public API: GraphQL endpoint for MessageLogs with reference_id
 - [ ] Enhanced CRM integration
-- [ ] Instagram integration
 - [ ] Email marketing platform integration
-- [ ] Analytics dashboard integration
 
 ### 5. Content & Marketing
 - [ ] E-book delivery system

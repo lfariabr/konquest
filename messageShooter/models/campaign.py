@@ -28,7 +28,7 @@ CONTACT_TAGS = {
     CONTACT_TYPE_APPOINTMENT: [
                                 # Pró-Corpo
                                 "Reminder", "Reschedule", "ReminderIpiranga", "ReminderSantoAmaro",
-                                # "NPS",
+                                "NPS",
                                 # "Google My Business",
                                 
                                 # Plástica

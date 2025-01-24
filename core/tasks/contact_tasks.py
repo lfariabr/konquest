@@ -5,6 +5,7 @@ from django.utils import timezone
 import logging
 from typing import Optional
 from core.models.contact import Contact
+from messageShooter.tasks.campaign_tasks import send_debug_notification
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,8 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
         start_id: Optional ID to start processing from
     """
     logger.info("Starting contact check in CRM batch%s", f" from ID {start_id}" if start_id else "")
+    log_message = f"🤖 TASK: Starting contact check in core -> lead -> appt -> sales"
+    send_debug_notification(log_message)
     
     stats = {
         'total_contacts': 0,

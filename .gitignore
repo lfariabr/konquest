@@ -36,3 +36,4 @@ references/
 
 # Other
 messageShooter/references/celerybeat-schedule
+celerybeat-schedule.db

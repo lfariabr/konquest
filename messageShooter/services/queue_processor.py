@@ -172,8 +172,8 @@ class QueueProcessor:
                         return False, lead_error
                     
                     # Add delay after successful lead creation
-                    self.logger.info("Resting 60 seconds before creating next lead...")
-                    await asyncio.sleep(60)
+                    self.logger.info("Resting 8 minutes before creating next lead...")
+                    await asyncio.sleep(480)
                     
                     # Return here after successful lead creation to prevent message sending
                     return True, None
@@ -367,7 +367,7 @@ class QueueProcessor:
         try:
             from messageShooter.resolvers.get_counter import get_counter_whatsapp
             from messageShooter.resolvers.get_message import get_message
-            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps
+            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip
 
             # Get related objects using sync_to_async
             @sync_to_async

@@ -441,6 +441,16 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             
             appointments = unique_appointments
             logger.info(f"VIP - Final selection: {len(appointments)} unique appointments (from index {CONTACTS_TO_LOAD_APT_VIP_START})")
+            
+            list_of_contacts_per_store = []
+            # Logic to get 10 contacts per 'store_name'
+            from messageShooter.utils.vip_token_dic import vip_store_dict_info
+            for store_name in vip_store_dict_info:
+                list_of_contacts_per_store.append(appointments.filter(store_name=store_name)[:10])
+                
+            logger.info(f"VIP - Final selection per store: {len(list_of_contacts_per_store)} unique appointments (from index {CONTACTS_TO_LOAD_APT_VIP_START})")
+
+            appointments = list_of_contacts_per_store
 
         else:
             logger.warning(f"Unknown contact tag: {contact_tag}")

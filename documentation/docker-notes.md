@@ -2,6 +2,7 @@
 - Stop all containers: docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
 
 # 1. Clone and build
+rm -rf konquest
 cd /var/www/konquest
 git clone https://github.com/lfariabr/konquest.git
 cd konquest
@@ -47,9 +48,11 @@ docker exec -it k_celery_worker celery -A konquist inspect registered
 
 ### Instant run tasks
 docker exec -it k_celery_worker celery -A konquist call apiCrm.tasks.cleanup_crm_tables
+docker exec -it k_celery_worker celery -A konquist call apiCrm.tasks.fetch_all_data
 
 docker exec -it k_celery_worker celery -A konquist call core.tasks.check_contacts_in_crm
-docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.campaign_tasks.process_scheduled_campaigns
+
+docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_scheduled_campaigns
 docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_queues
 
 ### Clear the Redis lock
