@@ -1,6 +1,6 @@
 import logging
 from typing import List
-from django.db.models import Min
+from django.db.models import Min, Max, Count
 from django.db.models.query import QuerySet
 from django.conf import settings
 from django.db.models import Q
@@ -41,7 +41,6 @@ from konquist.settings import (CONTACTS_TO_LOAD_APT,
                             CONTACTS_TO_LOAD_APT_VIP,
                              CONTACTS_TO_LOAD_APT_VIP_START, 
                              CONTACTS_TO_LOAD_APT_VIP_END)
-from django.db.models import Count
 
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """
@@ -397,15 +396,15 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             #     customer_phone__in=list(returning_customers)
             # ).values('customer_phone', 'store_name', 'appointment_date', 'status_label')[:5]
             
-            for apt in loyal_sample:
-                # Get their November+ appointment
-                future_apt = november_onwards_appointments.filter(
-                    customer_phone=apt['customer_phone']
-                ).values('appointment_date', 'store_name').first()
+            # for apt in loyal_sample:
+            #     # Get their November+ appointment
+            #     future_apt = november_onwards_appointments.filter(
+            #         customer_phone=apt['customer_phone']
+            #     ).values('appointment_date', 'store_name').first()
                 
-                logger.info(f"  Customer {apt['customer_phone']}:")
-                logger.info(f"    October visit: {apt['store_name']} on {apt['appointment_date']}")
-                logger.info(f"    Returned: {future_apt['store_name']} on {future_apt['appointment_date']}")
+            #     logger.info(f"  Customer {apt['customer_phone']}:")
+            #     logger.info(f"    October visit: {apt['store_name']} on {apt['appointment_date']}")
+            #     logger.info(f"    Returned: {future_apt['store_name']} on {future_apt['appointment_date']}")
 
             # 3. Filter October appointments to exclude phones that appear in November onwards
             appointments = october_appointments.exclude(
@@ -414,40 +413,75 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             
             logger.info(f"After filtering, found {appointments.count()} October appointments without subsequent visits")
 
-            # # Sample of VIP targets (didn't return)
-            # logger.info("\nSample of 5 VIP target customers who haven't returned:")
-            # vip_sample = appointments.values('customer_phone', 'store_name', 'appointment_date', 'status_label')[:5]
-            # for apt in vip_sample:
-            #     logger.info(f"  Customer {apt['customer_phone']}:")
-            #     logger.info(f"    Last visit: {apt['store_name']} on {apt['appointment_date']}")
-
-            # 4. Handle distinct to avoid duplicates
-            seen_phones = set()
-            unique_appointments = []
+            if contact_tag == 'VIP':
+                from messageShooter.utils.vip_token_dic import vip_store_dict_info
+                
+                # Initialize list for all selected appointments
+                vip_appointments = []
+                
+                logger.info(f"Starting VIP contact selection, targeting 10 contacts per store")
+                
+                # Process each store in vip_store_dict_info
+                for store_name in vip_store_dict_info.keys():
+                    # Get appointments for this store, ensuring uniqueness by customer_phone
+                    store_appointments = (
+                        appointments.filter(store_name=store_name)
+                        .values('customer_phone')
+                        .annotate(latest_apt=Max('appointment_date'))
+                        .order_by('-latest_apt')
+                    )[:10]  # Limit to 10 unique customers
+                    
+                    # Get the full appointment records - only the latest one per customer
+                    phone_numbers = [apt['customer_phone'] for apt in store_appointments]
+                    if phone_numbers:
+                        store_full_appointments = []
+                        for apt in store_appointments:
+                            latest = appointments.filter(
+                                store_name=store_name,
+                                customer_phone=apt['customer_phone'],
+                                appointment_date=apt['latest_apt']
+                            ).first()
+                            if latest:
+                                store_full_appointments.append(latest)
+                        
+                        logger.info(f"Store {store_name}: Found {len(store_appointments)} unique customers, "
+                                  f"selected {len(store_full_appointments)} appointments")
+                        vip_appointments.extend(store_full_appointments)
+                
+                appointments = vip_appointments
+                logger.info(f"VIP - Final selection: {len(appointments)} unique appointments across "
+                          f"{len(vip_store_dict_info)} stores")
+                
+                # Add detailed breakdown
+                store_counts = {}
+                for apt in appointments:
+                    store_counts[apt.store_name] = store_counts.get(apt.store_name, 0) + 1
+                logger.info("Final distribution:")
+                for store, count in store_counts.items():
+                    logger.info(f"  {store}: {count} appointments")
             
-            # Using slice parameters from settings for VIP contacts
-            appointments_to_process = (
-                appointments[CONTACTS_TO_LOAD_APT_VIP_START:CONTACTS_TO_LOAD_APT_VIP_END] 
-                if contact_tag == 'VIP' 
-                else appointments
-            )
-            
-            for apt in appointments_to_process:
-                if apt.customer_phone not in seen_phones:
-                    seen_phones.add(apt.customer_phone)
-                    unique_appointments.append(apt)
-                if len(unique_appointments) >= CONTACTS_TO_LOAD_APT_VIP:
-                    break
-            
-            appointments = unique_appointments
-            logger.info(f"VIP - Final selection: {len(appointments)} unique appointments (from index {CONTACTS_TO_LOAD_APT_VIP_START})")
-
+            else:
+                # Original logic for non-VIP tags
+                seen_phones = set()
+                unique_appointments = []
+                for apt in appointments:
+                    if apt.customer_phone not in seen_phones:
+                        seen_phones.add(apt.customer_phone)
+                        unique_appointments.append(apt)
+                    if len(unique_appointments) >= CONTACTS_TO_LOAD_APT:
+                        break
+                
+                appointments = unique_appointments
+                logger.info(f"VIP - Final selection: {len(appointments)} unique appointments")
+        
         else:
             logger.warning(f"Unknown contact tag: {contact_tag}")
             return []
         
         # Convert all appointments to contacts using bulk operation
         contacts = convert_appointments_to_contacts_bulk(appointments, contact_tag, user)
+        # logger.info("TESTING THIS OUT!!)")
+        # contacts = []
         
         # Cache the results
         cache_timeout = 300 if contact_tag == 'NPS' else 3600  # 5 mins for NPS, 1 hour for others
