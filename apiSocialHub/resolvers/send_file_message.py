@@ -5,6 +5,7 @@ import json
 import logging
 from ..logs.logger import send_file_logger
 from django.conf import settings
+from .monitor import monitor_api_response
 
 # API URL
 api_url = "https://apinew.socialhub.pro/api/sendMessage"
@@ -62,6 +63,7 @@ def send_file_message(phone, message, token_socialhub, file_path):
                 send_file_logger.error(
                     f"Failed to send message with file to {phone}. Status: {response.status_code}, Response: {response.text}"
                 )
+                monitor_api_response(phone, token_socialhub, response_json=response.text)
                 return {"status": False, "error": f"HTTP {response.status_code}: {response.text}"}
 
     except requests.exceptions.RequestException as e:

@@ -4,6 +4,7 @@ import requests
 import json
 import logging
 from ..logs.logger import send_text_logger
+from .monitor import monitor_api_response
 
 api_url = "https://apinew.socialhub.pro/api/sendMessage"
 logger = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ def send_text_message(phone, message, token_socialhub, file_path=None):
             return data
         else:
             send_text_logger.error(f"Fail to send text message to {phone}. Code: {response.status_code}, Resposta: {response.text}")
+            monitor_api_response(phone, token_socialhub, response_json=response.text)
             return {"Status": False, "Error": f"HTTP {response.status_code}: {response.text}"}
     
     except requests.exceptions.RequestException as e:

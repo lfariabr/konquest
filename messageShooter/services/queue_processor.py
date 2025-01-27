@@ -355,7 +355,22 @@ class QueueProcessor:
                 f"   - Failed: {error_count}\n"
                 f"   - Exceptions: {exception_count}"
             )
+
+            # Import both functions and the stores list
+            from apiSocialHub.resolvers.monitor import (
+                send_invalid_tokens_notification,
+                queue_finished,
+                stores_with_invalid_token
+            )
             
+            # Send invalid tokens notification if there are any invalid tokens
+            if len(stores_with_invalid_token) > 0:
+                self.logger.info(f"Found {len(stores_with_invalid_token)} stores with invalid tokens. Sending notification...")
+                send_invalid_tokens_notification()
+            
+            # Always send the queue completion notification
+            queue_finished()
+
             return success_count, error_count, exception_count
             
         except Exception as e:

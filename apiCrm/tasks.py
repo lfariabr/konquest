@@ -103,7 +103,7 @@ def fetch_all_data():
     
     try:
         today = datetime.now().date()
-        start_date = (today - timedelta(days=30)).strftime('%Y-%m-%d')
+        start_date = (today - timedelta(days=130)).strftime('%Y-%m-%d') #TODO: improve this logic for October VIP clients
         end_date = today.strftime('%Y-%m-%d')
         extended_end_date = (today + timedelta(days=30)).strftime('%Y-%m-%d')
 

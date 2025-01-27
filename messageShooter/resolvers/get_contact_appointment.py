@@ -429,7 +429,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                         .values('customer_phone')
                         .annotate(latest_apt=Max('appointment_date'))
                         .order_by('-latest_apt')
-                    )[:10]  # Limit to 10 unique customers
+                    )[:100]  # Limit to 100 unique customers
+                    #TODO: think about this logic
                     
                     # Get the full appointment records - only the latest one per customer
                     phone_numbers = [apt['customer_phone'] for apt in store_appointments]
@@ -480,6 +481,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         
         # Convert all appointments to contacts using bulk operation
         contacts = convert_appointments_to_contacts_bulk(appointments, contact_tag, user)
+        
         # logger.info("TESTING THIS OUT!!)")
         # contacts = []
         

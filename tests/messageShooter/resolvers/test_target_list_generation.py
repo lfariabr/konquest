@@ -9,6 +9,7 @@ from messageShooter.models.target_list import TargetList
 from messageShooter.resolvers.target_list_resolver import generate_target_lists
 from freezegun import freeze_time
 import datetime
+from scripts.setup_queue import move_target_lists_to_queue
 
 @pytest.fixture
 def setup_test_data(db):
@@ -244,7 +245,6 @@ def test_target_list_to_queue_conversion(setup_test_data):
         assert TargetList.objects.count() == 2
         
         # Import and run the queue setup function
-        from setup_queue import move_target_lists_to_queue
         move_target_lists_to_queue()
         
         # Verify queue items were created
