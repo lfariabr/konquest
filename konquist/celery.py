@@ -119,7 +119,7 @@ def task_failure_handler(sender=None, task_id=None, exception=None, einfo=None, 
 app.conf.beat_schedule = {
     'test_redis_connection': {
         'task': 'apiCrm.tasks.test_redis',
-        'schedule': crontab(minute='*/1')
+        'schedule': crontab(minute='*/5')
     },
     
     # Daily cleanup

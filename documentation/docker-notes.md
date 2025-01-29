@@ -78,3 +78,12 @@ sudo chown -R 1000:1000 apiSocialHub/logs/* logs/*
 sudo chmod -R 775 apiSocialHub/logs logs
 
 docker-compose build --no-cache
+
+### 'Task already running'
+#### Enter the Django shell in the celery worker container
+docker exec -it k_celery_worker python manage.py shell
+
+#### Then in the Python shell, run these commands:
+from django.core.cache import cache
+cache.delete("fetch_all_data_lock")
+exit()
