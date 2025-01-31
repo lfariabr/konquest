@@ -26,8 +26,8 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
         start_id: Optional ID to start processing from
     """
     logger.info("Starting contact check in CRM batch%s", f" from ID {start_id}" if start_id else "")
-    log_message = f"🤖 TASK: Starting contact check in core -> lead -> appt -> sales"
-    send_debug_notification(log_message)
+    # log_message = f"🤖 TASK: Starting contact check in core -> lead -> appt -> sales"
+    # send_debug_notification(log_message)
     
     stats = {
         'total_contacts': 0,

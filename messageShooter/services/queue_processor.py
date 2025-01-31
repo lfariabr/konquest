@@ -668,8 +668,91 @@ class QueueProcessor:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         return loop.run_until_complete(self.send_message_async(contact, message, userphone))
+    
     def send_message(self, contact, message, userphone):
         """Send a message (sync version)"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         return loop.run_until_complete(self.send_message_async(contact, message, userphone))
+
+    async def process_queue_chunk(self, chunk_size: int = 1000, offset: int = 0) -> tuple[int, int]:
+        """
+        Process a chunk of contacts from pending queues.
+        
+        Args:
+            chunk_size: Number of contacts to process in this chunk
+            offset: Starting offset for contact processing
+        
+        Returns:
+            tuple: (total_contacts, processed_count)
+        """
+        try:
+            # Wrap Django database operations with sync_to_async
+            @sync_to_async
+            def get_pending_queues():
+                return list(Queue.objects.filter(
+                    status__in=['pending', 'retrying', 'interrupted']
+                ).order_by('-priority', 'scheduled_time'))
+
+            @sync_to_async
+            def get_contacts(queue_item):
+                return list(queue_item.target_list.get_contacts())
+
+            @sync_to_async
+            def update_queue_status(queue_item, processed_count, total_contacts):
+                queue_item.processed_count = processed_count
+                queue_item.total_contacts = total_contacts
+                queue_item.status = 'processing'
+                queue_item.save()
+
+            @sync_to_async
+            def get_queue_message_and_phone(queue_item):
+                return queue_item.message, queue_item.userphone
+
+            # Get pending queues
+            pending_queues = await get_pending_queues()
+        
+            if not pending_queues:
+                return 0, 0
+            
+            total_contacts = 0
+            processed_count = 0
+        
+            for queue_item in pending_queues:
+                # Get total contacts if not already counted
+                if total_contacts == 0:
+                    contacts = await get_contacts(queue_item)
+                    total_contacts = len(contacts)
+            
+                # Process only contacts in the current chunk
+                chunk_contacts = contacts[offset:offset + chunk_size]
+                if not chunk_contacts:
+                    continue
+                
+                self.logger.info(f"Processing chunk of {len(chunk_contacts)} contacts for queue {queue_item.id}")
+            
+                # Get message and userphone for the queue
+                message, userphone = await get_queue_message_and_phone(queue_item)
+                
+                # Process contacts in current chunk
+                for contact in chunk_contacts:
+                    try:
+                        # Use existing process_contact_async method
+                        success = await self.process_contact_async(contact, message, userphone)
+                        if success:
+                            processed_count += 1
+                            # Log successful message send
+                            await sync_to_async(self._log_message)(contact, message, userphone)
+                        await asyncio.sleep(self.breath_time)  # Respect rate limiting
+                    except Exception as e:
+                        self.logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
+                        continue
+            
+                # Update queue status
+                await update_queue_status(queue_item, processed_count, total_contacts)
+            
+            return total_contacts, processed_count
+        
+        except Exception as e:
+            self.logger.error(f"Error in process_queue_chunk: {str(e)}", exc_info=True)
+            raise

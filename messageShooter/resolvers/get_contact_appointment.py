@@ -431,6 +431,10 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                         .order_by('-latest_apt')
                     )[:100]  # Limit to 100 unique customers
                     #TODO: think about this logic
+                    # criar uma flag no appointment para apontar se ele foi selecionado no VIP ou não
+                    # filtra apenas os selecionados. Desligar a flag depois de ter sido contatado
+                    # Luis | Tag: Selecionado VIP | hoje pegar ele
+                    # Validar se já é contact com a relationship_tag = VIP
                     
                     # Get the full appointment records - only the latest one per customer
                     phone_numbers = [apt['customer_phone'] for apt in store_appointments]
