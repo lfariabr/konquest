@@ -72,6 +72,41 @@ def send_nps_failure_notification(message):
     except Exception as e:
         logger.info(f"Falha ao enviar o email: {e}")
 
+def send_invalid_token_notification(message):
+    # Lista de destinatários
+    recipients = [
+        "luis.faria@18digital.com.br"
+    ]
+
+    # Assunto e corpo do email
+    subject = "[konquista] Alerta - Tokens Inválidos ⚠️"
+    body = f"""Olá,
+
+    {message}
+
+    Link da planilha:
+    https://docs.google.com/spreadsheets/d/1c8vA0uQYuGbkSPwlRQnRKeR_zFDmoasoFQCURQ9aSvg/
+
+    Obrigado!
+    """
+
+    # Criar a mensagem de email
+    msg = MIMEMultipart()
+    msg['From'] = "rpdprocorpo@gmail.com"
+    msg['To'] = ", ".join(recipients)
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Enviar o email
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login("rpdprocorpo@gmail.com", "mzqs vdks erxm jaht")
+            server.sendmail("rpdprocorpo@gmail.com", recipients, msg.as_string())
+            logger.info("Email enviado com sucesso para os destinatários!")
+    except Exception as e:
+        logger.info(f"Falha ao enviar o email: {e}")
+
 # Test code - only runs when script is executed directly
 if __name__ == "__main__":
     test_message = "Test notification message."

@@ -1,0 +1,53 @@
+# Konquista App - Tech Stack & Project Overview
+
+## Core Technologies
+- **Programming Language:**  
+  - **Python:** 3.10+  
+- **Web Framework:**  
+  - **Django:** (Recommended: Latest stable release, e.g., Django 4.x)
+- **API Architecture:**  
+  - **GraphQL**
+
+## Testing & Build
+- **Testing Framework:**  
+  - **Pytest:** with coverage reporting
+- **Build System:**  
+  - **Docker** with **Docker Compose**  
+    - _Containers Involved (7 total):_  
+      - Django web server container  
+      - Celery worker container  
+      - Celery beat scheduler container  
+      - Redis cache container  
+      - PostgreSQL database container  
+      - Nginx reverse proxy container  
+      - Monitoring services container
+
+## Data & Caching
+- **Database Systems:**  
+  - **PostgreSQL:** Preferred for production  
+  - **SQLite:** For development and testing environments  
+- **Caching System:**  
+  - **Redis**
+
+## Background Task Management
+- **Task Queue System:**  
+  - **Celery:** Using Redis as the message broker
+
+## Project Structure
+- **Core System:**  
+  - Contact management, templates, user management
+- **Message Shooter System:**  
+  - Campaign engine, queue processing
+- **CRM Integration:**  
+  - apiCrm
+- **Intelligent Message Management**
+
+## Development Workflow & Tools
+- **Version Control:**  
+  - Git
+- **Dependency Management:**  
+  - pip
+- **Testing:**  
+  - pytest
+- **Container Orchestration:**  
+  - docker-compose
