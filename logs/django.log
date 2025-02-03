@@ -1,0 +1,155 @@
+INFO 2025-02-03 01:14:47,484 autoreload 40914 8248113856 Watching for file changes with StatReloader
+INFO 2025-02-03 01:15:05,224 autoreload 40914 8248113856 /Users/luisfaria/Desktop/sEngineer/konquest/messageShooter/resolvers/get_contact_appointment.py changed, reloading.
+INFO 2025-02-03 01:15:06,272 autoreload 41118 8248113856 Watching for file changes with StatReloader
+INFO 2025-02-03 01:15:07,541 basehttp 41118 6163312640 "GET /apiCrm/graphql/ HTTP/1.1" 200 2611
+INFO 2025-02-03 01:15:07,869 basehttp 41118 6163312640 "POST /apiCrm/graphql/ HTTP/1.1" 200 28821
+INFO 2025-02-03 01:15:11,231 basehttp 41118 6163312640 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 5792
+INFO 2025-02-03 01:15:11,297 basehttp 41118 6180139008 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/css/all.min.css HTTP/1.1" 200 96518
+INFO 2025-02-03 01:15:11,299 basehttp 41118 6163312640 "GET /static/admin/js/tailwind-3.4.5.js HTTP/1.1" 200 366531
+INFO 2025-02-03 01:15:11,303 basehttp 41118 6180139008 "GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 200 89476
+INFO 2025-02-03 01:15:11,315 basehttp 41118 6180139008 "GET /static/admin/tinymce/tinymce.min.js HTTP/1.1" 200 415158
+INFO 2025-02-03 01:15:15,129 basehttp 41118 6163312640 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:15:15,182 basehttp 41118 6163312640 "GET /admin/ HTTP/1.1" 200 37309
+INFO 2025-02-03 01:15:15,245 basehttp 41118 6163312640 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 157192
+INFO 2025-02-03 01:15:18,104 basehttp 41118 6163312640 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 116357
+INFO 2025-02-03 01:15:18,133 basehttp 41118 6163312640 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 287630
+INFO 2025-02-03 01:15:18,134 basehttp 41118 6180139008 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-02-03 01:15:18,153 basehttp 41118 6196965376 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-02-03 01:15:22,601 basehttp 41118 6163312640 "GET /admin/apiCrm/appointment/ HTTP/1.1" 200 143211
+INFO 2025-02-03 01:15:24,595 basehttp 41118 6163312640 "GET /admin/apiCrm/billcharge/ HTTP/1.1" 200 131106
+INFO 2025-02-03 01:15:25,644 basehttp 41118 6163312640 "GET /admin/apiCrm/appointment/ HTTP/1.1" 200 143211
+INFO 2025-02-03 01:15:27,775 basehttp 41118 6163312640 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 116357
+INFO 2025-02-03 01:15:30,787 basehttp 41118 6163312640 "GET /admin/apiCrm/billcharge/ HTTP/1.1" 200 131106
+INFO 2025-02-03 01:15:32,632 basehttp 41118 6163312640 "GET /admin/apiCrm/lead/ HTTP/1.1" 200 116357
+INFO 2025-02-03 01:15:34,495 basehttp 41118 6163312640 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41934
+INFO 2025-02-03 01:15:42,012 basehttp 41118 6163312640 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:15:42,028 basehttp 41118 6163312640 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42868
+INFO 2025-02-03 01:17:05,082 basehttp 41118 6163312640 "POST /apiCrm/graphql/ HTTP/1.1" 200 140329
+INFO 2025-02-03 01:17:42,567 basehttp 41118 6163312640 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:17:42,593 basehttp 41118 6163312640 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42868
+INFO 2025-02-03 01:18:01,419 autoreload 41411 8248113856 Watching for file changes with StatReloader
+INFO 2025-02-03 01:18:02,692 basehttp 41411 6168801280 "GET /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:18:02,702 basehttp 41411 6168801280 "GET /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 200 5840
+INFO 2025-02-03 01:18:05,385 basehttp 41411 6168801280 "POST /admin/login/?next=/admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:18:05,413 basehttp 41411 6168801280 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 41934
+INFO 2025-02-03 01:18:05,438 basehttp 41411 6168801280 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-02-03 01:18:09,952 basehttp 41411 6168801280 "POST /admin/messageShooter/campaign/ HTTP/1.1" 302 0
+INFO 2025-02-03 01:18:09,965 basehttp 41411 6168801280 "GET /admin/messageShooter/campaign/ HTTP/1.1" 200 42868
+INFO 2025-02-03 01:18:40,023 basehttp 41411 6168801280 "GET /admin/core/contact/ HTTP/1.1" 200 1032157
+WARNING 2025-02-03 01:19:11,612 log 41521 8248113856 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-02-03 01:19:11,613 log 41521 8248113856 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-02-03 01:19:11,613 log 41521 8248113856 Method Not Allowed: /apiCrm/appointments/
+WARNING 2025-02-03 01:19:11,634 log 41521 8248113856 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-02-03 01:19:11,634 log 41521 8248113856 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-02-03 01:19:11,634 log 41521 8248113856 Method Not Allowed: /apiCrm/bill-charges/
+WARNING 2025-02-03 01:19:11,708 log 41521 8248113856 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-02-03 01:19:11,708 log 41521 8248113856 Method Not Allowed: /apiCrm/leads/
+WARNING 2025-02-03 01:19:11,708 log 41521 8248113856 Method Not Allowed: /apiCrm/leads/
+INFO 2025-02-03 01:19:11,720 admin 41521 8248113856 Progress: 100.0% - Found 2 leads - Elapsed: 0.0s
+INFO 2025-02-03 01:19:11,723 admin 41521 8248113856 Progress: 100.0% - Found 1 leads - Elapsed: 0.0s
+INFO 2025-02-03 01:19:11,728 admin 41521 8248113856 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-02-03 01:19:11,732 admin 41521 8248113856 Progress: 100.0% - Found 1 appointments - Elapsed: 0.0s
+INFO 2025-02-03 01:19:13,268 contact 41521 8248113856 Checking lead status for contact 1 (123)
+INFO 2025-02-03 01:19:13,268 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,270 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,270 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,271 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,271 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,274 contact 41521 8248113856 Checking lead status for contact 1 (11000000000)
+INFO 2025-02-03 01:19:13,274 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,277 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,278 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,280 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,280 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,282 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,282 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,283 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,283 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,285 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,285 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,286 contact 41521 8248113856 Checking lead status for contact 1 (11000000000)
+INFO 2025-02-03 01:19:13,286 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,288 contact 41521 8248113856 Checking lead status for contact 1 (123)
+INFO 2025-02-03 01:19:13,289 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,290 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,290 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,292 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,293 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,294 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,295 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,297 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,297 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,298 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,298 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,300 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,300 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,300 contact 41521 8248113856 Checking appointment status for contact 1 (11000000000)
+INFO 2025-02-03 01:19:13,301 contact 41521 8248113856 No matching appointment found for contact 1
+INFO 2025-02-03 01:19:13,302 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,303 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,304 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,305 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,307 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,307 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,307 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,308 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,309 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,310 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,311 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,312 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,313 contact 41521 8248113856 Checking appointment status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,314 contact 41521 8248113856 Found matching appointment: 1 for contact 1
+INFO 2025-02-03 01:19:13,316 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,317 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,319 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,319 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,320 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,320 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,323 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,323 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,325 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,326 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,326 contact 41521 8248113856 Checking lead status for contact 1 (11777777777)
+INFO 2025-02-03 01:19:13,327 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,329 contact 41521 8248113856 Checking lead status for contact 5 (123)
+INFO 2025-02-03 01:19:13,329 contact 41521 8248113856 No matching lead found for contact 5
+INFO 2025-02-03 01:19:13,332 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,332 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,334 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,335 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,335 contact 41521 8248113856 Checking lead status for contact 2 ((11) 98765-4322)
+INFO 2025-02-03 01:19:13,335 contact 41521 8248113856 No matching lead found for contact 2
+INFO 2025-02-03 01:19:13,336 contact 41521 8248113856 Checking lead status for contact 3 (+55 11 98765-4323)
+INFO 2025-02-03 01:19:13,336 contact 41521 8248113856 No matching lead found for contact 3
+INFO 2025-02-03 01:19:13,336 contact 41521 8248113856 Checking lead status for contact 4 (11.98765.4324)
+INFO 2025-02-03 01:19:13,337 contact 41521 8248113856 No matching lead found for contact 4
+INFO 2025-02-03 01:19:13,343 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,343 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,344 contact 41521 8248113856 Checking lead status for contact 2 (11888888888)
+INFO 2025-02-03 01:19:13,344 contact 41521 8248113856 No matching lead found for contact 2
+INFO 2025-02-03 01:19:13,346 contact 41521 8248113856 Checking lead status for contact 1 ()
+INFO 2025-02-03 01:19:13,346 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,347 contact 41521 8248113856 Checking lead status for contact 1 ()
+INFO 2025-02-03 01:19:13,347 contact 41521 8248113856 No matching lead found for contact 1
+INFO 2025-02-03 01:19:13,358 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,358 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,360 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,360 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,361 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,361 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,361 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,362 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,362 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,362 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,363 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,363 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,365 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,365 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,366 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,367 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,367 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,368 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,369 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,370 contact 41521 8248113856 Found matching lead: 1 for contact 1
+INFO 2025-02-03 01:19:13,372 contact 41521 8248113856 Checking lead status for contact 1 (11987654321)
+INFO 2025-02-03 01:19:13,372 contact 41521 8248113856 Found matching lead: 1 for contact 1

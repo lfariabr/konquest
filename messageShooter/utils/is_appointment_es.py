@@ -23,11 +23,11 @@ reminder_undesired_status_es = ['Atendido',
                                 'Cancelado',
                                 'Reagendado']
 
-reminder_stores_include_es = ['JARDINS'] # store for store in stores
-reminder_stores_include_ipiranga = ['IPIRANGA']
-reminder_stores_include_santo_amaro = ['SANTO AMARO']
+reminder_stores_include_es = ['JARDINS', 
+                                'IPIRANGA', 
+                                'SANTO AMARO'] 
+                                # store for store in stores
 
-store_include_pl = ['PLÁSTICA']
 
 # REMINDER RULES - PLÁSTICA
 reminder_desired_status_pl = ['Confirmado', 
@@ -37,6 +37,8 @@ reminder_undesired_status_pl = ['Atendido',
                                 'Falta', 
                                 'Cancelado',
                                 'Reagendado']
+
+store_include_pl = ['PLÁSTICA']
 
 # RESCHEDULE RULES
 stores_include_es_reschedule = [store for store in stores] # store for store in stores

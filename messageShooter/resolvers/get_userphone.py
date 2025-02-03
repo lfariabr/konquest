@@ -2,6 +2,7 @@
 import logging
 from core.models.userphone import UserPhone
 from messageShooter.utils.nps_token_dic import store_dict_info
+from messageShooter.utils.reminder_token_dic import reminder_token_dict
 from messageShooter.utils.vip_token_dic import vip_store_dict_info
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,39 @@ def get_userphone_ncc(contact_tag, store):
     if contact_phone already received message on the past from an existing userphone to do the match.
     """
     pass
+
+def get_userphone_reminder(contact_tag, store):
+    """
+    Get userphone token based on contact tag and store of appointment
+    Returns a tuple of (userphone, token) or (None, None) if not found
+    """
+    if contact_tag != 'Reminder':
+        logger.error(f"Invalid contact tag: {contact_tag}")
+        raise ValueError(f"get_userphone_reminder called with invalid tag: {contact_tag}")
+        
+    if not store:
+        logger.error("No store provided for Reminder")
+        return None, None
+        
+    try:
+        store_info = reminder_token_dict.get(store)  # Use .get() instead of calling the dict
+        if not store_info:
+            logger.error(f"Store {store} not found in reminder_token_dict")
+            return None, None
+        
+        token = store_info.get('token')
+        phone = store_info.get('numero_telefone')
+
+        if not token or not phone:
+            logger.error(f"Token or phone not found for store {store}")
+            return None, None
+
+        logger.info(f"Found Reminder token for store {store}")
+        return phone, token
+        
+    except Exception as e:
+        logger.error(f"Error getting Reminder userphone for store {store}: {str(e)}")
+        return None, None
 
 def get_userphone_nps(contact_tag, store):
     """

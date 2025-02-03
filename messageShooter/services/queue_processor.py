@@ -382,7 +382,7 @@ class QueueProcessor:
         try:
             from messageShooter.resolvers.get_counter import get_counter_whatsapp
             from messageShooter.resolvers.get_message import get_message
-            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip
+            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip, get_userphone_reminder
 
             # Get related objects using sync_to_async
             @sync_to_async
@@ -446,6 +446,30 @@ class QueueProcessor:
                                     logger.info(f"Created new UserPhone for NPS store {contact.store}")
                                     return userphone
                         
+                        elif target_list.contact_tag == 'Reminder':
+                            phone, token = get_userphone_reminder(target_list.contact_tag, contact.store)
+                            
+                            if phone and token:
+                                try:
+                                    # Try to get existing UserPhone
+                                    userphone = UserPhone.objects.get(
+                                        phone_number=phone,
+                                        relationship_tag=target_list.contact_tag
+                                    )
+                                    logger.info(f"Found existing UserPhone for Reminder store {contact.store}")
+                                    return userphone
+                                except UserPhone.DoesNotExist:
+                                    # Create new UserPhone if it doesn't exist
+                                    userphone = UserPhone.objects.create(
+                                        phone_number=phone,
+                                        phone_token=token,
+                                        relationship_tag=target_list.contact_tag,
+                                        user=contact.user,
+                                        phone_description=contact.store
+                                    )
+                                    logger.info(f"Created new UserPhone for Reminder store {contact.store}")
+                                    return userphone
+
                         elif target_list.contact_tag == 'VIP':
                             phone, token = get_userphone_vip(target_list.contact_tag, contact.store)
                             
@@ -464,7 +488,8 @@ class QueueProcessor:
                                         phone_number=phone,
                                         phone_token=token,
                                         relationship_tag=target_list.contact_tag,
-                                        user=contact.user
+                                        user=contact.user,
+                                        phone_description=contact.store
                                     )
                                     logger.info(f"Created new UserPhone for VIP store {contact.store}")
                                     return userphone

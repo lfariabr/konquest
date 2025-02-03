@@ -1,0 +1,24 @@
+2025-02-03 01:19:14,754 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-03 01:19:14,754 - INFO - ...
+2025-02-03 01:19:14,755 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-02-03 01:19:14,756 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-03 01:19:14,756 - INFO - ...
+2025-02-03 01:19:14,756 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-02-03 01:19:14,757 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-03 01:19:14,757 - INFO - ...
+2025-02-03 01:19:14,757 - ERROR - Exception occurred: Connection error

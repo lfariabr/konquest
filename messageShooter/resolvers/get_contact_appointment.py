@@ -17,8 +17,6 @@ from messageShooter.utils.is_appointment_es import (
                                                 procedures_es, 
                                                 stores_exclude_es, 
                                                 reminder_stores_include_es, 
-                                                reminder_stores_include_ipiranga, 
-                                                reminder_stores_include_santo_amaro,
                                                 intervals_es,
                                                 store_include_pl,
                                                 procedures_pl,
@@ -50,6 +48,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         user: User instance to associate with created contacts
     - Returns: List of Contact instances derived from appointments
     """
+
     logger = logging.getLogger(__name__)
     logger.info(f"Processing contacts with tag {contact_tag}")
 
@@ -65,46 +64,48 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     if cached_contacts is not None:
         logger.info(f"Using cached contacts for {contact_tag}")
         return cached_contacts
-
-    base_query = Appointment.objects.filter(
-        procedure_name__in=procedures_es)
-
+    
+    # Pró-Corpo ES - Confirmação
     base_query_reminder = Appointment.objects.filter(
         store_name__in=reminder_stores_include_es,
         procedure_name__in=procedures_es,
         status_label__in=reminder_desired_status_es
     )
 
-    base_query_reminder_pl = Appointment.objects.filter(
-        store_name__in=store_include_pl,
-        procedure_name__in=procedures_pl,
-        status_label__in=reminder_desired_status_pl
-    )
-
+    # Pró-Corpo ES - Ativo de Falta e Cancelado
     base_query_reschedule = Appointment.objects.filter(
         store_name__in=stores_include_es_reschedule,
         procedure_name__in=procedures_es,
         status_label__in=reschedule_desired_status_es
     )
 
-    base_query_reschedule_pl = Appointment.objects.filter(
-        store_name__in=stores_include_pl_reschedule,
-        procedure_name__in=procedures_pl,
-        status_label__in=reschedule_desired_status_pl
-    )
-    
+    # Pró-Corpo ES - NPS
     base_query_nps = Appointment.objects.filter(
         store_name__in=nps_stores_include_es
     ).exclude(procedure_name__in=procedures_es)
 
+    # Pró-Corpo ES - VIP
     base_query_vip = Appointment.objects.filter(
         store_name__in=stores_include_es_reschedule,
         status_label__in=nps_desired_status_es
     )
 
+    # Mais Cirurgia - Confirmação
+    base_query_reminder_pl = Appointment.objects.filter(
+        store_name__in=store_include_pl,
+        procedure_name__in=procedures_pl,
+        status_label__in=reminder_desired_status_pl
+    )
+
+    # Mais Cirurgia - Ativo de Falta e Cancelado
+    base_query_reschedule_pl = Appointment.objects.filter(
+        store_name__in=stores_include_pl_reschedule,
+        procedure_name__in=procedures_pl,
+        status_label__in=reschedule_desired_status_pl
+    )
+   
     try:
         if contact_tag == 'Reminder':
-            # Optimize time ranges
             five_days_future = now + timedelta(days=5)
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
@@ -129,65 +130,14 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
 
             appointments = list(reminder_appointments)            
-            logger.info(f"Reminder - Found {len(appointments)} appointments")
-        
-        elif contact_tag == 'ReminderIpiranga':
-            five_days_future = now + timedelta(days=5)
-            thirty_days_past = now - timedelta(days=30)
-            thirty_days_future = now + timedelta(days=30)
-
-            # Get excluded phones first (can be cached)
-            excluded_cache_key = f'excluded_phones_reminder_ipiranga_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
+            logger.info(f"Reminder - Found {len(appointments)} appointments for stores {reminder_stores_include_es}")
             
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reminder_undesired_status_es,
-                    procedure_name__in=procedures_es,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Get appointments with optimized query
-            appointments = base_query.filter(
-                status_label__in=reminder_desired_status_es,
-                appointment_date__range=(now, five_days_future),
-                store_name__in=reminder_stores_include_ipiranga
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
-            
-            appointments = list(appointments)
-            logger.info(f"ReminderIpiranga - Found {len(appointments)} appointments")
-        
-        elif contact_tag == 'ReminderSantoAmaro':
-            five_days_future = now + timedelta(days=5)
-            thirty_days_past = now - timedelta(days=30)
-            thirty_days_future = now + timedelta(days=30)
-
-            # Get excluded phones first (can be cached)
-            excluded_cache_key = f'excluded_phones_reminder_santo_amaro_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
-            
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reminder_undesired_status_es,
-                    procedure_name__in=procedures_es,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Get appointments with optimized query
-            appointments = base_query.filter(
-                status_label__in=reminder_desired_status_es,
-                appointment_date__range=(now, five_days_future),
-                store_name__in=reminder_stores_include_santo_amaro
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
-            
-            appointments = list(appointments)
-            logger.info(f"ReminderSantoAmaro - Found {len(appointments)} appointments")
+            logger.info("Appointment count per store:")
+            store_counts = {}
+            for apt in appointments:
+                store_counts[apt.store_name] = store_counts.get(apt.store_name, 0) + 1
+            for store, count in store_counts.items():
+                logger.info(f"  {store}: {count}")
         
         elif contact_tag == 'ReminderPL':
             five_days_future = now + timedelta(days=5)
