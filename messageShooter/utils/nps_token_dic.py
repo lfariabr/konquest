@@ -55,6 +55,13 @@ store_dict_info = {
         "login": "luis.faria@procorpoestetica.com.br",
         "link_google": "https://g.page/r/CYtdpuvpr8VAEBM/review"
     },
+    "GUARULHOS": {
+        "token": "?",
+        "conta_social_hub": "?",
+        "numero_telefone": "?",
+        "login": "?",
+        "link_google": "?"
+    },
     "LAPA": {
         "token": "bhPky7VluDP5VBkSw481Qyu1MMuWz3rJ",
         "conta_social_hub": "Licença 2",

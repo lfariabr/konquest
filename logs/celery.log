@@ -1,87 +1,70 @@
-INFO 2025-02-03 01:16:08,664 Starting data import for period: 2025-02-03 to 2025-02-03 (extended to 2025-02-04)
-INFO 2025-02-03 01:16:08,666 Fetching data for dates: 2025-02-03 to 2025-02-03
-INFO 2025-02-03 01:17:03,997 Fetched: 35 leads, 2123 appointments, 0 bill charges
-INFO 2025-02-03 01:17:04,005 Starting to process 35 leads in batches of 1000
-INFO 2025-02-03 01:17:04,006 Processing leads batch 1-35 of 35
-INFO 2025-02-03 01:17:04,073 Batch processed in 0.07s - Saved 35 leads
-INFO 2025-02-03 01:17:04,073 Finished processing leads - Total time: 0.07s - Processed: 35/35
-INFO 2025-02-03 01:17:04,074 Starting to process 2123 appointments in batches of 1000
-INFO 2025-02-03 01:17:04,075 Processing appointments batch 1-1000 of 2123
-INFO 2025-02-03 01:17:04,572 Batch processed in 0.50s - Saved 1000 appointments
-INFO 2025-02-03 01:17:04,573 Processing appointments batch 1001-2000 of 2123
-INFO 2025-02-03 01:17:05,007 Batch processed in 0.43s - Saved 1000 appointments
-INFO 2025-02-03 01:17:05,007 Processing appointments batch 2001-2123 of 2123
-INFO 2025-02-03 01:17:05,055 Batch processed in 0.05s - Saved 123 appointments
-INFO 2025-02-03 01:17:05,055 Finished processing appointments - Total time: 0.05s - Processed: 2123/2123
-WARNING 2025-02-03 01:17:05,055 No bill charges data to process
-INFO 2025-02-03 01:17:05,055 Import completed in 56.39 seconds
-INFO 2025-02-03 01:19:11,473 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
-INFO 2025-02-03 01:19:11,474 Import completed in 0.00 seconds
-INFO 2025-02-03 01:19:11,479 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
-INFO 2025-02-03 01:19:11,479 Import completed in 0.00 seconds
-INFO 2025-02-03 01:19:11,481 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
-ERROR 2025-02-03 01:19:11,481 Error in resolve_all_data: Invalid date format
-INFO 2025-02-03 01:19:11,484 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
-ERROR 2025-02-03 01:19:11,484 Error in resolve_all_data: Invalid data format
-INFO 2025-02-03 01:19:11,602 🤖 TASK: Starting CRM tables cleanup
-INFO 2025-02-03 01:19:11,603 Successfully truncated apiCrm_billcharge
-INFO 2025-02-03 01:19:11,603 Successfully truncated apiCrm_appointment
-INFO 2025-02-03 01:19:11,603 Successfully truncated apiCrm_lead
-INFO 2025-02-03 01:19:11,603 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4506583152'>
-INFO 2025-02-03 01:19:14,708 Fetching data for dates: 2024-01-01 to 2024-01-02
-INFO 2025-02-03 01:19:14,708 Fetched: 1 leads, 1 appointments, 1 bill charges
-INFO 2025-02-03 01:19:14,712 Fetching data for dates: 2024-01-01 to 2024-01-02
-INFO 2025-02-03 01:19:14,712 Fetched: 0 leads, 0 appointments, 0 bill charges
-INFO 2025-02-03 01:19:14,716 Fetching data for dates: 2024-01-01 to 2024-01-02
-INFO 2025-02-03 01:19:14,720 Fetching data for dates: invalid-date to 2024-01-02
-INFO 2025-02-03 01:19:14,747 Payload: {
+INFO 2025-02-06 00:25:44,674 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-02-06 00:25:44,675 Import completed in 0.00 seconds
+INFO 2025-02-06 00:25:44,678 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+INFO 2025-02-06 00:25:44,678 Import completed in 0.00 seconds
+INFO 2025-02-06 00:25:44,680 Starting data import for period: invalid-date to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-02-06 00:25:44,681 Error in resolve_all_data: Invalid date format
+INFO 2025-02-06 00:25:44,683 Starting data import for period: 2024-01-01 to 2024-01-02 (extended to 2024-01-03)
+ERROR 2025-02-06 00:25:44,683 Error in resolve_all_data: Invalid data format
+INFO 2025-02-06 00:25:44,800 🤖 TASK: Starting CRM tables cleanup
+INFO 2025-02-06 00:25:44,802 Successfully truncated apiCrm_billcharge
+INFO 2025-02-06 00:25:44,802 Successfully truncated apiCrm_appointment
+INFO 2025-02-06 00:25:44,802 Successfully truncated apiCrm_lead
+INFO 2025-02-06 00:25:44,802 Table existence check: <MagicMock name='CursorWrapper().__enter__().fetchone()' id='4457528096'>
+INFO 2025-02-06 00:25:47,780 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-02-06 00:25:47,780 Fetched: 1 leads, 1 appointments, 1 bill charges
+INFO 2025-02-06 00:25:47,784 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-02-06 00:25:47,784 Fetched: 0 leads, 0 appointments, 0 bill charges
+INFO 2025-02-06 00:25:47,789 Fetching data for dates: 2024-01-01 to 2024-01-02
+INFO 2025-02-06 00:25:47,793 Fetching data for dates: invalid-date to 2024-01-02
+INFO 2025-02-06 00:25:47,821 Payload: {
   "api_token": "dummy_token",
   "phone": "1234567890",
   "message": "Test message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,747 ...
-INFO 2025-02-03 01:19:14,750 Payload: {
+INFO 2025-02-06 00:25:47,821 ...
+INFO 2025-02-06 00:25:47,824 Payload: {
   "api_token": "dummy_token",
   "phone": "1234567890",
   "message": "Test message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,750 ...
-ERROR 2025-02-03 01:19:14,750 Failed to parse response JSON for phone 1234567890: Expecting value: line 1 column 1 (char 0)
-INFO 2025-02-03 01:19:14,752 Payload: {
+INFO 2025-02-06 00:25:47,824 ...
+ERROR 2025-02-06 00:25:47,824 Failed to parse response JSON for phone 1234567890: Expecting value: line 1 column 1 (char 0)
+INFO 2025-02-06 00:25:47,826 Payload: {
   "api_token": "dummy_token",
   "phone": "1234567890",
   "message": "Test message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,752 ...
-INFO 2025-02-03 01:19:14,753 Payload: {
+INFO 2025-02-06 00:25:47,826 ...
+INFO 2025-02-06 00:25:47,827 Payload: {
   "api_token": "dummy_token",
   "phone": "1234567890",
   "message": "Test message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,753 ...
-INFO 2025-02-03 01:19:14,754 Payload: {
+INFO 2025-02-06 00:25:47,827 ...
+INFO 2025-02-06 00:25:47,829 Payload: {
   "api_token": "token",
   "phone": "phone",
   "message": "message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,754 ...
-INFO 2025-02-03 01:19:14,756 Payload: {
+INFO 2025-02-06 00:25:47,829 ...
+INFO 2025-02-06 00:25:47,830 Payload: {
   "api_token": "token",
   "phone": "phone",
   "message": "message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,756 ...
-ERROR 2025-02-03 01:19:14,756 Failed to parse response JSON for phone phone: Expecting value: line 1 column 1 (char 0)
-INFO 2025-02-03 01:19:14,757 Payload: {
+INFO 2025-02-06 00:25:47,830 ...
+ERROR 2025-02-06 00:25:47,830 Failed to parse response JSON for phone phone: Expecting value: line 1 column 1 (char 0)
+INFO 2025-02-06 00:25:47,831 Payload: {
   "api_token": "token",
   "phone": "phone",
   "message": "message",
   "preview_url": true
 }
-INFO 2025-02-03 01:19:14,757 ...
+INFO 2025-02-06 00:25:47,831 ...

@@ -107,7 +107,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
     try:
         if contact_tag == 'Reminder':
             five_days_future = now + timedelta(days=5)
-            thirty_days_past = now - timedelta(days=30)
+            one_day_past = now - timedelta(days=1)
             thirty_days_future = now + timedelta(days=30)
             
             # Get excluded phones first (can be cached)
@@ -118,11 +118,13 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                 excluded_phones = set(Appointment.objects.filter(
                     status_label__in=reminder_undesired_status_es,
                     procedure_name__in=procedures_es,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
+                    appointment_date__range=(one_day_past, thirty_days_future)
                 ).values_list('customer_phone', flat=True))
                 cache.set(excluded_cache_key, excluded_phones, timeout=3600)
             
             # Get appointments with optimized query
+            # Maybe we can add date_range in the original base_query_reminder 
+            # and use here simply to exclude the set of excluded phones
             reminder_appointments = base_query_reminder.filter(
                 appointment_date__range=(now, five_days_future)
             ).exclude(
@@ -141,7 +143,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         
         elif contact_tag == 'ReminderPL':
             five_days_future = now + timedelta(days=5)
-            thirty_days_past = now - timedelta(days=30)
+            one_day_past = now - timedelta(days=1)
             thirty_days_future = now + timedelta(days=30)
 
             # Get excluded phones first (can be cached)
@@ -152,7 +154,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                 excluded_phones = set(Appointment.objects.filter(
                     status_label__in=reminder_undesired_status_pl,
                     procedure_name__in=procedures_pl,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
+                    appointment_date__range=(one_day_past, thirty_days_future)
                 ).values_list('customer_phone', flat=True))
                 cache.set(excluded_cache_key, excluded_phones, timeout=3600)
             
