@@ -155,7 +155,7 @@ def get_message_for_interval(contact_type,
                 counter = expected_counter  # Set the counter for message lookup
 
             elif appointment_status_label == "Cancelado":
-                expected_counter = 0
+                expected_counter = None
                 if -7 <= days_interval <= -4:    # Changed to match get_message_for_interval
                     expected_counter = 0      # Recent cancellation
                 elif -14 <= days_interval <= -10:

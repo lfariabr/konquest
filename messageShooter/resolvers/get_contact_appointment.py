@@ -208,6 +208,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         elif contact_tag == 'ReschedulePL':
             thirty_days_past = now - timedelta(days=30)
             thirty_days_future = now + timedelta(days=30)
+            last_7_days = now - timedelta(days=7)
+
 
             # Get excluded phones (cached)
             excluded_cache_key = f'excluded_phones_reschedule_pl_{user.id}'
@@ -223,6 +225,7 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             
             # Optimized query with distinct handling
             reschedule_appointments = base_query_reschedule_pl.filter(
+                appointment_date__gte=last_7_days
             ).exclude(
                 customer_phone__in=excluded_phones
             ).order_by('-appointment_date')
