@@ -186,8 +186,16 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                 cache.set(excluded_cache_key, excluded_phones, timeout=3600)
             
             # Optimized query with distinct handling
+            ###########
+            ###########
+            ###########
+            ###########
+            ###########
+            ###########
             reschedule_appointments = base_query_reschedule.filter(
-                appointment_date__gte=last_7_days
+                # appointment_date__gte=last_7_days # The problem is here. 
+                # I believe I can simply change date__gte to date__range
+                appointment_date__range=(last_7_days, now),
             ).exclude(
                 customer_phone__in=excluded_phones
             ).order_by('-appointment_date')
@@ -225,7 +233,9 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             
             # Optimized query with distinct handling
             reschedule_appointments = base_query_reschedule_pl.filter(
-                appointment_date__gte=last_7_days
+                # appointment_date__gte=last_7_days # The problem is here.
+                # I believe I can simply change date__gte to date__range
+                appointment_date__range=(last_7_days, now),
             ).exclude(
                 customer_phone__in=excluded_phones
             ).order_by('-appointment_date')
