@@ -146,6 +146,9 @@ def get_message_for_interval(contact_type,
                     expected_counter = 1      # Week-old miss (7-14 days_interval ago)
                 elif days_interval <= -14:
                     expected_counter = 2      # Old miss (14+ days_interval ago)
+                else:
+                    logger.info(f"Falta appointment outside message windows with days_interval: {days_interval}. Skipping message.")
+                    return None
                 
                 # Only proceed if the actual counter matches what we expect for this period
                 if counter != expected_counter:
@@ -156,12 +159,15 @@ def get_message_for_interval(contact_type,
 
             elif appointment_status_label == "Cancelado":
                 expected_counter = None
-                if -7 <= days_interval <= -4:    # Changed to match get_message_for_interval
-                    expected_counter = 0      # Recent cancellation
+                if -7 <= days_interval <= -4:    # Recent cancellation
+                    expected_counter = 0
                 elif -14 <= days_interval <= -10:
                     expected_counter = 1      # Week-old cancellation
                 elif days_interval <= -21:
                     expected_counter = 2      # Old cancellation
+                else:
+                    logger.info(f"Cancelled appointment outside message windows with days_interval: {days_interval}. Skipping message.")
+                    return None  # Explicitly return None for appointments outside our time windows
                 
                 # Only proceed if the actual counter matches what we expect for this period
                 if counter != expected_counter:
@@ -171,7 +177,7 @@ def get_message_for_interval(contact_type,
                 counter = expected_counter  # Set the counter for message lookup
 
             else:
-                logger.warning(f"Invalid appointment_status_label for Reschedule: appointment_status_label={appointment_status_label}, days={days}")
+                logger.warning(f"Invalid appointment_status_label for Reschedule: appointment_status_label={appointment_status_label}, days={days_interval}")
                 return None  # Invalid status for Reschedule
             
     else:

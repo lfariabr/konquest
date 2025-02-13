@@ -67,7 +67,6 @@ def create_target_list(campaign_id, force_run=False):
 
         # Contact Type Validation
         ###########################
-
         if campaign.contact_type == "Whatsapp":
             contacts = get_contact_whatsapp(campaign.contact_type, campaign.contact_tag)
         
@@ -80,10 +79,11 @@ def create_target_list(campaign_id, force_run=False):
         else:
             logger.error(f"Invalid contact type '{campaign.contact_type}' for campaign '{campaign.name}'")
             return 0, 0, 0
+        
+        # Filter contacts in memory
+        if contacts:
+            contacts = [c for c in contacts if c.available_to_queue and c.priority == 5]
             
-        if contacts and len(contacts) > 0:
-            logger.info(f"First contact type: {type(contacts[0])}")
-
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")
             return created_count, skipped_count, error_count

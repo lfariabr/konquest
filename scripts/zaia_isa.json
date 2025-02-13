@@ -60,10 +60,40 @@
     "tags": ["radiofrequência", "estrias", "pele firme"]
   },
   {
-    "contexto": "Informações sobre as localizações das unidades da clínica",
-    "pergunta": "Quais são as localizações das unidades da clínica?",
-    "resposta": "Temos unidades em diversas regiões:\n\n**São Paulo - Capital:**\n• Jardins: Rua Augusta, 2677 - Cerqueira César\n• Itaim Bibi: Rua Pais de Araújo, 121\n• Moema: Al. Jauaperi, 93\n• Santo Amaro: Av. Santo Amaro, 6670\n• Tucuruvi: Av. Nova Cantareira, 1032 - Loja 2\n• Lapa: Rua Pio XI, 196 - Alto da Lapa\n• Tatuapé: R. Lucília Queiroz 250\n• Ipiranga: Av. Nazaré, 1000\n• Vila Mascote: Av. Dr. Lino de Moraes Leme, 1159 - Loja 4\n• Mooca: Av. Paes de Barros, 1426\n\n**São Paulo - Grande SP:**\n• Osasco: Rua João Crudo, 68 - Centro\n• São Bernardo do Campo: Av. Índico, 534 - Jardim do Mar\n• Guarulhos: Av. Tiradentes, 2153 - Jardim Guarulhos\n• Alphaville: Al Madeira, 55\n\n**São Paulo - Interior:**\n• Campinas: Av. Dr. Moraes Sales, 2444 - Nova Campinas\n• Sorocaba: Av. Barão de Tatuí, 802 - Vila Florinda\n\n**São Paulo - Litoral:**\n• Santos: Rua Dr. Luís de Faria, 70 - Gonzaga\n• Praia Grande: Rua Fumio Miyazi, 444 - Boqueirão\n\n**Rio de Janeiro:**\n• Tijuca: Rua Conde de Bonfim, 85\n• Copacabana: Rua Raimundo Corrêa, 23 - Loja B\n\n**Paraná:**\n• Londrina: Rua Sen. Souza Naves, 1510 – Centro\n\nQual unidade fica mais próxima para você? 😊",
-    "tags": ["localização", "unidades", "clínica", "São Paulo", "Rio de Janeiro", "Paraná", "Alphaville", "Campinas", "Copacabana", "Itaim", "Ipiranga", "Lapa", "Londrina", "Moema", "Mooca", "Jardins", "Osasco", "São Bernardo", "Guarulhos", "Santo Amaro", "Santos", "Sorocaba", "Tatuapé", "Tijuca", "Tucuruvi", "Vila Mascote", "Praia Grande"]
+    "contexto": "Informações sobre as localizações das unidades em São Paulo - Capital",
+    "pergunta": "Quais são as localizações das unidades em São Paulo - Capital?",
+    "resposta": "Em São Paulo - Capital, temos:\n- Jardins: Rua Augusta, 2677, Cerqueira César\n- Itaim Bibi: Rua Pais de Araújo, 121\n- Moema: Al. Jauaperi, 93\n- Santo Amaro: Av. Santo Amaro, 6670\n- Tucuruvi: Av. Nova Cantareira, 1032 (Loja 2)\n- Lapa: Rua Pio XI, 196\n- Tatuapé: R. Lucília Queiroz, 250\n- Ipiranga: Av. Nazaré, 1000\n- Vila Mascote: Av. Dr. Lino de Moraes Leme, 1159 (Loja 4)\n- Mooca: Av. Paes de Barros, 1426",
+    "tags": ["localização", "São Paulo", "Capital"]
+  },
+  {
+    "contexto": "Informações sobre as localizações das unidades em São Paulo - Grande SP",
+    "pergunta": "Quais são as localizações das unidades em São Paulo - Grande SP?",
+    "resposta": "Em São Paulo - Grande SP, temos:\n- Osasco: Rua João Crudo, 68, Centro\n- São Bernardo do Campo: Av. Índico, 534, Jardim do Mar\n- Guarulhos: Av. Tiradentes, 2153, Jardim Guarulhos\n- Alphaville: Al. Madeira, 55",
+    "tags": ["localização", "São Paulo", "Grande SP"]
+  },
+  {
+    "contexto": "Informações sobre as localizações das unidades em São Paulo - Interior",
+    "pergunta": "Quais são as localizações das unidades em São Paulo - Interior?",
+    "resposta": "Em São Paulo - Interior, temos:\n- Campinas: Av. Dr. Moraes Sales, 2444, Nova Campinas\n- Sorocaba: Av. Barão de Tatuí, 802, Vila Florinda",
+    "tags": ["localização", "São Paulo", "Interior"]
+  },
+  {
+    "contexto": "Informações sobre as localizações das unidades em São Paulo - Litoral",
+    "pergunta": "Quais são as localizações das unidades em São Paulo - Litoral?",
+    "resposta": "Em São Paulo - Litoral, temos:\n- Santos: Rua Dr. Luís de Faria, 70, Gonzaga\n- Praia Grande: Rua Fumio Miyazi, 444, Boqueirão",
+    "tags": ["localização", "São Paulo", "Litoral"]
+  },
+  {
+    "contexto": "Informações sobre as localizações das unidades no Rio de Janeiro",
+    "pergunta": "Quais são as localizações das unidades no Rio de Janeiro?",
+    "resposta": "No Rio de Janeiro, temos:\n- Tijuca: Rua Conde de Bonfim, 85\n- Copacabana: Rua Raimundo Corrêa, 23 (Loja B)",
+    "tags": ["localização", "Rio de Janeiro"]
+  },
+  {
+    "contexto": "Informações sobre as localizações das unidades no Paraná",
+    "pergunta": "Quais são as localizações das unidades no Paraná?",
+    "resposta": "No Paraná, temos:\n- Londrina: Rua Sen. Souza Naves, 1510, Centro",
+    "tags": ["localização", "Paraná", "Londrina"]
   },
   {
     "contexto": "Preços de tratamentos estéticos.",
@@ -166,5 +196,123 @@
     "pergunta": "Por que eu devo fazer meu tratamento na Pró-Corpo?",
     "resposta": "A Pró-Corpo é líder no mercado de estética com números que comprovam nossa excelência:\n\n• Mais de 20 unidades próprias em localização privilegiadas\n• 18+ anos de experiência no mercado de estética\n• Mais de 1.000.000 de clientes atendidos e satisfeitos\n• Equipe altamente qualificada e constantemente atualizada\n• Tecnologia de ponta com equipamentos de última geração\n• Protocolos exclusivos desenvolvidos por especialistas\n• Ambiente moderno e acolhedor\n• Atendimento personalizado para cada cliente\n• Resultados comprovados e duradouros\n• Procedimentos seguros com produtos de qualidade certificada\n• Preços competitivos e diversas formas de pagamento\n\nNossa missão é proporcionar bem-estar e autoestima através de tratamentos eficazes e seguros. Venha fazer parte da família Pró-Corpo! 💫✨",
     "tags": ["Pró-Corpo", "experiência", "credibilidade", "qualidade", "tratamentos estéticos", "bem-estar", "resultados"]
+  },
+  {
+    "unidades": [
+      {
+        "regiao": "São Paulo - Capital",
+        "lista": [
+          {
+            "nome": "Jardins",
+            "endereco": "Rua Augusta, 2677, Cerqueira César, São Paulo - SP"
+          },
+          {
+            "nome": "Itaim Bibi",
+            "endereco": "Rua Pais de Araújo, 121, São Paulo - SP"
+          },
+          {
+            "nome": "Moema",
+            "endereco": "Al. Jauaperi, 93, São Paulo - SP"
+          },
+          {
+            "nome": "Santo Amaro",
+            "endereco": "Av. Santo Amaro, 6670, São Paulo - SP"
+          },
+          {
+            "nome": "Tucuruvi",
+            "endereco": "Av. Nova Cantareira, 1032 (Loja 2), São Paulo - SP"
+          },
+          {
+            "nome": "Lapa",
+            "endereco": "Rua Pio XI, 196, São Paulo - SP"
+          },
+          {
+            "nome": "Tatuapé",
+            "endereco": "R. Lucília Queiroz, 250, São Paulo - SP"
+          },
+          {
+            "nome": "Ipiranga",
+            "endereco": "Av. Nazaré, 1000, São Paulo - SP"
+          },
+          {
+            "nome": "Vila Mascote",
+            "endereco": "Av. Dr. Lino de Moraes Leme, 1159 (Loja 4), São Paulo - SP, 04635-001"
+          },
+          {
+            "nome": "Mooca",
+            "endereco": "Av. Paes de Barros, 1426, São Paulo - SP"
+          }
+        ]
+      },
+      {
+        "regiao": "São Paulo - Grande SP",
+        "lista": [
+          {
+            "nome": "Osasco",
+            "endereco": "Rua João Crudo, 68, Centro, Osasco - SP"
+          },
+          {
+            "nome": "São Bernardo do Campo",
+            "endereco": "Av. Índico, 534, Jardim do Mar, São Bernardo do Campo - SP"
+          },
+          {
+            "nome": "Guarulhos",
+            "endereco": "Av. Tiradentes, 2153, Jardim Guarulhos, Guarulhos - SP, 07090-000"
+          },
+          {
+            "nome": "Alphaville",
+            "endereco": "Al. Madeira, 55, Alphaville - SP"
+          }
+        ]
+      },
+      {
+        "regiao": "São Paulo - Interior",
+        "lista": [
+          {
+            "nome": "Campinas",
+            "endereco": "Av. Dr. Moraes Sales, 2444, Nova Campinas, Campinas - SP"
+          },
+          {
+            "nome": "Sorocaba",
+            "endereco": "Av. Barão de Tatuí, 802, Vila Florinda, Sorocaba - SP"
+          }
+        ]
+      },
+      {
+        "regiao": "São Paulo - Litoral",
+        "lista": [
+          {
+            "nome": "Santos",
+            "endereco": "Rua Dr. Luís de Faria, 70, Gonzaga, Santos - SP"
+          },
+          {
+            "nome": "Praia Grande",
+            "endereco": "Rua Fumio Miyazi, 444, Boqueirão, Praia Grande - SP"
+          }
+        ]
+      },
+      {
+        "regiao": "Rio de Janeiro",
+        "lista": [
+          {
+            "nome": "Tijuca",
+            "endereco": "Rua Conde de Bonfim, 85, Rio de Janeiro - RJ"
+          },
+          {
+            "nome": "Copacabana",
+            "endereco": "Rua Raimundo Corrêa, 23 (Loja B), Rio de Janeiro - RJ"
+          }
+        ]
+      },
+      {
+        "regiao": "Paraná",
+        "lista": [
+          {
+            "nome": "Londrina",
+            "endereco": "Rua Sen. Souza Naves, 1510, Centro, Londrina - PR"
+          }
+        ]
+      }
+    ]
   }
 ]

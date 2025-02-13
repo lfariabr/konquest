@@ -40,6 +40,13 @@ from konquist.settings import (CONTACTS_TO_LOAD_APT,
                              CONTACTS_TO_LOAD_APT_VIP_START, 
                              CONTACTS_TO_LOAD_APT_VIP_END)
 
+from messageShooter.helpers.appointment_queries import (
+                                                    get_reminder_appointment_query,
+                                                    get_reschedule_appointment_query,
+                                                    get_reschedule_pl_appointment_query,
+                                                    get_reminder_pl_appointment_query,
+                                                    get_nps_appointment_query)
+
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """
     Get appointments based on specific relationship tag rules
@@ -65,20 +72,6 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         logger.info(f"Using cached contacts for {contact_tag}")
         return cached_contacts
     
-    # Pró-Corpo ES - Confirmação
-    base_query_reminder = Appointment.objects.filter(
-        store_name__in=reminder_stores_include_es,
-        procedure_name__in=procedures_es,
-        status_label__in=reminder_desired_status_es
-    )
-
-    # Pró-Corpo ES - Ativo de Falta e Cancelado
-    base_query_reschedule = Appointment.objects.filter(
-        store_name__in=stores_include_es_reschedule,
-        procedure_name__in=procedures_es,
-        status_label__in=reschedule_desired_status_es
-    )
-
     # Pró-Corpo ES - NPS
     base_query_nps = Appointment.objects.filter(
         store_name__in=nps_stores_include_es
@@ -89,48 +82,10 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
         store_name__in=stores_include_es_reschedule,
         status_label__in=nps_desired_status_es
     )
-
-    # Mais Cirurgia - Confirmação
-    base_query_reminder_pl = Appointment.objects.filter(
-        store_name__in=store_include_pl,
-        procedure_name__in=procedures_pl,
-        status_label__in=reminder_desired_status_pl
-    )
-
-    # Mais Cirurgia - Ativo de Falta e Cancelado
-    base_query_reschedule_pl = Appointment.objects.filter(
-        store_name__in=stores_include_pl_reschedule,
-        procedure_name__in=procedures_pl,
-        status_label__in=reschedule_desired_status_pl
-    )
    
     try:
         if contact_tag == 'Reminder':
-            five_days_future = now + timedelta(days=5)
-            one_day_past = now - timedelta(days=1)
-            thirty_days_future = now + timedelta(days=30)
-            
-            # Get excluded phones first (can be cached)
-            excluded_cache_key = f'excluded_phones_reminder_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
-            
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reminder_undesired_status_es,
-                    procedure_name__in=procedures_es,
-                    appointment_date__range=(one_day_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Get appointments with optimized query
-            # Maybe we can add date_range in the original base_query_reminder 
-            # and use here simply to exclude the set of excluded phones
-            reminder_appointments = base_query_reminder.filter(
-                appointment_date__range=(now, five_days_future)
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
-
+            reminder_appointments = get_reminder_appointment_query(user)
             appointments = list(reminder_appointments)            
             logger.info(f"Reminder - Found {len(appointments)} appointments for stores {reminder_stores_include_es}")
             
@@ -142,67 +97,16 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                 logger.info(f"  {store}: {count}")
         
         elif contact_tag == 'ReminderPL':
-            five_days_future = now + timedelta(days=5)
-            one_day_past = now - timedelta(days=1)
-            thirty_days_future = now + timedelta(days=30)
-
-            # Get excluded phones first (can be cached)
-            excluded_cache_key = f'excluded_phones_reminder_pl_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
-            
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reminder_undesired_status_pl,
-                    procedure_name__in=procedures_pl,
-                    appointment_date__range=(one_day_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Get appointments with optimized query
-            appointments = base_query_reminder_pl.filter(
-                appointment_date__range=(now, five_days_future),
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('appointment_date')[:CONTACTS_TO_LOAD_APT]
-            
+            appointments = get_reminder_pl_appointment_query(user)
             appointments = list(appointments)
             logger.info(f"ReminderPL - Found {len(appointments)} appointments")
         
         elif contact_tag == 'Reschedule':
-            thirty_days_past = now - timedelta(days=30)
-            thirty_days_future = now + timedelta(days=30)
-            last_7_days = now - timedelta(days=7)
+            reschedule_appointments = get_reschedule_appointment_query(user)
             
-            # Get excluded phones (cached)
-            excluded_cache_key = f'excluded_phones_reschedule_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
-            
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reschedule_undesired_status_es,
-                    procedure_name__in=procedures_es,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Optimized query with distinct handling
-            ###########
-            ###########
-            ###########
-            ###########
-            ###########
-            ###########
-            reschedule_appointments = base_query_reschedule.filter(
-                # appointment_date__gte=last_7_days # The problem is here. 
-                # I believe I can simply change date__gte to date__range
-                appointment_date__range=(last_7_days, now),
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('-appointment_date')
-            
-            # Handle distinct in Python for better compatibility
             seen_phones = set()
             unique_appointments = []
+
             for apt in reschedule_appointments:
                 if apt.customer_phone not in seen_phones:
                     seen_phones.add(apt.customer_phone)
@@ -214,35 +118,11 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             logger.info(f"Reschedule - Found {len(appointments)} appointments")
 
         elif contact_tag == 'ReschedulePL':
-            thirty_days_past = now - timedelta(days=30)
-            thirty_days_future = now + timedelta(days=30)
-            last_7_days = now - timedelta(days=7)
+            reschedule_appointments = get_reschedule_pl_appointment_query(user)
 
-
-            # Get excluded phones (cached)
-            excluded_cache_key = f'excluded_phones_reschedule_pl_{user.id}'
-            excluded_phones = cache.get(excluded_cache_key)
-            
-            if excluded_phones is None:
-                excluded_phones = set(Appointment.objects.filter(
-                    status_label__in=reschedule_undesired_status_pl,
-                    procedure_name__in=procedures_pl,
-                    appointment_date__range=(thirty_days_past, thirty_days_future)
-                ).values_list('customer_phone', flat=True))
-                cache.set(excluded_cache_key, excluded_phones, timeout=3600)
-            
-            # Optimized query with distinct handling
-            reschedule_appointments = base_query_reschedule_pl.filter(
-                # appointment_date__gte=last_7_days # The problem is here.
-                # I believe I can simply change date__gte to date__range
-                appointment_date__range=(last_7_days, now),
-            ).exclude(
-                customer_phone__in=excluded_phones
-            ).order_by('-appointment_date')
-            
-            # Handle distinct in Python for better compatibility
             seen_phones = set()
             unique_appointments = []
+
             for apt in reschedule_appointments:
                 if apt.customer_phone not in seen_phones:
                     seen_phones.add(apt.customer_phone)
@@ -254,49 +134,8 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             logger.info(f"ReschedulePL - Found {len(appointments)} appointments")
         
         elif contact_tag == 'NPS':
-            # Define NPS period
-            last_2_days = now - timedelta(days=2)
+            appointments = get_nps_appointment_query()
             
-            # Debug: Count total appointments before filtering
-            total_appointments = Appointment.objects.filter(
-                appointment_date__range=(last_2_days, now)
-            ).count()
-            logger.info(f"Total appointments in last 10 days: {total_appointments}")
-            
-            # Debug: Count after store filter
-            store_filtered = Appointment.objects.filter(
-                appointment_date__range=(last_2_days, now),
-                store_name__in=nps_stores_include_es
-            ).count()
-            logger.info(f"Appointments after store filter: {store_filtered}")
-            
-            # Debug: Count after procedure exclusion
-            procedure_filtered = Appointment.objects.filter(
-                appointment_date__range=(last_2_days, now),
-                store_name__in=nps_stores_include_es
-            ).exclude(
-                procedure_name__in=procedures_es
-            ).count()
-            logger.info(f"Appointments after procedure exclusion: {procedure_filtered}")
-            
-            # Debug: Count after status filter
-            status_filtered = Appointment.objects.filter(
-                appointment_date__range=(last_2_days, now),
-                store_name__in=nps_stores_include_es,
-                status_label__in=nps_desired_status_es
-            ).exclude(
-                procedure_name__in=procedures_es
-            ).count()
-            logger.info(f"Appointments after status filter: {status_filtered}")
-
-            # Optimized query
-            appointments = base_query_nps.filter(
-                status_label__in=nps_desired_status_es,
-                appointment_date__range=(last_2_days, now),
-                store_name__in=nps_stores_include_es
-            ).order_by('appointment_date')
-            
-            # Handle distinct
             seen_phones = set()
             unique_appointments = []
             for apt in appointments:
@@ -355,22 +194,6 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             logger.info(f"Found {november_onwards_appointments.count()} appointments from November onwards ({len(november_onwards_phones)} unique customers)")
             logger.info(f"Retention analysis: {len(returning_customers)} out of {len(october_phones)} October customers returned in November+")
 
-            # # Sample of loyal customers (returned in November+)
-            # logger.info("\nSample of 5 loyal customers who returned:")
-            # loyal_sample = october_appointments.filter(
-            #     customer_phone__in=list(returning_customers)
-            # ).values('customer_phone', 'store_name', 'appointment_date', 'status_label')[:5]
-            
-            # for apt in loyal_sample:
-            #     # Get their November+ appointment
-            #     future_apt = november_onwards_appointments.filter(
-            #         customer_phone=apt['customer_phone']
-            #     ).values('appointment_date', 'store_name').first()
-                
-            #     logger.info(f"  Customer {apt['customer_phone']}:")
-            #     logger.info(f"    October visit: {apt['store_name']} on {apt['appointment_date']}")
-            #     logger.info(f"    Returned: {future_apt['store_name']} on {future_apt['appointment_date']}")
-
             # 3. Filter October appointments to exclude phones that appear in November onwards
             appointments = october_appointments.exclude(
                 customer_phone__in=november_onwards_phones
@@ -395,7 +218,6 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
                         .annotate(latest_apt=Max('appointment_date'))
                         .order_by('-latest_apt')
                     )[:100]  # Limit to 100 unique customers
-                    #TODO: think about this logic
                     # criar uma flag no appointment para apontar se ele foi selecionado no VIP ou não
                     # filtra apenas os selecionados. Desligar a flag depois de ter sido contatado
                     # Luis | Tag: Selecionado VIP | hoje pegar ele

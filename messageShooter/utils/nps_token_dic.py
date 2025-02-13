@@ -56,11 +56,11 @@ store_dict_info = {
         "link_google": "https://g.page/r/CYtdpuvpr8VAEBM/review"
     },
     "GUARULHOS": {
-        "token": "?",
-        "conta_social_hub": "?",
-        "numero_telefone": "?",
-        "login": "?",
-        "link_google": "?"
+        "token": "GUARULHOS",
+        "conta_social_hub": "GUARULHOS",
+        "numero_telefone": "GUARULHOS",
+        "login": "GUARULHOS",
+        "link_google": "GUARULHOS"
     },
     "LAPA": {
         "token": "bhPky7VluDP5VBkSw481Qyu1MMuWz3rJ",

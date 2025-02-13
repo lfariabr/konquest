@@ -22,3 +22,43 @@
 }
 2025-02-06 00:25:47,831 - INFO - ...
 2025-02-06 00:25:47,831 - ERROR - Exception occurred: Connection error
+2025-02-11 00:06:29,735 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "11963546222",
+  "message": "\ud83e\udd16 TASK: Starting to process campaigns @ 2025-02-11 00:06:29",
+  "preview_url": true
+}
+2025-02-11 00:06:29,737 - INFO - ...
+2025-02-11 00:06:29,746 - INFO - Payload: {
+  "api_token": "rmvYoOnWD5WjcH7Bx5lYTZkGMX2vweN1",
+  "phone": "11963546222",
+  "message": "\ud83e\udd16 TASK: Starting to process queues @ 2025-02-11 00:06:29",
+  "preview_url": true
+}
+2025-02-11 00:06:29,746 - INFO - ...
+2025-02-11 00:06:31,961 - INFO - Text message sent to 11963546222. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-02-11 00:06:31,960 - INFO - Text message sent to 11963546222. Response {'success': True, 'message': 'Message stored successfully. Will be processing in few seconds!'}
+2025-02-12 23:49:40,504 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-12 23:49:40,504 - INFO - ...
+2025-02-12 23:49:40,504 - INFO - Text message sent to phone. Response {'status': 'success'}
+2025-02-12 23:49:40,505 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-12 23:49:40,505 - INFO - ...
+2025-02-12 23:49:40,505 - ERROR - Fail to send text message to phone. Code: 400, Resposta: Error message
+2025-02-12 23:49:40,506 - INFO - Payload: {
+  "api_token": "token",
+  "phone": "phone",
+  "message": "message",
+  "preview_url": true
+}
+2025-02-12 23:49:40,506 - INFO - ...
+2025-02-12 23:49:40,506 - ERROR - Exception occurred: Connection error

@@ -18,6 +18,10 @@ class Contact(models.Model):
     region = models.CharField(max_length=100, null=True, blank=True, default="São Paulo")
     user = models.ForeignKey(kUser, on_delete=models.CASCADE)
     
+    # New fields for priority and availability
+    available_to_queue = models.BooleanField(default=True, help_text="Whether this contact is available for queue processing")
+    priority = models.IntegerField(default=5, help_text="Contact priority (1-5, where 1 is highest priority)")
+
     # Message counters
     botox_messages_sent = models.IntegerField(default=0, help_text="Number of Botox campaign messages sent")
     preenchimento_messages_sent = models.IntegerField(default=0, help_text="Number of Preenchimento campaign messages sent")

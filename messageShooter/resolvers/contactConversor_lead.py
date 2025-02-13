@@ -56,7 +56,9 @@ def convert_lead_to_contact_bulk(leads, contact_tag, user=None):
                 source='Lead',  # Mark the source as Lead
                 lead_last_checked=timezone.now(),
                 lead_check_count=0,
-                lead_created_at=lead.created_at
+                lead_created_at=lead.created_at,
+                available_to_queue=True,
+                priority=1
             ))
 
     # Perform bulk operations

@@ -21,25 +21,25 @@ logger = logging.getLogger(__name__)
     time_limit=3600,      # Hard timeout 1 hour
     soft_time_limit=3000  # Soft timeout 50 minutes
 )
-def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] = None):
+def check_contacts_in_crm(self, batch_size: int = 200, processed_count: int = 0):
     """
-    Process contacts in batches to check their CRM status.
+    Process the most recent contacts to check their CRM status.
     Called by trigger_contact_check which is scheduled daily at 1:30 AM.
     
     Args:
         batch_size: Number of contacts to process in this batch
-        start_id: Optional ID to start processing from
+        processed_count: Number of contacts processed so far
     """
-    lock_id = f"check_contacts_in_crm_lock:{start_id or 'initial'}"
+    lock_id = f"check_contacts_in_crm_lock:{processed_count}"
     execution_start = datetime.now()
     
     # Try to acquire lock
     if not cache.add(lock_id, str(execution_start), timeout=3600):  # 1 hour timeout
-        logger.warning(f"Task already running for batch {start_id or 'initial'}")
+        logger.warning(f"Task already running for batch {processed_count}")
         return None
         
     try:
-        logger.info("Starting contact check in CRM batch%s", f" from ID {start_id}" if start_id else "")
+        logger.info("Starting contact check in CRM batch from most recent contacts")
         
         stats = {
             'total_contacts': 0,
@@ -51,15 +51,11 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
             'last_id': None
         }
         
-        # Build base query
+        # Build base query for most recent contacts
         query = Contact.objects.exclude(Q(is_lead=True) | Q(is_appointment=True))
         
-        # Add ID filter if continuing from previous batch
-        if start_id:
-            query = query.filter(id__gt=start_id)
-            
-        # Get batch of contacts
-        contacts = query.order_by('id')[:batch_size]
+        # Get batch of most recent contacts
+        contacts = query.order_by('-created_at')[:batch_size]
         
         if not contacts:
             logger.info("No more contacts to process")
@@ -92,16 +88,17 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
                 continue
                 
         # If we processed the full batch, trigger the next batch
-        if total_contacts == batch_size and stats['last_id']:
+        if total_contacts == batch_size:
+            new_processed_count = processed_count + total_contacts
+            
             # Check if we've hit the safety limit
-            total_processed = (start_id or 0) + stats['total_contacts']
-            if total_processed >= 1000:
-                logger.warning(f"Reached safety limit of 1000 contacts. Processed {total_processed} contacts in total.")
-                send_debug_notification(f"⚠️ Contact check stopped: reached 1000 contacts limit. Total processed: {total_processed}")
+            if new_processed_count >= 1000:
+                logger.warning(f"Completed processing of 1000 most recent contacts")
+                send_debug_notification(f"✅ Contact check completed: processed {new_processed_count} most recent contacts")
                 return stats
                 
-            logger.info(f"Triggering next batch starting from ID {stats['last_id']}")
-            check_contacts_in_crm.delay(batch_size=batch_size, start_id=stats['last_id'])
+            logger.info(f"Triggering next batch. Total processed so far: {new_processed_count}")
+            check_contacts_in_crm.delay(batch_size=batch_size, processed_count=new_processed_count)
             
         return stats
             
@@ -109,7 +106,7 @@ def check_contacts_in_crm(self, batch_size: int = 200, start_id: Optional[int] =
         logger.error(f"Batch processing failed: {str(e)}")
         if self.request.retries < self.max_retries:
             self.retry(
-                kwargs={'batch_size': batch_size, 'start_id': start_id},
+                kwargs={'batch_size': batch_size, 'processed_count': processed_count},
                 countdown=60 * (self.request.retries + 1)  # Progressive backoff
             )
         raise

@@ -2,6 +2,7 @@
 # This is important because we grab users from apiCrm and plug it in konquista's core mechanism
 
 import logging
+from socket import AF_AAL5
 from django.conf import settings
 from django.db.models import Q
 from datetime import timedelta
@@ -36,29 +37,45 @@ def convert_appointment_to_contact(appointment, contact_tag, user=None):
         # Check if contact already exists with this phone
         existing_contact = Contact.objects.filter(
             phone=appointment.customer_phone,
-            relationship_tag=contact_tag, # Reschedule / Reminder
+            relationship_tag=contact_tag,
+            # is_appointment=True
         ).first()
         
-        # Edilson: Botox | Reschedule
-        # existing contact em mais de uma tag, mudar a existente pra False e nova pra True
-        # se a nova for prioritária (Priority: Reminder: 1, Reschedule: 2)
-        # update contact available_to_queue set to 0
-        # update contact available_to_queue = True - order by contact_priority, updating first
-
+        
         if existing_contact:
-            # TODO
-            # We need to add a logic here to update the contact information... 
-            # if it appears on both the appointment's and contact's list,
-            # what's the logic here? 
-            # latest appointment? what about contact tag? 
-            # needs deep dive...
-            # Brainstorm this case: http://127.0.0.1:8000/admin/core/contact/?q=11986443866
-
-            logger.info(f"Found existing contact for phone {appointment.customer_phone}: {existing_contact}. \n This means we are updating an existing contact, not creating neither duplication.")
-            existing_contact.appointment_status = appointment.status_label
-            existing_contact.appointment_id = appointment.id_crm  # Update to latest appointment
-            existing_contact.is_appointment = True
-            existing_contact.save()
+            # Update the contact if:
+            # 1. New appointment is more recent than the existing one
+            # 2. Contact tag priority needs to be considered
+            should_update = False
+            
+            # Check if new appointment is more recent
+            if (not existing_contact.appointment_created_at or 
+                appointment.appointment_date > existing_contact.appointment_created_at):
+                should_update = True
+                logger.info(f"Updating contact due to more recent appointment date: {appointment.appointment_date}")
+            
+            # Consider contact tag priority if defined
+            tag_priority = getattr(settings, 'CONTACT_TAG_PRIORITY', {})
+            if tag_priority:
+                existing_priority = tag_priority.get(existing_contact.relationship_tag, 0)
+                new_priority = tag_priority.get(contact_tag, 0)
+                if new_priority > existing_priority:
+                    should_update = True
+                    logger.info(f"Updating contact due to higher priority tag: {contact_tag}")
+            
+            if should_update:
+                existing_contact.name = appointment.customer_name
+                existing_contact.appointment_status = appointment.status_label
+                existing_contact.appointment_id = appointment.id_crm
+                existing_contact.relationship_tag = contact_tag # ?
+                existing_contact.is_appointment = True
+                existing_contact.appointment_created_at = appointment.appointment_date
+                existing_contact.store = appointment.store_name
+                existing_contact.save()
+                logger.info(f"Updated existing contact {existing_contact.id} with new appointment data")
+            else:
+                logger.info(f"Kept existing contact data as it was more relevant: {existing_contact.id}")
+            
             return existing_contact
 
             
@@ -73,9 +90,7 @@ def convert_appointment_to_contact(appointment, contact_tag, user=None):
             store=appointment.store_name,  # Store additional appointment data
             appointment_status=appointment.status_label,
             appointment_created_at=appointment.appointment_date,
-            user=user,  # Set the user
-            available_to_queue=True,
-            priority=1
+            user=user  # Set the user
         )
     
         # Save to database
