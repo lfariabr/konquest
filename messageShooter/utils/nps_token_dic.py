@@ -56,11 +56,11 @@ store_dict_info = {
         "link_google": "https://g.page/r/CYtdpuvpr8VAEBM/review"
     },
     "GUARULHOS": {
-        "token": "GUARULHOS",
-        "conta_social_hub": "GUARULHOS",
-        "numero_telefone": "GUARULHOS",
-        "login": "GUARULHOS",
-        "link_google": "GUARULHOS"
+        "token": "87n7RzLZSKw7ki4ldlLFIOqxVVnGspvB",
+        "conta_social_hub": "Licença 3",
+        "numero_telefone": "11974821912",
+        "login": "vanessa@procorpoestetica.com.br",
+        "link_google": "https://maps.app.goo.gl/wH27L5dwzLsrKv589"
     },
     "LAPA": {
         "token": "bhPky7VluDP5VBkSw481Qyu1MMuWz3rJ",
