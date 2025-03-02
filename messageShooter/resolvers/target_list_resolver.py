@@ -82,7 +82,7 @@ def create_target_list(campaign_id, force_run=False):
         
         # Filter contacts in memory
         if contacts:
-            contacts = [c for c in contacts if c.available_to_queue and c.priority == 5]
+            contacts = [c for c in contacts if c.available_to_queue and c.priority <= 5]
             
         if not contacts:
             logger.warning(f"No contacts found for campaign '{campaign.name}' with tag '{campaign.contact_tag}'")

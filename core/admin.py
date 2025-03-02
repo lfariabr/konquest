@@ -125,8 +125,8 @@ admin.site.register(MessageLogs, MessageLogsAdmin)
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'created_at', 'source', 'relationship_tag',  
-                    'store', 'region', 'external_tag', 'status', 
+    list_display = ('name', 'priority', 'available_to_queue', 'phone', 'created_at', 'source', 'relationship_tag',  
+                    'store', 'region',
                     # Lead related data
                     'is_lead', 'lead_id', 'lead_status', 'lead_created_at', 'lead_last_checked', 'lead_check_count', 'store_lead',
 
@@ -145,7 +145,7 @@ class ContactAdmin(admin.ModelAdmin):
     change_list_template = "admin/contacts_changelist.html"
     actions = ['check_leads', 'check_appointments', 'check_bill_charges'] # send_text_message_action, send_file_message_action
     ordering = ['-created_at']
-    list_per_page = 500
+    list_per_page = 2000
 
     def formatted_bill_charge_amount(self, obj):
         if obj.bill_charge_total_amount:

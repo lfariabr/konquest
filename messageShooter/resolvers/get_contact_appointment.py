@@ -45,7 +45,8 @@ from messageShooter.helpers.appointment_queries import (
                                                     get_reschedule_appointment_query,
                                                     get_reschedule_pl_appointment_query,
                                                     get_reminder_pl_appointment_query,
-                                                    get_nps_appointment_query)
+                                                    get_nps_appointment_query,
+                                                    get_vip_query)
 
 def get_contact_appointment(contact_type, contact_tag, user=None):
     """
@@ -149,65 +150,13 @@ def get_contact_appointment(contact_type, contact_tag, user=None):
             logger.info(f"NPS - Found {len(appointments)} unique appointments")
         
         elif contact_tag == 'VIP':
-            # 1. Get October appointments
-            month_october_start = datetime(2024, 10, 1)
-            month_october_end = datetime(2024, 10, 31, 23, 59, 59)
-
-            # Debug store filtering
-            logger.info(f"Filtering on these stores: {stores_include_es_reschedule}")
-            
-            # Get distribution of appointments by store
-            store_distribution = base_query_vip.filter(
-                appointment_date__range=(month_october_start, month_october_end),
-                status_label__in=nps_desired_status_es
-            ).values('store_name').annotate(count=Count('id')).order_by('-count')
-            
-            logger.info("Store distribution before filtering:")
-            for store in store_distribution:
-                logger.info(f"  {store['store_name']}: {store['count']} appointments")
-
-            october_appointments = base_query_vip.filter(
-                appointment_date__range=(month_october_start, month_october_end),
-                store_name__in=stores_include_es_reschedule,
-                status_label__in=nps_desired_status_es
-            )
-            
-            october_phones = set(october_appointments.values_list('customer_phone', flat=True))
-            logger.info(f"Found {october_appointments.count()} appointments in October ({len(october_phones)} unique customers)")
-            
-            # 2. Get November onwards appointments
-            month_november_start = datetime(2024, 11, 1)
-            yesterday = now - timedelta(days=1)
-
-            november_onwards_appointments = base_query_vip.filter(
-                appointment_date__range=(month_november_start, yesterday),
-                store_name__in=stores_include_es_reschedule,
-                status_label__in=nps_desired_status_es
-            )
-            
-            november_onwards_phones = set(
-                november_onwards_appointments.values_list('customer_phone', flat=True)
-            )
-            
-            # Calculate retention
-            returning_customers = october_phones.intersection(november_onwards_phones)
-            logger.info(f"Found {november_onwards_appointments.count()} appointments from November onwards ({len(november_onwards_phones)} unique customers)")
-            logger.info(f"Retention analysis: {len(returning_customers)} out of {len(october_phones)} October customers returned in November+")
-
-            # 3. Filter October appointments to exclude phones that appear in November onwards
-            appointments = october_appointments.exclude(
-                customer_phone__in=november_onwards_phones
-            ).order_by('appointment_date')
-            
-            logger.info(f"After filtering, found {appointments.count()} October appointments without subsequent visits")
+            appointments = get_vip_query(user)
 
             if contact_tag == 'VIP':
                 from messageShooter.utils.vip_token_dic import vip_store_dict_info
                 
                 # Initialize list for all selected appointments
                 vip_appointments = []
-                
-                logger.info(f"Starting VIP contact selection, targeting 10 contacts per store")
                 
                 # Process each store in vip_store_dict_info
                 for store_name in vip_store_dict_info.keys():

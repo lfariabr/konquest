@@ -29,6 +29,8 @@ from konquist.settings import (CONTACTS_TO_LOAD_APT,
                             CONTACTS_TO_LOAD_APT_VIP,
                              CONTACTS_TO_LOAD_APT_VIP_START, 
                              CONTACTS_TO_LOAD_APT_VIP_END)
+import logging
+logger = logging.getLogger(__name__)
 
 def get_reminder_appointment_query(user=None):
     """
@@ -198,3 +200,53 @@ def get_reschedule_pl_appointment_query(user=None):
     ).exclude(
         customer_phone__in=excluded_phones
     ).order_by('-appointment_date')[:CONTACTS_TO_LOAD_APT]
+
+def get_vip_query(user=None):
+    """
+
+    """
+    pass
+    # # 1. Get October appointments
+    # month_october_start = datetime(2024, 10, 1)
+    # month_october_end = datetime(2024, 10, 31, 23, 59, 59)
+
+    # # Debug store filtering
+    # logger.info(f"Filtering on these stores: {stores_include_es_reschedule}")
+    
+    # # Get distribution of appointments by store
+    # store_distribution = base_query_vip.filter(
+    #     appointment_date__range=(month_october_start, month_october_end),
+    #     status_label__in=nps_desired_status_es
+    # ).values('store_name').annotate(count=Count('id')).order_by('-count')
+    
+    # logger.info("Store distribution before filtering:")
+    # for store in store_distribution:
+    #     logger.info(f"  {store['store_name']}: {store['count']} appointments")
+
+    # october_appointments = base_query_vip.filter(
+    #     appointment_date__range=(month_october_start, month_october_end),
+    #     store_name__in=stores_include_es_reschedule,
+    #     status_label__in=nps_desired_status_es
+    # )
+    
+    # october_phones = set(october_appointments.values_list('customer_phone', flat=True))
+    # logger.info(f"Found {october_appointments.count()} appointments in October ({len(october_phones)} unique customers)")
+    
+    # # 2. Get November onwards appointments
+    # month_november_start = datetime(2024, 11, 1)
+    # yesterday = now - timedelta(days=1)
+
+    # november_onwards_appointments = base_query_vip.filter(
+    #     appointment_date__range=(month_november_start, yesterday),
+    #     store_name__in=stores_include_es_reschedule,
+    #     status_label__in=nps_desired_status_es
+    # )
+    
+    # november_onwards_phones = set(
+    #     november_onwards_appointments.values_list('customer_phone', flat=True)
+    # )
+    
+    # # Calculate retention
+    # returning_customers = october_phones.intersection(november_onwards_phones)
+    # logger.info(f"Found {november_onwards_appointments.count()} appointments from November onwards ({len(november_onwards_phones)} unique customers)")
+    # logger.info(f"Retention analysis: {len(returning_customers)} out of {len(october_phones)} October customers returned in November+")

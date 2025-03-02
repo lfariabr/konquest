@@ -75,7 +75,7 @@ def get_contact_lead(contact_type, contact_tag, user=None):
             ).order_by('-created_at')
 
             # Defining time slots:
-            morning_start = 8
+            morning_start = 1
             afternoon_start = 15
 
             if morning_start <= now.hour < afternoon_start:
