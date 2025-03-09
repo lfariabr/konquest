@@ -94,6 +94,7 @@ app.conf.task_routes = {
     'core.tasks.trigger_contact_check': {'queue': 'contact_processor'},
 
     # messageShooter
+    'messageShooter.tasks.run_daily_organizer': {'queue': 'campaign_queue'},  # New campaign queue
     'messageShooter.tasks.process_scheduled_campaigns': {'queue': 'campaign_queue'},
     'messageShooter.tasks.process_queues': {'queue': 'queue_processor'},
 }
@@ -142,6 +143,13 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=1, minute=30),
         'kwargs': {'batch_size': 200},
         'options': {'expires': 7200}  
+    },
+
+    # Daily organizer
+    'run_daily_organizer': {
+        'task': 'messageShooter.tasks.run_daily_organizer',
+        'schedule': crontab(hour=3, minute=2),
+        'options': {'expires': 7200} 
     },
 
     # Daily campaign processing

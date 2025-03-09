@@ -25,7 +25,7 @@ DATABASE_ENGINE = 'postgresql'
 ADMIN_PHONE = '11963546222'
 
 # messageShooter/resolvers/get_contacts.py and get_contact_lead.py
-CONTACTS_TO_LOAD_LEAD = 50 # 50
+CONTACTS_TO_LOAD_LEAD = 200 # 50
 CONTACTS_TO_LOAD_APT = 3000 # 3000
 CONTACTS_TO_LOAD_APT_VIP = 1000
 CONTACTS_TO_LOAD_APT_VIP_START = 1  # Start from 11th contact (index 10)

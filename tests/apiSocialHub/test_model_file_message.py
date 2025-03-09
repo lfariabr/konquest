@@ -3,8 +3,6 @@ import pytest
 from apiSocialHub.models.file_message import FileMessage
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-#TODO fix this
-
 # @pytest.mark.django_db
 # def test_file_message_model_creation():
 #     # Create a mock file

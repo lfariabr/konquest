@@ -52,6 +52,7 @@ docker exec -it k_celery_worker celery -A konquist call apiCrm.tasks.fetch_all_d
 
 docker exec -it k_celery_worker celery -A konquist call core.tasks.check_contacts_in_crm
 
+docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.run_daily_organizer
 docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_scheduled_campaigns
 docker exec -it k_celery_worker celery -A konquist call messageShooter.tasks.process_queues
 

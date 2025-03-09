@@ -37,7 +37,7 @@ def convert_appointments_to_contacts_bulk(appointments, contact_tag, user=None):
         if appointment.customer_phone in existing_contacts:
 
             # Update existing contact
-            contact = existing_contacts[appointment.customer_phone] # TODO: @run_organizer
+            contact = existing_contacts[appointment.customer_phone] 
             contact.appointment_status = appointment.status_label
             contact.appointment_id = appointment.id_crm
             contact.is_appointment = True

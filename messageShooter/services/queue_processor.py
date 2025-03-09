@@ -26,7 +26,7 @@ class QueueProcessor:
         """Initialize the queue processor"""
         self.max_retries = 3
         self.base_retry_delay = 5  # Base delay in minutes
-        self.breath_time = 15  # Increased from 8s to 15s between processing each contact
+        self.breath_time = 30  # Increased from 8s to 15s between processing each contact
         self._userphone_locks = {}  # Track last send time per userphone
         self._locks = {}  # Track locks per phone
         self.logger = logging.getLogger(__name__)
