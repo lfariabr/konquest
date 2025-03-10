@@ -41,11 +41,12 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     ten_days_ago = now - timedelta (days=10)
 
     logger.info(f'Total leads: {Lead.objects.count()}')
-    # Check leads by store
+
+    # Checking: leads by store and by status:
     store_leads = Lead.objects.filter(store__in=lead_stores_ncc)
-    logger.info(f'Leads in {lead_stores_ncc} store: {store_leads.count()}')
-    # Check leads by status
     status_leads = store_leads.filter(status__in=lead_status_ncc)
+
+    logger.info(f'Leads in {lead_stores_ncc} store: {store_leads.count()}')
     logger.info(f'Leads with status {lead_status_ncc}: {status_leads.count()}')
 
     # try to get from cache first for all types
@@ -74,23 +75,49 @@ def get_contact_lead(contact_type, contact_tag, user=None):
                 status__in=lead_status_ncc,
             ).order_by('-created_at')
 
-            # Defining time slots:
-            morning_start = 1
-            afternoon_start = 15
-
+            # Simple batch configuration
+            morning_start = 1  # 1 AM
+            afternoon_start = 14  # 2 PM
+            batch_size = 200  # Fixed batch size of 200 contacts
+            
+            # Calculate available batches
+            total_eligible_leads = total_leads.count()
+            logger.info(f"Total eligible leads: {total_eligible_leads}")
+            
+            # Batch navigation parameters - easily adjustable
+            starting_batch = 0  # First batch index (0-indexed)
+            batch_increment = 6  # Increment for afternoon batch (can be changed to 2, 3, etc.)
+            
+            # Determine which batch to process based on time of day
             if morning_start <= now.hour < afternoon_start:
-                # Morning batch (first 50 contacts)
-                leads = total_leads[:CONTACTS_TO_LOAD_LEAD]
-                logger.info(f"Processing morning batch: leads 1-{CONTACTS_TO_LOAD_LEAD}")
+                # Morning - use starting batch
+                current_batch = starting_batch
+                logger.info(f"Processing morning batch (batch {current_batch+1})")
 
             elif now.hour >= afternoon_start:
-                # Afternoon batch (last 50 contacts)
-                leads = total_leads[CONTACTS_TO_LOAD_LEAD:CONTACTS_TO_LOAD_LEAD*2]
-                logger.info(f"Processing afternoon batch: leads {CONTACTS_TO_LOAD_LEAD+1}-{CONTACTS_TO_LOAD_LEAD*2}")
-            
+                # Afternoon - use starting batch + increment
+                current_batch = starting_batch + batch_increment
+                logger.info(f"Processing afternoon batch (batch {current_batch+1})")
+
             else:
                 logger.info("Outside of the defined time slots")
                 return []
+            
+            # Calculate which slice of leads to process
+            start_index = current_batch * batch_size
+            end_index = start_index + batch_size
+            
+            # Make sure we don't exceed available leads
+            if start_index >= total_eligible_leads and total_eligible_leads > 0:
+                # Wrap around if needed
+                start_index = start_index % total_eligible_leads
+                end_index = start_index + batch_size
+            
+            # Get the leads for the current batch
+            leads = total_leads[start_index:end_index]
+            
+            # Log batch information
+            logger.info(f"Processing leads {start_index+1}-{min(end_index, total_eligible_leads)} of {total_eligible_leads}")
 
             leads = list(leads)
             total_count = total_leads.count()
