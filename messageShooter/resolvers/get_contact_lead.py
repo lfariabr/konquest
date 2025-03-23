@@ -1,11 +1,3 @@
-# Previous version:
-#  python manage.py shell -c "from messageShooter.resolvers.get_contact_lead import get_contact_lead; print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato'))"
-# New test to be done:
-# python manage.py shell -c "from django.contrib.auth import get_user_model; from messageShooter.resolvers.get_contact_lead import get_contact_lead; user = get_user_model().objects.first(); print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato', user=user))"
-
-# New fixing the 'user' call:
-# python manage.py shell -c "from core.models.user import kUser; from messageShooter.resolvers.get_contact_lead import get_contact_lead; user = kUser.objects.first(); print(get_contact_lead('Lead', 'Não Conseguiu Entrar Em Contato', user=user))"
-
 import logging
 from datetime import timedelta
 from django.utils import timezone
@@ -17,7 +9,6 @@ from apiCrm.models.lead import Lead
 from messageShooter.utils.lead_ncc_rules import lead_stores_ncc, lead_status_ncc
 from messageShooter.resolvers.contactConversor_lead import convert_lead_to_contact_bulk
 from konquist.settings import CONTACTS_TO_LOAD_LEAD
-
 
 logger = logging.getLogger(__name__)
 
@@ -31,21 +22,19 @@ def get_contact_lead(contact_type, contact_tag, user=None):
     - Returns: List[Contact]
     """
     logger = logging.getLogger(__name__)
-    logger.info(f"Processing contacts wiceth tag {contact_tag}")
+    logger.info(f"Processing contacts with tag {contact_tag}")
 
     if contact_type != "Lead" or not user:
         logger.error("Invalid contact type")
         return []
 
     now = timezone.now()
-    ten_days_ago = now - timedelta (days=10)
 
-    logger.info(f'Total leads: {Lead.objects.count()}')
-
-    # Checking: leads by store and by status:
+    # Checking: leads by store and by status
     store_leads = Lead.objects.filter(store__in=lead_stores_ncc)
     status_leads = store_leads.filter(status__in=lead_status_ncc)
 
+    logger.info(f'Total leads: {Lead.objects.count()}')
     logger.info(f'Leads in {lead_stores_ncc} store: {store_leads.count()}')
     logger.info(f'Leads with status {lead_status_ncc}: {status_leads.count()}')
 
@@ -66,36 +55,33 @@ def get_contact_lead(contact_type, contact_tag, user=None):
 
     try:
         if contact_tag == "NCC":
-            ten_days_ago = now - timedelta(days=10)
+            x_days_ago = now - timedelta(days=7)
 
-            # Get total eligible leads first
+            # Get total eligible leads
             total_leads = base_query.filter(
-                created_at__lte=ten_days_ago,
+                created_at__lte=x_days_ago,
                 store__in=lead_stores_ncc,
                 status__in=lead_status_ncc,
             ).order_by('-created_at')
 
-            # Simple batch configuration
             morning_start = 1  # 1 AM
             afternoon_start = 14  # 2 PM
-            batch_size = 200  # Fixed batch size of 200 contacts
+            batch_size = CONTACTS_TO_LOAD_LEAD # Amount of contacts to be processed
             
             # Calculate available batches
             total_eligible_leads = total_leads.count()
             logger.info(f"Total eligible leads: {total_eligible_leads}")
             
-            # Batch navigation parameters - easily adjustable
+            # Batch navigation parameters
             starting_batch = 0  # First batch index (0-indexed)
-            batch_increment = 6  # Increment for afternoon batch (can be changed to 2, 3, etc.)
+            batch_increment = 1  # can be changed to 2, 3, etc.
             
-            # Determine which batch to process based on time of day
+            # Determine which batch to process: morning or afternoon
             if morning_start <= now.hour < afternoon_start:
-                # Morning - use starting batch
                 current_batch = starting_batch
                 logger.info(f"Processing morning batch (batch {current_batch+1})")
 
             elif now.hour >= afternoon_start:
-                # Afternoon - use starting batch + increment
                 current_batch = starting_batch + batch_increment
                 logger.info(f"Processing afternoon batch (batch {current_batch+1})")
 
@@ -116,7 +102,6 @@ def get_contact_lead(contact_type, contact_tag, user=None):
             # Get the leads for the current batch
             leads = total_leads[start_index:end_index]
             
-            # Log batch information
             logger.info(f"Processing leads {start_index+1}-{min(end_index, total_eligible_leads)} of {total_eligible_leads}")
 
             leads = list(leads)
@@ -127,10 +112,8 @@ def get_contact_lead(contact_type, contact_tag, user=None):
             logger.warning(f"Unknown contact tag: {contact_tag}")
             return []
         
-        # Convert all leads to contacts using bulk operation
         contacts = convert_lead_to_contact_bulk(leads, contact_tag, user)
 
-        # Caching results
         cache_timeout = 300 if contact_tag == "NCC" else 3600
         cache.set(cache_key, contacts, timeout=cache_timeout)
 
