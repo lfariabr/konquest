@@ -1,5 +1,5 @@
 # Briefing:
-help me build a killer pitch deck for the amazing saas we have built. 
+build a killer pitch deck for the amazing saas we have built. 
 some context:
 
 - 	konquista

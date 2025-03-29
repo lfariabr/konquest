@@ -19,3 +19,14 @@ class BillCharge(models.Model):
 
     def __str__(self):
         return f"{self.quote_id} - {self.customer_name}"
+
+class Meta:
+    indexes = [
+            models.Index(fields=['quote_id']),
+            models.Index(fields=['customer_id']),
+            models.Index(fields=['customer_phone']),
+            models.Index(fields=['status']),
+            models.Index(fields=['is_paid']),
+            # Composite index for common query patterns
+            models.Index(fields=['customer_id', 'is_paid'], name='idx_billcharge_customer_paid'),
+        ]

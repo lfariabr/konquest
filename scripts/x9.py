@@ -71,7 +71,54 @@ def process_batch(phones: List[UserPhone]) -> List[Tuple[str, str]]:
     """
     invalid_tokens = []
     
-    for userphone in phones:
+    # for userphone in phones:
+    #     try:
+    #         logger.info(f"Testing token for phone {userphone.phone_number}")
+    #         print(f"🔍 Testing token for phone {userphone.phone_number}...")
+            
+    #         response = send_text_message(
+    #             ADMIN_PHONE,
+    #             TEST_MESSAGE,
+    #             userphone.phone_token,
+    #             userphone.relationship_tag
+    #         )
+            
+    #         if not validate_api_response(response):
+    #             logger.warning(
+    #                 f"Invalid token detected for phone: {userphone.phone_number}",
+    #                 extra={
+    #                     'phone': userphone.phone_number,
+    #                     'token': userphone.phone_token,
+    #                     'response': response
+    #                 }
+    #             )
+    #             print(f"❌ Invalid token found for {userphone.phone_number}")
+    #             invalid_tokens.append((userphone.phone_number, userphone.phone_token))
+    #             monitor_api_response(
+    #                 userphone.phone_number,
+    #                 userphone.phone_token,
+    #                 response
+    #             )
+    #         else:
+    #             logger.info(f"Valid token confirmed for phone: {userphone.phone_number}")
+    #             print(f"✅ Valid token for {userphone.phone_number}")
+                
+    #     except Exception as e:
+    #         logger.error(
+    #             f"Error processing phone {userphone.phone_number}",
+    #             exc_info=True,
+    #             extra={'phone': userphone.phone_number}
+    #         )
+    #         print(f"❌ Error processing {userphone.phone_number}: {str(e)}")
+            
+    # return invalid_tokens
+
+    # Filter phones to only include those in the failing_phones_to_try list
+    filtered_phones = [phone for phone in phones if phone.phone_number in failing_phones_to_try]
+    
+    print(f"Processing {len(filtered_phones)} phones from the failing phones list...")
+    
+    for userphone in filtered_phones:
         try:
             logger.info(f"Testing token for phone {userphone.phone_number}")
             print(f"🔍 Testing token for phone {userphone.phone_number}...")
@@ -112,6 +159,8 @@ def process_batch(phones: List[UserPhone]) -> List[Tuple[str, str]]:
             print(f"❌ Error processing {userphone.phone_number}: {str(e)}")
             
     return invalid_tokens
+
+    
 
 def main():
     """Main execution function."""
@@ -159,5 +208,61 @@ def main():
         print(f"\n❌ Script execution failed: {str(e)}")
         raise
 
+# Phones that are failing to retry sending out of them:
+failing_phones_to_try = ["11911215641",
+"11996704096",
+"11957226396",
+"13996332337",
+"11996736410",
+"4391704662",
+"11973235790",
+"15996972700",
+"11912139220",
+"19992874531",
+"11911217309",
+"21999258232",
+"11950519566",
+"11943743122",
+"11975627009"
+]
+
 if __name__ == "__main__":
     main()
+
+
+
+failing_stores = [
+"MOOCA",
+"LAPA",
+"MOEMA",
+"SANTOS",
+"SANTO AMARO",
+"LONDRINA",
+"IPIRANGA",
+"SOROCABA",
+"OSASCO",
+"CAMPINAS",
+"ITAIM",
+"TIJUCA",
+"TATUAPÉ",
+"VILA MASCOTE",
+"ALPHAVILLE"
+]
+
+failing_tokens = [
+    "JMSfC9NHqhSK1EJCnjpnRESvXNXNHR1e",
+    "bhPky7VluDP5VBkSw481Qyu1MMuWz3rJ",
+    "MlRC23n5BeubCGSDqnQHosBlGhbUOJqC",
+    "B9MMjBf1Mtw8FtfrJ77sMcl6ALG9lJAi",
+    "jKpdWAkph1WDOJc3y11DhPE59sI4P01O",
+    "N7dB5IvxRIAjpJjQUFnpzj55OxHOmxgL",
+    "QTcUCilgyCk3d8Si8jvXCFyrcmiMqvQg",
+    "Gx183Kuc53R82vIVjhq51f8LWHDezkBD",
+    "ToToZOpskyroPcJJWEcjRXl5DzFiQUvG",
+    "JTNWYuWiTyY3h4QMvFuop15ZF7jnuyAJ",
+    "knYOs0rkBFZwx91VGbujLpvkilqnFz8V",
+    "29Vpcy55LWLQ79D8KsTOx193rcjzzgxu",
+    "UPgy07zshja7oWgCm3fA449TWk5ip9ga",
+    "45PsqRpuAbQseiN944sgL4s6I2VGofiR",
+    "pCIAlFffCY44IHOZuOxDF6dLhGAGoZeB"
+]

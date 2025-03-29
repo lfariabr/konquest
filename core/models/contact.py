@@ -239,8 +239,11 @@ class Contact(models.Model):
 
         try:
             # Get all bill charges for this contact
-            all_charges = BillCharge.objects.filter(customer_phone=self.phone) # This is a problem, because customer_taxvat is not the phone number of customer...
-            
+            # all_charges = BillCharge.objects.filter(customer_phone=self.phone) # This is a problem, because customer_taxvat is not the phone number of customer...
+
+            # Optimized version:
+            all_charges = BillCharge.objects.filter(customer_phone=self.phone).order_by('-due_at')
+
             # Calculate total historical amount
             total_history = sum(charge.total_amount for charge in all_charges)
             self.bill_charge_total_history = total_history if total_history > 0 else None
