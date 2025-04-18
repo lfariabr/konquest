@@ -1,0 +1,10 @@
+INFO 2025-04-18 03:43:34,822 autoreload 60248 8367667904 Watching for file changes with StatReloader
+INFO 2025-04-18 03:43:48,289 basehttp 60248 6325039104 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 5792
+INFO 2025-04-18 03:46:24,873 autoreload 1559 8391391936 Watching for file changes with StatReloader
+INFO 2025-04-18 03:46:29,751 basehttp 1559 6137638912 "GET / HTTP/1.1" 200 10204
+INFO 2025-04-18 03:46:29,784 basehttp 1559 6137638912 "GET /static/css/landingPage.css HTTP/1.1" 200 10390
+INFO 2025-04-18 03:46:29,786 basehttp 1559 6171291648 "GET /static/img/2_campaigns.png HTTP/1.1" 200 44929
+INFO 2025-04-18 03:46:29,786 basehttp 1559 6154465280 "GET /static/img/1_comm.png HTTP/1.1" 200 86846
+INFO 2025-04-18 03:46:29,787 basehttp 1559 6188118016 "GET /static/img/3_integration.png HTTP/1.1" 200 51983
+WARNING 2025-04-18 03:47:02,747 basehttp 1559 6137638912 "GET /static/sounds/hover.mp3 HTTP/1.1" 404 1975
+WARNING 2025-04-18 03:51:40,172 basehttp 1559 6137065472 "GET /static/sounds/hover.mp3 HTTP/1.1" 404 1975

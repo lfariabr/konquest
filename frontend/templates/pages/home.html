@@ -4,101 +4,152 @@
 {% block title %}Konquest - Home{% endblock %}
 
 {% block extra_css %}
-<style>
-    body {
-        background-color: #1a1a1a;
-        color: #ffffff;
-        min-height: 100vh;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .logo-container {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 2rem;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0px); }
-    }
-
-    .start-button {
-        background: #25D366;
-        color: #1a1a1a;
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 50px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .start-button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
-    }
-
-    .start-button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.3),
-            transparent
-        );
-        transition: 0.5s;
-    }
-
-    .start-button:hover::before {
-        left: 100%;
-    }
-
-    .tagline {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 1s ease forwards 0.5s;
-    }
-
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="logo-container">
-    <img src="{% static 'img/logo.svg' %}" alt="Konquest Logo" width="100%" height="100%">
-</div>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="navbar-links">
+        <a href="#top" class="navbar-link">Top</a>
+        <a href="#about" class="navbar-link">About</a>
+        <a href="#faq" class="navbar-link">FAQ</a>
+    </div>
+</nav>
 
-<h1 class="tagline">Komece a sua jornada de relacionamento aqui!</h1>
+<!-- Hero Section -->
+<section id="top" class="hero-section">
+    <div class="logo-container">
+        <img src="{% static 'img/logo.svg' %}" alt="Konquest Logo" width="100%" height="100%">
+    </div>
 
-<a href="/admin/" class="start-button">CONNECT</a>
+    <h1 class="tagline">Komece a sua jornada de relacionamento aqui!</h1>
+
+    <a href="/admin/" class="start-button">CONNECT</a>
+</section>
+
+<!-- About Section -->
+<section id="about" class="section">
+    <h2 class="section-title">Sobre o Konquista</h2>
+    
+    <div class="carousel-container">
+        <div class="carousel">
+            <!-- Carousel Item 1 -->
+            <div class="carousel-item">
+                <div class="carousel-image">
+                    <img src="{% static 'img/1_comm.png' %}" alt="Unificando o Canal de Comunicação">
+                </div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Unificando o Canal de Comunicação</h3>
+                    <p class="carousel-description">
+                        O Konquista transforma a forma como você se comunica com seus clientes, centralizando as conversas do WhatsApp
+                        em uma base de dados escalável, filtrável e pronta para gerar insights valiosos para o seu negócio.
+                    </p>
+                </div>
+            </div>
+    
+            <!-- Carousel Item 2 -->
+            <div class="carousel-item">
+                <div class="carousel-image">
+                    <img src="{% static 'img/2_campaigns.png' %}" alt="Gerenciamento de Campanhas">
+                </div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Gerenciamento de Campanhas</h3>
+                    <p class="carousel-description">
+                        Crie réguas de relacionamento personalizadas com mensagens, imagens, vídeos e sequências (Dia 1, Dia 2, Dia 3...).
+                        Controle frequência, público-alvo e agendamento com facilidade para otimizar resultados.
+                    </p>
+                </div>
+            </div>
+    
+            <!-- Carousel Item 3 -->
+            <div class="carousel-item">
+                <div class="carousel-image">
+                    <img src="{% static 'img/3_integration.png' %}" alt="Integração com SocialHub">
+                </div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">100% Integrado com SocialHub</h3>
+                    <p class="carousel-description">
+                        Nossa integração nativa com a API do SocialHub garante o envio eficiente das mensagens. Não importa
+                        quantos números você tenha — o Konquista conecta tudo de forma simples e escalável.
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="carousel-buttons">
+            <button class="carousel-btn prev-btn">&#10094;</button>
+            <button class="carousel-btn next-btn">&#10095;</button>
+        </div>
+    
+        <div class="carousel-indicators">
+            <span class="carousel-indicator active" data-index="0"></span>
+            <span class="carousel-indicator" data-index="1"></span>
+            <span class="carousel-indicator" data-index="2"></span>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq" class="section">
+    <h2 class="section-title">FAQ / Perguntas Frequentes</h2>
+    
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>O que é o Konquista?</span>
+                <div class="faq-toggle"><i></i></div>
+            </div>
+            <div class="faq-answer">
+                <p>O Konquista é uma plataforma de automação de comunicação via WhatsApp desenvolvida para centralizar, segmentar e escalar o relacionamento com seus clientes. Ideal para times de marketing, vendas e atendimento.</p>
+            </div>
+        </div>
+    
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Como o Konquista pode ajudar meu negócio?</span>
+                <div class="faq-toggle"><i></i></div>
+            </div>
+            <div class="faq-answer">
+                <p>Com o Konquista, você ganha visibilidade completa sobre as conversas com seus clientes, cria campanhas automatizadas, melhora a performance do funil de vendas e integra tudo com seus sistemas atuais.</p>
+            </div>
+        </div>
+    
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>O Konquista funciona para pequenas empresas?</span>
+                <div class="faq-toggle"><i></i></div>
+            </div>
+            <div class="faq-answer">
+                <p>Sim! Nossa solução é flexível e atende desde operações locais com poucos leads até franquias e grandes redes com milhares de disparos mensais.</p>
+            </div>
+        </div>
+    
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Quais tecnologias são utilizadas no Konquista?</span>
+                <div class="faq-toggle"><i></i></div>
+            </div>
+            <div class="faq-answer">
+                <p>O Konquista é desenvolvido em Python usando o framework Django, com APIs GraphQL e REST. Utilizamos Docker, NGINX e bancos de dados PostgreSQL. A infraestrutura é preparada para escalar com segurança e performance.</p>
+            </div>
+        </div>
+    
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Como faço para contratar o Konquista?</span>
+                <div class="faq-toggle"><i></i></div>
+            </div>
+            <div class="faq-answer">
+                <p>É simples! Envie um e-mail para <strong>lfariabr@gmail.com</strong> ou uma mensagem no WhatsApp para <strong>+55 11 96354-6222</strong> que te enviamos uma proposta personalizada. Planos a partir de R$ 299/mês!</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Start Button Effects
         const button = document.querySelector('.start-button');
         
         // Add hover sound effect
@@ -121,6 +172,74 @@
             button.appendChild(ripple);
             
             setTimeout(() => ripple.remove(), 1000);
+        });
+        
+        // Carousel Functionality
+        const carousel = document.querySelector('.carousel');
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        let currentIndex = 0;
+        
+        // Initialize carousel
+        updateCarousel();
+        
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+        
+        // Navigation with robust event handling
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentIndex = (currentIndex === 0) ? carouselItems.length - 1 : currentIndex - 1;
+            updateCarousel();
+        });
+        
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentIndex = (currentIndex === carouselItems.length - 1) ? 0 : currentIndex + 1;
+            updateCarousel();
+        });
+        
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const targetIndex = parseInt(this.dataset.index);
+                currentIndex = targetIndex;
+                updateCarousel();
+            });
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
         });
     });
 </script>
