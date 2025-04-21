@@ -1,9 +1,12 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from decouple import config
 
 import logging
 logger = logging.getLogger(__name__)
+
+EMAILPW = config('EMAIL_PW')
 
 def end_of_queue_email():
     # Lista de destinatários
@@ -27,7 +30,7 @@ def end_of_queue_email():
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login("rpdprocorpo@gmail.com", "mzqs vdks erxm jaht")
+            server.login("rpdprocorpo@gmail.com", EMAILPW)
             server.sendmail("rpdprocorpo@gmail.com", recipients, msg.as_string())
             logger.info("Email enviado com sucesso para os destinatários!")
     except Exception as e:
@@ -66,7 +69,7 @@ def send_nps_failure_notification(message):
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login("rpdprocorpo@gmail.com", "mzqs vdks erxm jaht")
+            server.login("rpdprocorpo@gmail.com", EMAILPW)
             server.sendmail("rpdprocorpo@gmail.com", recipients, msg.as_string())
             logger.info("Email enviado com sucesso para os destinatários!")
     except Exception as e:
@@ -101,7 +104,7 @@ def send_invalid_token_notification(message):
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login("rpdprocorpo@gmail.com", "mzqs vdks erxm jaht")
+            server.login("rpdprocorpo@gmail.com", EMAILPW)
             server.sendmail("rpdprocorpo@gmail.com", recipients, msg.as_string())
             logger.info("Email enviado com sucesso para os destinatários!")
     except Exception as e:

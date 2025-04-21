@@ -52,7 +52,7 @@ class TestQueueProcessor(TestCase):
 
     def setUp(self):
         self.queue_processor = QueueProcessor()
-        self.queue_processor._test_mode = True  # Enable test mode to bypass delays
+        self.queue_processor.set_test_mode(True)
 
     @pytest.mark.asyncio
     async def test_process_with_retry_success(self):
@@ -107,10 +107,10 @@ class TestQueueProcessor(TestCase):
         await self.queue_processor.get_phone_lock(userphone_id)
         
         # Verify the lock was set
-        assert userphone_id in self.queue_processor._userphone_locks
+        assert userphone_id in self.queue_processor.rate_limiter._userphone_locks
         
         # Get the stored lock time
-        lock_time = self.queue_processor._userphone_locks[userphone_id]
+        lock_time = self.queue_processor.rate_limiter._userphone_locks[userphone_id]
         assert isinstance(lock_time, float)
         assert lock_time > 0
         

@@ -19,19 +19,26 @@ from apiCrm.utils.create_region import create_region
 from messageShooter.services.get_message_for_contact import get_message_for_contact
 from core.models.userphone import UserPhone
 
+# Refactoring Queue Processor
+from messageShooter.services.messaging.rate_limiter import RateLimiter
+from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
+
 logger = logging.getLogger(__name__)
 
 class QueueProcessor:
     def __init__(self):
         """Initialize the queue processor"""
-        self.max_retries = 3
-        self.base_retry_delay = 5  # Base delay in minutes
-        self.breath_time = 30  # Increased from 8s to 15s between processing each contact
-        self._userphone_locks = {}  # Track last send time per userphone
+        self.max_retries = 5
+        self.base_retry_delay = 6  # Base delay in minutes
         self._locks = {}  # Track locks per phone
         self.logger = logging.getLogger(__name__)
-        self._test_mode = False  # Flag for test mode
-        
+        self.rate_limiter = RateLimiter(breath_time=30)
+        self.retry_strategy = RetryStrategy(
+            max_retries=self.max_retries,
+            base_delay=self.base_retry_delay,
+            strategy_type=RetryStrategyType.EXPONENTIAL
+        )
+
         # Command in progress handling
         self.command_in_progress_delay = 5  # Seconds to wait when command in progress
         
@@ -39,79 +46,28 @@ class QueueProcessor:
         self.max_file_size = 10 * 1024 * 1024  # 10MB limit
         self.large_file_threshold = 1 * 1024 * 1024  # 1MB threshold for progress logging
         self.chunk_size = 256 * 1024  # 256KB chunks for progress tracking
-
+    
     async def get_phone_lock(self, userphone_id: int) -> float:
-        """Get the last send time for a userphone and enforce breath time"""
-        current_time = time.time()
-        last_send_time = self._userphone_locks.get(userphone_id, 0)
-        
-        if not self._test_mode and current_time - last_send_time < self.breath_time:
-            wait_time = self.breath_time - (current_time - last_send_time)
-            await asyncio.sleep(wait_time)
-        
-        self._userphone_locks[userphone_id] = time.time()
-        return current_time
+        """
+        Legacy method maintained for compatibility, delegates to rate_limiter
+        """
+        return await self.rate_limiter.acquire_lock(userphone_id)
 
     async def calculate_retry_delay(self, attempt: int) -> int:
-        """Calculate exponential backoff delay in seconds"""
-        if hasattr(self, '_test_mode') and self._test_mode:
-            return 0  # No delays in test mode
-        return min(300, (2 ** attempt) * self.base_retry_delay)
+        """
+        Calculate exponential backoff delay in seconds
+        This is a legacy method maintained for compatibility,
+        delegates to retry_strategy.calculate_delay
+        """
+        return await self.retry_strategy.calculate_delay(attempt)
 
     async def process_with_retry(self, func, *args, **kwargs):
-        """Execute a function with retry logic and exponential backoff"""
-        attempt = 0
-        last_error = None
-        retryable_errors = (
-            ConnectionError,
-            ConnectionResetError,
-            aiohttp.ClientError,
-            TimeoutError
-        )
-
-        while attempt < self.max_retries:
-            try:
-                self.logger.info(f"Attempt {attempt + 1} of {self.max_retries}")
-                result = await func(*args, **kwargs)
-                
-                # For successful responses
-                if isinstance(result, tuple):
-                    success, error = result
-                    if success:
-                        return result
-                    # Only retry on connection errors
-                    if isinstance(error, retryable_errors):
-                        last_error = error
-                    else:
-                        return result  # Don't retry non-connection errors
-                else:
-                    return result
-                    
-            except retryable_errors as e:
-                last_error = e
-                self.logger.warning(
-                    f"Attempt {attempt + 1} failed with retryable error: {str(e)}. "
-                    f"Retrying..."
-                )
-                
-                # Increment attempt and apply backoff
-                attempt += 1
-                if attempt < self.max_retries:
-                    delay = await self.calculate_retry_delay(attempt)
-                    if delay > 0 and not self._test_mode:
-                        self.logger.info(f"Waiting {delay} seconds before retry...")
-                        await asyncio.sleep(delay)
-                continue
-                
-            except Exception as e:
-                self.logger.error(f"Non-retryable error: {str(e)}")
-                raise  # Don't retry non-connection errors
-            
-            attempt += 1
-
-        if isinstance(last_error, Exception):
-            raise last_error
-        return False, last_error
+        """
+        Execute a function with retry logic and exponential backoff
+        This is a legacy method maintained for compatibility,
+        delegates to retry_strategy.execute
+        """
+        return await self.retry_strategy.execute(func, *args, **kwargs)
 
     async def process_contact_async(self, contact, message, userphone):
         """Process a single contact with rate limiting per userphone"""
@@ -283,6 +239,8 @@ class QueueProcessor:
         except Exception as e:
             error_msg = f"Exception while sending file message to {contact.phone}: {str(e)}"
             self.logger.error(error_msg)
+            if isinstance(e, (ConnectionError, ConnectionResetError)):
+                raise  # Let process_with_retry handle connection errors
             return False, error_msg
 
     async def process_queues_async(self, pending_queues=None, max_concurrent: int = 10, batch_size: int = 50):
@@ -510,6 +468,7 @@ class QueueProcessor:
                         error_count += 1
                         continue
                     
+                    # TODO: Starting here
                     # Apply rate limiting per phone
                     phone_key = f"phone_lock_{contact.phone}"
                     if phone_key in self._locks:
@@ -530,8 +489,9 @@ class QueueProcessor:
                         if phone_key in self._locks:
                             self._locks[phone_key].release()
                             # Add breath time after release
-                            if not self._test_mode and idx < total_contacts:
-                                await asyncio.sleep(self.breath_time)
+                            if not self.rate_limiter._test_mode and idx < total_contacts:
+                                # await asyncio.sleep(self.rate_limiter.breath_time)
+                                await self.rate_limiter.acquire_lock(userphone.id)
                     
                     result = {
                         "status": "sent" if success else "failed",
@@ -658,42 +618,6 @@ class QueueProcessor:
         asyncio.set_event_loop(loop)
         return loop.run_until_complete(self.process_queues_async(batch_size=batch_size))
     
-    def process_queue_item(self, queue_item):
-        """Process a single queue item"""
-        try:
-            # Get contacts from cache
-            contacts = queue_item.target_list.get_contacts()
-            if not contacts:
-                logger.warning(f"No contacts found for queue item {queue_item.id}")
-                queue_item.status = 'completed'
-                queue_item.save()
-                return
-                
-            # Process contacts in batches
-            batch_size = 50
-            for i in range(0, len(contacts), batch_size):
-                batch = contacts[i:i + batch_size]
-                self._process_contact_batch(queue_item, batch)
-                
-            queue_item.status = 'completed'
-            queue_item.save()
-            
-        except Exception as e:
-            logger.error(f"Error processing queue item {queue_item.id}: {str(e)}")
-            queue_item.status = 'failed'
-            queue_item.save()
-            raise
-
-    def _process_contact_batch(self, queue_item, batch):
-        # Implement batch processing logic here
-        pass
-
-    def send_message(self, contact, message, userphone):
-        """Send a message (sync version)"""
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        return loop.run_until_complete(self.send_message_async(contact, message, userphone))
-    
     def send_message(self, contact, message, userphone):
         """Send a message (sync version)"""
         loop = asyncio.new_event_loop()
@@ -768,7 +692,8 @@ class QueueProcessor:
                             processed_count += 1
                             # Log successful message send
                             await sync_to_async(self._log_message)(contact, message, userphone)
-                        await asyncio.sleep(self.breath_time)  # Respect rate limiting
+                        # await asyncio.sleep(self.rate_limiter.breath_time)  # Respect rate limiting
+                        await self.rate_limiter.acquire_lock(userphone.id)
                     except Exception as e:
                         self.logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
                         continue
@@ -781,3 +706,11 @@ class QueueProcessor:
         except Exception as e:
             self.logger.error(f"Error in process_queue_chunk: {str(e)}", exc_info=True)
             raise
+    
+    @property
+    def test_mode(self):
+        return self.rate_limiter._test_mode
+        
+    def set_test_mode(self, enabled: bool) -> None:
+        self.rate_limiter.set_test_mode(enabled)
+        self.retry_strategy.set_test_mode(enabled)
