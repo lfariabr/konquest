@@ -12,6 +12,10 @@ from core.models.message import Message
 from core.models.userphone import UserPhone
 from core.models.user import kUser
 from django.utils import timezone
+from messageShooter.services.messaging.message_sender import MessageSender
+from messageShooter.services.messaging.rate_limiter import RateLimiter
+from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
+import asyncio
 
 @pytest.mark.django_db
 class TestQueueProcessor(TestCase):
@@ -79,24 +83,74 @@ class TestQueueProcessor(TestCase):
         assert attempt_count == 2
 
     @pytest.mark.asyncio
-    @patch('messageShooter.services.queue_processor.send_text_message')
-    async def test_process_contact_async(self, mock_send_text_message):
+    async def test_process_contact_async(self):
         """Test processing a contact with text message"""
-        mock_send_text_message.return_value = {'success': True}
+        # Create a mock MessageSender to replace the real one
+        mock_message_sender = MagicMock()
+        # Configure the send_text_message method to return an awaitable that resolves to True
+        # This is necessary because the actual method is async and returns a coroutine
+        mock_message_sender.send_text_message.return_value = asyncio.Future()
+        mock_message_sender.send_text_message.return_value.set_result(True)
         
-        success, error = await self.queue_processor.process_contact_async(
-            self.test_contact,
-            self.test_message,
-            self.test_userphone
-        )
+        # Temporarily replace the real message_sender with our mock
+        original_message_sender = self.queue_processor.message_sender
+        self.queue_processor.message_sender = mock_message_sender
         
-        assert success is True
-        assert error is None
-        mock_send_text_message.assert_called_once_with(
-            phone='11999999999',
-            message='Test message',
-            token_socialhub='dummy_token'
-        )
+        try:
+            # Execute the test
+            success, error = await self.queue_processor.process_contact_async(
+                self.test_contact,
+                self.test_message,
+                self.test_userphone
+            )
+            
+            # Verify the text message was processed successfully
+            assert success is True
+            assert error is None
+            
+            # Verify that send_text_message was called with the expected parameters
+            mock_message_sender.send_text_message.assert_called_once_with(
+                self.test_contact, self.test_message, self.test_userphone
+            )
+        finally:
+            # Restore the original message_sender
+            self.queue_processor.message_sender = original_message_sender
+
+    @pytest.mark.asyncio
+    async def test_send_file_message_async(self):
+        """Test sending a file message through the queue processor"""
+        # Create a mock MessageSender to replace the real one
+        mock_message_sender = MagicMock()
+        # Configure the send_file_message method to return an awaitable that resolves to True
+        # This is necessary because the actual method is async and returns a coroutine
+        mock_message_sender.send_file_message.return_value = asyncio.Future()
+        mock_message_sender.send_file_message.return_value.set_result(True)
+        
+        # Temporarily replace the real message_sender with our mock
+        original_message_sender = self.queue_processor.message_sender
+        self.queue_processor.message_sender = mock_message_sender
+        
+        try:
+            # Execute the test
+            contact = MagicMock()
+            message = MagicMock()
+            userphone = MagicMock()
+            file_path = "/path/to/test/file.jpg"
+            
+            result = await self.queue_processor.send_file_message_async(
+                contact, message, userphone, file_path=file_path
+            )
+            
+            # Verify the result
+            assert result is True
+            
+            # Verify that the correct method was called with the right parameters
+            mock_message_sender.send_file_message.assert_called_once_with(
+                contact, message, userphone, file_path
+            )
+        finally:
+            # Restore the original message_sender
+            self.queue_processor.message_sender = original_message_sender
 
     @pytest.mark.asyncio
     async def test_get_phone_lock(self):

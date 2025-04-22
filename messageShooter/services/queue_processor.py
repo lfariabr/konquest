@@ -19,9 +19,10 @@ from apiCrm.utils.create_region import create_region
 from messageShooter.services.get_message_for_contact import get_message_for_contact
 from core.models.userphone import UserPhone
 
-# Refactoring Queue Processor
+# NEW - Refactoring Queue Processor
 from messageShooter.services.messaging.rate_limiter import RateLimiter
 from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
+from messageShooter.services.messaging.message_sender import MessageSender
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +33,19 @@ class QueueProcessor:
         self.base_retry_delay = 6  # Base delay in minutes
         self._locks = {}  # Track locks per phone
         self.logger = logging.getLogger(__name__)
+
+        # NEW - Create rate limiter and retry strategy
         self.rate_limiter = RateLimiter(breath_time=30)
         self.retry_strategy = RetryStrategy(
             max_retries=self.max_retries,
             base_delay=self.base_retry_delay,
             strategy_type=RetryStrategyType.EXPONENTIAL
+        )
+        
+        # NEW - create message sender
+        self.message_sender = MessageSender(
+            rate_limiter=self.rate_limiter,
+            retry_strategy=self.retry_strategy
         )
 
         # Command in progress handling
@@ -139,49 +148,40 @@ class QueueProcessor:
                     self.logger.error(error_message)
                     return False, error_message
             
-            ##### NEW
             elif message.file:  # Check if there is a file associated with the message
-                if message.file:  # Ensure the file field is not empty
-                    try:
-                        file_path = message.file.path
-                        success, error_message = await self.process_with_retry(
-                            self.send_file_message_async,
-                            contact,
-                            message,
-                            userphone,
-                            file_path
-                        )
-                        return success, error_message
-                    except Exception as e:
-                        self.logger.error(f"Error sending file message to {contact.phone}: {str(e)}")
-                else:
-                    error_message = f"No file associated with message for {contact.phone}"
+                try:
+                    # Use the new message_sender for file messages
+                    success = await self.message_sender.send_file_message(contact, message, userphone)
+                    return success, None if success else "Failed to send file message"
+                except Exception as e:
+                    error_message = f"Error sending file message to {contact.phone}: {str(e)}"
                     self.logger.error(error_message)
                     return False, error_message
 
             # else, if just a text message:
             else:
-                success, error_message = await self.process_with_retry(
-                    self.send_message_async,
-                    contact,
-                    message,
-                    userphone
-                )
-                
-                if success:
-                    # Update contact message counter
-                    @sync_to_async
-                    def update_contact_counter():
-                        if "botox" in message.relationship_tag.lower():
-                            contact.botox_messages_sent += 1
-                        elif "preenchimento" in message.relationship_tag.lower():
-                            contact.preenchimento_messages_sent += 1
-                        contact.last_message_sent_at = timezone.now()
-                        contact.save(update_fields=['botox_messages_sent', 'preenchimento_messages_sent', 'last_message_sent_at'])
+                try:
+                    # Use the new message_sender for text messages 
+                    success = await self.message_sender.send_text_message(contact, message, userphone)
+
+                    if success:
+                        # Update contact message counter
+                        @sync_to_async
+                        def update_contact_counter():
+                            if "botox" in message.relationship_tag.lower():
+                                contact.botox_messages_sent += 1
+                            elif "preenchimento" in message.relationship_tag.lower():
+                                contact.preenchimento_messages_sent += 1
+                            contact.last_message_sent_at = timezone.now()
+                            contact.save(update_fields=['botox_messages_sent', 'preenchimento_messages_sent', 'last_message_sent_at'])
+                        
+                        await update_contact_counter()
                     
-                    await update_contact_counter()
-                
-                return success, error_message
+                    return success, None if success else "Failed to send text message"
+                except Exception as e:
+                    error_message = f"Error sending text message to {contact.phone}: {str(e)}"
+                    self.logger.error(error_message)
+                    return False, error_message
 
         except Exception as e:
             error_message = f"Error processing contact {contact.phone}: {str(e)}"
@@ -189,59 +189,14 @@ class QueueProcessor:
             return False, error_message
 
     async def send_message_async(self, contact, message, userphone):
-        """Send message asynchronously by wrapping sync functions in to_thread"""
-        try:
-            # Wrap the synchronous send_text_message in to_thread
-            result = await asyncio.to_thread(
-                send_text_message,
-                phone=contact.phone,
-                message=message.text,
-                token_socialhub=userphone.phone_token
-            )
-            
-            # Handle async mock in tests
-            if hasattr(result, '__await__'):
-                result = await result
-            
-            if isinstance(result, dict) and result.get('success', False):
-                return True, None
-            else:
-                error_msg = f"Failed to send message to {contact.phone}: {result.get('message', 'Unknown error')}"
-                self.logger.error(error_msg)
-                return False, error_msg
+        """Send message asynchronously by delegating to message_sender"""
+        return await self.message_sender.send_text_message(contact, message, userphone)
 
-        except Exception as e:
-            error_msg = f"Failed to send message to {contact.phone}: {str(e)}"
-            self.logger.error(error_msg)
-            if isinstance(e, (ConnectionError, ConnectionResetError)):
-                raise  # Let process_with_retry handle connection errors
-            return False, error_msg
     
     ######## NEW
-    async def send_file_message_async(self, contact, message, userphone, file_path):
-        """Send file message asynchronously by wrapping sync functions in to_thread"""
-        try:
-            result = await asyncio.to_thread(
-                send_file_message,
-                phone=contact.phone,
-                message=message.text,
-                token_socialhub=userphone.phone_token,
-                file_path=file_path,
-            )
-
-            if isinstance(result, dict) and result.get('success', False):
-                return True, None
-            else:
-                error_msg = result.get('error', 'Unknown error')
-                self.logger.error(f"Failed to send message to {contact.phone}: {error_msg}")
-                return False, error_msg
-
-        except Exception as e:
-            error_msg = f"Exception while sending file message to {contact.phone}: {str(e)}"
-            self.logger.error(error_msg)
-            if isinstance(e, (ConnectionError, ConnectionResetError)):
-                raise  # Let process_with_retry handle connection errors
-            return False, error_msg
+    async def send_file_message_async(self, contact, message, userphone, file_path=None):
+        """Send file message asynchronously by delegating to message_sender"""
+        return await self.message_sender.send_file_message(contact, message, userphone, file_path)
 
     async def process_queues_async(self, pending_queues=None, max_concurrent: int = 10, batch_size: int = 50):
         """Process multiple queues concurrently and independently"""
@@ -468,7 +423,6 @@ class QueueProcessor:
                         error_count += 1
                         continue
                     
-                    # TODO: Starting here
                     # Apply rate limiting per phone
                     phone_key = f"phone_lock_{contact.phone}"
                     if phone_key in self._locks:
@@ -623,89 +577,6 @@ class QueueProcessor:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         return loop.run_until_complete(self.send_message_async(contact, message, userphone))
-
-    async def process_queue_chunk(self, chunk_size: int = 1000, offset: int = 0) -> tuple[int, int]:
-        """
-        Process a chunk of contacts from pending queues.
-        
-        Args:
-            chunk_size: Number of contacts to process in this chunk
-            offset: Starting offset for contact processing
-        
-        Returns:
-            tuple: (total_contacts, processed_count)
-        """
-        try:
-            # Wrap Django database operations with sync_to_async
-            @sync_to_async
-            def get_pending_queues():
-                return list(Queue.objects.filter(
-                    status__in=['pending', 'retrying', 'interrupted']
-                ).order_by('-priority', 'scheduled_time'))
-
-            @sync_to_async
-            def get_contacts(queue_item):
-                return list(queue_item.target_list.get_contacts())
-
-            @sync_to_async
-            def update_queue_status(queue_item, processed_count, total_contacts):
-                queue_item.processed_count = processed_count
-                queue_item.total_contacts = total_contacts
-                queue_item.status = 'processing'
-                queue_item.save()
-
-            @sync_to_async
-            def get_queue_message_and_phone(queue_item):
-                return queue_item.message, queue_item.userphone
-
-            # Get pending queues
-            pending_queues = await get_pending_queues()
-        
-            if not pending_queues:
-                return 0, 0
-            
-            total_contacts = 0
-            processed_count = 0
-        
-            for queue_item in pending_queues:
-                # Get total contacts if not already counted
-                if total_contacts == 0:
-                    contacts = await get_contacts(queue_item)
-                    total_contacts = len(contacts)
-            
-                # Process only contacts in the current chunk
-                chunk_contacts = contacts[offset:offset + chunk_size]
-                if not chunk_contacts:
-                    continue
-                
-                self.logger.info(f"Processing chunk of {len(chunk_contacts)} contacts for queue {queue_item.id}")
-            
-                # Get message and userphone for the queue
-                message, userphone = await get_queue_message_and_phone(queue_item)
-                
-                # Process contacts in current chunk
-                for contact in chunk_contacts:
-                    try:
-                        # Use existing process_contact_async method
-                        success = await self.process_contact_async(contact, message, userphone)
-                        if success:
-                            processed_count += 1
-                            # Log successful message send
-                            await sync_to_async(self._log_message)(contact, message, userphone)
-                        # await asyncio.sleep(self.rate_limiter.breath_time)  # Respect rate limiting
-                        await self.rate_limiter.acquire_lock(userphone.id)
-                    except Exception as e:
-                        self.logger.error(f"Error processing contact {contact.id}: {str(e)}", exc_info=True)
-                        continue
-            
-                # Update queue status
-                await update_queue_status(queue_item, processed_count, total_contacts)
-            
-            return total_contacts, processed_count
-        
-        except Exception as e:
-            self.logger.error(f"Error in process_queue_chunk: {str(e)}", exc_info=True)
-            raise
     
     @property
     def test_mode(self):
