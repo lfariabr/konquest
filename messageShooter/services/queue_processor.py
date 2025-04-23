@@ -1,28 +1,28 @@
 # messageShooter/services/queue_processor.py
-import time
 import logging
 import asyncio
-import aiohttp
-from django.utils import timezone
-from django.db import transaction
 from asgiref.sync import sync_to_async
 from messageShooter.models.queue import Queue
-from apiSocialHub.resolvers.send_text_message import send_text_message
-from apiSocialHub.resolvers.send_file_message import send_file_message
 from core.models.messagelog import MessageLogs
-from core.models.message import Message
-from django.db.models import Q
-from typing import List, Tuple, Dict, Any
+from typing import Tuple, Dict, Any
 from apiCrm.models.lead import Lead
 from apiCrm.utils.create_store import create_store
 from apiCrm.utils.create_region import create_region
-from messageShooter.services.get_message_for_contact import get_message_for_contact
 from core.models.userphone import UserPhone
+from django.utils import timezone
 
 # NEW - Refactoring Queue Processor
 from messageShooter.services.messaging.rate_limiter import RateLimiter
 from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
 from messageShooter.services.messaging.message_sender import MessageSender
+
+from messageShooter.services.contact_processor import ContactProcessor
+
+# Process async
+from messageShooter.services.get_message_for_contact import get_message_for_contact
+from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip, get_userphone_reminder
+from messageShooter.helpers.queue_suporter import get_userphone_async
+
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,14 @@ class QueueProcessor:
         self._locks = {}  # Track locks per phone
         self.logger = logging.getLogger(__name__)
 
-        # NEW - Create rate limiter and retry strategy
+        # Command in progress handling
+        self.command_in_progress_delay = 5  # Seconds to wait when command in progress 
+        # File upload settings
+        self.max_file_size = 10 * 1024 * 1024  # 10MB limit
+        self.large_file_threshold = 1 * 1024 * 1024  # 1MB threshold for progress logging
+        self.chunk_size = 256 * 1024  # 256KB chunks for progress tracking
+
+        # Create rate limiter and retry strategy
         self.rate_limiter = RateLimiter(breath_time=30)
         self.retry_strategy = RetryStrategy(
             max_retries=self.max_retries,
@@ -42,19 +49,15 @@ class QueueProcessor:
             strategy_type=RetryStrategyType.EXPONENTIAL
         )
         
-        # NEW - create message sender
+        # create message sender
         self.message_sender = MessageSender(
             rate_limiter=self.rate_limiter,
             retry_strategy=self.retry_strategy
         )
 
-        # Command in progress handling
-        self.command_in_progress_delay = 5  # Seconds to wait when command in progress
-        
-        # File upload settings
-        self.max_file_size = 10 * 1024 * 1024  # 10MB limit
-        self.large_file_threshold = 1 * 1024 * 1024  # 1MB threshold for progress logging
-        self.chunk_size = 256 * 1024  # 256KB chunks for progress tracking
+        # NEW - create contact processor
+        self.contact_processor = ContactProcessor(logger=self.logger)
+
     
     async def get_phone_lock(self, userphone_id: int) -> float:
         """
@@ -293,10 +296,7 @@ class QueueProcessor:
     async def process_queue_item_async(self, queue_item: Queue):
         """Process a single queue item asynchronously with enhanced error handling"""
         try:
-            from messageShooter.resolvers.get_counter import get_counter_whatsapp
-            from messageShooter.resolvers.get_message import get_message
-            from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip, get_userphone_reminder
-
+            
             # Get related objects using sync_to_async
             @sync_to_async
             def get_related():
@@ -319,10 +319,7 @@ class QueueProcessor:
                 try:
                     self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
                     
-                    @sync_to_async
-                    def get_message_for_contact_wrapper():
-                        return get_message_for_contact(contact, target_list)
-                    counter, message = await get_message_for_contact_wrapper()
+                    counter, message = await sync_to_async(get_message_for_contact)(contact, target_list)
                     
                     if not message:
                         self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
@@ -333,86 +330,8 @@ class QueueProcessor:
                         }
                         continue
 
-                    # Get appropriate userphone based on contact tag
-                    @sync_to_async
-                    def get_userphone_wrapper():
-                        if target_list.contact_tag == 'NPS':
-                            # For NPS, get store-specific userphone
-                            phone, token = get_userphone_nps(target_list.contact_tag, contact.store)
-                            if phone and token:
-                                try:
-                                    # Try to get existing UserPhone
-                                    userphone = UserPhone.objects.get(
-                                        phone_number=phone,
-                                        relationship_tag=target_list.contact_tag
-                                    )
-                                    logger.info(f"Found existing UserPhone for NPS store {contact.store}")
-                                    return userphone
-                                except UserPhone.DoesNotExist:
-                                    # Create new UserPhone if it doesn't exist
-                                    userphone = UserPhone.objects.create(
-                                        phone_number=phone,
-                                        phone_token=token,
-                                        relationship_tag=target_list.contact_tag,
-                                        user=contact.user
-                                    )
-                                    logger.info(f"Created new UserPhone for NPS store {contact.store}")
-                                    return userphone
-                        
-                        elif target_list.contact_tag == 'Reminder':
-                            phone, token = get_userphone_reminder(target_list.contact_tag, contact.store)
-                            
-                            if phone and token:
-                                try:
-                                    # Try to get existing UserPhone
-                                    userphone = UserPhone.objects.get(
-                                        phone_number=phone,
-                                        relationship_tag=target_list.contact_tag
-                                    )
-                                    logger.info(f"Found existing UserPhone for Reminder store {contact.store}")
-                                    return userphone
-                                except UserPhone.DoesNotExist:
-                                    # Create new UserPhone if it doesn't exist
-                                    userphone = UserPhone.objects.create(
-                                        phone_number=phone,
-                                        phone_token=token,
-                                        relationship_tag=target_list.contact_tag,
-                                        user=contact.user,
-                                        phone_description=contact.store
-                                    )
-                                    logger.info(f"Created new UserPhone for Reminder store {contact.store}")
-                                    return userphone
+                    userphone, token = await get_userphone_async(contact, target_list)
 
-                        elif target_list.contact_tag == 'VIP':
-                            phone, token = get_userphone_vip(target_list.contact_tag, contact.store)
-                            
-                            if phone and token:
-                                try:
-                                    # Try to get existing UserPhone
-                                    userphone = UserPhone.objects.get(
-                                        phone_number=phone,
-                                        relationship_tag=target_list.contact_tag
-                                    )
-                                    logger.info(f"Found existing UserPhone for VIP store {contact.store}")
-                                    return userphone
-                                except UserPhone.DoesNotExist:
-                                    # Create new UserPhone if it doesn't exist
-                                    userphone = UserPhone.objects.create(
-                                        phone_number=phone,
-                                        phone_token=token,
-                                        relationship_tag=target_list.contact_tag,
-                                        user=contact.user,
-                                        phone_description=contact.store
-                                    )
-                                    logger.info(f"Created new UserPhone for VIP store {contact.store}")
-                                    return userphone
-                        else:
-                            # For non-NPS, use regular get_userphone
-                            userphone, token = get_userphone(target_list.contact_tag)
-                            return userphone
-                        return None
-
-                    userphone = await get_userphone_wrapper()
                     if not userphone:
                         self.logger.error(f"❌ Queue {queue_item.id}: No userphone found for contact {contact.phone}")
                         processed_contacts[str(contact.id)] = {
@@ -584,4 +503,4 @@ class QueueProcessor:
         
     def set_test_mode(self, enabled: bool) -> None:
         self.rate_limiter.set_test_mode(enabled)
-        self.retry_strategy.set_test_mode(enabled)
+        self.retry_strategy.set_test_mode(enabled)  
