@@ -9,17 +9,27 @@ services:
       - "6380:6380"
     volumes:
       - redis_data:/data
-    command: >
-      redis-server 
-      --port 6380 
-      --appendonly yes
-      --save 900 1 
-      --requirepass ${REDIS_PASSWORD}
-      --maxmemory 4gb
-      --maxmemory-policy allkeys-lru
-      --tcp-keepalive 300
-      --tcp-backlog 511
-      --io-threads 4
+    command:
+      - redis-server
+      - --port
+      - "6380"
+      - --appendonly
+      - "yes"
+      - --save
+      - "900"
+      - "1"
+      - --requirepass
+      - "${REDIS_PASSWORD}"
+      - --maxmemory
+      - "4gb"
+      - --maxmemory-policy
+      - "allkeys-lru"
+      - --tcp-keepalive
+      - "300"
+      - --tcp-backlog
+      - "511"
+      - --io-threads
+      - "4"
     networks:
       - konquest_network
     deploy:
@@ -39,6 +49,8 @@ services:
     build: .
     container_name: konquest_django
     restart: unless-stopped
+    env_file:
+      - .env
     command: >
       bash -c "
         echo 'Waiting for Redis...' &&
