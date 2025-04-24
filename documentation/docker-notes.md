@@ -5,7 +5,7 @@
 rm -rf konquest
 cd /var/www/konquest
 git clone https://github.com/lfariabr/konquest.git
-cd konquest
+cd konquest -> git pull master #
 docker-compose build
 
 # 2. Controlled shutdown

@@ -6,8 +6,18 @@ from asgiref.sync import sync_to_async
 
 logger = getLogger(__name__)
 
+# Enhanced logging for debugging async wrapper and refactor issues
 async def get_message_for_contact_async(contact, target_list):
-    return await sync_to_async(get_message_for_contact)(contact, target_list)
+    logger.info(f"[queue_suporter] Calling get_message_for_contact for contact={getattr(contact, 'id', contact)} target_list={getattr(target_list, 'id', target_list)}")
+    try:
+        result = await sync_to_async(get_message_for_contact)(contact, target_list)
+        logger.info(f"[queue_suporter] get_message_for_contact returned: {result}")
+        if not isinstance(result, tuple) or len(result) != 2:
+            logger.error(f"[queue_suporter] get_message_for_contact returned unexpected result: {result}")
+        return result
+    except Exception as e:
+        logger.error(f"[queue_suporter] Error in get_message_for_contact_async: {e}", exc_info=True)
+        raise
 
 async def get_userphone_async(contact, target_list):
     def get_userphone_wrapper():

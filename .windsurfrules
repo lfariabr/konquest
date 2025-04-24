@@ -1,53 +1,42 @@
-# Konquista App - Tech Stack & Project Overview
+# Konquista App – Tech Stack & Project Overview
 
 ## Core Technologies
-- **Programming Language:**  
-  - **Python:** 3.10+  
-- **Web Framework:**  
-  - **Django:** (Recommended: Latest stable release, e.g., Django 4.x)
-- **API Architecture:**  
-  - **GraphQL**
+- **Language:** Python 3.10+
+- **Web Framework:** Django (latest stable, e.g., 4.x)
+- **API:** GraphQL (flexible data querying/mutation)
+- **Containerization:** Docker & Docker Compose  
+  - **Containers:** Django, Celery worker, Celery beat, Redis, PostgreSQL, Nginx, Monitoring
 
-## Testing & Build
-- **Testing Framework:**  
-  - **Pytest:** with coverage reporting
-- **Build System:**  
-  - **Docker** with **Docker Compose**  
-    - _Containers Involved (7 total):_  
-      - Django web server container  
-      - Celery worker container  
-      - Celery beat scheduler container  
-      - Redis cache container  
-      - PostgreSQL database container  
-      - Nginx reverse proxy container  
-      - Monitoring services container
+## System Architecture
+- **Backend:** Django + Celery + Redis stack
+- **Database:** PostgreSQL (production), SQLite (dev/test)
+- **Caching:** Redis
+- **Task Queue:** Celery (asynchronous processing, multi-queue)
+- **Reverse Proxy:** Nginx
+- **Monitoring:** Integrated logging & error tracking
 
-## Data & Caching
-- **Database Systems:**  
-  - **PostgreSQL:** Preferred for production  
-  - **SQLite:** For development and testing environments  
-- **Caching System:**  
-  - **Redis**
-
-## Background Task Management
-- **Task Queue System:**  
-  - **Celery:** Using Redis as the message broker
-
-## Project Structure
-- **Core System:**  
-  - Contact management, templates, user management
+## Core Features
+- **Intelligent Message Management:**  
+  Campaign scheduling, smart targeting, dynamic content, parallel processing, file/media support
+- **CRM Integration (apiCrm):**  
+  Real-time bi-directional sync, automated lead management, appointment/payment handling
 - **Message Shooter System:**  
-  - Campaign engine, queue processing
-- **CRM Integration:**  
-  - apiCrm
-- **Intelligent Message Management**
+  Campaign engine, dynamic target lists, async queue processing, rate limiting, error handling
+- **Core System:**  
+  Contact management, message templates, user/role management, WhatsApp number management, activity logging
 
-## Development Workflow & Tools
-- **Version Control:**  
-  - Git
-- **Dependency Management:**  
-  - pip
-- **Testing:**  
-  - pytest
-- **Container Orchestration:**  
-  - docker-compose
+## Development Workflow
+- **Version Control:** Git
+- **Dependency Management:** pip, requirements.txt
+- **Testing:** Pytest (unit, integration, coverage, mocking)
+- **Container Orchestration:** docker-compose
+
+## Setup & Deployment
+**Prerequisites:** Python 3.10+, Docker & Docker Compose, Redis, PostgreSQL (optional for local)
+
+**Local Development:**
+```bash
+pip install -r requirements.txt
+python manage.py runserver
+celery -A konquist worker -l INFO -Q default,contact_processor,campaign_queue,queue_processor
+celery -A konquist beat -l INFO

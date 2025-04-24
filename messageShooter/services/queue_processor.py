@@ -19,10 +19,8 @@ from messageShooter.services.messaging.message_sender import MessageSender
 from messageShooter.services.contact_processor import ContactProcessor
 
 # Process async
-from messageShooter.services.get_message_for_contact import get_message_for_contact
-from messageShooter.resolvers.get_userphone import get_userphone, get_userphone_nps, get_userphone_vip, get_userphone_reminder
 from messageShooter.helpers.queue_suporter import get_userphone_async
-
+from messageShooter.helpers.queue_suporter import get_message_for_contact_async
 
 logger = logging.getLogger(__name__)
 
@@ -316,10 +314,15 @@ class QueueProcessor:
 
             # Process contacts sequentially with breath time
             for idx, contact in enumerate(contacts, 1):
+                # Count do total (nao usar len, usar o COUNT dos dados -> 1 linha com 1 coluna)
+                # off set 0:100
+                # when completed, add + 100
                 try:
                     self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
-                    
-                    counter, message = await sync_to_async(get_message_for_contact)(contact, target_list)
+                    counter, message = await get_message_for_contact_async(contact, target_list)
+                    # eager loading -> talvez trazer já tudo direto
+                    # fazer join nas tabelas UserPhone, Message, Contact -> join
+                    # https://docs.djangoproject.com/en/5.2/ref/models/querysets/ # TODO
                     
                     if not message:
                         self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
@@ -331,6 +334,7 @@ class QueueProcessor:
                         continue
 
                     userphone, token = await get_userphone_async(contact, target_list)
+                    # TODO we stopped here!
 
                     if not userphone:
                         self.logger.error(f"❌ Queue {queue_item.id}: No userphone found for contact {contact.phone}")

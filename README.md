@@ -118,12 +118,6 @@ pytest
 pytest --cov=.
 ```
 
-## Documentation
-- [API Documentation](./docs/api.md)
-- [Development Guide](./docs/development.md)
-- [Deployment Guide](./docs/deployment.md)
-- [User Guide](./docs/user-guide.md)
-
 ## License
 Luis Faria, Self-Made Software Engineer @ 2024. All rights reserved.
 
