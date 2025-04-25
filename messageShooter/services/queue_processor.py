@@ -1,26 +1,33 @@
 # messageShooter/services/queue_processor.py
 import logging
 import asyncio
-from asgiref.sync import sync_to_async
+from django.utils import timezone
+from typing import Tuple, Dict, Any
 from messageShooter.models.queue import Queue
 from core.models.messagelog import MessageLogs
-from typing import Tuple, Dict, Any
 from apiCrm.models.lead import Lead
+from core.models.userphone import UserPhone
+from asgiref.sync import sync_to_async
+
 from apiCrm.utils.create_store import create_store
 from apiCrm.utils.create_region import create_region
-from core.models.userphone import UserPhone
-from django.utils import timezone
+from apiSocialHub.resolvers.monitor import (
+    send_invalid_tokens_notification,
+    queue_finished,
+    stores_with_invalid_token
+)
 
 # NEW - Refactoring Queue Processor
-from messageShooter.services.messaging.rate_limiter import RateLimiter
-from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
-from messageShooter.services.messaging.message_sender import MessageSender
-
 from messageShooter.services.contact_processor import ContactProcessor
-
-# Process async
-from messageShooter.helpers.queue_suporter import get_userphone_async
-from messageShooter.helpers.queue_suporter import get_message_for_contact_async
+from messageShooter.services.messaging.rate_limiter import RateLimiter
+from messageShooter.services.messaging.message_sender import MessageSender
+from messageShooter.services.retry.retry_strategy import RetryStrategy, RetryStrategyType
+from messageShooter.helpers.queue_supporter import (
+    get_userphone_async, 
+    get_message_for_contact_async, 
+    get_status_msg,
+    LEAD_MESSAGES
+)
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +88,10 @@ class QueueProcessor:
 
     async def process_contact_async(self, contact, message, userphone):
         """Process a single contact with rate limiting per userphone"""
+        
         try:
-            # If message text indicates lead creation, create lead instead of sending message
-            if message.text in ["Lead da campanha Botox", "Lead da campanha Preenchimento", "Lead da bio do Instagram"]:
+            # If message text indicates lead flag, create lead instead of sending message
+            if message.text in LEAD_MESSAGES:
                 try:
                     if "Botox" in message.text:
                         campaign_name = "Botox"
@@ -192,9 +200,7 @@ class QueueProcessor:
     async def send_message_async(self, contact, message, userphone):
         """Send message asynchronously by delegating to message_sender"""
         return await self.message_sender.send_text_message(contact, message, userphone)
-
     
-    ######## NEW
     async def send_file_message_async(self, contact, message, userphone, file_path=None):
         """Send file message asynchronously by delegating to message_sender"""
         return await self.message_sender.send_file_message(contact, message, userphone, file_path)
@@ -268,21 +274,12 @@ class QueueProcessor:
                 f"   - Successful: {success_count}\n"
                 f"   - Failed: {error_count}\n"
                 f"   - Exceptions: {exception_count}"
-            )
-
-            # Import both functions and the stores list
-            from apiSocialHub.resolvers.monitor import (
-                send_invalid_tokens_notification,
-                queue_finished,
-                stores_with_invalid_token
-            )
+            )            
             
-            # Send invalid tokens notification if there are any invalid tokens
             if len(stores_with_invalid_token) > 0:
                 self.logger.info(f"Found {len(stores_with_invalid_token)} stores with invalid tokens. Sending notification...")
                 send_invalid_tokens_notification()
             
-            # Always send the queue completion notification
             queue_finished()
 
             return success_count, error_count, exception_count
@@ -290,6 +287,77 @@ class QueueProcessor:
         except Exception as e:
             self.logger.error(f"❌ Error in batch queue processing: {str(e)}")
             return 0, 0, 1
+    
+    async def _process_contact(
+        self,
+        queue_item: Queue,
+        contact,
+        idx: int,
+        total_contacts: int,
+        target_list,
+    ) -> Tuple[str, dict, bool]:
+        """
+        Process an individual contact in the queue.
+        Returns (status, result_dict, was_success)
+        """
+        try:
+            self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
+
+            counter, message = await get_message_for_contact_async(contact, target_list)
+
+            if not message:
+                self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
+                return "skipped", {
+                    "status": "skipped",
+                    "processed_at": timezone.now().isoformat(),
+                    "message_counter": counter
+                }, False
+
+            userphone, token = await get_userphone_async(contact, target_list)
+
+            if not userphone:
+                self.logger.error(f"❌ Queue {queue_item.id}: No userphone found for contact {contact.phone}")
+                return "error", {
+                    "status": "error",
+                    "error": "No userphone found",
+                    "processed_at": timezone.now().isoformat()
+                }, False
+
+            # Rate limiting
+            phone_key = f"phone_lock_{contact.phone}"
+            if phone_key not in self._locks:
+                self._locks[phone_key] = asyncio.Lock()
+            await self._locks[phone_key].acquire()
+
+            try:
+                success, error_message = await self.process_contact_async(contact, message, userphone)
+
+                # Message logging is now handled by the MessageSender class, this has been refactored
+                # if success and message.text in ["Lead da campanha Botox", "Lead da campanha Preenchimento", "Lead da bio do Instagram"]:
+                #     await sync_to_async(self._log_message)(contact, message, userphone, target_list)
+
+            finally:
+                self._locks[phone_key].release()
+                if not self.rate_limiter._test_mode and idx < total_contacts:
+                    await self.rate_limiter.acquire_lock(userphone.id)
+
+            result = {
+                "status": "sent" if success else "failed",
+                "processed_at": timezone.now().isoformat(),
+                "error": error_message if not success else None,
+                "message_counter": counter
+            }
+
+            return result["status"], result, success
+
+        except Exception as e:
+            error_msg = f"Failed to process contact {idx}/{total_contacts}: {str(e)}"
+            self.logger.error(error_msg)
+            return "failed", {
+                    "status": "failed",
+                    "processed_at": timezone.now().isoformat(),
+                    "error": error_msg
+                }, False
 
     async def process_queue_item_async(self, queue_item: Queue):
         """Process a single queue item asynchronously with enhanced error handling"""
@@ -314,87 +382,13 @@ class QueueProcessor:
 
             # Process contacts sequentially with breath time
             for idx, contact in enumerate(contacts, 1):
-                # Count do total (nao usar len, usar o COUNT dos dados -> 1 linha com 1 coluna)
-                # off set 0:100
-                # when completed, add + 100
-                try:
-                    self.logger.info(f"📱 Queue {queue_item.id}: Processing contact {idx}/{total_contacts} ({contact.phone})")
-                    counter, message = await get_message_for_contact_async(contact, target_list)
-                    # eager loading -> talvez trazer já tudo direto
-                    # fazer join nas tabelas UserPhone, Message, Contact -> join
-                    # https://docs.djangoproject.com/en/5.2/ref/models/querysets/ # TODO
-                    
-                    if not message:
-                        self.logger.info(f"📭 Queue {queue_item.id}: Skipping contact {idx}/{total_contacts} ({contact.phone}) - no message found for counter {counter}")
-                        processed_contacts[str(contact.id)] = {
-                            "status": "skipped",
-                            "processed_at": timezone.now().isoformat(),
-                            "message_counter": counter
-                        }
-                        continue
+                status, result, success = await self._process_contact(queue_item, contact, idx, total_contacts, target_list)
+                processed_contacts[str(contact.id)] = result
 
-                    userphone, token = await get_userphone_async(contact, target_list)
-                    # TODO we stopped here!
-
-                    if not userphone:
-                        self.logger.error(f"❌ Queue {queue_item.id}: No userphone found for contact {contact.phone}")
-                        processed_contacts[str(contact.id)] = {
-                            "status": "error",
-                            "error": "No userphone found",
-                            "processed_at": timezone.now().isoformat()
-                        }
-                        error_count += 1
-                        continue
-                    
-                    # Apply rate limiting per phone
-                    phone_key = f"phone_lock_{contact.phone}"
-                    if phone_key in self._locks:
-                        self.logger.info(f"⏳ Waiting for rate limit on phone {contact.phone}...")
-                        await self._locks[phone_key].acquire()
-                    else:
-                        self._locks[phone_key] = asyncio.Lock()
-                        await self._locks[phone_key].acquire()
-                    
-                    try:
-                        success, error_message = await self.process_contact_async(contact, message, userphone)
-                        
-                        # Log successful message send only if it's not a lead creation message
-                        if success and message.text not in ["Lead da campanha Botox", "Lead da campanha Preenchimento", "Lead da bio do Instagram"]:
-                            await sync_to_async(self._log_message)(contact, message, userphone, target_list)
-                        
-                    finally:
-                        if phone_key in self._locks:
-                            self._locks[phone_key].release()
-                            # Add breath time after release
-                            if not self.rate_limiter._test_mode and idx < total_contacts:
-                                # await asyncio.sleep(self.rate_limiter.breath_time)
-                                await self.rate_limiter.acquire_lock(userphone.id)
-                    
-                    result = {
-                        "status": "sent" if success else "failed",
-                        "processed_at": timezone.now().isoformat(),
-                        "error": error_message if not success else None,
-                        "message_counter": counter
-                    }
-                    
-                    processed_contacts[str(contact.id)] = result
-                    
-                    if success:
-                        self.logger.info(f"✅ Queue {queue_item.id}: Successfully sent message {counter} to contact {idx}/{total_contacts} ({contact.phone})")
-                        success_count += 1
-                    else:
-                        self.logger.error(f"❌ Queue {queue_item.id}: Failed to send to contact {idx}/{total_contacts} ({contact.phone}): {error_message}")
-                        error_count += 1
-
-                except Exception as e:
-                    error_msg = f"Failed to process contact {idx}/{total_contacts}: {str(e)}"
-                    self.logger.error(error_msg)
+                if status == "sent":
+                    success_count += 1
+                elif status in ["error", "failed"]:
                     error_count += 1
-                    processed_contacts[str(contact.id)] = {
-                        "status": "failed",
-                        "processed_at": timezone.now().isoformat(),
-                        "error": error_msg
-                    }
 
             # Determine final status
             final_status = 'sent'
@@ -410,16 +404,8 @@ class QueueProcessor:
                 processed_contacts,
                 sent_at=timezone.now() if success_count > 0 else None
             )
-
-            # Use consistent log message format
-            status_msg = (
-                f"✨ Queue {queue_item.id}: Completed successfully! {success_count}/{total_contacts} messages sent"
-                if final_status == 'sent' and success_count == total_contacts
-                else f"⚠️ Queue {queue_item.id}: Partially completed. {success_count}/{total_contacts} sent, {error_count}/{total_contacts} failed"
-                if final_status == 'sent' and error_count > 0
-                else f"💥 Queue {queue_item.id}: Failed completely. {error_count}/{total_contacts} messages failed"
-            )
-            self.logger.info(status_msg)
+            
+            self.logger.info(get_status_msg(queue_item, success_count, total_contacts, final_status, error_count))
 
             return True, None
 
@@ -439,12 +425,8 @@ class QueueProcessor:
             return False, False
 
         try:
-            # Update status to pending to allow reprocessing
-            await sync_to_async(self._update_queue_status)(queue_item, 'pending')
-            
-            # Process the queue item
+            await sync_to_async(self._update_queue_status)(queue_item, 'pending')            
             success, error = await self.process_queue_item_async(queue_item)
-            
             return success, error
             
         except Exception as e:

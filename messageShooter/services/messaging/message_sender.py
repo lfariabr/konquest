@@ -89,9 +89,9 @@ class MessageSender:
         # Delegate to the text sender implementation
         success = await self.text_sender.send(contact, message, userphone)
         
-        # if success:
-        #     # Log the successful message
-        #     await self._log_message(contact, message, userphone)
+        if success:
+            # Log the successful message
+            await self._log_message(contact, message, userphone)
             
         return success
 
@@ -120,9 +120,9 @@ class MessageSender:
         # Delegate to the file sender implementation
         success = await self.file_sender.send(contact, message, userphone, file_path)
         
-        # if success:
-        #     # Log the successful message
-        #     await self._log_message(contact, message, userphone)
+        if success:
+            # Log the successful message
+            await self._log_message(contact, message, userphone)
             
         return success
     
