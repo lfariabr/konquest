@@ -11,7 +11,7 @@ from apiCrm.schemas.resolve_all_data import fetch_data, process_leads_batch, pro
 from celery import shared_task
 import logging
 from django.core.cache import cache
-from apiSocialHub.resolvers.send_text_message import send_text_message
+from utils.discord import send_discord_message
 
 # Import celery app directly
 from konquist.celery import app
@@ -38,6 +38,8 @@ def cleanup_crm_tables():
     Uses PostgreSQL-specific syntax for cleanup while maintaining referential integrity.
     """
     logger.info("🤖 TASK: Starting CRM tables cleanup")
+    log_message = f"🤖 TASK: Starting CRM tables cleanup"
+    send_discord_message(log_message)
 
     try:
         with connection.cursor() as cursor:
@@ -96,6 +98,9 @@ def cleanup_crm_tables():
 def fetch_all_data():
     logger.info("🤖 TASK: Starting to fetch all data from CRM @ Pró-Corpo."
     )
+    log_message = f"🤖 TASK: Starting to fetch all data from CRM @ Pró-Corpo."
+    send_discord_message(log_message)
+    
     lock_id = "fetch_all_data_lock"
     # Try to acquire lock
     if not cache.add(lock_id, "true", timeout=3600):  # 1 hour timeout
@@ -134,10 +139,15 @@ def fetch_all_data():
         }
         
         logger.info(f"Successfully fetched and processed data: {result_stats}")
+        log_message = f"Successfully fetched and processed data: {result_stats}"
+        send_discord_message(log_message)
+
         return result_stats
         
     except Exception as e:
         logger.error(f"Error in fetch_all_data: {str(e)}", exc_info=True)
+        log_message = f"Error in fetch_all_data: {str(e)}"
+        send_discord_message(log_message)
         raise
     finally:
         # Release lock

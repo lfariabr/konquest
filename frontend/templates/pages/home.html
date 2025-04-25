@@ -24,8 +24,14 @@
     </div>
 
     <h1 class="tagline">Komece a sua jornada de relacionamento aqui!</h1>
-
-    <a href="/admin/" class="start-button">CONNECT</a>
+    <a href="/admin/" class="start-button" id="connect-btn">CONNECT</a>
+    <script>
+        document.getElementById("connect-btn").addEventListener("click", function(e) {
+            // Fire-and-forget: don't block navigation!
+            fetch("/api/notify-connect-click/", {method: "POST", headers: {"X-CSRFToken": "{{ csrf_token }}"}});
+            // Do not prevent default, so user still goes to /admin/
+        });
+    </script>
 </section>
 
 <!-- About Section -->

@@ -17,8 +17,8 @@ class ContactOrganizer:
         'NPS': 3,              
         'NCC': 4,              
         'Botox': 5,            
-        'Preenchimento': 6,    
-        'Instagram': 7         # Lowest priority
+        'Preenchimento': 5,    
+        'Instagram': 5         # Lowest priority
     }
     
     @classmethod
@@ -46,7 +46,7 @@ class ContactOrganizer:
             
             if not related_contacts.exists():
                 # No other contacts found, use current contact's tag
-                new_priority = cls.PRIORITY_RULES.get(contact.relationship_tag, 7)
+                new_priority = cls.PRIORITY_RULES.get(contact.relationship_tag, 5)
                 contact.priority = new_priority
                 contact.save(update_fields=['priority'])
                 logger.info(f"Single contact {contact.id} ({contact.phone}) priority set to {new_priority}")
@@ -56,7 +56,7 @@ class ContactOrganizer:
             contact_priorities = {}
             for related in related_contacts:
                 if related.relationship_tag:
-                    priority = cls.PRIORITY_RULES.get(related.relationship_tag, 7)
+                    priority = cls.PRIORITY_RULES.get(related.relationship_tag, 5)
                     contact_priorities[related.id] = {
                         'contact': related,
                         'priority': priority,

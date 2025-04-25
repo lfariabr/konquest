@@ -1,13 +1,15 @@
-from celery import shared_task, chain
-from django.db import transaction
-from django.db.models import Q
-from django.utils import timezone
 import logging
+from celery import shared_task, chain
+from django.db.models import Q
 from typing import Optional
-from core.models.contact import Contact
-from messageShooter.tasks.campaign_tasks import send_debug_notification
 from datetime import datetime
+from django.db import transaction
+from django.utils import timezone
+from core.models.contact import Contact
 from django.core.cache import cache
+
+from utils.discord import send_discord_message
+from messageShooter.tasks.campaign_tasks import send_debug_notification
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +34,9 @@ def check_contacts_in_crm(self, batch_size: int = 200, processed_count: int = 0)
     """
     lock_id = f"check_contacts_in_crm_lock:{processed_count}"
     execution_start = datetime.now()
+
+    log_message = f"🤖 TASK: Starting contact check in CRM batch from most recent contacts @ {execution_start.strftime('%Y-%m-%d %H:%M:%S')}"
+    send_discord_message(log_message)
     
     # Try to acquire lock
     if not cache.add(lock_id, str(execution_start), timeout=3600):  # 1 hour timeout
@@ -95,6 +100,8 @@ def check_contacts_in_crm(self, batch_size: int = 200, processed_count: int = 0)
             if new_processed_count >= 1000:
                 logger.warning(f"Completed processing of 1000 most recent contacts")
                 send_debug_notification(f"✅ Contact check completed: processed {new_processed_count} most recent contacts")
+                log_message = f"✅ Contact check completed: processed {new_processed_count} most recent contacts"
+                send_discord_message(log_message)  
                 return stats
                 
             logger.info(f"Triggering next batch. Total processed so far: {new_processed_count}")

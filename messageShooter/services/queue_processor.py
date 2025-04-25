@@ -28,6 +28,7 @@ from messageShooter.helpers.queue_supporter import (
     get_status_msg,
     LEAD_MESSAGES
 )
+from utils.discord import send_discord_message
 
 logger = logging.getLogger(__name__)
 
@@ -279,6 +280,12 @@ class QueueProcessor:
             if len(stores_with_invalid_token) > 0:
                 self.logger.info(f"Found {len(stores_with_invalid_token)} stores with invalid tokens. Sending notification...")
                 send_invalid_tokens_notification()
+
+            send_discord_message(f"Batch processing completed ✅:\n"
+                f"   - Total Queues: {total_queues}\n"
+                f"   - Successful: {success_count}\n"
+                f"   - Failed: {error_count}\n"
+                f"   - Exceptions: {exception_count}")
             
             queue_finished()
 

@@ -25,6 +25,7 @@ from apiCrm.models.billcharge import BillCharge
 from core.forms.contact_upload import ContactCsvUploadForm
 from core.resolvers.clean_phone_number import clean_phone_number
 from core.resolvers.process_csv_files import process_csv_files
+from utils.discord import send_discord_message
 
 logger = logging.getLogger(__name__)
 
@@ -453,6 +454,7 @@ class ContactAdmin(admin.ModelAdmin):
                         continue
                 print(f"Successfully processed {row_count} rows from file {csv_file.name}.")
                 logging.info(f"Successfully processed {row_count} rows from file {csv_file.name}.")
+                send_discord_message(f"🤖 Contacts uploaded successfully with {row_count} rows from file {csv_file.name}.")
 
             finally:
                 # Clean up temporary file
@@ -460,6 +462,7 @@ class ContactAdmin(admin.ModelAdmin):
 
         except Exception as e:
             logging.error(f"Error processing file {csv_file.name}: {e}")
+            send_discord_message(f"🤖 Error processing file {csv_file.name}: {e}")
             self.message_user(request, f"Error processing file {csv_file.name}: {e}", level=messages.ERROR)
 
 admin.site.register(Contact, ContactAdmin)

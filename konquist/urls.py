@@ -10,6 +10,7 @@ from django.views.generic.base import RedirectView
 from apiCrm.schemas.resolve_all_data import schema
 from django.views.generic import TemplateView
 from core.views import get_terminal_logs
+from utils.discord import connect_clicked
 
 main_urlpatterns = [
     path('admin/', admin_site.urls),
@@ -23,7 +24,7 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.svg', permanent=True)),
     path('terminal_logs/', TemplateView.as_view(template_name='pages/terminal_logs.html'), name='terminal_logs'),
     path('terminal_logs/data/', get_terminal_logs, name='get_terminal_logs'),
-
+    path("api/notify-connect-click/", connect_clicked, name="notify_connect_click"),
 ]
 
 if settings.DEBUG:
