@@ -89,6 +89,13 @@ def get_userphone_nps(contact_tag, store):
 
         logger.info(f"Found NPS token for store {store}")
         return phone, token
+        # # TODO: Test!
+        # try:
+        #     userphone = UserPhone.objects.get(relationship_tag='NPSUnique').first()
+        #     return userphone, userphone.phone_token
+        # except UserPhone.DoesNotExist:
+        #     logger.error("No UserPhone found with relationship_tag='NPSUnique'")
+        #     return None, None
         
     except Exception as e:
         logger.error(f"Error getting NPS userphone for store {store}: {str(e)}")
