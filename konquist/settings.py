@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
 
 # sqlite3 (dev) 
 # postgresql (prod)
-DATABASE_ENGINE = 'sqlite3' 
+DATABASE_ENGINE = 'postgresql' 
 ADMIN_PHONE = '11963546222'
 
 # messageShooter/resolvers/get_contacts.py and get_contact_lead.py
