@@ -502,7 +502,7 @@ class ContactAdmin(admin.ModelAdmin):
                             store=row['Unidade'],
                             region=row['Região'],
                             external_tag=row['Tags'],
-                            relationship_tag='NovoFioPerdizes',
+                            relationship_tag='NovoFio Perdizes',
                             source='Whatsapp',
                             user=k_user
                         )
