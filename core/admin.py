@@ -24,7 +24,7 @@ from apiCrm.models.billcharge import BillCharge
 
 from core.forms.contact_upload import ContactCsvUploadForm
 from core.resolvers.clean_phone_number import clean_phone_number
-from core.resolvers.process_csv_files import process_csv_files
+from core.resolvers.process_csv_files import process_csv_files, process_csv_files_perdizes
 from utils.discord import send_discord_message
 
 logger = logging.getLogger(__name__)
@@ -372,8 +372,9 @@ class ContactAdmin(admin.ModelAdmin):
             botox_file = request.FILES.get('botox_file')
             preenchimento_file = request.FILES.get('preenchimento_file')
             instagram_file = request.FILES.get('instagram_file')
+            novo_fio_file = request.FILES.get('novo_fio_file')
 
-            if not botox_file and not preenchimento_file and not instagram_file:
+            if not botox_file and not preenchimento_file and not instagram_file and not novo_fio_file:
                 self.message_user(request, "No files selected.", level=messages.ERROR)
                 return HttpResponseRedirect(reverse('admin:core_contact_changelist'))
 
@@ -381,6 +382,9 @@ class ContactAdmin(admin.ModelAdmin):
             for csv_file in [botox_file, preenchimento_file, instagram_file]:
                 if csv_file:
                     self._process_csv_file(csv_file, created_date, request)
+            
+            if novo_fio_file:
+                self._process_csv_file_perdizes(novo_fio_file, created_date, request)
 
             self.message_user(request, "Contacts uploaded successfully.", level=messages.SUCCESS)
             return HttpResponseRedirect(reverse('admin:core_contact_changelist'))
@@ -413,6 +417,7 @@ class ContactAdmin(admin.ModelAdmin):
                 is_preenchimento = 'preenchimento' in csv_file.name.lower()
                 is_instagram = 'instagram' in csv_file.name.lower()
                 is_botox = 'botox' in csv_file.name.lower()
+                is_novo_fio = 'novo_fio' in csv_file.name.lower()
 
                 if is_preenchimento:
                     df_leads = process_csv_files(preenchimento_file_path=temp_path)
@@ -445,6 +450,59 @@ class ContactAdmin(admin.ModelAdmin):
                             region=row['Região'],
                             external_tag=row['Tags'],
                             relationship_tag=self.get_relationship_tag(is_preenchimento, is_instagram, is_botox),
+                            source='Whatsapp',
+                            user=k_user
+                        )
+                        row_count += 1
+                    except Exception as e:
+                        logging.error(f"Error processing row: {row}, Error: {e}")
+                        continue
+                print(f"Successfully processed {row_count} rows from file {csv_file.name}.")
+                logging.info(f"Successfully processed {row_count} rows from file {csv_file.name}.")
+                send_discord_message(f"🤖 Contacts uploaded successfully with {row_count} rows from file {csv_file.name}.")
+
+            finally:
+                # Clean up temporary file
+                os.unlink(temp_path)
+
+        except Exception as e:
+            logging.error(f"Error processing file {csv_file.name}: {e}")
+            send_discord_message(f"🤖 Error processing file {csv_file.name}: {e}")
+            self.message_user(request, f"Error processing file {csv_file.name}: {e}", level=messages.ERROR)
+    
+    def _process_csv_file_perdizes(self, csv_file, created_date, request):
+        try:
+            # Create temporary file to store the CSV data
+            with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.csv') as temp_file:
+                temp_file.write(csv_file.read().decode('utf-8'))
+                temp_path = temp_file.name
+
+            try:
+                # Process CSV using process_csv_files
+                df_leads_perdizes = process_csv_files_perdizes(novo_fio_file_path=temp_path)
+
+                # Get or create kUser
+                try:
+                    k_user = kUser.objects.get(email=request.user.email)
+                except kUser.DoesNotExist:
+                    k_user = kUser.objects.create(
+                        name=request.user.get_full_name() or request.user.username,
+                        email=request.user.email,
+                        password=request.user.password
+                    )
+
+                # Create contacts from processed DataFrame
+                row_count = 0
+                for _, row in df_leads_perdizes.iterrows():
+                    try:
+                        Contact.objects.create(
+                            name=row['Nome'],
+                            phone=clean_phone_number(row['Whatsapp']),
+                            created_at=created_date,
+                            store=row['Unidade'],
+                            region=row['Região'],
+                            external_tag=row['Tags'],
+                            relationship_tag='NovoFioPerdizes',
                             source='Whatsapp',
                             user=k_user
                         )

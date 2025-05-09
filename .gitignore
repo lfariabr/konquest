@@ -39,3 +39,5 @@ messageShooter/references/celerybeat-schedule
 celerybeat-schedule.db
 
 .windsurfrules
+
+redis.md

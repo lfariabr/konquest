@@ -84,3 +84,59 @@ def process_csv_files(botox_file_path=None, preenchimento_file_path=None, instag
     except Exception as e:
         logging.error(f"Error processing CSV files: {e}")
         return pd.DataFrame()
+
+def process_csv_files_perdizes(novo_fio_file_path=None):
+    df_list = []
+
+    try:
+        if novo_fio_file_path:
+            try:
+                # Open the file to ensure it's properly flushed
+                with open(novo_fio_file_path, 'r') as f:
+                    df_novo_fio = pd.read_csv(f)
+                    if not df_novo_fio.empty:
+                        df_novo_fio['filename'] = 'novofio'  
+                        df_list.append(df_novo_fio)
+            except Exception as e:
+                logging.error(f"Error reading novo_fio file: {e}")
+
+        if not df_list:
+            return pd.DataFrame()
+
+        df_leads_perdizes = pd.concat(df_list, ignore_index=True)
+
+        # Ensure required columns exist
+        required_columns = ['Nome', 'Whatsapp', 'Tags']
+        if not all(col in df_leads_perdizes.columns for col in required_columns):
+            logging.error("Missing required columns in CSV file")
+            return pd.DataFrame()
+
+        df_leads_perdizes['Whatsapp'] = df_leads_perdizes['Whatsapp'].astype(str)
+        df_leads_perdizes['Whatsapp'] = df_leads_perdizes['Whatsapp'].apply(clean_phone_number)
+
+        default_tag = "SEM TAGS"
+        df_leads_perdizes['Tags'] = df_leads_perdizes['Tags'].fillna(default_tag)
+        df_leads_perdizes['Tags'] = df_leads_perdizes['Tags'].replace('NAN', default_tag)
+        df_leads_perdizes['Tags'] = df_leads_perdizes['Tags'].str.upper().astype(str)
+        
+        df_leads_perdizes['Unidade'] = "PERDIZES"
+        df_leads_perdizes['Região'] = "SÃO PAULO"
+
+        df_leads_perdizes['DDD'] = df_leads_perdizes['Whatsapp'].astype(str).str[:2]
+
+        default_region = 'DDD aleatório'
+        df_leads_perdizes['Região_DDD'] = df_leads_perdizes['DDD'].map(ddd_dict).fillna(default_region)
+
+        default_region = 'São Paulo'
+        df_leads_perdizes['Região'] = df_leads_perdizes.apply(
+            lambda row: row['Região_DDD'] if row['Região'] == default_region or pd.isnull(row['Região']) else row['Região'],
+            axis=1
+        )
+
+        df_leads_perdizes.drop(columns=['Região_DDD'], inplace=True)
+
+        return df_leads_perdizes
+
+    except Exception as e:
+        logging.error(f"Error processing CSV files: {e}")
+        return pd.DataFrame()

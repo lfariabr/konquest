@@ -23,7 +23,7 @@ CONTACT_TYPES = [
 
 # Contact Tags by Type
 CONTACT_TAGS = {
-    CONTACT_TYPE_WHATSAPP: ["Preenchimento", "Botox", "Instagram"],
+    CONTACT_TYPE_WHATSAPP: ["Preenchimento", "Botox", "Instagram", "NovoFio Perdizes"],
     CONTACT_TYPE_APPOINTMENT: [
                                 # Pró-Corpo
                                 "Reminder", "Reschedule", "ReminderIpiranga", 

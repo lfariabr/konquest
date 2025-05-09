@@ -1,0 +1,23 @@
+INFO 2025-05-09 01:43:02,511 queueAdmin 27233 12918534144 Queue list view performance: 5 queries in 3.67s
+INFO 2025-05-09 01:43:02,517 get_contact_whatsapp 27233 12918534144 Fetching WhatsApp contacts with tag 'Botox'
+INFO 2025-05-09 01:43:02,951 get_contact_whatsapp 27233 12918534144 Found 25 total contacts from the last 30 days with tag 'Botox'
+INFO 2025-05-09 01:43:03,380 get_contact_whatsapp 27233 12918534144 Found 25 unique contacts from the last 30 days with tag 'Botox'
+INFO 2025-05-09 01:43:04,217 target_list 27233 12918534144 Getting appointments for user lfariabr@gmail.com
+INFO 2025-05-09 01:43:04,218 get_contact_appointment 27233 12918534144 Processing contacts with tag Reschedule
+INFO 2025-05-09 01:43:13,582 get_contact_appointment 27233 12918534144 Reschedule - Found 2738 appointments
+INFO 2025-05-09 01:43:25,253 contactConversor_apt 27233 12918534144 Processed 2738 appointments: Created 84, Updated 2654
+INFO 2025-05-09 01:43:25,713 target_list 27233 12918534144 Getting appointments for user lfariabr@gmail.com
+INFO 2025-05-09 01:43:25,714 get_contact_appointment 27233 12918534144 Processing contacts with tag NPS
+INFO 2025-05-09 01:43:27,406 get_contact_appointment 27233 12918534144 NPS - Found 686 unique appointments
+INFO 2025-05-09 01:43:34,203 contactConversor_apt 27233 12918534144 Processed 686 appointments: Created 85, Updated 601
+INFO 2025-05-09 01:43:34,679 target_list 27233 12918534144 Getting appointments for user lfariabr@gmail.com
+INFO 2025-05-09 01:43:34,680 get_contact_appointment 27233 12918534144 Processing contacts with tag ReminderPL
+INFO 2025-05-09 01:43:36,122 get_contact_appointment 27233 12918534144 ReminderPL - Found 77 appointments
+INFO 2025-05-09 01:43:40,485 contactConversor_apt 27233 12918534144 Processed 77 appointments: Created 20, Updated 57
+INFO 2025-05-09 01:43:41,020 target_list 27233 12918534144 Getting appointments for user lfariabr@gmail.com
+INFO 2025-05-09 01:43:41,021 get_contact_appointment 27233 12918534144 Processing contacts with tag ReschedulePL
+INFO 2025-05-09 01:43:43,744 get_contact_appointment 27233 12918534144 ReschedulePL - Found 436 appointments
+INFO 2025-05-09 01:43:47,560 contactConversor_apt 27233 12918534144 Processed 436 appointments: Created 11, Updated 425
+INFO 2025-05-09 01:43:47,586 get_contact_whatsapp 27233 12918534144 Fetching WhatsApp contacts with tag 'Instagram'
+INFO 2025-05-09 01:43:48,071 get_contact_whatsapp 27233 12918534144 Found 122 total contacts from the last 30 days with tag 'Instagram'
+INFO 2025-05-09 01:43:48,505 get_contact_whatsapp 27233 12918534144 Found 122 unique contacts from the last 30 days with tag 'Instagram'
