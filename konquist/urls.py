@@ -11,10 +11,12 @@ from apiCrm.schemas.resolve_all_data import schema
 from django.views.generic import TemplateView
 from core.views import get_terminal_logs
 from utils.discord import connect_clicked
+from api.urls import urlpatterns as api_urlpatterns
 
 main_urlpatterns = [
     path('admin/', admin_site.urls),
     path('apiCrm/', include('apiCrm.urls')),
+    path('api/', include(api_urlpatterns)),
 ]
 
 urlpatterns = [

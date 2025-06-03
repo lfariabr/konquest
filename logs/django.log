@@ -1,0 +1,289 @@
+INFO 2025-06-03 19:11:57,466 autoreload 34970 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:11:58,888 basehttp 34970 6172618752 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 5799
+INFO 2025-06-03 19:11:58,948 basehttp 34970 6189445120 "GET /static/admin/css/tailwind.css HTTP/1.1" 200 18767
+INFO 2025-06-03 19:11:58,953 basehttp 34970 6189445120 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/css/all.min.css HTTP/1.1" 200 96518
+INFO 2025-06-03 19:11:58,954 basehttp 34970 6172618752 "GET /static/admin/js/tailwind-3.4.5.js HTTP/1.1" 200 366531
+INFO 2025-06-03 19:11:58,960 basehttp 34970 6172618752 "GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 200 89476
+INFO 2025-06-03 19:11:58,962 basehttp 34970 6189445120 "GET /static/admin/js/tom-select.complete.min.js.js HTTP/1.1" 200 50720
+INFO 2025-06-03 19:11:58,987 basehttp 34970 6189445120 "GET /static/admin/tinymce/tinymce.min.js HTTP/1.1" 200 415158
+INFO 2025-06-03 19:12:02,018 basehttp 34970 6172618752 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-06-03 19:12:02,090 basehttp 34970 6172618752 "GET /admin/ HTTP/1.1" 200 37194
+INFO 2025-06-03 19:12:02,180 basehttp 34970 6189445120 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-regular-400.woff2 HTTP/1.1" 200 25464
+INFO 2025-06-03 19:12:02,181 basehttp 34970 6172618752 "GET /static/admin/fonts/fontawesome-free-6.6.0-web/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 157192
+INFO 2025-06-03 19:12:06,306 basehttp 34970 6172618752 "GET /admin/admin/logentry/ HTTP/1.1" 200 70276
+INFO 2025-06-03 19:12:06,329 basehttp 34970 6172618752 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 287630
+INFO 2025-06-03 19:12:06,335 basehttp 34970 6189445120 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-06-03 19:12:06,352 basehttp 34970 6206271488 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-06-03 19:12:17,127 basehttp 34970 6172618752 "GET /admin/auth/group/ HTTP/1.1" 200 26979
+INFO 2025-06-03 19:12:18,133 basehttp 34970 6172618752 "GET /admin/auth/user/ HTTP/1.1" 200 36013
+INFO 2025-06-03 19:12:41,708 basehttp 34970 6172618752 "GET /admin/core/contact/ HTTP/1.1" 200 149972
+INFO 2025-06-03 19:13:22,985 basehttp 34970 6172618752 "GET /admin/core/message/ HTTP/1.1" 200 57464
+INFO 2025-06-03 19:13:24,142 basehttp 34970 6172618752 "GET /admin/core/messagelogs/ HTTP/1.1" 200 39812
+INFO 2025-06-03 19:23:33,331 autoreload 34970 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/urls.py changed, reloading.
+INFO 2025-06-03 19:23:34,656 autoreload 35438 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:23:46,443 basehttp 35438 6167834624 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:23:46,674 basehttp 35438 6201487360 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:23:46,675 basehttp 35438 6184660992 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:23:46,677 basehttp 35438 6251966464 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:23:46,677 basehttp 35438 6218313728 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:23:46,679 basehttp 35438 6218313728 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:23:46,680 basehttp 35438 6201487360 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:23:46,681 basehttp 35438 6251966464 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:23:46,681 basehttp 35438 6184660992 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:23:46,681 basehttp 35438 6167834624 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:23:46,682 basehttp 35438 6235140096 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:23:46,682 basehttp 35438 6218313728 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:23:46,697 basehttp 35438 6235140096 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:23:46,863 basehttp 35438 6235140096 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:23:46,865 basehttp 35438 6235140096 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:23:56,184 basehttp 35438 6167834624 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+WARNING 2025-06-03 19:24:47,422 log 35438 6167834624 Not Found: /apiCrm/
+WARNING 2025-06-03 19:24:47,423 basehttp 35438 6167834624 "GET /apiCrm/ HTTP/1.1" 404 5465
+INFO 2025-06-03 19:29:40,098 autoreload 35438 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:29:41,268 autoreload 35886 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:31:07,260 autoreload 35886 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-06-03 19:31:08,165 autoreload 36194 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:32:20,875 autoreload 36194 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:32:21,847 autoreload 36241 8334909184 Watching for file changes with StatReloader
+ERROR 2025-06-03 19:32:51,741 log 36241 6193475584 Internal Server Error: /api/contacts/
+Traceback (most recent call last):
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 727, in render
+    context = self.get_context(data, accepted_media_type, renderer_context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 705, in get_context
+    'filter_form': self.get_filter_form(data, view, request),
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 637, in get_filter_form
+    html = backend().to_html(request, queryset, view)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django_filters/rest_framework/backends.py", line 81, in to_html
+    template = loader.get_template(self.template)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: django_filters/rest_framework/form.html
+ERROR 2025-06-03 19:32:51,743 basehttp 36241 6193475584 "GET /api/contacts/ HTTP/1.1" 500 135018
+ERROR 2025-06-03 19:32:54,002 log 36241 6193475584 Internal Server Error: /api/contacts/
+Traceback (most recent call last):
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 727, in render
+    context = self.get_context(data, accepted_media_type, renderer_context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 705, in get_context
+    'filter_form': self.get_filter_form(data, view, request),
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 637, in get_filter_form
+    html = backend().to_html(request, queryset, view)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django_filters/rest_framework/backends.py", line 81, in to_html
+    template = loader.get_template(self.template)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: django_filters/rest_framework/form.html
+ERROR 2025-06-03 19:32:54,003 basehttp 36241 6193475584 "GET /api/contacts/ HTTP/1.1" 500 135018
+INFO 2025-06-03 19:33:05,646 autoreload 36241 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:33:06,566 autoreload 36266 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:33:06,856 basehttp 36266 6124367872 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:33:13,186 autoreload 36266 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:33:14,006 autoreload 36284 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:33:15,673 basehttp 36284 6166196224 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:33:18,203 basehttp 36284 6166196224 "GET /api/contacts/ HTTP/1.1" 200 128745
+ERROR 2025-06-03 19:33:36,556 log 36284 6166196224 Internal Server Error: /api/contacts/
+Traceback (most recent call last):
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 727, in render
+    context = self.get_context(data, accepted_media_type, renderer_context)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 705, in get_context
+    'filter_form': self.get_filter_form(data, view, request),
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/rest_framework/renderers.py", line 637, in get_filter_form
+    html = backend().to_html(request, queryset, view)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django_filters/rest_framework/backends.py", line 81, in to_html
+    template = loader.get_template(self.template)
+  File "/Users/luisfaria/.pyenv/versions/3.10.12/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: django_filters/rest_framework/form.html
+ERROR 2025-06-03 19:33:36,558 basehttp 36284 6166196224 "GET /api/contacts/?relationship_tag=Botox HTTP/1.1" 500 135351
+INFO 2025-06-03 19:33:51,664 autoreload 36284 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:33:52,622 autoreload 36316 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:33:52,977 basehttp 36316 6156890112 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:33:54,101 basehttp 36316 6156890112 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:33:57,144 autoreload 36316 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-06-03 19:33:58,066 autoreload 36334 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:33:59,390 autoreload 36334 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:33:59,967 autoreload 36344 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:34:02,195 basehttp 36344 6160003072 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:34:05,415 basehttp 36344 6160003072 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:37:15,479 autoreload 36344 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:37:16,955 autoreload 36405 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:37:17,809 basehttp 36405 6166179840 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:37:19,102 basehttp 36405 6166179840 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:37:19,923 basehttp 36405 6166179840 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:37:20,884 basehttp 36405 6166179840 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:37:21,299 basehttp 36405 6166179840 "GET /api/messagelogs/ HTTP/1.1" 200 28233
+INFO 2025-06-03 19:37:21,693 basehttp 36405 6166179840 "GET /api/contacts/ HTTP/1.1" 200 128745
+INFO 2025-06-03 19:38:56,747 autoreload 36405 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/serializers/contact_serializer.py changed, reloading.
+INFO 2025-06-03 19:38:57,885 autoreload 36442 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:40:56,874 autoreload 36442 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/serializers/contact_serializer.py changed, reloading.
+INFO 2025-06-03 19:40:57,857 autoreload 36473 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:41:23,902 autoreload 36473 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/serializers/contact_serializer.py changed, reloading.
+INFO 2025-06-03 19:41:24,658 autoreload 36495 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:41:35,319 basehttp 36495 6194343936 "GET /api/contacts/ HTTP/1.1" 200 41767
+WARNING 2025-06-03 19:42:38,600 log 36495 6194343936 Bad Request: /api/contacts/
+WARNING 2025-06-03 19:42:38,601 basehttp 36495 6194343936 "POST /api/contacts/ HTTP/1.1" 400 16475
+INFO 2025-06-03 19:42:46,177 basehttp 36495 6194343936 "POST /api/contacts/ HTTP/1.1" 201 16714
+WARNING 2025-06-03 19:42:50,057 log 36495 6194343936 Bad Request: /api/contacts/
+WARNING 2025-06-03 19:42:50,058 basehttp 36495 6194343936 "POST /api/contacts/ HTTP/1.1" 400 16482
+INFO 2025-06-03 19:42:53,797 basehttp 36495 6194343936 "POST /api/contacts/ HTTP/1.1" 201 16714
+INFO 2025-06-03 19:44:34,327 autoreload 36495 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:44:35,563 autoreload 36580 8334909184 Watching for file changes with StatReloader
+WARNING 2025-06-03 19:44:43,223 log 36580 6170816512 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:44:43,224 basehttp 36580 6170816512 "POST /api/contacts/ HTTP/1.1" 403 9972
+WARNING 2025-06-03 19:44:44,590 log 36580 6170816512 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:44:44,591 basehttp 36580 6170816512 "POST /api/contacts/ HTTP/1.1" 403 9972
+WARNING 2025-06-03 19:45:10,491 log 36580 6170816512 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:45:10,492 basehttp 36580 6170816512 "GET /api/contacts/?store=CENTRAL&status=active HTTP/1.1" 403 10107
+INFO 2025-06-03 19:45:22,657 autoreload 36580 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-06-03 19:45:23,665 autoreload 36615 8334909184 Watching for file changes with StatReloader
+WARNING 2025-06-03 19:45:25,381 log 36615 6200356864 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:45:25,382 basehttp 36615 6200356864 "POST /api/contacts/ HTTP/1.1" 403 9972
+WARNING 2025-06-03 19:45:26,727 log 36615 6200356864 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:45:26,727 basehttp 36615 6200356864 "POST /api/contacts/ HTTP/1.1" 403 9972
+WARNING 2025-06-03 19:45:28,070 log 36615 6200356864 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:45:28,070 basehttp 36615 6200356864 "POST /api/contacts/ HTTP/1.1" 403 9972
+INFO 2025-06-03 19:45:28,096 basehttp 36615 6284488704 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:45:28,097 basehttp 36615 6267662336 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:45:28,099 basehttp 36615 6234009600 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:45:28,099 basehttp 36615 6217183232 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:45:28,103 basehttp 36615 6250835968 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:45:28,104 basehttp 36615 6217183232 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:45:28,104 basehttp 36615 6234009600 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:45:28,107 basehttp 36615 6284488704 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:45:28,108 basehttp 36615 6267662336 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:45:28,108 basehttp 36615 6200356864 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:45:28,109 basehttp 36615 6250835968 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:45:28,116 basehttp 36615 6250835968 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:45:28,124 basehttp 36615 6250835968 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:45:28,126 basehttp 36615 6250835968 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:45:38,559 autoreload 36615 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:45:39,450 autoreload 36635 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:45:40,769 basehttp 36635 6161264640 "POST /api/contacts/ HTTP/1.1" 201 16714
+WARNING 2025-06-03 19:45:47,738 log 36635 6161264640 Bad Request: /api/contacts/
+WARNING 2025-06-03 19:45:47,739 basehttp 36635 6161264640 "POST /api/contacts/ HTTP/1.1" 400 16649
+WARNING 2025-06-03 19:45:49,542 log 36635 6161264640 Bad Request: /api/contacts/
+WARNING 2025-06-03 19:45:49,542 basehttp 36635 6161264640 "POST /api/contacts/ HTTP/1.1" 400 16649
+INFO 2025-06-03 19:45:49,572 basehttp 36635 6194917376 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:45:49,572 basehttp 36635 6178091008 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:45:49,574 basehttp 36635 6211743744 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:45:49,574 basehttp 36635 6245396480 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:45:49,578 basehttp 36635 6211743744 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:45:49,578 basehttp 36635 6178091008 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:45:49,579 basehttp 36635 6228570112 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:45:49,581 basehttp 36635 6194917376 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:45:49,581 basehttp 36635 6245396480 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:45:49,582 basehttp 36635 6161264640 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:45:49,582 basehttp 36635 6211743744 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:45:49,588 basehttp 36635 6161264640 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:45:49,598 basehttp 36635 6161264640 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:45:49,599 basehttp 36635 6161264640 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+WARNING 2025-06-03 19:45:53,535 log 36635 6161264640 Bad Request: /api/contacts/
+WARNING 2025-06-03 19:45:53,535 basehttp 36635 6161264640 "POST /api/contacts/ HTTP/1.1" 400 16985
+INFO 2025-06-03 19:45:57,380 basehttp 36635 6161264640 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:34,928 autoreload 36635 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:46:35,844 autoreload 36660 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:46:37,344 basehttp 36660 6205960192 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:38,273 basehttp 36660 6205960192 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:38,300 basehttp 36660 6239612928 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:46:38,302 basehttp 36660 6256439296 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:46:38,303 basehttp 36660 6290092032 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:46:38,304 basehttp 36660 6273265664 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:46:38,306 basehttp 36660 6256439296 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:46:38,307 basehttp 36660 6222786560 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:46:38,308 basehttp 36660 6290092032 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:46:38,308 basehttp 36660 6239612928 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:46:38,308 basehttp 36660 6273265664 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:46:38,309 basehttp 36660 6205960192 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:46:38,309 basehttp 36660 6256439296 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:46:38,314 basehttp 36660 6205960192 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:46:38,328 basehttp 36660 6205960192 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:46:38,330 basehttp 36660 6205960192 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:46:48,701 autoreload 36660 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-06-03 19:46:49,538 autoreload 36678 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:46:51,151 basehttp 36678 6131789824 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:51,985 basehttp 36678 6131789824 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:52,004 basehttp 36678 6148616192 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:46:52,007 basehttp 36678 6165442560 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:46:52,007 basehttp 36678 6182268928 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:46:52,008 basehttp 36678 6215921664 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:46:52,009 basehttp 36678 6148616192 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:46:52,010 basehttp 36678 6199095296 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:46:52,011 basehttp 36678 6215921664 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:46:52,011 basehttp 36678 6131789824 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:46:52,011 basehttp 36678 6148616192 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:46:52,012 basehttp 36678 6182268928 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:46:52,012 basehttp 36678 6165442560 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:46:52,015 basehttp 36678 6165442560 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:46:52,024 basehttp 36678 6165442560 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:46:52,025 basehttp 36678 6165442560 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:46:54,759 basehttp 36678 6131789824 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:46:57,185 autoreload 36678 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:46:58,255 autoreload 36696 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:47:07,992 autoreload 36865 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:47:09,780 basehttp 36865 6172782592 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:47:10,446 basehttp 36865 6172782592 "GET /api/contacts/ HTTP/1.1" 200 28096
+WARNING 2025-06-03 19:47:18,472 log 36865 6172782592 Forbidden: /api/contacts/
+WARNING 2025-06-03 19:47:18,472 basehttp 36865 6172782592 "GET /api/contacts/?page=2 HTTP/1.1" 403 10007
+INFO 2025-06-03 19:48:21,631 autoreload 36865 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:48:22,722 autoreload 36891 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:48:29,303 autoreload 36891 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/konquist/settings.py changed, reloading.
+INFO 2025-06-03 19:48:30,190 autoreload 36912 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:48:31,619 basehttp 36912 6170406912 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:48:31,642 basehttp 36912 6254538752 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:48:31,642 basehttp 36912 6237712384 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:48:31,644 basehttp 36912 6187233280 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:48:31,644 basehttp 36912 6204059648 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:48:31,647 basehttp 36912 6220886016 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:48:31,647 basehttp 36912 6254538752 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:48:31,648 basehttp 36912 6187233280 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:48:31,649 basehttp 36912 6204059648 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:48:31,649 basehttp 36912 6237712384 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:48:31,649 basehttp 36912 6170406912 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:48:31,650 basehttp 36912 6204059648 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:48:31,655 basehttp 36912 6204059648 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:48:31,683 basehttp 36912 6204059648 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:48:31,685 basehttp 36912 6204059648 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:48:37,801 autoreload 36912 8334909184 /Users/luisfaria/Desktop/sEngineer/konquest/api/viewsets/contact_viewset.py changed, reloading.
+INFO 2025-06-03 19:48:38,604 autoreload 36937 8334909184 Watching for file changes with StatReloader
+INFO 2025-06-03 19:48:39,074 basehttp 36937 6204731392 "GET /api/contacts/ HTTP/1.1" 200 28096
+INFO 2025-06-03 19:48:39,098 basehttp 36937 6221557760 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-06-03 19:48:39,100 basehttp 36937 6238384128 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-06-03 19:48:39,101 basehttp 36937 6255210496 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-06-03 19:48:39,102 basehttp 36937 6221557760 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-06-03 19:48:39,102 basehttp 36937 6288863232 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-06-03 19:48:39,106 basehttp 36937 6238384128 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-06-03 19:48:39,106 basehttp 36937 6221557760 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-06-03 19:48:39,107 basehttp 36937 6288863232 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-06-03 19:48:39,108 basehttp 36937 6255210496 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-06-03 19:48:39,108 basehttp 36937 6204731392 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-06-03 19:48:39,109 basehttp 36937 6272036864 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-06-03 19:48:39,113 basehttp 36937 6272036864 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-06-03 19:48:39,124 basehttp 36937 6272036864 "GET /favicon.ico HTTP/1.1" 301 0
+INFO 2025-06-03 19:48:39,128 basehttp 36937 6272036864 "GET /static/img/favicon.svg HTTP/1.1" 200 1878
+INFO 2025-06-03 19:48:41,427 basehttp 36937 6204731392 "GET /api/contacts/?page=2 HTTP/1.1" 200 43207
+INFO 2025-06-03 19:48:58,888 basehttp 36937 6204731392 "GET /api/contacts/?page=10 HTTP/1.1" 200 43214
+INFO 2025-06-03 19:49:01,138 basehttp 36937 6204731392 "GET /api/contacts/?page=100 HTTP/1.1" 200 43221
+INFO 2025-06-03 19:49:07,323 basehttp 36937 6204731392 "GET /api/contacts/?page=150 HTTP/1.1" 200 43221
