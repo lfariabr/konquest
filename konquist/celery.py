@@ -162,7 +162,7 @@ app.conf.beat_schedule = {
     # Daily queue processing
     'process_queues': {
         'task': 'messageShooter.tasks.process_queues',
-        'schedule': crontab(hour=7, minute=15),
+        'schedule': crontab(hour=8, minute=0),
         'options': {'expires': 7200}
     }
 }

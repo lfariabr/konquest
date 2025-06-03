@@ -11,7 +11,6 @@ from messageShooter.services.queue_processor import QueueProcessor
 from messageShooter.services.run_organizer import organize_contacts_bulk
 from core.models.contact import Contact
 from utils.discord import send_discord_message
-from utils.socialHub import send_debug_notification
 
 # python manage.py shell
 # from messageShooter.tasks.campaign_tasks import test_organize_contacts
@@ -34,7 +33,6 @@ def process_scheduled_campaigns():
     """
     logger.info(f"🤖 TASK: Starting to process campaigns @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     log_message = f"🤖 TASK: Starting to process campaigns @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    send_debug_notification(log_message)
     send_discord_message(log_message)
     
     campaign_scheduler = CampaignScheduler()
@@ -53,7 +51,6 @@ def process_queues():
     """
     logger.info(f"🤖 TASK: Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     log_message = f"🤖 TASK: Starting to process queues @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    send_debug_notification(log_message)
     send_discord_message(log_message)
     queue_processor = QueueProcessor()
     queue_processor.process_queue()

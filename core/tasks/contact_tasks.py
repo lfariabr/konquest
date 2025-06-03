@@ -7,9 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 from core.models.contact import Contact
 from django.core.cache import cache
-
 from utils.discord import send_discord_message
-from messageShooter.tasks.campaign_tasks import send_debug_notification
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +97,6 @@ def check_contacts_in_crm(self, batch_size: int = 200, processed_count: int = 0)
             # Check if we've hit the safety limit
             if new_processed_count >= 1000:
                 logger.warning(f"Completed processing of 1000 most recent contacts")
-                send_debug_notification(f"✅ Contact check completed: processed {new_processed_count} most recent contacts")
                 log_message = f"✅ Contact check completed: processed {new_processed_count} most recent contacts"
                 send_discord_message(log_message)  
                 return stats
