@@ -9,13 +9,16 @@ from graphene_django.views import GraphQLView
 from django.views.generic.base import RedirectView
 from apiCrm.schemas.resolve_all_data import schema
 from django.views.generic import TemplateView
-from core.views import get_terminal_logs
 from utils.discord import connect_clicked
 from api.urls import urlpatterns as api_urlpatterns
+from django.views.decorators.csrf import csrf_exempt
+from api.schema import schema_graphene
 
 main_urlpatterns = [
     path('admin/', admin_site.urls),
     path('apiCrm/', include('apiCrm.urls')),
+    
+    # api layer - django rest framework
     path('api/', include(api_urlpatterns)),
 ]
 
@@ -24,9 +27,10 @@ urlpatterns = [
     path('', include(main_urlpatterns)),
     path('apiCrm/graphql/', GraphQLView.as_view(graphiql=True, schema=schema)),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.svg', permanent=True)),
-    path('terminal_logs/', TemplateView.as_view(template_name='pages/terminal_logs.html'), name='terminal_logs'),
-    path('terminal_logs/data/', get_terminal_logs, name='get_terminal_logs'),
     path("api/notify-connect-click/", connect_clicked, name="notify_connect_click"),
+
+    # api layer - graphene
+    # path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema_graphene))),
 ]
 
 if settings.DEBUG:

@@ -45,7 +45,12 @@ INSTALLED_APPS = [
 
     # Extra Libraries
     'rest_framework',
+
+    # api layer
     'graphene_django',
+    'django_filters',
+
+    # debug
     # 'debug_toolbar',
 
     # Apps
@@ -170,12 +175,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/Sao_Paulo'
 USE_TZ = True
 USE_I18N = True
-
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -331,3 +333,16 @@ CACHES = {
 # REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
 # CELERY_BROKER_URL = f'{REDIS_URL}/{REDIS_DB}'
 # CELERY_RESULT_BACKEND = REDIS_URL
+
+# API layer
+GRAPHENE = {
+    'SCHEMA': 'konquest.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
