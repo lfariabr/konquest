@@ -1,99 +1,84 @@
-# api
+# API Module
 
-The `api` component is a feature from Konquista that provides endpoints where customers can access data via restful api requests.
-
----
-
-## 📌 Overview
-
-The `api` module is responsible for providing endpoints where customers can access data such as Contacts and Sent Messages via restful api requests.
+The `api` component provides RESTful endpoints for accessing and managing Konquista's data, with JWT authentication for secure access.
 
 ---
 
-### 1. 🧲 Contacts
+## 📌 Current Implementation
 
-Endpoints for Contacts with fields such as:
+### ✅ Completed
+- **JWT Authentication**
+  - Secure token-based authentication using `djangorestframework-simplejwt`
+  - Token refresh mechanism implemented
+  - Protected API endpoints requiring authentication
 
-- `created date`, `source`, `store`, `name`, `priority`, `telephone`, `email`, `message`, `relationship_tag`
+- **Security**
+  - All API endpoints require authentication by default
+  - JWT token validation for each request
+  - Secure token handling and storage
 
-**Usage:**
+- **Core Endpoints**
+  - Contacts management
+  - Messages and logs
 
-- Fetch data from `Contacts`
+## 🚧 In Progress
 
----
+### 1. Test Suite Updates
+- Updating test cases to work with JWT authentication
+- Adding authentication to existing test cases
+- Ensuring proper test isolation and cleanup
 
-### 2. 📅 Sent Messages
+## 📋 Backlog
 
-Endpoints for Sent Messages with fields like:
+### High Priority
+1. **Test Suite Completion**
+   - [ ] Update all test cases to include JWT authentication
+   - [ ] Add authentication tests for all endpoints
+   - [ ] Test token refresh flow
+   - [ ] Add test coverage for permission scenarios
 
-- `sent at`, `relationship_tag`, `contact phone`, `message`, `sender_phone_name` 
+2. **CRUD Operations**
+   - [ ] Implement and test Create operations
+   - [ ] Implement and test Update operations
+   - [ ] Implement and test Delete operations
+   - [ ] Add validation for all write operations
 
-**Usage:**
+3. **API Documentation**
+   - [ ] Document all endpoints with request/response examples
+   - [ ] Add authentication requirements to documentation
+   - [ ] Include error response documentation
 
-- Fetch data from `Sent Messages`
+### Medium Priority
+4. **Enhanced Security**
+   - [ ] Implement rate limiting
+   - [ ] Add request throttling
+   - [ ] Set up CORS policies
+   - [ ] Add request/response logging
 
-## ⚙️ Key Features
+5. **API Features**
+   - [ ] Add filtering and search capabilities
+   - [ ] Implement pagination
+   - [ ] Add sorting options
+   - [ ] Include related resources in responses
 
-- ✅ **Django Rest Framework**  
-  Provides endpoints for Contacts and Sent Messages
+### Low Priority
+6. **Developer Experience**
+   - [ ] Add API versioning
+   - [ ] Set up Swagger/OpenAPI documentation
+   - [ ] Create API client examples
+   - [ ] Add request/response validation
 
-- 🔗 **... ?**  
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec metus vel ante feugiat placerat. Nullam nec metus vel ante feugiat placerat.
+## 🔧 Technical Details
 
----
+### Authentication Flow
+1. Obtain JWT token via `/api/token/`
+2. Include token in `Authorization: Bearer <token>` header
+3. Refresh token using `/api/token/refresh/` when expired
 
-## 📦 Dependencies
+### Dependencies
+- Django REST Framework
+- djangorestframework-simplejwt
+- Django (core models)
 
-- **@core** module:  
-  Exposes models and serializers for Contacts and Sent Messages
-
----
-
-# Progress
-
-basic DRF (Django REST Framework) API with:
-
-1. Models:
-- Using direct imports from core models (Contact and MessageLogs)
-- No proxy models or model extensions
-2. Serializers:
-- Basic ModelSerializer using fields = '__all__'
-- No custom validation or field-level customization
-3. Views:
-- Basic ModelViewSet for both models
-- No custom actions or filtering
-4. URLs:
-- Properly configured with DRF's DefaultRouter
-- Endpoints at /api/contacts/ and /api/messagelogs/
-
-# Recommendations for Improvement
-1. Model Layer
-- Proxy Models: Create proxy models in api/models/ to keep API-specific logic separate from core models
-- Custom Managers: Add custom managers for API-specific queries
-2. Serializers
-- Field Selection: Explicitly define fields instead of using __all__
-- Validation: Add field-level and object-level validation
-- Nested Serializers: For related fields
-- Read-Only Fields: Mark appropriate fields as read-only
-3. Views
-- Permissions: Add proper permission classes
-- Filtering: Add filtering and search capabilities
-- Pagination: Configure pagination
-- Custom Actions: Add custom endpoints for common operations
-4. Security
-- Authentication: Set up token authentication
-- Throttling: Implement rate limiting
-- CORS: Configure CORS headers
-
-# Next Steps
-1. Basic Enhancements:
-- Add proper field definitions to serializers
-- Add basic filtering and search
-- Set up pagination
-2. Advanced Features:
-- Add custom actions to viewsets
-- Implement token authentication
-- Add comprehensive documentation
-3. Testing:
-- Set up API tests
-- Add test coverage
+### Configuration
+JWT settings are configured in `settings.py` with secure defaults for token lifetime and rotation.

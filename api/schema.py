@@ -1,3 +1,6 @@
+# API layer - graphene
+# Currently not being used
+
 import graphene
 import graphql_jwt
 from graphene_django import DjangoObjectType

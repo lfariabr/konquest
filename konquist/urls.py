@@ -13,6 +13,10 @@ from utils.discord import connect_clicked
 from api.urls import urlpatterns as api_urlpatterns
 from django.views.decorators.csrf import csrf_exempt
 from api.schema import schema_graphene
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 main_urlpatterns = [
     path('admin/', admin_site.urls),
@@ -20,15 +24,20 @@ main_urlpatterns = [
     
     # api layer - django rest framework
     path('api/', include(api_urlpatterns)),
+    
+    # JWT Token endpoints
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('', include(main_urlpatterns)),
-    path('apiCrm/graphql/', GraphQLView.as_view(graphiql=True, schema=schema)),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'img/favicon.svg', permanent=True)),
-    path("api/notify-connect-click/", connect_clicked, name="notify_connect_click"),
 
+    # graphene to play with apiCrm
+    path('apiCrm/graphql/', GraphQLView.as_view(graphiql=True, schema=schema)),
+    
     # api layer - graphene
     # path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema_graphene))),
 ]

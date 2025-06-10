@@ -1,2 +1,0 @@
-ERROR 2025-06-03 19:52:11,882 signals 37172 6126727168 Error updating target list counter: 'NoneType' object has no attribute 'id'
-ERROR 2025-06-03 19:52:43,050 signals 37172 6126727168 Error updating target list counter: 'NoneType' object has no attribute 'id'

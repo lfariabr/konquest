@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
 
 # sqlite3 (dev) 
 # postgresql (prod)
-DATABASE_ENGINE = 'sqlite3' 
+DATABASE_ENGINE = 'postgresql' 
 ADMIN_PHONE = '11963546222'
 
 # messageShooter/resolvers/get_contacts.py and get_contact_lead.py
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # Extra Libraries
     'rest_framework',
+    'rest_framework_simplejwt',
 
     # api layer
     'graphene_django',
@@ -343,6 +344,30 @@ GRAPHENE = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
+    # 'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Rest Framework Settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    # Authentication and Permissions
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# JWT Settings
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
