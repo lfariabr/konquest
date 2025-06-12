@@ -19,8 +19,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
                 '209.38.90.25', 
                 'localhost']
 
-# sqlite3 (dev) 
-# postgresql (prod)
+# sqlite3 (DEV) and postgresql (PROD)
 DATABASE_ENGINE = 'postgresql' 
 ADMIN_PHONE = '11963546222'
 

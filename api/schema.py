@@ -2,7 +2,6 @@
 # Currently not being used
 
 import graphene
-import graphql_jwt
 from graphene_django import DjangoObjectType
 from core.models.contact import Contact
 from core.models.messagelog import MessageLogs
@@ -48,9 +47,6 @@ class CreateContact(graphene.Mutation):
 
 class Mutation(graphene.ObjectType):
     create_contact = CreateContact.Field()
-    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
-    verify_token = graphql_jwt.Verify.Field()
-    refresh_token = graphql_jwt.Refresh.Field()
 
 schema_graphene = graphene.Schema(query=Query, mutation=Mutation)
 

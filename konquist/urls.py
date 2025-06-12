@@ -25,6 +25,9 @@ main_urlpatterns = [
     # api layer - django rest framework
     path('api/', include(api_urlpatterns)),
     
+    # Discord webhook
+    path('api/notify-connect-click/', connect_clicked, name='discord_connect_clicked'),
+    
     # JWT Token endpoints
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
