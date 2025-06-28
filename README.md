@@ -1,8 +1,40 @@
 # Konquista
-Enterprise WhatsApp Marketing Automation
+> Enterprise WhatsApp Marketing Automation Platform
+
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
+[![Django](https://img.shields.io/badge/Django-5.1+-green.svg)](https://djangoproject.com)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Overview
-Konquista is an enterprise-grade WhatsApp marketing automation platform built with Django. It enables businesses to manage and automate customer communications through WhatsApp, integrating with CRM systems for lead management, appointment scheduling, and post-sale engagement.
+Welcome to Konquista. This is an enterprise-grade WhatsApp marketing automation platform built with Django. It enables businesses to manage and automate customer communications through WhatsApp, integrating with CRM systems for lead management, appointment scheduling, and post-sale engagement.
+
+## Business Impact & Value Proposition
+
+- 20+ stores actively using it
+- 100K+ contacts managed
+- 250K+ WhatsApp messages sent (30K+/month)
+
+## Fun Fact
+https://dev.to/lfariaus/from-google-sheets-to-a-scalable-saas-building-konquista-with-python-and-django-46mh
+
+## Version Control Strategy
+Following **GitFlow** with feature branches and semantic versioning:
+
+| Version | Milestone | Status | When |
+|---------|-----------|--------|------|
+| **0.0.0** | module *core + konquista setup* | ✅ Complete | Oct 2024 |
+| **1.0.0** | module *apiCrm* | ✅ Complete | Nov 2024 |
+| **2.0.0** | module *apiSocialHub* | ✅ Complete | Nov 2024 |
+| **3.0.0** | module *messageShooter* | ✅ Complete | Dec 2024 |
+| **4.0.0** | module *dataWrestler* | ✅ Complete | Dec 2024 |
+| **5.0.0** | module *publicApi* | ✅ Complete | Jun 2025 |
+| **6.0.0** | module *analytics* (reporting API + email) | 🔄 Planned | TBD |
+| **tbd** | Github Actions for automatic deployment @ droplet | 🔄 Planned | TBD |
+| **tbd** | AI Enhanced matching | 🔄 Planned | TBD |
+| **tbd** | Multi-tenant architecture | 🔄 Planned | TBD |
+| **tbd** | Stripe integration | 🔄 Planned | TBD |
+| **tbd** | Webhook system for external integrations vs Django Signals | 🔄 Planned | TBD |
 
 ## Core Features
 
@@ -47,8 +79,13 @@ Konquista is an enterprise-grade WhatsApp marketing automation platform built wi
   - WhatsApp number management
   - Activity logging
 
-### 5. Technical Features
+### 5. Public API
+- **MessageLogs**: Track message delivery and status
+- **Contacts**: Manage contact information and history
+
+### 6. Technical Features
 - **GraphQL API**: Flexible data querying and manipulation
+- **Django Rest Framework**: RESTful API for CRM and Message Shooter
 - **Asynchronous Processing**: Celery for task management
 - **Caching**: Redis for performance optimization
 - **Monitoring**: Comprehensive logging and error tracking
@@ -60,6 +97,7 @@ Konquista is an enterprise-grade WhatsApp marketing automation platform built wi
 - PostgreSQL/SQLite database support
 - Docker containerization
 - GraphQL API layer
+- Django Rest Framework for API endpoints
 - Asynchronous task processing
 
 ## Deployment
@@ -123,9 +161,6 @@ pytest
 # Run with coverage
 pytest --cov=.
 ```
-
-## License
-Luis Faria, Self-Made Software Engineer @ 2025. All rights reserved.
 
 ## Support
 For support and inquiries, contact lfariabr@gmail.com
